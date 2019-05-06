@@ -29,12 +29,12 @@ import java.nio.file.Path;
 rocThrustCI:
 {
 
-    def rocThurst = new rocProject('rocThurst')
+    def rocthrust = new rocProject('rocthrust')
     // customize for project
-    rocThurst.paths.build_command = 'cmake -D CMAKE_CXX_COMPILER="/opt/rocm/hcc/bin/hcc" CMakeLists.txt -Bbuild && cd build && make'
+    rocthrust.paths.build_command = 'cmake -D CMAKE_CXX_COMPILER="/opt/rocm/hcc/bin/hcc" CMakeLists.txt -Bbuild && cd build && make'
 
     // Define test architectures, optional rocm version argument is available
-    def nodes = new dockerNodes(['gfx900', 'gfx906'], rocThurst)
+    def nodes = new dockerNodes(['gfx900', 'gfx906'], rocthrust)
 
     boolean formatCheck = true
 
@@ -63,7 +63,7 @@ rocThrustCI:
           command = """#!/usr/bin/env bash
                 set -x
                 cd ${project.paths.project_build_prefix}/build/release/clients/staging
-                LD_LIBRARY_PATH=/opt/rocm/hcc/lib GTEST_LISTENER=NO_PASS_LINE_IN_LOG ./rocThurst-test --gtest_output=xml --gtest_color=yes --gtest_filter=*nightly*-*known_bug* #--gtest_filter=*nightly*
+                LD_LIBRARY_PATH=/opt/rocm/hcc/lib GTEST_LISTENER=NO_PASS_LINE_IN_LOG ./rocthrust-test --gtest_output=xml --gtest_color=yes --gtest_filter=*nightly*-*known_bug* #--gtest_filter=*nightly*
             """
         }
         else
@@ -72,7 +72,7 @@ rocThrustCI:
                 set -x
                 cd ${project.paths.project_build_prefix}/build/release/clients/staging
                 LD_LIBRARY_PATH=/opt/rocm/hcc/lib ./example-sscal
-                LD_LIBRARY_PATH=/opt/rocm/hcc/lib GTEST_LISTENER=NO_PASS_LINE_IN_LOG ./rocThurst-test --gtest_output=xml --gtest_color=yes  --gtest_filter=*quick*:*pre_checkin*-*known_bug* #--gtest_filter=*checkin*
+                LD_LIBRARY_PATH=/opt/rocm/hcc/lib GTEST_LISTENER=NO_PASS_LINE_IN_LOG ./rocthrust-test --gtest_output=xml --gtest_color=yes  --gtest_filter=*quick*:*pre_checkin*-*known_bug* #--gtest_filter=*checkin*
             """
         }
 
@@ -97,6 +97,6 @@ rocThrustCI:
         platform.archiveArtifacts(this, """${project.paths.project_build_prefix}/build/release/package/*.deb""")
     }
 
-    buildProject(rocThurst, formatCheck, nodes.dockerArray, compileCommand, testCommand, packageCommand)
+    buildProject(rocthrust, formatCheck, nodes.dockerArray, compileCommand, testCommand, packageCommand)
 
 }
