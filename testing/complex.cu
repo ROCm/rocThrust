@@ -1,3 +1,20 @@
+/*
+ *  Copyright 2008-2013 NVIDIA Corporation
+ *  Modifications Copyright© 2019 Advanced Micro Devices, Inc. All rights reserved.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+ 
 #include <unittest/unittest.h>
 
 #include <thrust/complex.h>
@@ -5,10 +22,10 @@
 #include <iostream>
 #include <sstream>
 
-/* 
+/*
    The following tests do not check for the numerical accuracy of the operations.
-   That is tested in a separate program (complex_accuracy.cpp) which requires mpfr, 
-   and takes a lot of time to run.   
+   That is tested in a separate program (complex_accuracy.cpp) which requires mpfr,
+   and takes a lot of time to run.
  */
 
 template<typename T>
@@ -17,29 +34,29 @@ struct TestComplexConstructors
   void operator()(void)
   {
     thrust::host_vector<T> data = unittest::random_samples<T>(2);
-    
+
     thrust::complex<T> a(data[0],data[1]);
     thrust::complex<T> b(a);
     a = thrust::complex<T>(data[0],data[1]);
     ASSERT_ALMOST_EQUAL(a,b);
-    
+
     a = thrust::complex<T>(data[0]);
     ASSERT_EQUAL(data[0], a.real());
     ASSERT_EQUAL(T(0), a.imag());
-    
+
     a = thrust::complex<T>();
     ASSERT_ALMOST_EQUAL(a,std::complex<T>(0));
-    
-    a = thrust::complex<T>(thrust::complex<float>(data[0],data[1]));
+
+    a = thrust::complex<T>(thrust::complex<float>(static_cast<float>(data[0]),static_cast<float>(data[1])));
     ASSERT_ALMOST_EQUAL(a,b);
-    
-    a = thrust::complex<T>(thrust::complex<double>(data[0],data[1]));
+
+    a = thrust::complex<T>(thrust::complex<double>(static_cast<double>(data[0]),static_cast<double>(data[1])));
     ASSERT_ALMOST_EQUAL(a,b);
-    
-    a = thrust::complex<T>(std::complex<float>(data[0],data[1]));
+
+    a = thrust::complex<T>(std::complex<float>(static_cast<float>(data[0]),static_cast<float>(data[1])));
     ASSERT_ALMOST_EQUAL(a,b);
-    
-    a = thrust::complex<T>(std::complex<double>(data[0],data[1]));
+
+    a = thrust::complex<T>(std::complex<double>(static_cast<double>(data[0]),static_cast<double>(data[1])));
     ASSERT_ALMOST_EQUAL(a,b);
   }
 };
@@ -124,7 +141,7 @@ struct TestComplexBasicArithmetic
     std::complex<T> b(a);
 
     // Test the basic arithmetic functions against std
-    
+
     ASSERT_ALMOST_EQUAL(abs(a),abs(b));
 
     ASSERT_ALMOST_EQUAL(arg(a),arg(b));
@@ -137,7 +154,7 @@ struct TestComplexBasicArithmetic
 
     // random_samples does not seem to produce infinities so proj(z) == z
     ASSERT_EQUAL(proj(a),a);
-    
+
   }
 };
 SimpleUnitTest<TestComplexBasicArithmetic, FloatingPointTypes> TestComplexBasicArithmeticInstance;
@@ -169,7 +186,7 @@ struct TestComplexBinaryArithmetic
     ASSERT_EQUAL(a - b, std::complex<T>(a) - std::complex<T>(b));
     ASSERT_EQUAL(a - data_b[0], std::complex<T>(a) - data_b[0]);
     ASSERT_EQUAL(data_a[0] - b, data_b[0] - std::complex<T>(b));
-    
+
   }
 };
 SimpleUnitTest<TestComplexBinaryArithmetic, FloatingPointTypes> TestComplexBinaryArithmeticInstance;
@@ -185,7 +202,7 @@ struct TestComplexUnaryArithmetic
 
     ASSERT_EQUAL(+a,+std::complex<T>(a));
     ASSERT_EQUAL(-a,-std::complex<T>(a));
-    
+
   }
 };
 SimpleUnitTest<TestComplexUnaryArithmetic, FloatingPointTypes> TestComplexUnaryArithmeticInstance;
@@ -204,7 +221,7 @@ struct TestComplexExponentialFunctions
     ASSERT_ALMOST_EQUAL(exp(a),exp(b));
     ASSERT_ALMOST_EQUAL(log(a),log(b));
     ASSERT_ALMOST_EQUAL(log10(a),log10(b));
-    
+
   }
 };
 SimpleUnitTest<TestComplexExponentialFunctions, FloatingPointTypes> TestComplexExponentialFunctionsInstance;
@@ -284,3 +301,27 @@ struct TestComplexStreamOperators
 };
 
 SimpleUnitTest<TestComplexStreamOperators, FloatingPointTypes> TestComplexStreamOperatorsInstance;
+
+#if THRUST_CPP_DIALECT >= 2011
+template<typename T>
+struct TestComplexStdComplexDeviceInterop
+{
+  void operator()()
+  {
+    thrust::host_vector<T> data = unittest::random_samples<T>(6);
+    std::vector<std::complex<T> > vec(10);
+    vec[0] = std::complex<T>(data[0], data[1]);
+    vec[1] = std::complex<T>(data[2], data[3]);
+    vec[2] = std::complex<T>(data[4], data[5]);
+
+    thrust::device_vector<thrust::complex<T> > device_vec = vec;
+    ASSERT_ALMOST_EQUAL(vec[0].real(), thrust::complex<T>(device_vec[0]).real());
+    ASSERT_ALMOST_EQUAL(vec[0].imag(), thrust::complex<T>(device_vec[0]).imag());
+    ASSERT_ALMOST_EQUAL(vec[1].real(), thrust::complex<T>(device_vec[1]).real());
+    ASSERT_ALMOST_EQUAL(vec[1].imag(), thrust::complex<T>(device_vec[1]).imag());
+    ASSERT_ALMOST_EQUAL(vec[2].real(), thrust::complex<T>(device_vec[2]).real());
+    ASSERT_ALMOST_EQUAL(vec[2].imag(), thrust::complex<T>(device_vec[2]).imag());
+  }
+};
+SimpleUnitTest<TestComplexStdComplexDeviceInterop, FloatingPointTypes> TestComplexStdComplexDeviceInteropInstance;
+#endif

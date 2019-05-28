@@ -27,19 +27,15 @@
  ******************************************************************************/
 #pragma once
 
-
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HCC
-#include <thrust/system/hip/detail/transform.h>
 #include <thrust/iterator/permutation_iterator.h>
+#include <thrust/system/hip/detail/transform.h>
 
 BEGIN_NS_THRUST
+namespace hip_rocprim
+{
 
-namespace hip_rocprim {
-
-template <class Derived,
-          class ItemsIt,
-          class MapIt,
-          class ResultIt>
+template <class Derived, class ItemsIt, class MapIt, class ResultIt>
 void THRUST_HIP_FUNCTION
 scatter(execution_policy<Derived>& policy,
         ItemsIt                    first,
@@ -47,12 +43,11 @@ scatter(execution_policy<Derived>& policy,
         MapIt                      map,
         ResultIt                   result)
 {
-  typedef typename ItemsIt::value_type ItemsTy;
-  hip_rocprim::transform(policy,
-                         first,
-                         last,
-                         thrust::make_permutation_iterator(result, map),
-                         thrust::identity<ItemsTy>());
+    hip_rocprim::transform(policy,
+                           first,
+                           last,
+                           thrust::make_permutation_iterator(result, map),
+                           identity());
 }
 
 template <class Derived,
@@ -70,14 +65,13 @@ scatter_if(execution_policy<Derived>& policy,
            ResultIt                   result,
            Predicate                  predicate)
 {
-  typedef typename ItemsIt::value_type ItemsTy;
-  hip_rocprim::transform_if(policy,
-                            first,
-                            last,
-                            stencil,
-                            thrust::make_permutation_iterator(result, map),
-                            thrust::identity<ItemsTy>(),
-                            predicate);
+    hip_rocprim::transform_if(policy,
+                              first,
+                              last,
+                              stencil,
+                              thrust::make_permutation_iterator(result, map),
+                              identity(),
+                              predicate);
 }
 
 template <class Derived,
@@ -94,16 +88,10 @@ scatter_if(execution_policy<Derived>& policy,
            StencilIt                  stencil,
            ResultIt                   result)
 {
-  typedef typename ItemsIt::value_type ItemsTy;
-  hip_rocprim::scatter_if(policy,
-                          first,
-                          last,
-                          map,
-                          stencil,
-                          result,
-                          thrust::identity<ItemsTy>());
+    hip_rocprim::scatter_if(
+        policy, first, last, map, stencil, result, identity()
+    );
 }
-
 
 } // namespace hip_rocprim
 END_NS_THRUST
