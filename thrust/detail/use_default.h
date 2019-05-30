@@ -21,7 +21,8 @@
 namespace thrust
 {
 
-struct use_default {};
+    struct use_default
+    {
+    };
 
 } // end thrust
-

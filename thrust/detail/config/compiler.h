@@ -38,30 +38,31 @@
 
 // enumerate host compilers we know about
 #define THRUST_HOST_COMPILER_UNKNOWN 0
-#define THRUST_HOST_COMPILER_MSVC    1
-#define THRUST_HOST_COMPILER_GCC     2
-#define THRUST_HOST_COMPILER_CLANG   3
+#define THRUST_HOST_COMPILER_MSVC 1
+#define THRUST_HOST_COMPILER_GCC 2
+#define THRUST_HOST_COMPILER_CLANG 3
 
 // enumerate device compilers we know about
 #define THRUST_DEVICE_COMPILER_UNKNOWN 0
-#define THRUST_DEVICE_COMPILER_MSVC    1
-#define THRUST_DEVICE_COMPILER_GCC     2
-#define THRUST_DEVICE_COMPILER_NVCC    3
-#define THRUST_DEVICE_COMPILER_CLANG   4
-#define THRUST_DEVICE_COMPILER_HCC     5
+#define THRUST_DEVICE_COMPILER_MSVC 1
+#define THRUST_DEVICE_COMPILER_GCC 2
+#define THRUST_DEVICE_COMPILER_NVCC 3
+#define THRUST_DEVICE_COMPILER_CLANG 4
+#define THRUST_DEVICE_COMPILER_HCC 5
 
 // figure out which host compiler we're using
 // XXX we should move the definition of THRUST_DEPRECATED out of this logic
-#if   defined(_MSC_VER)
+#if defined(_MSC_VER)
 #define THRUST_HOST_COMPILER THRUST_HOST_COMPILER_MSVC
 #define THRUST_DEPRECATED __declspec(deprecated)
 #elif defined(__clang__)
 #define THRUST_HOST_COMPILER THRUST_HOST_COMPILER_CLANG
-#define THRUST_DEPRECATED __attribute__ ((deprecated))
-#define THRUST_CLANG_VERSION (__clang_major__ * 10000 + __clang_minor__ * 100 + __clang_patchlevel__)
+#define THRUST_DEPRECATED __attribute__((deprecated))
+#define THRUST_CLANG_VERSION \
+    (__clang_major__ * 10000 + __clang_minor__ * 100 + __clang_patchlevel__)
 #elif defined(__GNUC__)
 #define THRUST_HOST_COMPILER THRUST_HOST_COMPILER_GCC
-#define THRUST_DEPRECATED __attribute__ ((deprecated))
+#define THRUST_DEPRECATED __attribute__((deprecated))
 #define THRUST_GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
 #else
 #define THRUST_HOST_COMPILER THRUST_HOST_COMPILER_UNKNOWN
@@ -96,29 +97,25 @@
 #endif // _OPENMP
 
 // disable specific MSVC warnings
-#if (THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_MSVC) && !defined(__CUDA_ARCH__)
+#if(THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_MSVC) && !defined(__CUDA_ARCH__)
 #define __THRUST_DISABLE_MSVC_WARNING_BEGIN(x) \
-__pragma(warning(push)) \
-__pragma(warning(disable : x))
-#define __THRUST_DISABLE_MSVC_WARNING_END(x) \
-__pragma(warning(pop))
+    __pragma(warning(push)) __pragma(warning(disable : x))
+#define __THRUST_DISABLE_MSVC_WARNING_END(x) __pragma(warning(pop))
 #else
 #define __THRUST_DISABLE_MSVC_WARNING_BEGIN(x)
 #define __THRUST_DISABLE_MSVC_WARNING_END(x)
 #endif
 #define __THRUST_DISABLE_MSVC_POSSIBLE_LOSS_OF_DATA_WARNING(x) \
-__THRUST_DISABLE_MSVC_WARNING_BEGIN(4244 4267) \
-x;\
-__THRUST_DISABLE_MSVC_WARNING_END(4244 4267)
+    __THRUST_DISABLE_MSVC_WARNING_BEGIN(4244 4267)             \
+    x;                                                         \
+    __THRUST_DISABLE_MSVC_WARNING_END(4244 4267)
 #define __THRUST_DISABLE_MSVC_POSSIBLE_LOSS_OF_DATA_WARNING_BEGIN \
-__THRUST_DISABLE_MSVC_WARNING_BEGIN(4244 4267)
+    __THRUST_DISABLE_MSVC_WARNING_BEGIN(4244 4267)
 #define __THRUST_DISABLE_MSVC_POSSIBLE_LOSS_OF_DATA_WARNING_END \
-__THRUST_DISABLE_MSVC_WARNING_END(4244 4267)
+    __THRUST_DISABLE_MSVC_WARNING_END(4244 4267)
 #define __THRUST_DISABLE_MSVC_FORCING_VALUE_TO_BOOL(x) \
-__THRUST_DISABLE_MSVC_WARNING_BEGIN(4800) \
-x;\
-__THRUST_DISABLE_MSVC_WARNING_END(4800)
-#define __THRUST_DISABLE_MSVC_FORCING_VALUE_TO_BOOL_BEGIN \
-__THRUST_DISABLE_MSVC_WARNING_BEGIN(4800)
-#define __THRUST_DISABLE_MSVC_FORCING_VALUE_TO_BOOL_END \
-__THRUST_DISABLE_MSVC_WARNING_END(4800)
+    __THRUST_DISABLE_MSVC_WARNING_BEGIN(4800)          \
+    x;                                                 \
+    __THRUST_DISABLE_MSVC_WARNING_END(4800)
+#define __THRUST_DISABLE_MSVC_FORCING_VALUE_TO_BOOL_BEGIN __THRUST_DISABLE_MSVC_WARNING_BEGIN(4800)
+#define __THRUST_DISABLE_MSVC_FORCING_VALUE_TO_BOOL_END __THRUST_DISABLE_MSVC_WARNING_END(4800)

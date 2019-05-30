@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 #pragma once
 
 #include <thrust/detail/config.h>
@@ -22,36 +21,35 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
-template<typename ExecutionPolicy,
-         typename InputIterator,
-         typename ForwardIterator>
-__host__ __device__
-  ForwardIterator uninitialized_copy(thrust::execution_policy<ExecutionPolicy> &exec,
-                                     InputIterator first,
-                                     InputIterator last,
-                                     ForwardIterator result);
+                template <typename ExecutionPolicy,
+                          typename InputIterator,
+                          typename ForwardIterator>
+                __host__ __device__ ForwardIterator
+                                    uninitialized_copy(thrust::execution_policy<ExecutionPolicy>& exec,
+                                                       InputIterator                              first,
+                                                       InputIterator                              last,
+                                                       ForwardIterator                            result);
 
-template<typename ExecutionPolicy,
-         typename InputIterator,
-         typename Size,
-         typename ForwardIterator>
-__host__ __device__
-  ForwardIterator uninitialized_copy_n(thrust::execution_policy<ExecutionPolicy> &exec,
-                                       InputIterator first,
-                                       Size n,
-                                       ForwardIterator result);
+                template <typename ExecutionPolicy,
+                          typename InputIterator,
+                          typename Size,
+                          typename ForwardIterator>
+                __host__ __device__ ForwardIterator
+                                    uninitialized_copy_n(thrust::execution_policy<ExecutionPolicy>& exec,
+                                                         InputIterator                              first,
+                                                         Size                                       n,
+                                                         ForwardIterator                            result);
 
-} // end namespace generic
-} // end namespace detail
-} // end namespace system
+            } // end namespace generic
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/detail/generic/uninitialized_copy.inl>
-

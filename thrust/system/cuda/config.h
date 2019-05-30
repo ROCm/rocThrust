@@ -28,22 +28,28 @@
 #include <thrust/detail/config.h>
 
 #ifndef BEGIN_NS_THRUST
-#define BEGIN_NS_THRUST namespace thrust {
+#define BEGIN_NS_THRUST \
+    namespace thrust    \
+    {
 #endif
 
-#define THRUST_UNUSED_VAR(expr) do { (void)(expr); } while (0)
+#define THRUST_UNUSED_VAR(expr) \
+    do                          \
+    {                           \
+        (void)(expr);           \
+    } while(0)
 
 #if defined(__CUDACC__)
-#  if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__>= 350 && defined(__CUDACC_RDC__))
-#    define __THRUST_HAS_CUDART__ 1
-#    define THRUST_RUNTIME_FUNCTION __host__ __device__ __forceinline__
-#  else
-#    define __THRUST_HAS_CUDART__ 0
-#    define THRUST_RUNTIME_FUNCTION __host__ __forceinline__
-#  endif
+#if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 350 && defined(__CUDACC_RDC__))
+#define __THRUST_HAS_CUDART__ 1
+#define THRUST_RUNTIME_FUNCTION __host__ __device__ __forceinline__
 #else
-#  define __THRUST_HAS_CUDART__ 0
-#  define THRUST_RUNTIME_FUNCTION __host__ __forceinline__
+#define __THRUST_HAS_CUDART__ 0
+#define THRUST_RUNTIME_FUNCTION __host__ __forceinline__
+#endif
+#else
+#define __THRUST_HAS_CUDART__ 0
+#define THRUST_RUNTIME_FUNCTION __host__ __forceinline__
 #endif
 
 #ifdef __CUDA_ARCH__
@@ -57,14 +63,16 @@
 #endif
 
 #define THRUST_DEVICE_FUNCTION __device__ __forceinline__
-#define THRUST_HOST_FUNCTION __host__     __forceinline__
+#define THRUST_HOST_FUNCTION __host__ __forceinline__
 #define THRUST_FUNCTION __host__ __device__ __forceinline__
 #if 0
 #define THRUST_ARGS(...) __VA_ARGS__
 #define THRUST_STRIP_PARENS(X) X
-#define THRUST_AGENT_ENTRY(ARGS) THRUST_FUNCTION static void entry(THRUST_STRIP_PARENS(THRUST_ARGS ARGS))
+#define THRUST_AGENT_ENTRY(ARGS) \
+    THRUST_FUNCTION static void entry(THRUST_STRIP_PARENS(THRUST_ARGS ARGS))
 #else
-#define THRUST_AGENT_ENTRY(...) THRUST_AGENT_ENTRY_INLINE_ATTR __device__ static void entry(__VA_ARGS__)
+#define THRUST_AGENT_ENTRY(...) \
+    THRUST_AGENT_ENTRY_INLINE_ATTR __device__ static void entry(__VA_ARGS__)
 #endif
 
 #ifdef THRUST_DEBUG_SYNC
@@ -74,11 +82,15 @@
 #define THRUST_DEBUG_SYNC_FLAG false
 #endif
 
-#define THRUST_CUB_NS_PREFIX namespace thrust {   namespace cuda_cub {
-#define THRUST_CUB_NS_POSTFIX }  }
-
+#define THRUST_CUB_NS_PREFIX \
+    namespace thrust         \
+    {                        \
+        namespace cuda_cub   \
+        {
+#define THRUST_CUB_NS_POSTFIX \
+    }                         \
+    }
 
 #ifndef END_NS_THRUST
 #define END_NS_THRUST }
 #endif
-

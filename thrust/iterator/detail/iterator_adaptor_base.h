@@ -17,95 +17,67 @@
 #pragma once
 
 #include <thrust/detail/type_traits.h>
-#include <thrust/iterator/iterator_traits.h>
 #include <thrust/detail/use_default.h>
 #include <thrust/iterator/iterator_facade.h>
+#include <thrust/iterator/iterator_traits.h>
 
 namespace thrust
 {
 
+    // forward declaration of iterator_adaptor for iterator_adaptor_base below
+    template <typename Derived,
+              typename Base,
+              typename Value,
+              typename System,
+              typename Traversal,
+              typename Reference,
+              typename Difference>
+    class iterator_adaptor;
 
-// forward declaration of iterator_adaptor for iterator_adaptor_base below
-template<typename Derived,
-         typename Base,
-         typename Value,
-         typename System,
-         typename Traversal,
-         typename Reference,
-         typename Difference
->
-class iterator_adaptor;
+    namespace detail
+    {
 
+        // If T is use_default, return the result of invoking
+        // DefaultNullaryFn, otherwise return T.
+        // XXX rename to dflt_help
+        template <class T, class DefaultNullaryFn>
+        struct ia_dflt_help
+            : thrust::detail::eval_if<thrust::detail::is_same<T, thrust::use_default>::value,
+                                      DefaultNullaryFn,
+                                      thrust::detail::identity_<T>>
+        {
+        }; // end ia_dflt_help
 
-namespace detail
-{
+        // A metafunction which computes an iterator_adaptor's base class,
+        // a specialization of iterator_facade.
+        template <typename Derived,
+                  typename Base,
+                  typename Value,
+                  typename System,
+                  typename Traversal,
+                  typename Reference,
+                  typename Difference>
+        struct iterator_adaptor_base
+        {
+            typedef typename ia_dflt_help<Value, iterator_value<Base>>::type value;
 
-// If T is use_default, return the result of invoking
-// DefaultNullaryFn, otherwise return T.
-// XXX rename to dflt_help
-template <class T, class DefaultNullaryFn>
-struct ia_dflt_help
-  : thrust::detail::eval_if<
-        thrust::detail::is_same<T, thrust::use_default>::value
-      , DefaultNullaryFn
-      , thrust::detail::identity_<T>
-    >
-{
-}; // end ia_dflt_help
+            typedef typename ia_dflt_help<System, thrust::iterator_system<Base>>::type system;
 
+            typedef
+                typename ia_dflt_help<Traversal, thrust::iterator_traversal<Base>>::type traversal;
 
-// A metafunction which computes an iterator_adaptor's base class,
-// a specialization of iterator_facade.
-template<typename Derived,
-         typename Base,
-         typename Value,
-         typename System,
-         typename Traversal,
-         typename Reference,
-         typename Difference
->
-  struct iterator_adaptor_base
-{
-  typedef typename ia_dflt_help<
-    Value,
-    iterator_value<Base>
-  >::type value;
+            typedef typename ia_dflt_help<
+                Reference,
+                thrust::detail::eval_if<thrust::detail::is_same<Value, use_default>::value,
+                                        thrust::iterator_reference<Base>,
+                                        thrust::detail::add_reference<Value>>>::type reference;
 
-  typedef typename ia_dflt_help<
-    System,
-    thrust::iterator_system<Base>
-  >::type system;
+            typedef typename ia_dflt_help<Difference, iterator_difference<Base>>::type difference;
 
-  typedef typename ia_dflt_help<
-    Traversal,
-    thrust::iterator_traversal<Base>
-  >::type traversal;
+            typedef thrust::
+                iterator_facade<Derived, value, system, traversal, reference, difference>
+                    type;
+        }; // end iterator_adaptor_base
 
-  typedef typename ia_dflt_help<
-    Reference,
-    thrust::detail::eval_if<
-      thrust::detail::is_same<Value,use_default>::value,
-      thrust::iterator_reference<Base>,
-      thrust::detail::add_reference<Value>
-    >
-  >::type reference;
-
-  typedef typename ia_dflt_help<
-    Difference,
-    iterator_difference<Base>
-  >::type difference;
-
-  typedef thrust::iterator_facade<
-    Derived,
-    value,
-    system,
-    traversal,
-    reference,
-    difference
-  > type;
-}; // end iterator_adaptor_base
-
-
-} // end detail
+    } // end detail
 } // end thrust
-

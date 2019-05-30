@@ -35,63 +35,52 @@ BEGIN_NS_THRUST
 namespace hip_rocprim
 {
 
-template <class Derived, class ItemsIt, class MapIt, class ResultIt>
-void THRUST_HIP_FUNCTION
-scatter(execution_policy<Derived>& policy,
-        ItemsIt                    first,
-        ItemsIt                    last,
-        MapIt                      map,
-        ResultIt                   result)
-{
-    hip_rocprim::transform(policy,
-                           first,
-                           last,
-                           thrust::make_permutation_iterator(result, map),
-                           identity());
-}
+    template <class Derived, class ItemsIt, class MapIt, class ResultIt>
+    void THRUST_HIP_FUNCTION scatter(
+        execution_policy<Derived>& policy, ItemsIt first, ItemsIt last, MapIt map, ResultIt result)
+    {
+        hip_rocprim::transform(
+            policy, first, last, thrust::make_permutation_iterator(result, map), identity());
+    }
 
-template <class Derived,
-          class ItemsIt,
-          class MapIt,
-          class StencilIt,
-          class ResultIt,
-          class Predicate>
-void THRUST_HIP_FUNCTION
-scatter_if(execution_policy<Derived>& policy,
-           ItemsIt                    first,
-           ItemsIt                    last,
-           MapIt                      map,
-           StencilIt                  stencil,
-           ResultIt                   result,
-           Predicate                  predicate)
-{
-    hip_rocprim::transform_if(policy,
-                              first,
-                              last,
-                              stencil,
-                              thrust::make_permutation_iterator(result, map),
-                              identity(),
-                              predicate);
-}
+    template <class Derived,
+              class ItemsIt,
+              class MapIt,
+              class StencilIt,
+              class ResultIt,
+              class Predicate>
+    void THRUST_HIP_FUNCTION scatter_if(execution_policy<Derived>& policy,
+                                        ItemsIt                    first,
+                                        ItemsIt                    last,
+                                        MapIt                      map,
+                                        StencilIt                  stencil,
+                                        ResultIt                   result,
+                                        Predicate                  predicate)
+    {
+        hip_rocprim::transform_if(policy,
+                                  first,
+                                  last,
+                                  stencil,
+                                  thrust::make_permutation_iterator(result, map),
+                                  identity(),
+                                  predicate);
+    }
 
-template <class Derived,
-          class ItemsIt,
-          class MapIt,
-          class StencilIt,
-          class ResultIt,
-          class Predicate>
-void THRUST_HIP_FUNCTION
-scatter_if(execution_policy<Derived>& policy,
-           ItemsIt                    first,
-           ItemsIt                    last,
-           MapIt                      map,
-           StencilIt                  stencil,
-           ResultIt                   result)
-{
-    hip_rocprim::scatter_if(
-        policy, first, last, map, stencil, result, identity()
-    );
-}
+    template <class Derived,
+              class ItemsIt,
+              class MapIt,
+              class StencilIt,
+              class ResultIt,
+              class Predicate>
+    void THRUST_HIP_FUNCTION scatter_if(execution_policy<Derived>& policy,
+                                        ItemsIt                    first,
+                                        ItemsIt                    last,
+                                        MapIt                      map,
+                                        StencilIt                  stencil,
+                                        ResultIt                   result)
+    {
+        hip_rocprim::scatter_if(policy, first, last, map, stencil, result, identity());
+    }
 
 } // namespace hip_rocprim
 END_NS_THRUST

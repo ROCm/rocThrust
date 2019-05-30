@@ -23,41 +23,37 @@
 // carefully save their definitions and restore them
 // can't tell exactly when push_macro & pop_macro were introduced to gcc; assume 4.5.0
 
-
 #if !defined(__GNUC__) || ((10000 * __GNUC__ + 100 * __GNUC_MINOR__ + __GNUC_PATCHLEVEL__) >= 40500)
-#  ifdef __host__
-#    pragma push_macro("__host__")
-#    undef __host__
-#    define THRUST_HOST_NEEDS_RESTORATION
-#  endif
-#  ifdef __device__
-#    pragma push_macro("__device__")
-#    undef __device__
-#    define THRUST_DEVICE_NEEDS_RESTORATION
-#  endif
+#ifdef __host__
+#pragma push_macro("__host__")
+#undef __host__
+#define THRUST_HOST_NEEDS_RESTORATION
+#endif
+#ifdef __device__
+#pragma push_macro("__device__")
+#undef __device__
+#define THRUST_DEVICE_NEEDS_RESTORATION
+#endif
 #else // GNUC pre 4.5.0
-#  if !defined(__DRIVER_TYPES_H__)
-#    ifdef __host__
-#      undef __host__
-#    endif
-#    ifdef __device__
-#      undef __device__
-#    endif
-#  endif // __DRIVER_TYPES_H__
+#if !defined(__DRIVER_TYPES_H__)
+#ifdef __host__
+#undef __host__
+#endif
+#ifdef __device__
+#undef __device__
+#endif
+#endif // __DRIVER_TYPES_H__
 #endif // __GNUC__
-
 
 #include <driver_types.h>
 
-
 #if !defined(__GNUC__) || ((10000 * __GNUC__ + 100 * __GNUC_MINOR__ + __GNUC_PATCHLEVEL__) >= 40500)
-#  ifdef THRUST_HOST_NEEDS_RESTORATION
-#    pragma pop_macro("__host__")
-#    undef THRUST_HOST_NEEDS_RESTORATION
-#  endif
-#  ifdef THRUST_DEVICE_NEEDS_RESTORATION
-#    pragma pop_macro("__device__")
-#    undef THRUST_DEVICE_NEEDS_RESTORATION
-#  endif
+#ifdef THRUST_HOST_NEEDS_RESTORATION
+#pragma pop_macro("__host__")
+#undef THRUST_HOST_NEEDS_RESTORATION
+#endif
+#ifdef THRUST_DEVICE_NEEDS_RESTORATION
+#pragma pop_macro("__device__")
+#undef THRUST_DEVICE_NEEDS_RESTORATION
+#endif
 #endif // __GNUC__
-

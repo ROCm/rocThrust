@@ -17,50 +17,49 @@
 #pragma once
 
 #include <thrust/detail/config.h>
-#include <thrust/system/tbb/detail/execution_policy.h>
 #include <thrust/detail/execute_with_allocator.h>
+#include <thrust/system/tbb/detail/execution_policy.h>
 
 namespace thrust
 {
-namespace system
-{
-namespace tbb
-{
-namespace detail
-{
+    namespace system
+    {
+        namespace tbb
+        {
+            namespace detail
+            {
 
+                struct par_t : thrust::system::tbb::detail::execution_policy<par_t>
+                {
+                    par_t()
+                        : thrust::system::tbb::detail::execution_policy<par_t>()
+                    {
+                    }
 
-struct par_t : thrust::system::tbb::detail::execution_policy<par_t>
-{
-  par_t() : thrust::system::tbb::detail::execution_policy<par_t>() {}
+                    template <typename Allocator>
+                    thrust::detail::execute_with_allocator<
+                        Allocator,
+                        thrust::system::tbb::detail::execution_policy>
+                        operator()(Allocator& alloc) const
+                    {
+                        return thrust::detail::execute_with_allocator<
+                            Allocator,
+                            thrust::system::tbb::detail::execution_policy>(alloc);
+                    }
+                };
 
-  template<typename Allocator>
-    thrust::detail::execute_with_allocator<Allocator, thrust::system::tbb::detail::execution_policy>
-      operator()(Allocator &alloc) const
-  {
-    return thrust::detail::execute_with_allocator<Allocator, thrust::system::tbb::detail::execution_policy>(alloc);
-  }
-};
+            } // end detail
 
+            static const detail::par_t par;
 
-} // end detail
+        } // end tbb
+    } // end system
 
+    // alias par here
+    namespace tbb
+    {
 
-static const detail::par_t par;
+        using thrust::system::tbb::par;
 
-
-} // end tbb
-} // end system
-
-
-// alias par here
-namespace tbb
-{
-
-
-using thrust::system::tbb::par;
-
-
-} // end tbb
+    } // end tbb
 } // end thrust
-

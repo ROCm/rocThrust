@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file for_each.h
  *  \brief Sequential implementations of for_each functions.
  */
@@ -27,69 +26,58 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace sequential
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace sequential
+            {
 
+                __thrust_exec_check_disable__ template <typename DerivedPolicy,
+                                                        typename InputIterator,
+                                                        typename UnaryFunction>
+                __host__ __device__ InputIterator
+                                    for_each(sequential::execution_policy<DerivedPolicy>&,
+                                             InputIterator first,
+                                             InputIterator last,
+                                             UnaryFunction f)
+                {
+                    // wrap f
+                    thrust::detail::wrapped_function<UnaryFunction, void> wrapped_f(f);
 
-__thrust_exec_check_disable__
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename UnaryFunction>
-__host__ __device__
-InputIterator for_each(sequential::execution_policy<DerivedPolicy> &,
-                       InputIterator first,
-                       InputIterator last,
-                       UnaryFunction f)
-{
-  // wrap f
-  thrust::detail::wrapped_function<
-    UnaryFunction,
-    void
-  > wrapped_f(f);
+                    for(; first != last; ++first)
+                    {
+                        wrapped_f(*first);
+                    }
 
-  for(; first != last; ++first)
-  {
-    wrapped_f(*first);
-  }
+                    return first;
+                } // end for_each()
 
-  return first;
-} // end for_each()
+                template <typename DerivedPolicy,
+                          typename InputIterator,
+                          typename Size,
+                          typename UnaryFunction>
+                __host__ __device__ InputIterator
+                                    for_each_n(sequential::execution_policy<DerivedPolicy>&,
+                                               InputIterator first,
+                                               Size          n,
+                                               UnaryFunction f)
+                {
+                    // wrap f
+                    thrust::detail::wrapped_function<UnaryFunction, void> wrapped_f(f);
 
+                    for(Size i = 0; i != n; i++)
+                    {
+                        // we can dereference an OutputIterator if f does not
+                        // try to use the reference for anything besides assignment
+                        wrapped_f(*first);
+                        ++first;
+                    }
 
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename Size,
-         typename UnaryFunction>
-__host__ __device__
-InputIterator for_each_n(sequential::execution_policy<DerivedPolicy> &,
-                         InputIterator first,
-                         Size n,
-                         UnaryFunction f)
-{
-  // wrap f
-  thrust::detail::wrapped_function<
-    UnaryFunction,
-    void
-  > wrapped_f(f);
+                    return first;
+                } // end for_each_n()
 
-  for(Size i = 0; i != n; i++)
-  {
-    // we can dereference an OutputIterator if f does not
-    // try to use the reference for anything besides assignment
-    wrapped_f(*first);
-    ++first;
-  }
-
-  return first;
-} // end for_each_n()
-
-
-} // end namespace sequential
-} // end namespace detail
-} // end namespace system
+            } // end namespace sequential
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
-

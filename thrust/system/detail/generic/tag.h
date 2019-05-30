@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file generic/tag.h
  *  \brief Implementation of the generic backend's tag.
  */
@@ -25,24 +24,24 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
-// tag exists only to make the generic entry points the least priority match
-// during ADL. tag should not be derived from and is constructible from anything
-struct tag
-{
-  template<typename T>
-  __host__ __device__ inline
-  tag(const T &) {}
-};
+                // tag exists only to make the generic entry points the least priority match
+                // during ADL. tag should not be derived from and is constructible from anything
+                struct tag
+                {
+                    template <typename T>
+                    __host__ __device__ inline tag(const T&)
+                    {
+                    }
+                };
 
-} // end generic
-} // end detail
-} // end system
+            } // end generic
+        } // end detail
+    } // end system
 } // end thrust
-

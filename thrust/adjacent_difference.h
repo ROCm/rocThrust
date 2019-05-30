@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file adjacent_difference.h
  *  \brief Compute difference between consecutive elements of a range
  */
@@ -27,13 +26,11 @@
 namespace thrust
 {
 
-
-/*! \addtogroup transformations Transformations
+    /*! \addtogroup transformations Transformations
  *  \{
  */
 
-
-/*! \p adjacent_difference calculates the differences of adjacent elements in the
+    /*! \p adjacent_difference calculates the differences of adjacent elements in the
  *  range <tt>[first, last)</tt>. That is, <tt>\*first</tt> is assigned to
  *  <tt>\*result</tt>, and, for each iterator \p i in the range
  *  <tt>[first + 1, last)</tt>, the difference of <tt>\*i</tt> and <tt>*(i - 1)</tt>
@@ -80,13 +77,14 @@ namespace thrust
  *  \see http://www.sgi.com/tech/stl/adjacent_difference.html
  *  \see inclusive_scan
  */
-template<typename DerivedPolicy, typename InputIterator, typename OutputIterator>
-__host__ __device__
-OutputIterator adjacent_difference(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                   InputIterator first, InputIterator last, 
-                                   OutputIterator result);
+    template <typename DerivedPolicy, typename InputIterator, typename OutputIterator>
+    __host__ __device__ OutputIterator
+                        adjacent_difference(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                            InputIterator                                               first,
+                                            InputIterator                                               last,
+                                            OutputIterator                                              result);
 
-/*! \p adjacent_difference calculates the differences of adjacent elements in the
+    /*! \p adjacent_difference calculates the differences of adjacent elements in the
  *  range <tt>[first, last)</tt>. That is, <tt>*first</tt> is assigned to
  *  <tt>\*result</tt>, and, for each iterator \p i in the range
  *  <tt>[first + 1, last)</tt>, <tt>binary_op(\*i, \*(i - 1))</tt> is assigned to
@@ -135,14 +133,18 @@ OutputIterator adjacent_difference(const thrust::detail::execution_policy_base<D
  *  \see http://www.sgi.com/tech/stl/adjacent_difference.html
  *  \see inclusive_scan
  */
-template<typename DerivedPolicy, typename InputIterator, typename OutputIterator, typename BinaryFunction>
-__host__ __device__
-OutputIterator adjacent_difference(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                   InputIterator first, InputIterator last,
-                                   OutputIterator result,
-                                   BinaryFunction binary_op);
+    template <typename DerivedPolicy,
+              typename InputIterator,
+              typename OutputIterator,
+              typename BinaryFunction>
+    __host__ __device__ OutputIterator
+                        adjacent_difference(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                            InputIterator                                               first,
+                                            InputIterator                                               last,
+                                            OutputIterator                                              result,
+                                            BinaryFunction                                              binary_op);
 
-/*! \p adjacent_difference calculates the differences of adjacent elements in the
+    /*! \p adjacent_difference calculates the differences of adjacent elements in the
  *  range <tt>[first, last)</tt>. That is, <tt>\*first</tt> is assigned to
  *  <tt>\*result</tt>, and, for each iterator \p i in the range
  *  <tt>[first + 1, last)</tt>, the difference of <tt>\*i</tt> and <tt>*(i - 1)</tt>
@@ -184,11 +186,11 @@ OutputIterator adjacent_difference(const thrust::detail::execution_policy_base<D
  *  \see http://www.sgi.com/tech/stl/adjacent_difference.html
  *  \see inclusive_scan
  */
-template <typename InputIterator, typename OutputIterator>
-OutputIterator adjacent_difference(InputIterator first, InputIterator last, 
-                                   OutputIterator result);
+    template <typename InputIterator, typename OutputIterator>
+    OutputIterator
+        adjacent_difference(InputIterator first, InputIterator last, OutputIterator result);
 
-/*! \p adjacent_difference calculates the differences of adjacent elements in the
+    /*! \p adjacent_difference calculates the differences of adjacent elements in the
  *  range <tt>[first, last)</tt>. That is, <tt>*first</tt> is assigned to
  *  <tt>\*result</tt>, and, for each iterator \p i in the range
  *  <tt>[first + 1, last)</tt>, <tt>binary_op(\*i, \*(i - 1))</tt> is assigned to
@@ -232,15 +234,15 @@ OutputIterator adjacent_difference(InputIterator first, InputIterator last,
  *  \see http://www.sgi.com/tech/stl/adjacent_difference.html
  *  \see inclusive_scan
  */
-template <typename InputIterator, typename OutputIterator, typename BinaryFunction>
-OutputIterator adjacent_difference(InputIterator first, InputIterator last,
-                                   OutputIterator result,
-                                   BinaryFunction binary_op);
+    template <typename InputIterator, typename OutputIterator, typename BinaryFunction>
+    OutputIterator adjacent_difference(InputIterator  first,
+                                       InputIterator  last,
+                                       OutputIterator result,
+                                       BinaryFunction binary_op);
 
-/*! \}
+    /*! \}
  */
 
 } // end namespace thrust
 
 #include <thrust/detail/adjacent_difference.inl>
-

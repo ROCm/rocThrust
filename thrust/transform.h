@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file transform.h
  *  \brief Transforms input ranges using a function object
  */
@@ -27,17 +26,15 @@
 namespace thrust
 {
 
-
-/*! \addtogroup algorithms
+    /*! \addtogroup algorithms
  */
 
-/*! \addtogroup transformations
+    /*! \addtogroup transformations
  *  \ingroup algorithms
  *  \{
  */
 
-
-/*! This version of \p transform applies a unary function to each element
+    /*! This version of \p transform applies a unary function to each element
  *  of an input sequence and stores the result in the corresponding 
  *  position in an output sequence.  Specifically, for each iterator 
  *  <tt>i</tt> in the range [\p first, \p last) the operation 
@@ -84,18 +81,18 @@ namespace thrust
  *
  *  \see http://www.sgi.com/tech/stl/transform.html
  */
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator,
-         typename UnaryFunction>
-__host__ __device__
-  OutputIterator transform(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                           InputIterator first, InputIterator last,
-                           OutputIterator result,
-                           UnaryFunction op);
+    template <typename DerivedPolicy,
+              typename InputIterator,
+              typename OutputIterator,
+              typename UnaryFunction>
+    __host__ __device__ OutputIterator
+                        transform(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                  InputIterator                                               first,
+                                  InputIterator                                               last,
+                                  OutputIterator                                              result,
+                                  UnaryFunction                                               op);
 
-	
-/*! This version of \p transform applies a unary function to each element
+    /*! This version of \p transform applies a unary function to each element
  *  of an input sequence and stores the result in the corresponding 
  *  position in an output sequence.  Specifically, for each iterator 
  *  <tt>i</tt> in the range [\p first, \p last) the operation 
@@ -135,15 +132,11 @@ __host__ __device__
  *
  *  \see http://www.sgi.com/tech/stl/transform.html
  */
-template<typename InputIterator,
-         typename OutputIterator,
-         typename UnaryFunction>
-  OutputIterator transform(InputIterator first, InputIterator last,
-                           OutputIterator result,
-                           UnaryFunction op);
+    template <typename InputIterator, typename OutputIterator, typename UnaryFunction>
+    OutputIterator
+        transform(InputIterator first, InputIterator last, OutputIterator result, UnaryFunction op);
 
-
-/*! This version of \p transform applies a binary function to each pair
+    /*! This version of \p transform applies a binary function to each pair
  *  of elements from two input sequences and stores the result in the
  *  corresponding position in an output sequence.  Specifically, for
  *  each iterator <tt>i</tt> in the range [\p first1, \p last1) and 
@@ -198,20 +191,20 @@ template<typename InputIterator,
  *
  *  \see http://www.sgi.com/tech/stl/transform.html
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename BinaryFunction>
-__host__ __device__
-  OutputIterator transform(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                           InputIterator1 first1, InputIterator1 last1,
-                           InputIterator2 first2,
-                           OutputIterator result,
-                           BinaryFunction op);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename BinaryFunction>
+    __host__ __device__ OutputIterator
+                        transform(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                  InputIterator1                                              first1,
+                                  InputIterator1                                              last1,
+                                  InputIterator2                                              first2,
+                                  OutputIterator                                              result,
+                                  BinaryFunction                                              op);
 
-
-/*! This version of \p transform applies a binary function to each pair
+    /*! This version of \p transform applies a binary function to each pair
  *  of elements from two input sequences and stores the result in the
  *  corresponding position in an output sequence.  Specifically, for
  *  each iterator <tt>i</tt> in the range [\p first1, \p last1) and 
@@ -259,17 +252,17 @@ __host__ __device__
  *
  *  \see http://www.sgi.com/tech/stl/transform.html
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename BinaryFunction>
-  OutputIterator transform(InputIterator1 first1, InputIterator1 last1,
-                           InputIterator2 first2,
-                           OutputIterator result,
-                           BinaryFunction op);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename BinaryFunction>
+    OutputIterator transform(InputIterator1 first1,
+                             InputIterator1 last1,
+                             InputIterator2 first2,
+                             OutputIterator result,
+                             BinaryFunction op);
 
-
-/*! This version of \p transform_if conditionally applies a unary function
+    /*! This version of \p transform_if conditionally applies a unary function
  *  to each element of an input sequence and stores the result in the corresponding 
  *  position in an output sequence if the corresponding position in the input sequence
  *  satifies a predicate. Otherwise, the corresponding position in the
@@ -335,20 +328,20 @@ template<typename InputIterator1,
  *
  *  \see thrust::transform
  */
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename ForwardIterator,
-         typename UnaryFunction,
-         typename Predicate>
-__host__ __device__
-  ForwardIterator transform_if(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                               InputIterator first, InputIterator last,
-                               ForwardIterator result,
-                               UnaryFunction op,
-                               Predicate pred);
+    template <typename DerivedPolicy,
+              typename InputIterator,
+              typename ForwardIterator,
+              typename UnaryFunction,
+              typename Predicate>
+    __host__ __device__ ForwardIterator
+                        transform_if(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                     InputIterator                                               first,
+                                     InputIterator                                               last,
+                                     ForwardIterator                                             result,
+                                     UnaryFunction                                               op,
+                                     Predicate                                                   pred);
 
-
-/*! This version of \p transform_if conditionally applies a unary function
+    /*! This version of \p transform_if conditionally applies a unary function
  *  to each element of an input sequence and stores the result in the corresponding 
  *  position in an output sequence if the corresponding position in the input sequence
  *  satifies a predicate. Otherwise, the corresponding position in the
@@ -407,17 +400,17 @@ __host__ __device__
  *
  *  \see thrust::transform
  */
-template<typename InputIterator,
-         typename ForwardIterator,
-         typename UnaryFunction,
-         typename Predicate>
-  ForwardIterator transform_if(InputIterator first, InputIterator last,
-                               ForwardIterator result,
-                               UnaryFunction op,
-                               Predicate pred);
+    template <typename InputIterator,
+              typename ForwardIterator,
+              typename UnaryFunction,
+              typename Predicate>
+    ForwardIterator transform_if(InputIterator   first,
+                                 InputIterator   last,
+                                 ForwardIterator result,
+                                 UnaryFunction   op,
+                                 Predicate       pred);
 
-
-/*! This version of \p transform_if conditionally applies a unary function
+    /*! This version of \p transform_if conditionally applies a unary function
  *  to each element of an input sequence and stores the result in the corresponding 
  *  position in an output sequence if the corresponding position in a stencil sequence
  *  satisfies a predicate. Otherwise, the corresponding position in the
@@ -478,22 +471,22 @@ template<typename InputIterator,
  *
  *  \see thrust::transform
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename ForwardIterator,
-         typename UnaryFunction,
-         typename Predicate>
-__host__ __device__
-  ForwardIterator transform_if(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                               InputIterator1 first, InputIterator1 last,
-                               InputIterator2 stencil,
-                               ForwardIterator result,
-                               UnaryFunction op,
-                               Predicate pred);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename ForwardIterator,
+              typename UnaryFunction,
+              typename Predicate>
+    __host__ __device__ ForwardIterator
+                        transform_if(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                     InputIterator1                                              first,
+                                     InputIterator1                                              last,
+                                     InputIterator2                                              stencil,
+                                     ForwardIterator                                             result,
+                                     UnaryFunction                                               op,
+                                     Predicate                                                   pred);
 
-
-/*! This version of \p transform_if conditionally applies a unary function
+    /*! This version of \p transform_if conditionally applies a unary function
  *  to each element of an input sequence and stores the result in the corresponding 
  *  position in an output sequence if the corresponding position in a stencil sequence
  *  satisfies a predicate. Otherwise, the corresponding position in the
@@ -547,19 +540,19 @@ __host__ __device__
  *
  *  \see thrust::transform
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename ForwardIterator,
-         typename UnaryFunction,
-         typename Predicate>
-  ForwardIterator transform_if(InputIterator1 first, InputIterator1 last,
-                               InputIterator2 stencil,
-                               ForwardIterator result,
-                               UnaryFunction op,
-                               Predicate pred);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename ForwardIterator,
+              typename UnaryFunction,
+              typename Predicate>
+    ForwardIterator transform_if(InputIterator1  first,
+                                 InputIterator1  last,
+                                 InputIterator2  stencil,
+                                 ForwardIterator result,
+                                 UnaryFunction   op,
+                                 Predicate       pred);
 
-
-/*! This version of \p transform_if conditionally applies a binary function
+    /*! This version of \p transform_if conditionally applies a binary function
  *  to each pair of elements from two input sequences and stores the result in the corresponding 
  *  position in an output sequence if the corresponding position in a stencil sequence
  *  satifies a predicate. Otherwise, the corresponding position in the
@@ -625,24 +618,24 @@ template<typename InputIterator1,
  *
  *  \see thrust::transform
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename ForwardIterator,
-         typename BinaryFunction,
-         typename Predicate>
-__host__ __device__
-  ForwardIterator transform_if(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                               InputIterator1 first1, InputIterator1 last1,
-                               InputIterator2 first2,
-                               InputIterator3 stencil,
-                               ForwardIterator result,
-                               BinaryFunction binary_op,
-                               Predicate pred);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename ForwardIterator,
+              typename BinaryFunction,
+              typename Predicate>
+    __host__ __device__ ForwardIterator
+                        transform_if(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                     InputIterator1                                              first1,
+                                     InputIterator1                                              last1,
+                                     InputIterator2                                              first2,
+                                     InputIterator3                                              stencil,
+                                     ForwardIterator                                             result,
+                                     BinaryFunction                                              binary_op,
+                                     Predicate                                                   pred);
 
-
-/*! This version of \p transform_if conditionally applies a binary function
+    /*! This version of \p transform_if conditionally applies a binary function
  *  to each pair of elements from two input sequences and stores the result in the corresponding 
  *  position in an output sequence if the corresponding position in a stencil sequence
  *  satifies a predicate. Otherwise, the corresponding position in the
@@ -701,25 +694,23 @@ __host__ __device__
  *
  *  \see thrust::transform
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename ForwardIterator,
-         typename BinaryFunction,
-         typename Predicate>
-  ForwardIterator transform_if(InputIterator1 first1, InputIterator1 last1,
-                               InputIterator2 first2,
-                               InputIterator3 stencil,
-                               ForwardIterator result,
-                               BinaryFunction binary_op,
-                               Predicate pred);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename ForwardIterator,
+              typename BinaryFunction,
+              typename Predicate>
+    ForwardIterator transform_if(InputIterator1  first1,
+                                 InputIterator1  last1,
+                                 InputIterator2  first2,
+                                 InputIterator3  stencil,
+                                 ForwardIterator result,
+                                 BinaryFunction  binary_op,
+                                 Predicate       pred);
 
-
-/*! \} // end transformations
+    /*! \} // end transformations
  */
-
 
 } // end namespace thrust
 
 #include <thrust/detail/transform.inl>
-

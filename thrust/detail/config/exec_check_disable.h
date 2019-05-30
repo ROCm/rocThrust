@@ -31,5 +31,3 @@
 #define __thrust_exec_check_disable__
 
 #endif
-
-

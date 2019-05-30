@@ -27,39 +27,39 @@
 
 namespace thrust
 {
-namespace detail
-{
+    namespace detail
+    {
 
 // In the C++11 mode, by default, result_of_adaptable function inheritfrom std::result_of
 #if __cplusplus >= 201103L || defined(__cpp_lib_result_of_sfinae)
-template <typename Signature, typename Enable = void>
-struct result_of_adaptable_function : std::result_of<Signature> {};
-#else  /* cxx11 */
-template<typename Signature, typename Enable = void> 
-struct result_of_adaptable_function;
-#endif  /* cxx11 */
+        template <typename Signature, typename Enable = void>
+        struct result_of_adaptable_function : std::result_of<Signature>
+        {
+        };
+#else /* cxx11 */
+        template <typename Signature, typename Enable = void>
+        struct result_of_adaptable_function;
+#endif /* cxx11 */
 
-// specialization for unary invocations of things which have result_type
-template<typename Functor, typename Arg1>
-  struct result_of_adaptable_function<
-    Functor(Arg1),
-    typename thrust::detail::enable_if<thrust::detail::has_result_type<Functor>::value>::type
-  >
-{
-  typedef typename Functor::result_type type;
-}; // end result_of
+        // specialization for unary invocations of things which have result_type
+        template <typename Functor, typename Arg1>
+        struct result_of_adaptable_function<
+            Functor(Arg1),
+            typename thrust::detail::enable_if<
+                thrust::detail::has_result_type<Functor>::value>::type>
+        {
+            typedef typename Functor::result_type type;
+        }; // end result_of
 
-// specialization for binary invocations of things which have result_type
-template<typename Functor, typename Arg1, typename Arg2>
-  struct result_of_adaptable_function<
-    Functor(Arg1,Arg2),
-    typename thrust::detail::enable_if<thrust::detail::has_result_type<Functor>::value>::type
-  >
-{
-  typedef typename Functor::result_type type;
-};
+        // specialization for binary invocations of things which have result_type
+        template <typename Functor, typename Arg1, typename Arg2>
+        struct result_of_adaptable_function<
+            Functor(Arg1, Arg2),
+            typename thrust::detail::enable_if<
+                thrust::detail::has_result_type<Functor>::value>::type>
+        {
+            typedef typename Functor::result_type type;
+        };
 
-
-} // end detail
+    } // end detail
 } // end thrust
-

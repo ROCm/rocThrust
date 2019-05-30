@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 #pragma once
 
 #include <thrust/detail/config.h>
@@ -22,78 +21,67 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
+                template <typename ExecutionPolicy, typename InputIterator, typename OutputIterator>
+                __host__ __device__ OutputIterator
+                                    inclusive_scan(thrust::execution_policy<ExecutionPolicy>& exec,
+                                                   InputIterator                              first,
+                                                   InputIterator                              last,
+                                                   OutputIterator                             result);
 
-template<typename ExecutionPolicy,
-         typename InputIterator,
-         typename OutputIterator>
-__host__ __device__
-  OutputIterator inclusive_scan(thrust::execution_policy<ExecutionPolicy> &exec,
-                                InputIterator first,
-                                InputIterator last,
-                                OutputIterator result);
+                // XXX it is an error to call this function; it has no implementation
+                template <typename ExecutionPolicy,
+                          typename InputIterator,
+                          typename OutputIterator,
+                          typename BinaryFunction>
+                __host__ __device__ OutputIterator
+                                    inclusive_scan(thrust::execution_policy<ExecutionPolicy>& exec,
+                                                   InputIterator                              first,
+                                                   InputIterator                              last,
+                                                   OutputIterator                             result,
+                                                   BinaryFunction                             binary_op);
 
+                template <typename ExecutionPolicy, typename InputIterator, typename OutputIterator>
+                __host__ __device__ OutputIterator
+                                    exclusive_scan(thrust::execution_policy<ExecutionPolicy>& exec,
+                                                   InputIterator                              first,
+                                                   InputIterator                              last,
+                                                   OutputIterator                             result);
 
-// XXX it is an error to call this function; it has no implementation 
-template<typename ExecutionPolicy,
-         typename InputIterator,
-         typename OutputIterator,
-         typename BinaryFunction>
-__host__ __device__
-  OutputIterator inclusive_scan(thrust::execution_policy<ExecutionPolicy> &exec,
-                                InputIterator first,
-                                InputIterator last,
-                                OutputIterator result,
-                                BinaryFunction binary_op);
+                template <typename ExecutionPolicy,
+                          typename InputIterator,
+                          typename OutputIterator,
+                          typename T>
+                __host__ __device__ OutputIterator
+                                    exclusive_scan(thrust::execution_policy<ExecutionPolicy>& exec,
+                                                   InputIterator                              first,
+                                                   InputIterator                              last,
+                                                   OutputIterator                             result,
+                                                   T                                          init);
 
+                // XXX it is an error to call this function; it has no implementation
+                template <typename ExecutionPolicy,
+                          typename InputIterator,
+                          typename OutputIterator,
+                          typename T,
+                          typename BinaryFunction>
+                __host__ __device__ OutputIterator
+                                    exclusive_scan(thrust::execution_policy<ExecutionPolicy>& exec,
+                                                   InputIterator                              first,
+                                                   InputIterator                              last,
+                                                   OutputIterator                             result,
+                                                   T                                          init,
+                                                   BinaryFunction                             binary_op);
 
-template<typename ExecutionPolicy,
-         typename InputIterator,
-         typename OutputIterator>
-__host__ __device__
-  OutputIterator exclusive_scan(thrust::execution_policy<ExecutionPolicy> &exec,
-                                InputIterator first,
-                                InputIterator last,
-                                OutputIterator result);
-
-
-template<typename ExecutionPolicy,
-         typename InputIterator,
-         typename OutputIterator,
-         typename T>
-__host__ __device__
-  OutputIterator exclusive_scan(thrust::execution_policy<ExecutionPolicy> &exec,
-                                InputIterator first,
-                                InputIterator last,
-                                OutputIterator result,
-                                T init);
-
-
-// XXX it is an error to call this function; it has no implementation 
-template<typename ExecutionPolicy,
-         typename InputIterator,
-         typename OutputIterator,
-         typename T,
-         typename BinaryFunction>
-__host__ __device__
-  OutputIterator exclusive_scan(thrust::execution_policy<ExecutionPolicy> &exec,
-                                InputIterator first,
-                                InputIterator last,
-                                OutputIterator result,
-                                T init,
-                                BinaryFunction binary_op);
-
-
-} // end namespace generic
-} // end namespace detail
-} // end namespace system
+            } // end namespace generic
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/detail/generic/scan.inl>
-

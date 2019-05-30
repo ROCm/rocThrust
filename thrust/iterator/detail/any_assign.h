@@ -20,36 +20,32 @@
 
 namespace thrust
 {
-namespace detail
-{
-
-
-// a type which may be assigned any other type
-struct any_assign
-{
-  inline __host__ __device__ any_assign()
-  {}
-
-  template<typename T>
-  inline __host__ __device__ any_assign(T)
-  {}
-
-  template<typename T>
-  inline __host__ __device__
-  any_assign &operator=(T)
-  {
-    if(0)
+    namespace detail
     {
-      // trick the compiler into silencing "warning: this expression has no effect"
-      int *x = 0;
-      *x = 13;
-    } // end if
 
-    return *this;
-  }
-};
+        // a type which may be assigned any other type
+        struct any_assign
+        {
+            inline __host__ __device__ any_assign() {}
 
+            template <typename T>
+            inline __host__ __device__ any_assign(T)
+            {
+            }
 
-} // end detail
+            template <typename T>
+            inline __host__ __device__ any_assign& operator=(T)
+            {
+                if(0)
+                {
+                    // trick the compiler into silencing "warning: this expression has no effect"
+                    int* x = 0;
+                    *x     = 13;
+                } // end if
+
+                return *this;
+            }
+        };
+
+    } // end detail
 } // end thrust
-

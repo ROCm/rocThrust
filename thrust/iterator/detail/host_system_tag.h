@@ -26,7 +26,7 @@
 namespace thrust
 {
 
-typedef thrust::system::__THRUST_HOST_SYSTEM_NAMESPACE::tag host_system_tag;
+    typedef thrust::system::__THRUST_HOST_SYSTEM_NAMESPACE::tag host_system_tag;
 
 } // end thrust
 
@@ -34,7 +34,6 @@ typedef thrust::system::__THRUST_HOST_SYSTEM_NAMESPACE::tag host_system_tag;
 namespace thrust
 {
 
-typedef THRUST_DEPRECATED host_system_tag host_space_tag;
+    typedef THRUST_DEPRECATED host_system_tag host_space_tag;
 
 } // end thrust
-

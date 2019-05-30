@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 #pragma once
 
 #include <thrust/detail/config.h>
@@ -22,32 +21,29 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
+                template <typename ExecutionPolicy,
+                          typename InputIterator,
+                          typename UnaryFunction,
+                          typename OutputType,
+                          typename BinaryFunction>
+                __host__ __device__ OutputType
+                                    transform_reduce(thrust::execution_policy<ExecutionPolicy>& exec,
+                                                     InputIterator                              first,
+                                                     InputIterator                              last,
+                                                     UnaryFunction                              unary_op,
+                                                     OutputType                                 init,
+                                                     BinaryFunction                             binary_op);
 
-template<typename ExecutionPolicy,
-         typename InputIterator, 
-         typename UnaryFunction, 
-         typename OutputType,
-         typename BinaryFunction>
-__host__ __device__
-  OutputType transform_reduce(thrust::execution_policy<ExecutionPolicy> &exec,
-                              InputIterator first,
-                              InputIterator last,
-                              UnaryFunction unary_op,
-                              OutputType init,
-                              BinaryFunction binary_op);
-
-
-} // end namespace generic
-} // end namespace detail
-} // end namespace system
+            } // end namespace generic
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/detail/generic/transform_reduce.inl>
-

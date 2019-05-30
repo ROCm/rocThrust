@@ -30,46 +30,41 @@
 
 namespace thrust
 {
-namespace detail
-{
-namespace functional
-{
-
-template<unsigned int i, typename Env>
-  struct argument_helper
-{
-  typedef typename thrust::tuple_element<i,Env>::type type;
-};
-
-template<unsigned int i>
-  struct argument_helper<i,thrust::null_type>
-{
-  typedef thrust::null_type type;
-};
-
-
-template<unsigned int i>
-  class argument
-{
-  public:
-    template<typename Env>
-      struct result
-        : argument_helper<i,Env>
+    namespace detail
     {
-    };
+        namespace functional
+        {
 
-    __host__ __device__
-    argument(void){}
+            template <unsigned int i, typename Env>
+            struct argument_helper
+            {
+                typedef typename thrust::tuple_element<i, Env>::type type;
+            };
 
-    template<typename Env>
-    __host__ __device__
-    typename result<Env>::type eval(const Env &e) const
-    {
-      return thrust::get<i>(e);
-    } // end eval()
-}; // end argument
+            template <unsigned int i>
+            struct argument_helper<i, thrust::null_type>
+            {
+                typedef thrust::null_type type;
+            };
 
-} // end functional
-} // end detail
+            template <unsigned int i>
+            class argument
+            {
+            public:
+                template <typename Env>
+                struct result : argument_helper<i, Env>
+                {
+                };
+
+                __host__ __device__ argument(void) {}
+
+                template <typename Env>
+                __host__ __device__ typename result<Env>::type eval(const Env& e) const
+                {
+                    return thrust::get<i>(e);
+                } // end eval()
+            }; // end argument
+
+        } // end functional
+    } // end detail
 } // end thrust
-

@@ -26,103 +26,76 @@
  ******************************************************************************/
 #pragma once
 
-
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
 #include <thrust/system/cuda/detail/copy_if.h>
 
 BEGIN_NS_THRUST
-namespace cuda_cub {
-
-// in-place
-  
-template <class Derived,
-          class InputIt,
-          class StencilIt,
-          class Predicate>
-InputIt __host__ __device__
-remove_if(execution_policy<Derived> &policy,
-          InputIt                    first,
-          InputIt                    last,
-          StencilIt                  stencil,
-          Predicate                  predicate)
+namespace cuda_cub
 {
-  return cuda_cub::copy_if(policy, first, last, stencil, first, detail::not1(predicate));
-}
 
-template <class Derived,
-          class InputIt,
-          class Predicate>
-InputIt __host__ __device__
-remove_if(execution_policy<Derived> &policy,
-          InputIt                    first,
-          InputIt                    last,
-          Predicate                  predicate)
-{
-  return cuda_cub::copy_if(policy, first, last, first, detail::not1(predicate));
-}
+    // in-place
 
+    template <class Derived, class InputIt, class StencilIt, class Predicate>
+    InputIt __host__ __device__ remove_if(execution_policy<Derived>& policy,
+                                          InputIt                    first,
+                                          InputIt                    last,
+                                          StencilIt                  stencil,
+                                          Predicate                  predicate)
+    {
+        return cuda_cub::copy_if(policy, first, last, stencil, first, detail::not1(predicate));
+    }
 
-template <class Derived,
-          class InputIt,
-          class T>
-InputIt __host__ __device__
-remove(execution_policy<Derived> &policy,
-       InputIt                    first,
-       InputIt                    last,
-       const T &                  value)
-{
-  detail::equal_to_value<T> pred(value);
-  return cuda_cub::remove_if(policy, first, last, pred);
-}
+    template <class Derived, class InputIt, class Predicate>
+    InputIt __host__ __device__ remove_if(execution_policy<Derived>& policy,
+                                          InputIt                    first,
+                                          InputIt                    last,
+                                          Predicate                  predicate)
+    {
+        return cuda_cub::copy_if(policy, first, last, first, detail::not1(predicate));
+    }
 
-// copy
+    template <class Derived, class InputIt, class T>
+    InputIt __host__ __device__
+                     remove(execution_policy<Derived>& policy, InputIt first, InputIt last, const T& value)
+    {
+        detail::equal_to_value<T> pred(value);
+        return cuda_cub::remove_if(policy, first, last, pred);
+    }
 
-template <class Derived,
-          class InputIt,
-          class StencilIt,
-          class OutputIt,
-          class Predicate>
-OutputIt __host__ __device__
-remove_copy_if(execution_policy<Derived> &policy,
-               InputIt                    first,
-               InputIt                    last,
-               StencilIt                  stencil,
-               OutputIt                   result,
-               Predicate                  predicate)
-{
-  return cuda_cub::copy_if(policy, first, last, stencil, result, detail::not1(predicate));
-}
+    // copy
 
-template <class Derived,
-          class InputIt,
-          class OutputIt,
-          class Predicate>
-OutputIt __host__ __device__
-remove_copy_if(execution_policy<Derived> &policy,
-               InputIt                    first,
-               InputIt                    last,
-               OutputIt                   result,
-               Predicate                  predicate)
-{
-  return cuda_cub::copy_if(policy, first, last, result, detail::not1(predicate));
-}
+    template <class Derived, class InputIt, class StencilIt, class OutputIt, class Predicate>
+    OutputIt __host__ __device__ remove_copy_if(execution_policy<Derived>& policy,
+                                                InputIt                    first,
+                                                InputIt                    last,
+                                                StencilIt                  stencil,
+                                                OutputIt                   result,
+                                                Predicate                  predicate)
+    {
+        return cuda_cub::copy_if(policy, first, last, stencil, result, detail::not1(predicate));
+    }
 
+    template <class Derived, class InputIt, class OutputIt, class Predicate>
+    OutputIt __host__ __device__ remove_copy_if(execution_policy<Derived>& policy,
+                                                InputIt                    first,
+                                                InputIt                    last,
+                                                OutputIt                   result,
+                                                Predicate                  predicate)
+    {
+        return cuda_cub::copy_if(policy, first, last, result, detail::not1(predicate));
+    }
 
-template <class Derived,
-          class InputIt,
-          class OutputIt,
-          class T>
-OutputIt __host__ __device__
-remove_copy(execution_policy<Derived> &policy,
-            InputIt                    first,
-            InputIt                    last,
-            OutputIt                   result,
-            const T &                  value)
-{
-  detail::equal_to_value<T> pred(value);
-  return cuda_cub::remove_copy_if(policy, first, last, result, pred);
-}
+    template <class Derived, class InputIt, class OutputIt, class T>
+    OutputIt __host__ __device__ remove_copy(execution_policy<Derived>& policy,
+                                             InputIt                    first,
+                                             InputIt                    last,
+                                             OutputIt                   result,
+                                             const T&                   value)
+    {
+        detail::equal_to_value<T> pred(value);
+        return cuda_cub::remove_copy_if(policy, first, last, result, pred);
+    }
 
-}    // namespace cuda_cub
+} // namespace cuda_cub
 END_NS_THRUST
 #endif

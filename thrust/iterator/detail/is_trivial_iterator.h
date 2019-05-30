@@ -24,7 +24,8 @@
 namespace __gnu_cxx
 {
 
-template<typename Iterator, typename Container> class __normal_iterator;
+    template <typename Iterator, typename Container>
+    class __normal_iterator;
 
 } // end __gnu_cxx
 #endif // __GNUC__
@@ -34,63 +35,56 @@ template<typename Iterator, typename Container> class __normal_iterator;
 namespace std
 {
 
-template<typename Value, typename Difference, typename Pointer, typename Reference> struct _Ranit;
+    template <typename Value, typename Difference, typename Pointer, typename Reference>
+    struct _Ranit;
 
 } // end std
 #endif // _MSC_VER
 
 namespace thrust
 {
-namespace detail
-{
+    namespace detail
+    {
 
 #ifdef __GNUC__
-template<typename T>
-  struct is_gnu_normal_iterator
-    : false_type
-{};
+        template <typename T>
+        struct is_gnu_normal_iterator : false_type
+        {
+        };
 
-
-// catch gnu __normal_iterators
-template<typename Iterator, typename Container>
-  struct is_gnu_normal_iterator< __gnu_cxx::__normal_iterator<Iterator, Container> >
-    : true_type
-{};
+        // catch gnu __normal_iterators
+        template <typename Iterator, typename Container>
+        struct is_gnu_normal_iterator<__gnu_cxx::__normal_iterator<Iterator, Container>> : true_type
+        {
+        };
 #endif // __GNUC__
 
-
 #ifdef _MSC_VER
-// catch msvc _Ranit
-template<typename Iterator>
-  struct is_convertible_to_msvc_Ranit :
-    is_convertible<
-      Iterator,
-      std::_Ranit<
-        typename iterator_value<Iterator>::type,
-        typename iterator_difference<Iterator>::type,
-        typename iterator_pointer<Iterator>::type,
-        typename iterator_reference<Iterator>::type
-      >
-    >
-{};
+        // catch msvc _Ranit
+        template <typename Iterator>
+        struct is_convertible_to_msvc_Ranit
+            : is_convertible<Iterator,
+                             std::_Ranit<typename iterator_value<Iterator>::type,
+                                         typename iterator_difference<Iterator>::type,
+                                         typename iterator_pointer<Iterator>::type,
+                                         typename iterator_reference<Iterator>::type>>
+        {
+        };
 #endif // _MSC_VER
 
-
-template<typename T>
-  struct is_trivial_iterator :
-    integral_constant<
-      bool,
-        is_pointer<T>::value
-      | thrust::detail::is_thrust_pointer<T>::value
+        template <typename T>
+        struct is_trivial_iterator
+            : integral_constant<bool,
+                                is_pointer<T>::value | thrust::detail::is_thrust_pointer<T>::value
 #if __GNUC__
-      | is_gnu_normal_iterator<T>::value
+                                    | is_gnu_normal_iterator<T>::value
 #endif // __GNUC__
 #ifdef _MSC_VER
-      | is_convertible_to_msvc_Ranit<T>::value
+                                    | is_convertible_to_msvc_Ranit<T>::value
 #endif // _MSC_VER
-    >
-{};
+                                >
+        {
+        };
 
-} // end detail
+    } // end detail
 } // end thrust
-

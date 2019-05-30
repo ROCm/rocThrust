@@ -14,46 +14,43 @@
  *  limitations under the License.
  */
 
-
 /*! \file trivial_copy.h
  *  \brief Device implementations for copying memory between host and device.
  */
 
 #pragma once
 
-#include <thrust/iterator/iterator_traits.h>
 #include <thrust/detail/type_traits.h>
 #include <thrust/iterator/detail/is_trivial_iterator.h>
+#include <thrust/iterator/iterator_traits.h>
 
 namespace thrust
 {
 
-namespace detail
-{
+    namespace detail
+    {
 
-namespace dispatch
-{
+        namespace dispatch
+        {
 
+            // a trivial copy's iterator's value_types match,
+            // the iterators themselves are normal_iterators
+            // and the ToIterator's value_type has_trivial_assign
+            template <typename FromIterator, typename ToIterator>
+            struct is_trivial_copy
+                : integral_constant<
+                      bool,
+                      is_same<typename thrust::iterator_value<FromIterator>::type,
+                              typename thrust::iterator_value<ToIterator>::type>::value
+                          && is_trivial_iterator<FromIterator>::value
+                          && is_trivial_iterator<ToIterator>::value
+                          && has_trivial_assign<
+                              typename thrust::iterator_value<ToIterator>::type>::value>
+            {
+            };
 
-// a trivial copy's iterator's value_types match,
-// the iterators themselves are normal_iterators
-// and the ToIterator's value_type has_trivial_assign
-template<typename FromIterator, typename ToIterator>
-  struct is_trivial_copy :
-    integral_constant<
-      bool,
-      is_same<
-        typename thrust::iterator_value<FromIterator>::type,
-        typename thrust::iterator_value<ToIterator>::type
-      >::value
-      && is_trivial_iterator<FromIterator>::value
-      && is_trivial_iterator<ToIterator>::value
-      && has_trivial_assign<typename thrust::iterator_value<ToIterator>::type>::value
-    > {};
+        } // end namespace dispatch
 
-} // end namespace dispatch
-
-} // end namespace detail
+    } // end namespace detail
 
 } // end namespace thrust
-

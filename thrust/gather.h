@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file gather.h
  *  \brief Irregular copying from a source range
  */
@@ -27,14 +26,12 @@
 namespace thrust
 {
 
-
-/*! \addtogroup gathering
+    /*! \addtogroup gathering
  *  \ingroup copying
  *  \{
  */
 
-
-/*! \p gather copies elements from a source array into a destination range according 
+    /*! \p gather copies elements from a source array into a destination range according 
  *  to a map. For each input iterator \c i in the range <tt>[map_first, map_last)</tt>, the
  *  value <tt>input_first[\*i]</tt> is assigned to <tt>*(result + (i - map_first))</tt>.
  *  \p RandomAccessIterator must permit random access.
@@ -81,19 +78,18 @@ namespace thrust
  *  // d_output is now {1, 1, 1, 1, 1, 0, 0, 0, 0, 0}
  *  \endcode
  */
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename RandomAccessIterator,
-         typename OutputIterator>
-__host__ __device__
-  OutputIterator gather(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                        InputIterator                                               map_first,
-                        InputIterator                                               map_last,
-                        RandomAccessIterator                                        input_first,
-                        OutputIterator                                              result);
+    template <typename DerivedPolicy,
+              typename InputIterator,
+              typename RandomAccessIterator,
+              typename OutputIterator>
+    __host__ __device__ OutputIterator
+                        gather(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                               InputIterator                                               map_first,
+                               InputIterator                                               map_last,
+                               RandomAccessIterator                                        input_first,
+                               OutputIterator                                              result);
 
-
-/*! \p gather copies elements from a source array into a destination range according 
+    /*! \p gather copies elements from a source array into a destination range according 
  *  to a map. For each input iterator \c i in the range <tt>[map_first, map_last)</tt>, the
  *  value <tt>input_first[\*i]</tt> is assigned to <tt>*(result + (i - map_first))</tt>.
  *  \p RandomAccessIterator must permit random access.
@@ -134,16 +130,13 @@ __host__ __device__
  *  // d_output is now {1, 1, 1, 1, 1, 0, 0, 0, 0, 0}
  *  \endcode
  */
-template<typename InputIterator,
-         typename RandomAccessIterator,
-         typename OutputIterator>
-  OutputIterator gather(InputIterator        map_first,
-                        InputIterator        map_last,
-                        RandomAccessIterator input_first,
-                        OutputIterator       result);
+    template <typename InputIterator, typename RandomAccessIterator, typename OutputIterator>
+    OutputIterator gather(InputIterator        map_first,
+                          InputIterator        map_last,
+                          RandomAccessIterator input_first,
+                          OutputIterator       result);
 
-
-/*! \p gather_if conditionally copies elements from a source array into a destination 
+    /*! \p gather_if conditionally copies elements from a source array into a destination 
  *  range according to a map. For each input iterator \c i in the range <tt>[map_first, map_last)</tt>,
  *  such that the value of <tt>\*(stencil + (i - map_first))</tt> is \c true, the value
  *  <tt>input_first[\*i]</tt> is assigned to <tt>*(result + (i - map_first))</tt>.
@@ -199,21 +192,20 @@ template<typename InputIterator,
  *  // d_output is now {0, 7, 4, 7, 8, 7, 3, 7, 7, 7}
  *  \endcode
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename RandomAccessIterator,
-         typename OutputIterator>
-__host__ __device__
-  OutputIterator gather_if(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                           InputIterator1                                              map_first,
-                           InputIterator1                                              map_last,
-                           InputIterator2                                              stencil,
-                           RandomAccessIterator                                        input_first,
-                           OutputIterator                                              result);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename RandomAccessIterator,
+              typename OutputIterator>
+    __host__ __device__ OutputIterator
+                        gather_if(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                  InputIterator1                                              map_first,
+                                  InputIterator1                                              map_last,
+                                  InputIterator2                                              stencil,
+                                  RandomAccessIterator                                        input_first,
+                                  OutputIterator                                              result);
 
-
-/*! \p gather_if conditionally copies elements from a source array into a destination 
+    /*! \p gather_if conditionally copies elements from a source array into a destination 
  *  range according to a map. For each input iterator \c i in the range <tt>[map_first, map_last)</tt>,
  *  such that the value of <tt>\*(stencil + (i - map_first))</tt> is \c true, the value
  *  <tt>input_first[\*i]</tt> is assigned to <tt>*(result + (i - map_first))</tt>.
@@ -263,18 +255,17 @@ __host__ __device__
  *  // d_output is now {0, 7, 4, 7, 8, 7, 3, 7, 7, 7}
  *  \endcode
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename RandomAccessIterator,
-         typename OutputIterator>
-  OutputIterator gather_if(InputIterator1       map_first,
-                           InputIterator1       map_last,
-                           InputIterator2       stencil,
-                           RandomAccessIterator input_first,
-                           OutputIterator       result);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename RandomAccessIterator,
+              typename OutputIterator>
+    OutputIterator gather_if(InputIterator1       map_first,
+                             InputIterator1       map_last,
+                             InputIterator2       stencil,
+                             RandomAccessIterator input_first,
+                             OutputIterator       result);
 
-
-/*! \p gather_if conditionally copies elements from a source array into a destination 
+    /*! \p gather_if conditionally copies elements from a source array into a destination 
  *  range according to a map. For each input iterator \c i in the range <tt>[map_first, map_last)</tt>
  *  such that the value of <tt>pred(\*(stencil + (i - map_first)))</tt> is \c true,
  *  the value <tt>input_first[\*i]</tt> is assigned to <tt>*(result + (i - map_first))</tt>.
@@ -342,23 +333,22 @@ template<typename InputIterator1,
  *  // d_output is now {0, 7, 4, 7, 8, 7, 3, 7, 7, 7}
  *  \endcode
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename RandomAccessIterator,
-         typename OutputIterator,
-         typename Predicate>
-__host__ __device__
-  OutputIterator gather_if(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                           InputIterator1                                              map_first,
-                           InputIterator1                                              map_last,
-                           InputIterator2                                              stencil,
-                           RandomAccessIterator                                        input_first,
-                           OutputIterator                                              result,
-                           Predicate                                                   pred);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename RandomAccessIterator,
+              typename OutputIterator,
+              typename Predicate>
+    __host__ __device__ OutputIterator
+                        gather_if(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                  InputIterator1                                              map_first,
+                                  InputIterator1                                              map_last,
+                                  InputIterator2                                              stencil,
+                                  RandomAccessIterator                                        input_first,
+                                  OutputIterator                                              result,
+                                  Predicate                                                   pred);
 
-
-/*! \p gather_if conditionally copies elements from a source array into a destination 
+    /*! \p gather_if conditionally copies elements from a source array into a destination 
  *  range according to a map. For each input iterator \c i in the range <tt>[map_first, map_last)</tt>
  *  such that the value of <tt>pred(\*(stencil + (i - map_first)))</tt> is \c true,
  *  the value <tt>input_first[\*i]</tt> is assigned to <tt>*(result + (i - map_first))</tt>.
@@ -420,22 +410,21 @@ __host__ __device__
  *  // d_output is now {0, 7, 4, 7, 8, 7, 3, 7, 7, 7}
  *  \endcode
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename RandomAccessIterator,
-         typename OutputIterator,
-         typename Predicate>
-  OutputIterator gather_if(InputIterator1       map_first,
-                           InputIterator1       map_last,
-                           InputIterator2       stencil,
-                           RandomAccessIterator input_first,
-                           OutputIterator       result,
-                           Predicate            pred);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename RandomAccessIterator,
+              typename OutputIterator,
+              typename Predicate>
+    OutputIterator gather_if(InputIterator1       map_first,
+                             InputIterator1       map_last,
+                             InputIterator2       stencil,
+                             RandomAccessIterator input_first,
+                             OutputIterator       result,
+                             Predicate            pred);
 
-/*! \} // gathering
+    /*! \} // gathering
  */
 
 } // end namespace thrust
 
 #include <thrust/detail/gather.inl>
-

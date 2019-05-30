@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file generate.h
  *  \brief Fills a range with values "generated" from a function of no arguments
  */
@@ -27,13 +26,11 @@
 namespace thrust
 {
 
-
-/*! \addtogroup transformations
+    /*! \addtogroup transformations
  *  \{
  */
 
-
-/*! \p generate assigns the result of invoking \p gen, a function object that takes no arguments,
+    /*! \p generate assigns the result of invoking \p gen, a function object that takes no arguments,
  *  to each element in the range <tt>[first,last)</tt>.
  *
  *  The algorithm's execution is parallelized as determined by \p exec.
@@ -69,17 +66,14 @@ namespace thrust
  *  \see generate_n
  *  \see http://www.sgi.com/tech/stl/generate.html
  */
-template<typename DerivedPolicy,
-         typename ForwardIterator,
-         typename Generator>
-__host__ __device__
-  void generate(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                ForwardIterator first,
-                ForwardIterator last,
-                Generator gen);
+    template <typename DerivedPolicy, typename ForwardIterator, typename Generator>
+    __host__ __device__ void
+             generate(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                      ForwardIterator                                             first,
+                      ForwardIterator                                             last,
+                      Generator                                                   gen);
 
-
-/*! \p generate assigns the result of invoking \p gen, a function object that takes no arguments,
+    /*! \p generate assigns the result of invoking \p gen, a function object that takes no arguments,
  *  to each element in the range <tt>[first,last)</tt>.
  *
  *  \param first The first element in the range of interest.
@@ -111,14 +105,10 @@ __host__ __device__
  *  \see generate_n
  *  \see http://www.sgi.com/tech/stl/generate.html
  */
-template<typename ForwardIterator,
-         typename Generator>
-  void generate(ForwardIterator first,
-                ForwardIterator last,
-                Generator gen);
+    template <typename ForwardIterator, typename Generator>
+    void generate(ForwardIterator first, ForwardIterator last, Generator gen);
 
-
-/*! \p generate_n assigns the result of invoking \p gen, a function object that takes no arguments,
+    /*! \p generate_n assigns the result of invoking \p gen, a function object that takes no arguments,
  *  to each element in the range <tt>[first,first + n)</tt>. The return value is <tt>first + n</tt>.
  *
  *  The algorithm's execution is parallelized as determined by \p exec.
@@ -154,18 +144,14 @@ template<typename ForwardIterator,
  *  \see generate
  *  \see http://www.sgi.com/tech/stl/generate.html
  */
-template<typename DerivedPolicy,
-         typename OutputIterator,
-         typename Size,
-         typename Generator>
-__host__ __device__
-  OutputIterator generate_n(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                            OutputIterator first,
-                            Size n,
-                            Generator gen);
+    template <typename DerivedPolicy, typename OutputIterator, typename Size, typename Generator>
+    __host__ __device__ OutputIterator
+                        generate_n(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                   OutputIterator                                              first,
+                                   Size                                                        n,
+                                   Generator                                                   gen);
 
-
-/*! \p generate_n assigns the result of invoking \p gen, a function object that takes no arguments,
+    /*! \p generate_n assigns the result of invoking \p gen, a function object that takes no arguments,
  *  to each element in the range <tt>[first,first + n)</tt>. The return value is <tt>first + n</tt>.
  *
  *  \param first The first element in the range of interest.
@@ -196,18 +182,12 @@ __host__ __device__
  *  \see generate
  *  \see http://www.sgi.com/tech/stl/generate.html
  */
-template<typename OutputIterator,
-         typename Size,
-         typename Generator>
-  OutputIterator generate_n(OutputIterator first,
-                            Size n,
-                            Generator gen);
+    template <typename OutputIterator, typename Size, typename Generator>
+    OutputIterator generate_n(OutputIterator first, Size n, Generator gen);
 
-
-/*! \} // end transformations
+    /*! \} // end transformations
  */
 
 } // end namespace thrust
 
 #include <thrust/detail/generate.inl>
-

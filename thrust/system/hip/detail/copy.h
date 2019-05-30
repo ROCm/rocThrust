@@ -34,50 +34,43 @@
 BEGIN_NS_THRUST
 
 template <typename DerivedPolicy, typename InputIt, typename OutputIt>
-__host__ __device__
-OutputIt copy(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
-              InputIt                                                     first,
-              InputIt                                                     last,
-              OutputIt                                                    result);
+__host__ __device__ OutputIt copy(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                  InputIt                                                     first,
+                                  InputIt                                                     last,
+                                  OutputIt result);
 
 template <class DerivedPolicy, class InputIt, class Size, class OutputIt>
-__host__ __device__
-OutputIt copy_n(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
-                InputIt                                                     first,
-                Size                                                        n,
-                OutputIt                                                    result);
+__host__ __device__ OutputIt
+                    copy_n(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                           InputIt                                                     first,
+                           Size                                                        n,
+                           OutputIt                                                    result);
 
 namespace hip_rocprim
 {
 
-// D->D copy requires HCC compiler
-template <class System, class InputIterator, class OutputIterator>
-OutputIterator THRUST_HIP_FUNCTION
-copy(execution_policy<System>& system,
-     InputIterator             first,
-     InputIterator             last,
-     OutputIterator            result);
+    // D->D copy requires HCC compiler
+    template <class System, class InputIterator, class OutputIterator>
+    OutputIterator THRUST_HIP_FUNCTION copy(execution_policy<System>& system,
+                                            InputIterator             first,
+                                            InputIterator             last,
+                                            OutputIterator            result);
 
-template <class System1, class System2, class InputIterator, class OutputIterator>
-OutputIterator __host__ /* WORKAROUND */ __device__
-copy(cross_system<System1, System2> systems,
-     InputIterator                  first,
-     InputIterator                  last,
-     OutputIterator                 result);
+    template <class System1, class System2, class InputIterator, class OutputIterator>
+    OutputIterator __host__ /* WORKAROUND */ __device__ copy(cross_system<System1, System2> systems,
+                                                             InputIterator                  first,
+                                                             InputIterator                  last,
+                                                             OutputIterator                 result);
 
-template <class System, class InputIterator, class Size, class OutputIterator>
-OutputIterator THRUST_HIP_FUNCTION
-copy_n(execution_policy<System>& system,
-       InputIterator             first,
-       Size                      n,
-       OutputIterator            result);
+    template <class System, class InputIterator, class Size, class OutputIterator>
+    OutputIterator THRUST_HIP_FUNCTION copy_n(execution_policy<System>& system,
+                                              InputIterator             first,
+                                              Size                      n,
+                                              OutputIterator            result);
 
-template <class System1, class System2, class InputIterator, class Size, class OutputIterator>
-OutputIterator __host__ /* WORKAROUND */ __device__
-copy_n(cross_system<System1, System2> systems,
-       InputIterator                  first,
-       Size                           n,
-       OutputIterator                 result);
+    template <class System1, class System2, class InputIterator, class Size, class OutputIterator>
+    OutputIterator __host__ /* WORKAROUND */ __device__ copy_n(
+        cross_system<System1, System2> systems, InputIterator first, Size n, OutputIterator result);
 
 } // namespace hip_rocprim
 END_NS_THRUST
@@ -91,77 +84,67 @@ namespace hip_rocprim
 {
 
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HCC
-// D->D copy requires HCC compiler
+    // D->D copy requires HCC compiler
 
-__thrust_exec_check_disable__ template <class System, class InputIterator, class OutputIterator>
-OutputIterator THRUST_HIP_FUNCTION
-copy(execution_policy<System>& system,
-     InputIterator             first,
-     InputIterator             last,
-     OutputIterator            result)
-{
-    OutputIterator ret = result;
-    THRUST_HIP_PRESERVE_KERNELS_WORKAROUND(
-        (__copy::device_to_device<System, InputIterator, OutputIterator>)
-    );
+    __thrust_exec_check_disable__ template <class System, class InputIterator, class OutputIterator>
+    OutputIterator THRUST_HIP_FUNCTION copy(execution_policy<System>& system,
+                                            InputIterator             first,
+                                            InputIterator             last,
+                                            OutputIterator            result)
+    {
+        OutputIterator ret = result;
+        THRUST_HIP_PRESERVE_KERNELS_WORKAROUND(
+            (__copy::device_to_device<System, InputIterator, OutputIterator>));
 #if __THRUST_HAS_HIPRT__
-    {
-        ret = __copy::device_to_device(system, first, last, result);
-    }
+        {
+            ret = __copy::device_to_device(system, first, last, result);
+        }
 #else
-    {
-        ret = thrust::copy(cvt_to_seq(derived_cast(system)), first, last, result);
-    }
+        {
+            ret = thrust::copy(cvt_to_seq(derived_cast(system)), first, last, result);
+        }
 #endif
-    return ret;
-} // end copy()
+        return ret;
+    } // end copy()
 
-__thrust_exec_check_disable__ template <class System,
-                                        class InputIterator,
-                                        class Size,
-                                        class OutputIterator>
-OutputIterator THRUST_HIP_FUNCTION
-copy_n(execution_policy<System>& system,
-       InputIterator             first,
-       Size                      n,
-       OutputIterator            result)
-{
-    OutputIterator ret = result;
-    THRUST_HIP_PRESERVE_KERNELS_WORKAROUND(
-        (__copy::device_to_device<System, InputIterator, OutputIterator>)
-    );
+    __thrust_exec_check_disable__ template <class System,
+                                            class InputIterator,
+                                            class Size,
+                                            class OutputIterator>
+    OutputIterator THRUST_HIP_FUNCTION
+                   copy_n(execution_policy<System>& system, InputIterator first, Size n, OutputIterator result)
+    {
+        OutputIterator ret = result;
+        THRUST_HIP_PRESERVE_KERNELS_WORKAROUND(
+            (__copy::device_to_device<System, InputIterator, OutputIterator>));
 #if __THRUST_HAS_HIPRT__
-    {
-        ret = __copy::device_to_device(system, first, first + n, result);
-    }
+        {
+            ret = __copy::device_to_device(system, first, first + n, result);
+        }
 #else
+        {
+            ret = thrust::copy_n(cvt_to_seq(derived_cast(system)), first, n, result);
+        }
+#endif
+        return ret;
+    } // end copy_n()
+#endif
+
+    template <class System1, class System2, class InputIterator, class OutputIterator>
+    OutputIterator __host__ /* WORKAROUND */ __device__ copy(cross_system<System1, System2> systems,
+                                                             InputIterator                  first,
+                                                             InputIterator                  last,
+                                                             OutputIterator                 result)
     {
-        ret = thrust::copy_n(cvt_to_seq(derived_cast(system)), first, n, result);
-    }
-#endif
-    return ret;
-} // end copy_n()
-#endif
+        return __copy::cross_system_copy(systems, first, last, result);
+    } // end copy()
 
-template <class System1, class System2, class InputIterator, class OutputIterator>
-OutputIterator __host__ /* WORKAROUND */ __device__
-copy(cross_system<System1, System2> systems,
-     InputIterator                  first,
-     InputIterator                  last,
-     OutputIterator                 result)
-{
-    return __copy::cross_system_copy(systems, first, last, result);
-} // end copy()
-
-template <class System1, class System2, class InputIterator, class Size, class OutputIterator>
-OutputIterator __host__ /* WORKAROUND */ __device__
-copy_n(cross_system<System1, System2> systems,
-       InputIterator                  first,
-       Size                           n,
-       OutputIterator                 result)
-{
-    return __copy::cross_system_copy_n(systems, first, n, result);
-} // end copy_n()
+    template <class System1, class System2, class InputIterator, class Size, class OutputIterator>
+    OutputIterator __host__ /* WORKAROUND */ __device__ copy_n(
+        cross_system<System1, System2> systems, InputIterator first, Size n, OutputIterator result)
+    {
+        return __copy::cross_system_copy_n(systems, first, n, result);
+    } // end copy_n()
 
 } // namespace hip_rocprim
 END_NS_THRUST

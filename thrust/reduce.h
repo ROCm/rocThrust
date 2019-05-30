@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file reduce.h
  *  \brief Functions for reducing a range to a single value
  */
@@ -29,13 +28,11 @@
 namespace thrust
 {
 
-
-/*! \addtogroup reductions
+    /*! \addtogroup reductions
  *  \{
  */
 
-
-/*! \p reduce is a generalization of summation: it computes the sum (or some
+    /*! \p reduce is a generalization of summation: it computes the sum (or some
  *  other binary operation) of all the elements in the range <tt>[first,
  *  last)</tt>. This version of \p reduce uses \c 0 as the initial value of the
  *  reduction. \p reduce is similar to the C++ Standard Template Library's
@@ -79,13 +76,13 @@ namespace thrust
  *
  *  \see http://www.sgi.com/tech/stl/accumulate.html
  */
-template<typename DerivedPolicy, typename InputIterator>
-__host__ __device__
-  typename thrust::iterator_traits<InputIterator>::value_type
-    reduce(const thrust::detail::execution_policy_base<DerivedPolicy> &exec, InputIterator first, InputIterator last);
+    template <typename DerivedPolicy, typename InputIterator>
+    __host__ __device__ typename thrust::iterator_traits<InputIterator>::value_type
+             reduce(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                    InputIterator                                               first,
+                    InputIterator                                               last);
 
-
-/*! \p reduce is a generalization of summation: it computes the sum (or some
+    /*! \p reduce is a generalization of summation: it computes the sum (or some
  *  other binary operation) of all the elements in the range <tt>[first,
  *  last)</tt>. This version of \p reduce uses \c 0 as the initial value of the
  *  reduction. \p reduce is similar to the C++ Standard Template Library's
@@ -124,11 +121,11 @@ __host__ __device__
  *
  *  \see http://www.sgi.com/tech/stl/accumulate.html
  */
-template<typename InputIterator> typename
-  thrust::iterator_traits<InputIterator>::value_type reduce(InputIterator first, InputIterator last);
+    template <typename InputIterator>
+    typename thrust::iterator_traits<InputIterator>::value_type reduce(InputIterator first,
+                                                                       InputIterator last);
 
-
-/*! \p reduce is a generalization of summation: it computes the sum (or some
+    /*! \p reduce is a generalization of summation: it computes the sum (or some
  *  other binary operation) of all the elements in the range <tt>[first,
  *  last)</tt>. This version of \p reduce uses \p init as the initial value of the
  *  reduction. \p reduce is similar to the C++ Standard Template Library's
@@ -173,15 +170,13 @@ template<typename InputIterator> typename
  *
  *  \see http://www.sgi.com/tech/stl/accumulate.html
  */
-template<typename DerivedPolicy, typename InputIterator, typename T>
-__host__ __device__
-  T reduce(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-           InputIterator first,
-           InputIterator last,
-           T init);
+    template <typename DerivedPolicy, typename InputIterator, typename T>
+    __host__ __device__ T reduce(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                 InputIterator                                               first,
+                                 InputIterator                                               last,
+                                 T                                                           init);
 
-
-/*! \p reduce is a generalization of summation: it computes the sum (or some
+    /*! \p reduce is a generalization of summation: it computes the sum (or some
  *  other binary operation) of all the elements in the range <tt>[first,
  *  last)</tt>. This version of \p reduce uses \p init as the initial value of the
  *  reduction. \p reduce is similar to the C++ Standard Template Library's
@@ -220,13 +215,10 @@ __host__ __device__
  *
  *  \see http://www.sgi.com/tech/stl/accumulate.html
  */
-template<typename InputIterator, typename T>
-  T reduce(InputIterator first,
-           InputIterator last,
-           T init);
+    template <typename InputIterator, typename T>
+    T reduce(InputIterator first, InputIterator last, T init);
 
-
-/*! \p reduce is a generalization of summation: it computes the sum (or some
+    /*! \p reduce is a generalization of summation: it computes the sum (or some
  *  other binary operation) of all the elements in the range <tt>[first,
  *  last)</tt>. This version of \p reduce uses \p init as the initial value of the
  *  reduction and \p binary_op as the binary function used for summation. \p reduce
@@ -278,19 +270,14 @@ template<typename InputIterator, typename T>
  *  \see http://www.sgi.com/tech/stl/accumulate.html
  *  \see transform_reduce
  */
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename T,
-         typename BinaryFunction>
-__host__ __device__
-  T reduce(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-           InputIterator first,
-           InputIterator last,
-           T init,
-           BinaryFunction binary_op);
+    template <typename DerivedPolicy, typename InputIterator, typename T, typename BinaryFunction>
+    __host__ __device__ T reduce(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                 InputIterator                                               first,
+                                 InputIterator                                               last,
+                                 T                                                           init,
+                                 BinaryFunction binary_op);
 
-
-/*! \p reduce is a generalization of summation: it computes the sum (or some
+    /*! \p reduce is a generalization of summation: it computes the sum (or some
  *  other binary operation) of all the elements in the range <tt>[first,
  *  last)</tt>. This version of \p reduce uses \p init as the initial value of the
  *  reduction and \p binary_op as the binary function used for summation. \p reduce
@@ -335,16 +322,10 @@ __host__ __device__
  *  \see http://www.sgi.com/tech/stl/accumulate.html
  *  \see transform_reduce
  */
-template<typename InputIterator,
-         typename T,
-         typename BinaryFunction>
-  T reduce(InputIterator first,
-           InputIterator last,
-           T init,
-           BinaryFunction binary_op);
+    template <typename InputIterator, typename T, typename BinaryFunction>
+    T reduce(InputIterator first, InputIterator last, T init, BinaryFunction binary_op);
 
-
-/*! \p reduce_by_key is a generalization of \p reduce to key-value pairs.
+    /*! \p reduce_by_key is a generalization of \p reduce to key-value pairs.
  *  For each group of consecutive keys in the range <tt>[keys_first, keys_last)</tt>
  *  that are equal, \p reduce_by_key copies the first element of the group to the
  *  \c keys_output. The corresponding values in the range are reduced using the
@@ -399,22 +380,20 @@ template<typename InputIterator,
  *  \see unique_by_key
  *  \see unique_by_key_copy
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator1,
-         typename OutputIterator2>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-  reduce_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                InputIterator1 keys_first, 
-                InputIterator1 keys_last,
-                InputIterator2 values_first,
-                OutputIterator1 keys_output,
-                OutputIterator2 values_output);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator1,
+              typename OutputIterator2>
+    __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                        reduce_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                      InputIterator1                                              keys_first,
+                                      InputIterator1                                              keys_last,
+                                      InputIterator2                                              values_first,
+                                      OutputIterator1                                             keys_output,
+                                      OutputIterator2                                             values_output);
 
-
-/*! \p reduce_by_key is a generalization of \p reduce to key-value pairs.
+    /*! \p reduce_by_key is a generalization of \p reduce to key-value pairs.
  *  For each group of consecutive keys in the range <tt>[keys_first, keys_last)</tt>
  *  that are equal, \p reduce_by_key copies the first element of the group to the
  *  \c keys_output. The corresponding values in the range are reduced using the
@@ -463,19 +442,17 @@ __host__ __device__
  *  \see unique_by_key
  *  \see unique_by_key_copy
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator1,
-         typename OutputIterator2>
-  thrust::pair<OutputIterator1,OutputIterator2>
-  reduce_by_key(InputIterator1 keys_first, 
-                InputIterator1 keys_last,
-                InputIterator2 values_first,
-                OutputIterator1 keys_output,
-                OutputIterator2 values_output);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator1,
+              typename OutputIterator2>
+    thrust::pair<OutputIterator1, OutputIterator2> reduce_by_key(InputIterator1  keys_first,
+                                                                 InputIterator1  keys_last,
+                                                                 InputIterator2  values_first,
+                                                                 OutputIterator1 keys_output,
+                                                                 OutputIterator2 values_output);
 
-
-/*! \p reduce_by_key is a generalization of \p reduce to key-value pairs.
+    /*! \p reduce_by_key is a generalization of \p reduce to key-value pairs.
  *  For each group of consecutive keys in the range <tt>[keys_first, keys_last)</tt>
  *  that are equal, \p reduce_by_key copies the first element of the group to the
  *  \c keys_output. The corresponding values in the range are reduced using the
@@ -533,24 +510,22 @@ template<typename InputIterator1,
  *  \see unique_by_key
  *  \see unique_by_key_copy
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename BinaryPredicate>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-  reduce_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                InputIterator1 keys_first, 
-                InputIterator1 keys_last,
-                InputIterator2 values_first,
-                OutputIterator1 keys_output,
-                OutputIterator2 values_output,
-                BinaryPredicate binary_pred);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename BinaryPredicate>
+    __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                        reduce_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                      InputIterator1                                              keys_first,
+                                      InputIterator1                                              keys_last,
+                                      InputIterator2                                              values_first,
+                                      OutputIterator1                                             keys_output,
+                                      OutputIterator2                                             values_output,
+                                      BinaryPredicate                                             binary_pred);
 
-
-/*! \p reduce_by_key is a generalization of \p reduce to key-value pairs.
+    /*! \p reduce_by_key is a generalization of \p reduce to key-value pairs.
  *  For each group of consecutive keys in the range <tt>[keys_first, keys_last)</tt>
  *  that are equal, \p reduce_by_key copies the first element of the group to the
  *  \c keys_output. The corresponding values in the range are reduced using the
@@ -602,21 +577,19 @@ __host__ __device__
  *  \see unique_by_key
  *  \see unique_by_key_copy
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename BinaryPredicate>
-  thrust::pair<OutputIterator1,OutputIterator2>
-  reduce_by_key(InputIterator1 keys_first, 
-                InputIterator1 keys_last,
-                InputIterator2 values_first,
-                OutputIterator1 keys_output,
-                OutputIterator2 values_output,
-                BinaryPredicate binary_pred);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename BinaryPredicate>
+    thrust::pair<OutputIterator1, OutputIterator2> reduce_by_key(InputIterator1  keys_first,
+                                                                 InputIterator1  keys_last,
+                                                                 InputIterator2  values_first,
+                                                                 OutputIterator1 keys_output,
+                                                                 OutputIterator2 values_output,
+                                                                 BinaryPredicate binary_pred);
 
-
-/*! \p reduce_by_key is a generalization of \p reduce to key-value pairs.
+    /*! \p reduce_by_key is a generalization of \p reduce to key-value pairs.
  *  For each group of consecutive keys in the range <tt>[keys_first, keys_last)</tt>
  *  that are equal, \p reduce_by_key copies the first element of the group to the
  *  \c keys_output. The corresponding values in the range are reduced using the
@@ -681,26 +654,24 @@ template<typename InputIterator1,
  *  \see unique_by_key
  *  \see unique_by_key_copy
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename BinaryPredicate,
-         typename BinaryFunction>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-  reduce_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                InputIterator1 keys_first, 
-                InputIterator1 keys_last,
-                InputIterator2 values_first,
-                OutputIterator1 keys_output,
-                OutputIterator2 values_output,
-                BinaryPredicate binary_pred,
-                BinaryFunction binary_op);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename BinaryPredicate,
+              typename BinaryFunction>
+    __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                        reduce_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                      InputIterator1                                              keys_first,
+                                      InputIterator1                                              keys_last,
+                                      InputIterator2                                              values_first,
+                                      OutputIterator1                                             keys_output,
+                                      OutputIterator2                                             values_output,
+                                      BinaryPredicate                                             binary_pred,
+                                      BinaryFunction                                              binary_op);
 
-
-/*! \p reduce_by_key is a generalization of \p reduce to key-value pairs.
+    /*! \p reduce_by_key is a generalization of \p reduce to key-value pairs.
  *  For each group of consecutive keys in the range <tt>[keys_first, keys_last)</tt>
  *  that are equal, \p reduce_by_key copies the first element of the group to the
  *  \c keys_output. The corresponding values in the range are reduced using the
@@ -759,27 +730,23 @@ __host__ __device__
  *  \see unique_by_key
  *  \see unique_by_key_copy
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename BinaryPredicate,
-         typename BinaryFunction>
-  thrust::pair<OutputIterator1,OutputIterator2>
-  reduce_by_key(InputIterator1 keys_first, 
-                InputIterator1 keys_last,
-                InputIterator2 values_first,
-                OutputIterator1 keys_output,
-                OutputIterator2 values_output,
-                BinaryPredicate binary_pred,
-                BinaryFunction binary_op);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename BinaryPredicate,
+              typename BinaryFunction>
+    thrust::pair<OutputIterator1, OutputIterator2> reduce_by_key(InputIterator1  keys_first,
+                                                                 InputIterator1  keys_last,
+                                                                 InputIterator2  values_first,
+                                                                 OutputIterator1 keys_output,
+                                                                 OutputIterator2 values_output,
+                                                                 BinaryPredicate binary_pred,
+                                                                 BinaryFunction  binary_op);
 
-
-/*! \} // end reductions
+    /*! \} // end reductions
  */
-
 
 } // end namespace thrust
 
 #include <thrust/detail/reduce.inl>
-

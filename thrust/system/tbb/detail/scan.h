@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file scan.h
  *  \brief TBB implementations of scan functions.
  */
@@ -26,39 +25,34 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace tbb
-{
-namespace detail
-{
+    namespace system
+    {
+        namespace tbb
+        {
+            namespace detail
+            {
 
-template<typename InputIterator,
-         typename OutputIterator,
-         typename BinaryFunction>
-  OutputIterator inclusive_scan(tag,
-                                InputIterator first,
-                                InputIterator last,
-                                OutputIterator result,
-                                BinaryFunction binary_op);
+                template <typename InputIterator, typename OutputIterator, typename BinaryFunction>
+                OutputIterator inclusive_scan(tag,
+                                              InputIterator  first,
+                                              InputIterator  last,
+                                              OutputIterator result,
+                                              BinaryFunction binary_op);
 
+                template <typename InputIterator,
+                          typename OutputIterator,
+                          typename T,
+                          typename BinaryFunction>
+                OutputIterator exclusive_scan(tag,
+                                              InputIterator  first,
+                                              InputIterator  last,
+                                              OutputIterator result,
+                                              T              init,
+                                              BinaryFunction binary_op);
 
-template<typename InputIterator,
-         typename OutputIterator,
-         typename T,
-         typename BinaryFunction>
-  OutputIterator exclusive_scan(tag,
-                                InputIterator first,
-                                InputIterator last,
-                                OutputIterator result,
-                                T init,
-                                BinaryFunction binary_op);
-
-
-} // end namespace detail
-} // end namespace tbb
-} // end namespace system
+            } // end namespace detail
+        } // end namespace tbb
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/tbb/detail/scan.inl>
-

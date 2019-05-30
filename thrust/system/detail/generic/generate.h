@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 #pragma once
 
 #include <thrust/detail/config.h>
@@ -22,36 +21,32 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
-template<typename ExecutionPolicy,
-         typename ForwardIterator,
-         typename Generator>
-__host__ __device__
-  void generate(thrust::execution_policy<ExecutionPolicy> &exec,
-                ForwardIterator first,
-                ForwardIterator last,
-                Generator gen);
+                template <typename ExecutionPolicy, typename ForwardIterator, typename Generator>
+                __host__ __device__ void generate(thrust::execution_policy<ExecutionPolicy>& exec,
+                                                  ForwardIterator                            first,
+                                                  ForwardIterator                            last,
+                                                  Generator                                  gen);
 
-template<typename ExecutionPolicy,
-         typename OutputIterator,
-         typename Size,
-         typename Generator>
-__host__ __device__
-  OutputIterator generate_n(thrust::execution_policy<ExecutionPolicy> &exec,
-                            OutputIterator first,
-                            Size n,
-                            Generator gen);
+                template <typename ExecutionPolicy,
+                          typename OutputIterator,
+                          typename Size,
+                          typename Generator>
+                __host__ __device__ OutputIterator
+                                    generate_n(thrust::execution_policy<ExecutionPolicy>& exec,
+                                               OutputIterator                             first,
+                                               Size                                       n,
+                                               Generator                                  gen);
 
-} // end namespace generic
-} // end namespace detail
-} // end namespace system
+            } // end namespace generic
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/detail/generic/generate.inl>
-

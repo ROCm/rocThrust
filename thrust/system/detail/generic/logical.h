@@ -17,47 +17,48 @@
 #pragma once
 
 #include <thrust/detail/config.h>
-#include <thrust/system/detail/generic/tag.h>
 #include <thrust/detail/internal_functional.h>
 #include <thrust/find.h>
 #include <thrust/logical.h>
+#include <thrust/system/detail/generic/tag.h>
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
+                template <typename ExecutionPolicy, typename InputIterator, typename Predicate>
+                __host__ __device__ bool all_of(thrust::execution_policy<ExecutionPolicy>& exec,
+                                                InputIterator                              first,
+                                                InputIterator                              last,
+                                                Predicate                                  pred)
+                {
+                    return thrust::find_if(exec, first, last, thrust::detail::not1(pred)) == last;
+                }
 
-template<typename ExecutionPolicy, typename InputIterator, typename Predicate>
-__host__ __device__
-bool all_of(thrust::execution_policy<ExecutionPolicy> &exec, InputIterator first, InputIterator last, Predicate pred)
-{
-  return thrust::find_if(exec, first, last, thrust::detail::not1(pred)) == last;
-}
+                template <typename ExecutionPolicy, typename InputIterator, typename Predicate>
+                __host__ __device__ bool any_of(thrust::execution_policy<ExecutionPolicy>& exec,
+                                                InputIterator                              first,
+                                                InputIterator                              last,
+                                                Predicate                                  pred)
+                {
+                    return thrust::find_if(exec, first, last, pred) != last;
+                }
 
+                template <typename ExecutionPolicy, typename InputIterator, typename Predicate>
+                __host__ __device__ bool none_of(thrust::execution_policy<ExecutionPolicy>& exec,
+                                                 InputIterator                              first,
+                                                 InputIterator                              last,
+                                                 Predicate                                  pred)
+                {
+                    return !thrust::any_of(exec, first, last, pred);
+                }
 
-template<typename ExecutionPolicy, typename InputIterator, typename Predicate>
-__host__ __device__
-bool any_of(thrust::execution_policy<ExecutionPolicy> &exec, InputIterator first, InputIterator last, Predicate pred)
-{
-  return thrust::find_if(exec, first, last, pred) != last;
-}
-
-
-template<typename ExecutionPolicy, typename InputIterator, typename Predicate>
-__host__ __device__
-bool none_of(thrust::execution_policy<ExecutionPolicy> &exec, InputIterator first, InputIterator last, Predicate pred)
-{
-  return !thrust::any_of(exec, first, last, pred);
-}
-
-
-} // end generic
-} // end detail
-} // end system
+            } // end generic
+        } // end detail
+    } // end system
 } // end thrust
-

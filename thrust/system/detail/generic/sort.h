@@ -21,134 +21,106 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
+                template <typename DerivedPolicy, typename RandomAccessIterator>
+                __host__ __device__ void sort(thrust::execution_policy<DerivedPolicy>& exec,
+                                              RandomAccessIterator                     first,
+                                              RandomAccessIterator                     last);
 
-template<typename DerivedPolicy,
-         typename RandomAccessIterator>
-__host__ __device__
-  void sort(thrust::execution_policy<DerivedPolicy> &exec,
-            RandomAccessIterator first,
-            RandomAccessIterator last);
+                template <typename DerivedPolicy,
+                          typename RandomAccessIterator,
+                          typename StrictWeakOrdering>
+                __host__ __device__ void sort(thrust::execution_policy<DerivedPolicy>& exec,
+                                              RandomAccessIterator                     first,
+                                              RandomAccessIterator                     last,
+                                              StrictWeakOrdering                       comp);
 
+                template <typename DerivedPolicy,
+                          typename RandomAccessIterator1,
+                          typename RandomAccessIterator2>
+                __host__ __device__ void sort_by_key(thrust::execution_policy<DerivedPolicy>& exec,
+                                                     RandomAccessIterator1 keys_first,
+                                                     RandomAccessIterator1 keys_last,
+                                                     RandomAccessIterator2 values_first);
 
-template<typename DerivedPolicy,
-         typename RandomAccessIterator,
-         typename StrictWeakOrdering>
-__host__ __device__
-  void sort(thrust::execution_policy<DerivedPolicy> &exec,
-            RandomAccessIterator first,
-            RandomAccessIterator last,
-            StrictWeakOrdering comp);
+                template <typename DerivedPolicy,
+                          typename RandomAccessIterator1,
+                          typename RandomAccessIterator2,
+                          typename StrictWeakOrdering>
+                __host__ __device__ void sort_by_key(thrust::execution_policy<DerivedPolicy>& exec,
+                                                     RandomAccessIterator1 keys_first,
+                                                     RandomAccessIterator1 keys_last,
+                                                     RandomAccessIterator2 values_first,
+                                                     StrictWeakOrdering    comp);
 
+                template <typename DerivedPolicy, typename RandomAccessIterator>
+                __host__ __device__ void stable_sort(thrust::execution_policy<DerivedPolicy>& exec,
+                                                     RandomAccessIterator                     first,
+                                                     RandomAccessIterator                     last);
 
-template<typename DerivedPolicy,
-         typename RandomAccessIterator1,
-         typename RandomAccessIterator2>
-__host__ __device__
-  void sort_by_key(thrust::execution_policy<DerivedPolicy> &exec,
-                   RandomAccessIterator1 keys_first,
-                   RandomAccessIterator1 keys_last,
-                   RandomAccessIterator2 values_first);
+                // XXX it is an error to call this function; it has no implementation
+                template <typename DerivedPolicy,
+                          typename RandomAccessIterator,
+                          typename StrictWeakOrdering>
+                __host__ __device__ void stable_sort(thrust::execution_policy<DerivedPolicy>& exec,
+                                                     RandomAccessIterator                     first,
+                                                     RandomAccessIterator                     last,
+                                                     StrictWeakOrdering                       comp);
 
+                template <typename DerivedPolicy,
+                          typename RandomAccessIterator1,
+                          typename RandomAccessIterator2>
+                __host__ __device__ void
+                         stable_sort_by_key(thrust::execution_policy<DerivedPolicy>& exec,
+                                            RandomAccessIterator1                    keys_first,
+                                            RandomAccessIterator1                    keys_last,
+                                            RandomAccessIterator2                    values_first);
 
-template<typename DerivedPolicy,
-         typename RandomAccessIterator1,
-         typename RandomAccessIterator2,
-         typename StrictWeakOrdering>
-__host__ __device__
-  void sort_by_key(thrust::execution_policy<DerivedPolicy> &exec,
-                   RandomAccessIterator1 keys_first,
-                   RandomAccessIterator1 keys_last,
-                   RandomAccessIterator2 values_first,
-                   StrictWeakOrdering comp);
+                // XXX it is an error to call this function; it has no implementation
+                template <typename DerivedPolicy,
+                          typename RandomAccessIterator1,
+                          typename RandomAccessIterator2,
+                          typename StrictWeakOrdering>
+                __host__ __device__ void
+                         stable_sort_by_key(thrust::execution_policy<DerivedPolicy>& exec,
+                                            RandomAccessIterator1                    keys_first,
+                                            RandomAccessIterator1                    keys_last,
+                                            RandomAccessIterator2                    values_first,
+                                            StrictWeakOrdering                       comp);
 
+                template <typename DerivedPolicy, typename ForwardIterator>
+                __host__ __device__ bool is_sorted(thrust::execution_policy<DerivedPolicy>& exec,
+                                                   ForwardIterator                          first,
+                                                   ForwardIterator                          last);
 
-template<typename DerivedPolicy,
-         typename RandomAccessIterator>
-__host__ __device__
-  void stable_sort(thrust::execution_policy<DerivedPolicy> &exec,
-                   RandomAccessIterator first,
-                   RandomAccessIterator last);
+                template <typename DerivedPolicy, typename ForwardIterator, typename Compare>
+                __host__ __device__ bool is_sorted(thrust::execution_policy<DerivedPolicy>& exec,
+                                                   ForwardIterator                          first,
+                                                   ForwardIterator                          last,
+                                                   Compare                                  comp);
 
+                template <typename DerivedPolicy, typename ForwardIterator>
+                __host__ __device__ ForwardIterator
+                                    is_sorted_until(thrust::execution_policy<DerivedPolicy>& exec,
+                                                    ForwardIterator                          first,
+                                                    ForwardIterator                          last);
 
-// XXX it is an error to call this function; it has no implementation
-template<typename DerivedPolicy,
-         typename RandomAccessIterator,
-         typename StrictWeakOrdering>
-__host__ __device__
-  void stable_sort(thrust::execution_policy<DerivedPolicy> &exec,
-                   RandomAccessIterator first,
-                   RandomAccessIterator last,
-                   StrictWeakOrdering comp);
+                template <typename DerivedPolicy, typename ForwardIterator, typename Compare>
+                __host__ __device__ ForwardIterator
+                                    is_sorted_until(thrust::execution_policy<DerivedPolicy>& exec,
+                                                    ForwardIterator                          first,
+                                                    ForwardIterator                          last,
+                                                    Compare                                  comp);
 
-
-template<typename DerivedPolicy,
-         typename RandomAccessIterator1,
-         typename RandomAccessIterator2>
-__host__ __device__
-  void stable_sort_by_key(thrust::execution_policy<DerivedPolicy> &exec,
-                          RandomAccessIterator1 keys_first,
-                          RandomAccessIterator1 keys_last,
-                          RandomAccessIterator2 values_first);
-
-
-// XXX it is an error to call this function; it has no implementation
-template<typename DerivedPolicy,
-         typename RandomAccessIterator1,
-         typename RandomAccessIterator2,
-         typename StrictWeakOrdering>
-__host__ __device__
-  void stable_sort_by_key(thrust::execution_policy<DerivedPolicy> &exec,
-                          RandomAccessIterator1 keys_first,
-                          RandomAccessIterator1 keys_last,
-                          RandomAccessIterator2 values_first,
-                          StrictWeakOrdering comp);
-
-
-template<typename DerivedPolicy, typename ForwardIterator>
-__host__ __device__
-  bool is_sorted(thrust::execution_policy<DerivedPolicy> &exec,
-                 ForwardIterator first,
-                 ForwardIterator last);
-
-
-template<typename DerivedPolicy,
-         typename ForwardIterator,
-         typename Compare>
-__host__ __device__
-  bool is_sorted(thrust::execution_policy<DerivedPolicy> &exec,
-                 ForwardIterator first,
-                 ForwardIterator last,
-                 Compare comp);
-
-
-template<typename DerivedPolicy, typename ForwardIterator>
-__host__ __device__
-  ForwardIterator is_sorted_until(thrust::execution_policy<DerivedPolicy> &exec,
-                                  ForwardIterator first,
-                                  ForwardIterator last);
-
-
-template<typename DerivedPolicy,
-         typename ForwardIterator,
-         typename Compare>
-__host__ __device__
-  ForwardIterator is_sorted_until(thrust::execution_policy<DerivedPolicy> &exec,
-                                  ForwardIterator first,
-                                  ForwardIterator last,
-                                  Compare comp);
-
-
-} // end generic
-} // end detail
-} // end system
+            } // end generic
+        } // end detail
+    } // end system
 } // end thrust
 
 #include <thrust/system/detail/generic/sort.inl>
-

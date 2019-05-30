@@ -27,37 +27,31 @@
  ******************************************************************************/
 #pragma once
 
-
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
+#include <thrust/functional.h>
 #include <thrust/system/cuda/config.h>
 #include <thrust/system/cuda/detail/execution_policy.h>
 #include <thrust/system/cuda/detail/transform.h>
-#include <thrust/functional.h>
 
 BEGIN_NS_THRUST
-namespace cuda_cub {
+namespace cuda_cub
+{
 
-namespace __copy {
+    namespace __copy
+    {
 
-  template <class Derived,
-            class InputIt,
-            class OutputIt>
-  OutputIt CUB_RUNTIME_FUNCTION
-  device_to_device(execution_policy<Derived>& policy,
-                   InputIt                    first,
-                   InputIt                    last,
-                   OutputIt                   result)
-  {
-    typedef typename thrust::iterator_traits<InputIt>::value_type InputTy;
-    return cuda_cub::transform(policy,
-                            first,
-                            last,
-                            result,
-                            thrust::identity<InputTy>());
-  }
+        template <class Derived, class InputIt, class OutputIt>
+        OutputIt CUB_RUNTIME_FUNCTION device_to_device(execution_policy<Derived>& policy,
+                                                       InputIt                    first,
+                                                       InputIt                    last,
+                                                       OutputIt                   result)
+        {
+            typedef typename thrust::iterator_traits<InputIt>::value_type InputTy;
+            return cuda_cub::transform(policy, first, last, result, thrust::identity<InputTy>());
+        }
 
-}    // namespace __copy
+    } // namespace __copy
 
-}    // namespace cuda_cub
+} // namespace cuda_cub
 END_NS_THRUST
 #endif

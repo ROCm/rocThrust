@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file uninitialized_fill.h
  *  \brief Copy construction into a range of uninitialized elements from a source value
  */
@@ -27,14 +26,12 @@
 namespace thrust
 {
 
-
-/*! \addtogroup filling
+    /*! \addtogroup filling
  *  \ingroup transformations
  *  \{
  */
 
-
-/*! In \c thrust, the function \c thrust::device_new allocates memory for
+    /*! In \c thrust, the function \c thrust::device_new allocates memory for
  *  an object and then creates an object at that location by calling a
  *  constructor. Occasionally, however, it is useful to separate those two
  *  operations. If each iterator in the range <tt>[first, last)</tt> points
@@ -87,15 +84,14 @@ namespace thrust
  *  \see \c device_new
  *  \see \c device_malloc
  */
-template<typename DerivedPolicy, typename ForwardIterator, typename T>
-__host__ __device__
-  void uninitialized_fill(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                          ForwardIterator first,
-                          ForwardIterator last,
-                          const T &x);
+    template <typename DerivedPolicy, typename ForwardIterator, typename T>
+    __host__ __device__ void
+             uninitialized_fill(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                ForwardIterator                                             first,
+                                ForwardIterator                                             last,
+                                const T&                                                    x);
 
-
-/*! In \c thrust, the function \c thrust::device_new allocates memory for
+    /*! In \c thrust, the function \c thrust::device_new allocates memory for
  *  an object and then creates an object at that location by calling a
  *  constructor. Occasionally, however, it is useful to separate those two
  *  operations. If each iterator in the range <tt>[first, last)</tt> points
@@ -143,13 +139,10 @@ __host__ __device__
  *  \see \c device_new
  *  \see \c device_malloc
  */
-template<typename ForwardIterator, typename T>
-  void uninitialized_fill(ForwardIterator first,
-                          ForwardIterator last,
-                          const T &x);
+    template <typename ForwardIterator, typename T>
+    void uninitialized_fill(ForwardIterator first, ForwardIterator last, const T& x);
 
-
-/*! In \c thrust, the function \c thrust::device_new allocates memory for
+    /*! In \c thrust, the function \c thrust::device_new allocates memory for
  *  an object and then creates an object at that location by calling a
  *  constructor. Occasionally, however, it is useful to separate those two
  *  operations. If each iterator in the range <tt>[first, first+n)</tt> points
@@ -203,15 +196,14 @@ template<typename ForwardIterator, typename T>
  *  \see \c device_new
  *  \see \c device_malloc
  */
-template<typename DerivedPolicy, typename ForwardIterator, typename Size, typename T>
-__host__ __device__
-  ForwardIterator uninitialized_fill_n(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                       ForwardIterator first,
-                                       Size n,
-                                       const T &x);
+    template <typename DerivedPolicy, typename ForwardIterator, typename Size, typename T>
+    __host__ __device__ ForwardIterator
+                        uninitialized_fill_n(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                             ForwardIterator                                             first,
+                                             Size                                                        n,
+                                             const T&                                                    x);
 
-
-/*! In \c thrust, the function \c thrust::device_new allocates memory for
+    /*! In \c thrust, the function \c thrust::device_new allocates memory for
  *  an object and then creates an object at that location by calling a
  *  constructor. Occasionally, however, it is useful to separate those two
  *  operations. If each iterator in the range <tt>[first, first+n)</tt> points
@@ -260,16 +252,13 @@ __host__ __device__
  *  \see \c device_new
  *  \see \c device_malloc
  */
-template<typename ForwardIterator, typename Size, typename T>
-  ForwardIterator uninitialized_fill_n(ForwardIterator first,
-                                       Size n,
-                                       const T &x);
+    template <typename ForwardIterator, typename Size, typename T>
+    ForwardIterator uninitialized_fill_n(ForwardIterator first, Size n, const T& x);
 
-/*! \} // end filling
+    /*! \} // end filling
  *  \} // transformations
  */
 
 } // end thrust
 
 #include <thrust/detail/uninitialized_fill.inl>
-

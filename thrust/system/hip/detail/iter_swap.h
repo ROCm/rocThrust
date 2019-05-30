@@ -29,20 +29,21 @@ BEGIN_NS_THRUST
 namespace hip_rocprim
 {
 
-template <typename DerivedPolicy, typename Pointer1, typename Pointer2>
-void THRUST_HIP_FUNCTION
-iter_swap(thrust::hip::execution_policy<DerivedPolicy>&, Pointer1 a, Pointer2 b)
-{
+    template <typename DerivedPolicy, typename Pointer1, typename Pointer2>
+    void THRUST_HIP_FUNCTION iter_swap(thrust::hip::execution_policy<DerivedPolicy>&,
+                                       Pointer1 a,
+                                       Pointer2 b)
+    {
 #if defined(THRUST_HIP_DEVICE_CODE)
-    Pointer2 (*fptr)(Pointer1, Pointer1, Pointer2) = thrust::swap_ranges;
-    (void)fptr;
+        Pointer2 (*fptr)(Pointer1, Pointer1, Pointer2) = thrust::swap_ranges;
+        (void)fptr;
 
-    using thrust::swap;
-    swap(*thrust::raw_pointer_cast(a), *thrust::raw_pointer_cast(b));
+        using thrust::swap;
+        swap(*thrust::raw_pointer_cast(a), *thrust::raw_pointer_cast(b));
 #else
-    thrust::swap_ranges(a, a + 1, b);
+        thrust::swap_ranges(a, a + 1, b);
 #endif
-} // end iter_swap()
+    } // end iter_swap()
 
 } // end hip_rocprim
 END_NS_THRUST

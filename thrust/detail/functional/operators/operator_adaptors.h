@@ -17,99 +17,88 @@
 #pragma once
 
 #include <thrust/detail/config.h>
-#include <thrust/tuple.h>
 #include <thrust/detail/type_traits.h>
+#include <thrust/tuple.h>
 
 namespace thrust
 {
-namespace detail
-{
-namespace functional
-{
+    namespace detail
+    {
+        namespace functional
+        {
 
-// this thing (which models Eval) is an adaptor for the unary
-// functors inside functional.h
-template<template<typename> class UnaryOperator>
-  struct unary_operator
-{
-  template<typename Env>
-    struct argument
-      : thrust::detail::eval_if<
-          (thrust::tuple_size<Env>::value == 0),
-          thrust::detail::identity_<thrust::null_type>,
-          thrust::tuple_element<0,Env>
-        >
-  {
-  };
+            // this thing (which models Eval) is an adaptor for the unary
+            // functors inside functional.h
+            template <template <typename> class UnaryOperator>
+            struct unary_operator
+            {
+                template <typename Env>
+                struct argument
+                    : thrust::detail::eval_if<(thrust::tuple_size<Env>::value == 0),
+                                              thrust::detail::identity_<thrust::null_type>,
+                                              thrust::tuple_element<0, Env>>
+                {
+                };
 
-  template<typename Env>
-    struct operator_type
-  {
-    typedef UnaryOperator<
-      typename thrust::detail::remove_reference<
-        typename argument<Env>::type
-      >::type
-    > type;
-  };
+                template <typename Env>
+                struct operator_type
+                {
+                    typedef UnaryOperator<typename thrust::detail::remove_reference<
+                        typename argument<Env>::type>::type>
+                        type;
+                };
 
-  template<typename Env>
-    struct result
-  {
-    typedef typename operator_type<Env>::type op_type;
-    typedef typename op_type::result_type type;
-  };
+                template <typename Env>
+                struct result
+                {
+                    typedef typename operator_type<Env>::type op_type;
+                    typedef typename op_type::result_type     type;
+                };
 
-  template<typename Env>
-  __host__ __device__
-  typename result<Env>::type eval(const Env &e) const
-  {
-    typename operator_type<Env>::type op;
-    return op(thrust::get<0>(e));
-  } // end eval()
-}; // end unary_operator
+                template <typename Env>
+                __host__ __device__ typename result<Env>::type eval(const Env& e) const
+                {
+                    typename operator_type<Env>::type op;
+                    return op(thrust::get<0>(e));
+                } // end eval()
+            }; // end unary_operator
 
-// this thing (which models Eval) is an adaptor for the binary
-// functors inside functional.h
-template<template<typename> class BinaryOperator>
-  struct binary_operator
-{
-  template<typename Env>
-    struct first_argument
-      : thrust::detail::eval_if<
-          (thrust::tuple_size<Env>::value == 0),
-          thrust::detail::identity_<thrust::null_type>,
-          thrust::tuple_element<0,Env>
-        >
-  {
-  };
+            // this thing (which models Eval) is an adaptor for the binary
+            // functors inside functional.h
+            template <template <typename> class BinaryOperator>
+            struct binary_operator
+            {
+                template <typename Env>
+                struct first_argument
+                    : thrust::detail::eval_if<(thrust::tuple_size<Env>::value == 0),
+                                              thrust::detail::identity_<thrust::null_type>,
+                                              thrust::tuple_element<0, Env>>
+                {
+                };
 
-  template<typename Env>
-    struct operator_type
-  {
-    typedef BinaryOperator<
-      typename thrust::detail::remove_reference<
-        typename first_argument<Env>::type
-      >::type
-    > type;
-  };
+                template <typename Env>
+                struct operator_type
+                {
+                    typedef BinaryOperator<typename thrust::detail::remove_reference<
+                        typename first_argument<Env>::type>::type>
+                        type;
+                };
 
-  template<typename Env>
-    struct result
-  {
-    typedef typename operator_type<Env>::type op_type;
-    typedef typename op_type::result_type type;
-  };
+                template <typename Env>
+                struct result
+                {
+                    typedef typename operator_type<Env>::type op_type;
+                    typedef typename op_type::result_type     type;
+                };
 
-  template<typename Env>
-  __host__ __device__
-  typename result<Env>::type eval(const Env &e) const
-  {
-    typename operator_type<Env>::type op;
-    return op(thrust::get<0>(e), thrust::get<1>(e));
-  } // end eval()
-}; // end binary_operator
+                template <typename Env>
+                __host__ __device__ typename result<Env>::type eval(const Env& e) const
+                {
+                    typename operator_type<Env>::type op;
+                    return op(thrust::get<0>(e), thrust::get<1>(e));
+                } // end eval()
+            }; // end binary_operator
 
-} // end functional
-} // end detail
+        } // end functional
+    } // end detail
 } // end thrust
-

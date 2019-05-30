@@ -16,17 +16,16 @@
 
 #pragma once
 
-#if   __cplusplus < 201103L
-  #define THRUST_CPP03
-  #define THRUST_CPP_DIALECT 2003
+#if __cplusplus < 201103L
+#define THRUST_CPP03
+#define THRUST_CPP_DIALECT 2003
 #elif __cplusplus < 201402L
-  #define THRUST_CPP11
-  #define THRUST_CPP_DIALECT 2011
+#define THRUST_CPP11
+#define THRUST_CPP_DIALECT 2011
 #elif __cplusplus < 201703L
-  #define THRUST_CPP14
-  #define THRUST_CPP_DIALECT 2014
+#define THRUST_CPP14
+#define THRUST_CPP_DIALECT 2014
 #else
-  #define THRUST_CPP17
-  #define THRUST_CPP_DIALECT 2017
+#define THRUST_CPP17
+#define THRUST_CPP_DIALECT 2017
 #endif
-

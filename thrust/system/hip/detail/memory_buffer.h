@@ -41,32 +41,30 @@ BEGIN_NS_THRUST
 // to avoid circular include dependency from thrust/memory.h
 //
 template <typename T, typename DerivedPolicy>
-thrust::pair<thrust::pointer<T, DerivedPolicy>, typename thrust::pointer<T, DerivedPolicy>::difference_type>
-__host__ __device__
-get_temporary_buffer(const thrust::detail::execution_policy_base<DerivedPolicy>& system,
-                     typename thrust::pointer<T, DerivedPolicy>::difference_type n);
+thrust::pair<thrust::pointer<T, DerivedPolicy>,
+             typename thrust::pointer<T, DerivedPolicy>::difference_type>
+    __host__ __device__
+             get_temporary_buffer(const thrust::detail::execution_policy_base<DerivedPolicy>& system,
+                                  typename thrust::pointer<T, DerivedPolicy>::difference_type n);
 
 template <typename DerivedPolicy, typename Pointer>
-void __host__ __device__
-return_temporary_buffer(const thrust::detail::execution_policy_base<DerivedPolicy>& system,
-                        Pointer                                                     p);
+void __host__ __device__ return_temporary_buffer(
+    const thrust::detail::execution_policy_base<DerivedPolicy>& system, Pointer p);
 
 namespace hip_rocprim
 {
 
-template <class Derived>
-void* __host__ __device__
-get_memory_buffer(execution_policy<Derived>& policy, std::ptrdiff_t n)
-{
-    return (void*)thrust::raw_pointer_cast(thrust::get_temporary_buffer<char>(policy, n).first);
-}
+    template <class Derived>
+    void* __host__ __device__ get_memory_buffer(execution_policy<Derived>& policy, std::ptrdiff_t n)
+    {
+        return (void*)thrust::raw_pointer_cast(thrust::get_temporary_buffer<char>(policy, n).first);
+    }
 
-template <class Derived>
-void __host__ __device__
-return_memory_buffer(execution_policy<Derived>& policy, void* ptr)
-{
-    thrust::return_temporary_buffer(policy, ptr);
-}
+    template <class Derived>
+    void __host__ __device__ return_memory_buffer(execution_policy<Derived>& policy, void* ptr)
+    {
+        thrust::return_temporary_buffer(policy, ptr);
+    }
 
 } // namespace hip_rocprim
 END_NS_THRUST

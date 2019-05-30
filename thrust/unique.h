@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file unique.h
  *  \brief Move unique elements to the front of a range
  */
@@ -28,13 +27,11 @@
 namespace thrust
 {
 
-
-/*! \addtogroup stream_compaction
+    /*! \addtogroup stream_compaction
  *  \{
  */
 
-
-/*! For each group of consecutive elements in the range <tt>[first, last)</tt>
+    /*! For each group of consecutive elements in the range <tt>[first, last)</tt>
  *  with the same value, \p unique removes all but the first element of 
  *  the group. The return value is an iterator \c new_last such that 
  *  no two consecutive elements in the range <tt>[first, new_last)</tt> are
@@ -75,15 +72,13 @@ namespace thrust
  *  \see http://www.sgi.com/tech/stl/unique.html
  *  \see unique_copy
  */
-template<typename DerivedPolicy,
-         typename ForwardIterator>
-__host__ __device__
-ForwardIterator unique(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                       ForwardIterator first,
-                       ForwardIterator last);
+    template <typename DerivedPolicy, typename ForwardIterator>
+    __host__ __device__ ForwardIterator
+                        unique(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                               ForwardIterator                                             first,
+                               ForwardIterator                                             last);
 
-
-/*! For each group of consecutive elements in the range <tt>[first, last)</tt>
+    /*! For each group of consecutive elements in the range <tt>[first, last)</tt>
  *  with the same value, \p unique removes all but the first element of 
  *  the group. The return value is an iterator \c new_last such that 
  *  no two consecutive elements in the range <tt>[first, new_last)</tt> are
@@ -118,12 +113,10 @@ ForwardIterator unique(const thrust::detail::execution_policy_base<DerivedPolicy
  *  \see http://www.sgi.com/tech/stl/unique.html
  *  \see unique_copy
  */
-template<typename ForwardIterator>
-ForwardIterator unique(ForwardIterator first,
-                       ForwardIterator last);
+    template <typename ForwardIterator>
+    ForwardIterator unique(ForwardIterator first, ForwardIterator last);
 
-
-/*! For each group of consecutive elements in the range <tt>[first, last)</tt>
+    /*! For each group of consecutive elements in the range <tt>[first, last)</tt>
  *  with the same value, \p unique removes all but the first element of 
  *  the group. The return value is an iterator \c new_last such that 
  *  no two consecutive elements in the range <tt>[first, new_last)</tt> are
@@ -167,17 +160,14 @@ ForwardIterator unique(ForwardIterator first,
  *  \see http://www.sgi.com/tech/stl/unique.html
  *  \see unique_copy
  */
-template<typename DerivedPolicy,
-         typename ForwardIterator,
-         typename BinaryPredicate>
-__host__ __device__
-ForwardIterator unique(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                       ForwardIterator first,
-                       ForwardIterator last,
-                       BinaryPredicate binary_pred);
+    template <typename DerivedPolicy, typename ForwardIterator, typename BinaryPredicate>
+    __host__ __device__ ForwardIterator
+                        unique(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                               ForwardIterator                                             first,
+                               ForwardIterator                                             last,
+                               BinaryPredicate                                             binary_pred);
 
-
-/*! For each group of consecutive elements in the range <tt>[first, last)</tt>
+    /*! For each group of consecutive elements in the range <tt>[first, last)</tt>
  *  with the same value, \p unique removes all but the first element of 
  *  the group. The return value is an iterator \c new_last such that 
  *  no two consecutive elements in the range <tt>[first, new_last)</tt> are
@@ -215,14 +205,11 @@ ForwardIterator unique(const thrust::detail::execution_policy_base<DerivedPolicy
  *  \see http://www.sgi.com/tech/stl/unique.html
  *  \see unique_copy
  */
-template<typename ForwardIterator,
-         typename BinaryPredicate>
-ForwardIterator unique(ForwardIterator first,
-                       ForwardIterator last,
-                       BinaryPredicate binary_pred);
+    template <typename ForwardIterator, typename BinaryPredicate>
+    ForwardIterator
+        unique(ForwardIterator first, ForwardIterator last, BinaryPredicate binary_pred);
 
-
-/*! \p unique_copy copies elements from the range <tt>[first, last)</tt>
+    /*! \p unique_copy copies elements from the range <tt>[first, last)</tt>
  * to a range beginning with \p result, except that in a consecutive group
  * of duplicate elements only the first one is copied. The return value
  * is the end of the range to which the elements are copied. 
@@ -274,17 +261,14 @@ ForwardIterator unique(ForwardIterator first,
  *  \see unique
  *  \see http://www.sgi.com/tech/stl/unique_copy.html
  */
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator>
-__host__ __device__
-OutputIterator unique_copy(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                           InputIterator first,
-                           InputIterator last,
-                           OutputIterator result);
+    template <typename DerivedPolicy, typename InputIterator, typename OutputIterator>
+    __host__ __device__ OutputIterator
+                        unique_copy(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    InputIterator                                               first,
+                                    InputIterator                                               last,
+                                    OutputIterator                                              result);
 
-
-/*! \p unique_copy copies elements from the range <tt>[first, last)</tt>
+    /*! \p unique_copy copies elements from the range <tt>[first, last)</tt>
  * to a range beginning with \p result, except that in a consecutive group
  * of duplicate elements only the first one is copied. The return value
  * is the end of the range to which the elements are copied. 
@@ -330,14 +314,10 @@ OutputIterator unique_copy(const thrust::detail::execution_policy_base<DerivedPo
  *  \see unique
  *  \see http://www.sgi.com/tech/stl/unique_copy.html
  */
-template<typename InputIterator,
-         typename OutputIterator>
-OutputIterator unique_copy(InputIterator first,
-                           InputIterator last,
-                           OutputIterator result);
+    template <typename InputIterator, typename OutputIterator>
+    OutputIterator unique_copy(InputIterator first, InputIterator last, OutputIterator result);
 
-
-/*! \p unique_copy copies elements from the range <tt>[first, last)</tt>
+    /*! \p unique_copy copies elements from the range <tt>[first, last)</tt>
  * to a range beginning with \p result, except that in a consecutive group
  * of duplicate elements only the first one is copied. The return value
  * is the end of the range to which the elements are copied. 
@@ -382,19 +362,18 @@ OutputIterator unique_copy(InputIterator first,
  *  \see unique
  *  \see http://www.sgi.com/tech/stl/unique_copy.html
  */
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator,
-         typename BinaryPredicate>
-__host__ __device__
-OutputIterator unique_copy(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                           InputIterator first,
-                           InputIterator last,
-                           OutputIterator result,
-                           BinaryPredicate binary_pred);
-                       
+    template <typename DerivedPolicy,
+              typename InputIterator,
+              typename OutputIterator,
+              typename BinaryPredicate>
+    __host__ __device__ OutputIterator
+                        unique_copy(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    InputIterator                                               first,
+                                    InputIterator                                               last,
+                                    OutputIterator                                              result,
+                                    BinaryPredicate                                             binary_pred);
 
-/*! \p unique_copy copies elements from the range <tt>[first, last)</tt>
+    /*! \p unique_copy copies elements from the range <tt>[first, last)</tt>
  * to a range beginning with \p result, except that in a consecutive group
  * of duplicate elements only the first one is copied. The return value
  * is the end of the range to which the elements are copied. 
@@ -433,16 +412,13 @@ OutputIterator unique_copy(const thrust::detail::execution_policy_base<DerivedPo
  *  \see unique
  *  \see http://www.sgi.com/tech/stl/unique_copy.html
  */
-template<typename InputIterator,
-         typename OutputIterator,
-         typename BinaryPredicate>
-OutputIterator unique_copy(InputIterator first,
-                           InputIterator last,
-                           OutputIterator result,
-                           BinaryPredicate binary_pred);
+    template <typename InputIterator, typename OutputIterator, typename BinaryPredicate>
+    OutputIterator unique_copy(InputIterator   first,
+                               InputIterator   last,
+                               OutputIterator  result,
+                               BinaryPredicate binary_pred);
 
-
-/*! \p unique_by_key is a generalization of \p unique to key-value pairs.
+    /*! \p unique_by_key is a generalization of \p unique to key-value pairs.
  *  For each group of consecutive keys in the range <tt>[keys_first, keys_last)</tt>
  *  that are equal, \p unique_by_key removes all but the first element of 
  *  the group.  Similarly, the corresponding values in the range
@@ -496,18 +472,14 @@ OutputIterator unique_copy(InputIterator first,
  *  \see unique_by_key_copy
  *  \see reduce_by_key
  */
-template<typename DerivedPolicy,
-         typename ForwardIterator1,
-         typename ForwardIterator2>
-__host__ __device__
-  thrust::pair<ForwardIterator1,ForwardIterator2>
-  unique_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                ForwardIterator1 keys_first, 
-                ForwardIterator1 keys_last,
-                ForwardIterator2 values_first);
+    template <typename DerivedPolicy, typename ForwardIterator1, typename ForwardIterator2>
+    __host__ __device__ thrust::pair<ForwardIterator1, ForwardIterator2>
+                        unique_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                      ForwardIterator1                                            keys_first,
+                                      ForwardIterator1                                            keys_last,
+                                      ForwardIterator2                                            values_first);
 
-
-/*! \p unique_by_key is a generalization of \p unique to key-value pairs.
+    /*! \p unique_by_key is a generalization of \p unique to key-value pairs.
  *  For each group of consecutive keys in the range <tt>[keys_first, keys_last)</tt>
  *  that are equal, \p unique_by_key removes all but the first element of 
  *  the group.  Similarly, the corresponding values in the range
@@ -555,15 +527,12 @@ __host__ __device__
  *  \see unique_by_key_copy
  *  \see reduce_by_key
  */
-template<typename ForwardIterator1,
-         typename ForwardIterator2>
-  thrust::pair<ForwardIterator1,ForwardIterator2>
-  unique_by_key(ForwardIterator1 keys_first, 
-                ForwardIterator1 keys_last,
-                ForwardIterator2 values_first);
+    template <typename ForwardIterator1, typename ForwardIterator2>
+    thrust::pair<ForwardIterator1, ForwardIterator2> unique_by_key(ForwardIterator1 keys_first,
+                                                                   ForwardIterator1 keys_last,
+                                                                   ForwardIterator2 values_first);
 
-
-/*! \p unique_by_key is a generalization of \p unique to key-value pairs.
+    /*! \p unique_by_key is a generalization of \p unique to key-value pairs.
  *  For each group of consecutive keys in the range <tt>[keys_first, keys_last)</tt>
  *  that are equal, \p unique_by_key removes all but the first element of 
  *  the group.  Similarly, the corresponding values in the range
@@ -616,20 +585,18 @@ template<typename ForwardIterator1,
  *  \see unique_by_key_copy
  *  \see reduce_by_key
  */
-template<typename DerivedPolicy,
-         typename ForwardIterator1,
-         typename ForwardIterator2,
-         typename BinaryPredicate>
-__host__ __device__
-  thrust::pair<ForwardIterator1,ForwardIterator2>
-    unique_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                  ForwardIterator1 keys_first, 
-                  ForwardIterator1 keys_last,
-                  ForwardIterator2 values_first,
-                  BinaryPredicate binary_pred);
+    template <typename DerivedPolicy,
+              typename ForwardIterator1,
+              typename ForwardIterator2,
+              typename BinaryPredicate>
+    __host__ __device__ thrust::pair<ForwardIterator1, ForwardIterator2>
+                        unique_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                      ForwardIterator1                                            keys_first,
+                                      ForwardIterator1                                            keys_last,
+                                      ForwardIterator2                                            values_first,
+                                      BinaryPredicate                                             binary_pred);
 
-
-/*! \p unique_by_key is a generalization of \p unique to key-value pairs.
+    /*! \p unique_by_key is a generalization of \p unique to key-value pairs.
  *  For each group of consecutive keys in the range <tt>[keys_first, keys_last)</tt>
  *  that are equal, \p unique_by_key removes all but the first element of 
  *  the group.  Similarly, the corresponding values in the range
@@ -676,17 +643,13 @@ __host__ __device__
  *  \see unique_by_key_copy
  *  \see reduce_by_key
  */
-template<typename ForwardIterator1,
-         typename ForwardIterator2,
-         typename BinaryPredicate>
-  thrust::pair<ForwardIterator1,ForwardIterator2>
-  unique_by_key(ForwardIterator1 keys_first, 
-                ForwardIterator1 keys_last,
-                ForwardIterator2 values_first,
-                BinaryPredicate binary_pred);
+    template <typename ForwardIterator1, typename ForwardIterator2, typename BinaryPredicate>
+    thrust::pair<ForwardIterator1, ForwardIterator2> unique_by_key(ForwardIterator1 keys_first,
+                                                                   ForwardIterator1 keys_last,
+                                                                   ForwardIterator2 values_first,
+                                                                   BinaryPredicate  binary_pred);
 
-
-/*! \p unique_by_key_copy is a generalization of \p unique_copy to key-value pairs.
+    /*! \p unique_by_key_copy is a generalization of \p unique_copy to key-value pairs.
  *  For each group of consecutive keys in the range <tt>[keys_first, keys_last)</tt>
  *  that are equal, \p unique_by_key_copy copies the first element of the group to
  *  a range beginning with \c keys_result and the corresponding values from the range
@@ -741,22 +704,20 @@ template<typename ForwardIterator1,
  *  \see unique_by_key
  *  \see reduce_by_key
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator1,
-         typename OutputIterator2>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-    unique_by_key_copy(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                       InputIterator1 keys_first, 
-                       InputIterator1 keys_last,
-                       InputIterator2 values_first,
-                       OutputIterator1 keys_result,
-                       OutputIterator2 values_result);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator1,
+              typename OutputIterator2>
+    __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                        unique_by_key_copy(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                           InputIterator1                                              keys_first,
+                                           InputIterator1                                              keys_last,
+                                           InputIterator2                                              values_first,
+                                           OutputIterator1                                             keys_result,
+                                           OutputIterator2 values_result);
 
-
-/*! \p unique_by_key_copy is a generalization of \p unique_copy to key-value pairs.
+    /*! \p unique_by_key_copy is a generalization of \p unique_copy to key-value pairs.
  *  For each group of consecutive keys in the range <tt>[keys_first, keys_last)</tt>
  *  that are equal, \p unique_by_key_copy copies the first element of the group to
  *  a range beginning with \c keys_result and the corresponding values from the range
@@ -805,19 +766,18 @@ __host__ __device__
  *  \see unique_by_key
  *  \see reduce_by_key
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator1,
-         typename OutputIterator2>
-  thrust::pair<OutputIterator1,OutputIterator2>
-  unique_by_key_copy(InputIterator1 keys_first, 
-                     InputIterator1 keys_last,
-                     InputIterator2 values_first,
-                     OutputIterator1 keys_result,
-                     OutputIterator2 values_result);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator1,
+              typename OutputIterator2>
+    thrust::pair<OutputIterator1, OutputIterator2>
+        unique_by_key_copy(InputIterator1  keys_first,
+                           InputIterator1  keys_last,
+                           InputIterator2  values_first,
+                           OutputIterator1 keys_result,
+                           OutputIterator2 values_result);
 
-
-/*! \p unique_by_key_copy is a generalization of \p unique_copy to key-value pairs.
+    /*! \p unique_by_key_copy is a generalization of \p unique_copy to key-value pairs.
  *  For each group of consecutive keys in the range <tt>[keys_first, keys_last)</tt>
  *  that are equal, \p unique_by_key_copy copies the first element of the group to
  *  a range beginning with \c keys_result and the corresponding values from the range
@@ -875,24 +835,22 @@ template<typename InputIterator1,
  *  \see unique_by_key
  *  \see reduce_by_key
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename BinaryPredicate>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-    unique_by_key_copy(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                       InputIterator1 keys_first, 
-                       InputIterator1 keys_last,
-                       InputIterator2 values_first,
-                       OutputIterator1 keys_result,
-                       OutputIterator2 values_result,
-                       BinaryPredicate binary_pred);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename BinaryPredicate>
+    __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                        unique_by_key_copy(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                           InputIterator1                                              keys_first,
+                                           InputIterator1                                              keys_last,
+                                           InputIterator2                                              values_first,
+                                           OutputIterator1                                             keys_result,
+                                           OutputIterator2 values_result,
+                                           BinaryPredicate binary_pred);
 
-
-/*! \p unique_by_key_copy is a generalization of \p unique_copy to key-value pairs.
+    /*! \p unique_by_key_copy is a generalization of \p unique_copy to key-value pairs.
  *  For each group of consecutive keys in the range <tt>[keys_first, keys_last)</tt>
  *  that are equal, \p unique_by_key_copy copies the first element of the group to
  *  a range beginning with \c keys_result and the corresponding values from the range
@@ -944,25 +902,21 @@ __host__ __device__
  *  \see unique_by_key
  *  \see reduce_by_key
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename BinaryPredicate>
-  thrust::pair<OutputIterator1,OutputIterator2>
-  unique_by_key_copy(InputIterator1 keys_first, 
-                     InputIterator1 keys_last,
-                     InputIterator2 values_first,
-                     OutputIterator1 keys_result,
-                     OutputIterator2 values_result,
-                     BinaryPredicate binary_pred);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename BinaryPredicate>
+    thrust::pair<OutputIterator1, OutputIterator2> unique_by_key_copy(InputIterator1  keys_first,
+                                                                      InputIterator1  keys_last,
+                                                                      InputIterator2  values_first,
+                                                                      OutputIterator1 keys_result,
+                                                                      OutputIterator2 values_result,
+                                                                      BinaryPredicate binary_pred);
 
-
-/*! \} // end stream_compaction
+    /*! \} // end stream_compaction
  */
-
 
 } // end namespace thrust
 
 #include <thrust/detail/unique.inl>
-

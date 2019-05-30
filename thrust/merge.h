@@ -27,14 +27,12 @@
 namespace thrust
 {
 
-
-/*! \addtogroup merging Merging
+    /*! \addtogroup merging Merging
  *  \ingroup algorithms
  *  \{
  */
 
-
-/*! \p merge combines two sorted ranges <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>
+    /*! \p merge combines two sorted ranges <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>
  *  into a single sorted range. That is, it copies from <tt>[first1, last1)</tt> and
  *  <tt>[first2, last2)</tt> into <tt>[result, result + (last1 - first1) + (last2 - first2))</tt>
  *  such that the resulting range is in ascending order. \p merge is stable, meaning both that the
@@ -95,20 +93,19 @@ namespace thrust
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator>
-__host__ __device__
-  OutputIterator merge(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                       InputIterator1 first1,
-                       InputIterator1 last1,
-                       InputIterator2 first2,
-                       InputIterator2 last2,
-                       OutputIterator result);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator>
+    __host__ __device__ OutputIterator
+                        merge(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                              InputIterator1                                              first1,
+                              InputIterator1                                              last1,
+                              InputIterator2                                              first2,
+                              InputIterator2                                              last2,
+                              OutputIterator                                              result);
 
-
-/*! \p merge combines two sorted ranges <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>
+    /*! \p merge combines two sorted ranges <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>
  *  into a single sorted range. That is, it copies from <tt>[first1, last1)</tt> and
  *  <tt>[first2, last2)</tt> into <tt>[result, result + (last1 - first1) + (last2 - first2))</tt>
  *  such that the resulting range is in ascending order. \p merge is stable, meaning both that the
@@ -160,17 +157,14 @@ __host__ __device__
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator>
-  OutputIterator merge(InputIterator1 first1,
-                       InputIterator1 last1,
-                       InputIterator2 first2,
-                       InputIterator2 last2,
-                       OutputIterator result);
+    template <typename InputIterator1, typename InputIterator2, typename OutputIterator>
+    OutputIterator merge(InputIterator1 first1,
+                         InputIterator1 last1,
+                         InputIterator2 first2,
+                         InputIterator2 last2,
+                         OutputIterator result);
 
-
-/*! \p merge combines two sorted ranges <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>
+    /*! \p merge combines two sorted ranges <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>
  *  into a single sorted range. That is, it copies from <tt>[first1, last1)</tt> and
  *  <tt>[first2, last2)</tt> into <tt>[result, result + (last1 - first1) + (last2 - first2))</tt>
  *  such that the resulting range is in ascending order. \p merge is stable, meaning both that the
@@ -230,22 +224,21 @@ template<typename InputIterator1,
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename StrictWeakCompare>
-__host__ __device__
-  OutputIterator merge(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                       InputIterator1 first1,
-                       InputIterator1 last1,
-                       InputIterator2 first2,
-                       InputIterator2 last2,
-                       OutputIterator result,
-                       StrictWeakCompare comp);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename StrictWeakCompare>
+    __host__ __device__ OutputIterator
+                        merge(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                              InputIterator1                                              first1,
+                              InputIterator1                                              last1,
+                              InputIterator2                                              first2,
+                              InputIterator2                                              last2,
+                              OutputIterator                                              result,
+                              StrictWeakCompare                                           comp);
 
-
-/*! \p merge combines two sorted ranges <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>
+    /*! \p merge combines two sorted ranges <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>
  *  into a single sorted range. That is, it copies from <tt>[first1, last1)</tt> and
  *  <tt>[first2, last2)</tt> into <tt>[result, result + (last1 - first1) + (last2 - first2))</tt>
  *  such that the resulting range is in ascending order. \p merge is stable, meaning both that the
@@ -296,19 +289,18 @@ __host__ __device__
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename StrictWeakCompare>
-  OutputIterator merge(InputIterator1 first1,
-                       InputIterator1 last1,
-                       InputIterator2 first2,
-                       InputIterator2 last2,
-                       OutputIterator result,
-                       StrictWeakCompare comp);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename StrictWeakCompare>
+    OutputIterator merge(InputIterator1    first1,
+                         InputIterator1    last1,
+                         InputIterator2    first2,
+                         InputIterator2    last2,
+                         OutputIterator    result,
+                         StrictWeakCompare comp);
 
-
-/*! \p merge_by_key performs a key-value merge. That is, \p merge_by_key copies elements from
+    /*! \p merge_by_key performs a key-value merge. That is, \p merge_by_key copies elements from
  *  <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt> into a single range,
  *  <tt>[keys_result, keys_result + (keys_last1 - keys_first1) + (keys_last2 - keys_first2))</tt> such that
  *  the resulting range is in ascending key order.
@@ -393,18 +385,25 @@ template<typename InputIterator1,
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy, typename InputIterator1, typename InputIterator2, typename InputIterator3, typename InputIterator4, typename OutputIterator1, typename OutputIterator2>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-    merge_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                 InputIterator1 keys_first1, InputIterator1 keys_last1,
-                 InputIterator2 keys_first2, InputIterator2 keys_last2,
-                 InputIterator3 values_first1, InputIterator4 values_first2,
-                 OutputIterator1 keys_result,
-                 OutputIterator2 values_result);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename InputIterator4,
+              typename OutputIterator1,
+              typename OutputIterator2>
+    __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                        merge_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                     InputIterator1                                              keys_first1,
+                                     InputIterator1                                              keys_last1,
+                                     InputIterator2                                              keys_first2,
+                                     InputIterator2                                              keys_last2,
+                                     InputIterator3                                              values_first1,
+                                     InputIterator4                                              values_first2,
+                                     OutputIterator1                                             keys_result,
+                                     OutputIterator2                                             values_result);
 
-
-/*! \p merge_by_key performs a key-value merge. That is, \p merge_by_key copies elements from
+    /*! \p merge_by_key performs a key-value merge. That is, \p merge_by_key copies elements from
  *  <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt> into a single range,
  *  <tt>[keys_result, keys_result + (keys_last1 - keys_first1) + (keys_last2 - keys_first2))</tt> such that
  *  the resulting range is in ascending key order.
@@ -479,16 +478,22 @@ __host__ __device__
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename InputIterator1, typename InputIterator2, typename InputIterator3, typename InputIterator4, typename OutputIterator1, typename OutputIterator2>
-  thrust::pair<OutputIterator1,OutputIterator2>
-    merge_by_key(InputIterator1 keys_first1, InputIterator1 keys_last1,
-                 InputIterator2 keys_first2, InputIterator2 keys_last2,
-                 InputIterator3 values_first1, InputIterator4 values_first2,
-                 OutputIterator1 keys_result,
-                 OutputIterator2 values_result);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename InputIterator4,
+              typename OutputIterator1,
+              typename OutputIterator2>
+    thrust::pair<OutputIterator1, OutputIterator2> merge_by_key(InputIterator1  keys_first1,
+                                                                InputIterator1  keys_last1,
+                                                                InputIterator2  keys_first2,
+                                                                InputIterator2  keys_last2,
+                                                                InputIterator3  values_first1,
+                                                                InputIterator4  values_first2,
+                                                                OutputIterator1 keys_result,
+                                                                OutputIterator2 values_result);
 
-
-/*! \p merge_by_key performs a key-value merge. That is, \p merge_by_key copies elements from
+    /*! \p merge_by_key performs a key-value merge. That is, \p merge_by_key copies elements from
  *  <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt> into a single range,
  *  <tt>[keys_result, keys_result + (keys_last1 - keys_first1) + (keys_last2 - keys_first2))</tt> such that
  *  the resulting range is in ascending key order.
@@ -574,19 +579,27 @@ template<typename InputIterator1, typename InputIterator2, typename InputIterato
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy, typename InputIterator1, typename InputIterator2, typename InputIterator3, typename InputIterator4, typename OutputIterator1, typename OutputIterator2, typename Compare>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-    merge_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                 InputIterator1 keys_first1, InputIterator1 keys_last1,
-                 InputIterator2 keys_first2, InputIterator2 keys_last2,
-                 InputIterator3 values_first1, InputIterator4 values_first2,
-                 OutputIterator1 keys_result,
-                 OutputIterator2 values_result,
-                 Compare comp);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename InputIterator4,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename Compare>
+    __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                        merge_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                     InputIterator1                                              keys_first1,
+                                     InputIterator1                                              keys_last1,
+                                     InputIterator2                                              keys_first2,
+                                     InputIterator2                                              keys_last2,
+                                     InputIterator3                                              values_first1,
+                                     InputIterator4                                              values_first2,
+                                     OutputIterator1                                             keys_result,
+                                     OutputIterator2                                             values_result,
+                                     Compare                                                     comp);
 
-
-/*! \p merge_by_key performs a key-value merge. That is, \p merge_by_key copies elements from
+    /*! \p merge_by_key performs a key-value merge. That is, \p merge_by_key copies elements from
  *  <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt> into a single range,
  *  <tt>[keys_result, keys_result + (keys_last1 - keys_first1) + (keys_last2 - keys_first2))</tt> such that
  *  the resulting range is in ascending key order.
@@ -661,20 +674,26 @@ __host__ __device__
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename InputIterator1, typename InputIterator2, typename InputIterator3, typename InputIterator4, typename OutputIterator1, typename OutputIterator2, typename StrictWeakCompare>
-  thrust::pair<OutputIterator1,OutputIterator2>
-    merge_by_key(InputIterator1 keys_first1, InputIterator1 keys_last1,
-                 InputIterator2 keys_first2, InputIterator2 keys_last2,
-                 InputIterator3 values_first1, InputIterator4 values_first2,
-                 OutputIterator1 keys_result,
-                 OutputIterator2 values_result,
-                 StrictWeakCompare comp);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename InputIterator4,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename StrictWeakCompare>
+    thrust::pair<OutputIterator1, OutputIterator2> merge_by_key(InputIterator1    keys_first1,
+                                                                InputIterator1    keys_last1,
+                                                                InputIterator2    keys_first2,
+                                                                InputIterator2    keys_last2,
+                                                                InputIterator3    values_first1,
+                                                                InputIterator4    values_first2,
+                                                                OutputIterator1   keys_result,
+                                                                OutputIterator2   values_result,
+                                                                StrictWeakCompare comp);
 
-
-/*! \} // merging
+    /*! \} // merging
  */
 
 } // end thrust
 
 #include <thrust/detail/merge.inl>
-

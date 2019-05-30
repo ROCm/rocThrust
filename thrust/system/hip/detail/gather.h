@@ -35,58 +35,54 @@ BEGIN_NS_THRUST
 namespace hip_rocprim
 {
 
-template <class Derived, class MapIt, class ItemsIt, class ResultIt>
-ResultIt THRUST_HIP_FUNCTION
-gather(execution_policy<Derived>& policy,
-       MapIt                      map_first,
-       MapIt                      map_last,
-       ItemsIt                    items,
-       ResultIt                   result)
-{
-    return hip_rocprim::transform(policy,
-                                  thrust::make_permutation_iterator(items, map_first),
-                                  thrust::make_permutation_iterator(items, map_last),
-                                  result,
-                                  identity());
-}
+    template <class Derived, class MapIt, class ItemsIt, class ResultIt>
+    ResultIt THRUST_HIP_FUNCTION gather(execution_policy<Derived>& policy,
+                                        MapIt                      map_first,
+                                        MapIt                      map_last,
+                                        ItemsIt                    items,
+                                        ResultIt                   result)
+    {
+        return hip_rocprim::transform(policy,
+                                      thrust::make_permutation_iterator(items, map_first),
+                                      thrust::make_permutation_iterator(items, map_last),
+                                      result,
+                                      identity());
+    }
 
-template <class Derived,
-          class MapIt,
-          class StencilIt,
-          class ItemsIt,
-          class ResultIt,
-          class Predicate>
-ResultIt THRUST_HIP_FUNCTION
-gather_if(execution_policy<Derived>& policy,
-          MapIt                      map_first,
-          MapIt                      map_last,
-          StencilIt                  stencil,
-          ItemsIt                    items,
-          ResultIt                   result,
-          Predicate                  predicate)
-{
-    return hip_rocprim::transform_if(policy,
-                                     thrust::make_permutation_iterator(items, map_first),
-                                     thrust::make_permutation_iterator(items, map_last),
-                                     stencil,
-                                     result,
-                                     identity(),
-                                     predicate);
-}
+    template <class Derived,
+              class MapIt,
+              class StencilIt,
+              class ItemsIt,
+              class ResultIt,
+              class Predicate>
+    ResultIt THRUST_HIP_FUNCTION gather_if(execution_policy<Derived>& policy,
+                                           MapIt                      map_first,
+                                           MapIt                      map_last,
+                                           StencilIt                  stencil,
+                                           ItemsIt                    items,
+                                           ResultIt                   result,
+                                           Predicate                  predicate)
+    {
+        return hip_rocprim::transform_if(policy,
+                                         thrust::make_permutation_iterator(items, map_first),
+                                         thrust::make_permutation_iterator(items, map_last),
+                                         stencil,
+                                         result,
+                                         identity(),
+                                         predicate);
+    }
 
-template <class Derived, class MapIt, class StencilIt, class ItemsIt, class ResultIt>
-ResultIt THRUST_HIP_FUNCTION
-gather_if(execution_policy<Derived>& policy,
-          MapIt                      map_first,
-          MapIt                      map_last,
-          StencilIt                  stencil,
-          ItemsIt                    items,
-          ResultIt                   result)
-{
-    return hip_rocprim::gather_if(
-        policy, map_first, map_last, stencil, items, result, identity()
-    );
-}
+    template <class Derived, class MapIt, class StencilIt, class ItemsIt, class ResultIt>
+    ResultIt THRUST_HIP_FUNCTION gather_if(execution_policy<Derived>& policy,
+                                           MapIt                      map_first,
+                                           MapIt                      map_last,
+                                           StencilIt                  stencil,
+                                           ItemsIt                    items,
+                                           ResultIt                   result)
+    {
+        return hip_rocprim::gather_if(
+            policy, map_first, map_last, stencil, items, result, identity());
+    }
 
 } // namespace hip_rocprim
 END_NS_THRUST

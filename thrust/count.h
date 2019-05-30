@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file count.h
  *  \brief Counting elements in a range
  */
@@ -28,22 +27,20 @@
 namespace thrust
 {
 
-
-/*! \addtogroup algorithms
+    /*! \addtogroup algorithms
  */
 
-/*! \addtogroup reductions
+    /*! \addtogroup reductions
  *  \ingroup algorithms
  *  \{
  */
 
-/*! \addtogroup counting
+    /*! \addtogroup counting
  *  \ingroup reductions
  *  \{
  */
 
-
-/*! \p count finds the number of elements in <tt>[first,last)</tt> that are equal
+    /*! \p count finds the number of elements in <tt>[first,last)</tt> that are equal
  *  to \p value. More precisely, \p count returns the number of iterators \c i in
  *  <tt>[first, last)</tt> such that <tt>*i == value</tt>.
  *
@@ -80,14 +77,14 @@ namespace thrust
  *
  *  \see http://www.sgi.com/tech/stl/count.html
  */
-template<typename DerivedPolicy, typename InputIterator, typename EqualityComparable>
-__host__ __device__
-  typename thrust::iterator_traits<InputIterator>::difference_type
-    count(const thrust::detail::execution_policy_base<DerivedPolicy> &exec, InputIterator first, InputIterator last, const EqualityComparable& value);
+    template <typename DerivedPolicy, typename InputIterator, typename EqualityComparable>
+    __host__ __device__ typename thrust::iterator_traits<InputIterator>::difference_type
+             count(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                   InputIterator                                               first,
+                   InputIterator                                               last,
+                   const EqualityComparable&                                   value);
 
-
-
-/*! \p count finds the number of elements in <tt>[first,last)</tt> that are equal
+    /*! \p count finds the number of elements in <tt>[first,last)</tt> that are equal
  *  to \p value. More precisely, \p count returns the number of iterators \c i in
  *  <tt>[first, last)</tt> such that <tt>*i == value</tt>.
  *
@@ -118,12 +115,11 @@ __host__ __device__
  *
  *  \see http://www.sgi.com/tech/stl/count.html
  */
-template <typename InputIterator, typename EqualityComparable>
-  typename thrust::iterator_traits<InputIterator>::difference_type
-    count(InputIterator first, InputIterator last, const EqualityComparable& value);
+    template <typename InputIterator, typename EqualityComparable>
+    typename thrust::iterator_traits<InputIterator>::difference_type
+        count(InputIterator first, InputIterator last, const EqualityComparable& value);
 
-
-/*! \p count_if finds the number of elements in <tt>[first,last)</tt> for which 
+    /*! \p count_if finds the number of elements in <tt>[first,last)</tt> for which 
  *  a predicate is \c true. More precisely, \p count_if returns the number of iterators
  *  \c i in <tt>[first, last)</tt> such that <tt>pred(*i) == true</tt>.
  *
@@ -171,13 +167,14 @@ template <typename InputIterator, typename EqualityComparable>
  *
  *  \see http://www.sgi.com/tech/stl/count.html
  */
-template<typename DerivedPolicy, typename InputIterator, typename Predicate>
-__host__ __device__
-  typename thrust::iterator_traits<InputIterator>::difference_type
-    count_if(const thrust::detail::execution_policy_base<DerivedPolicy> &exec, InputIterator first, InputIterator last, Predicate pred);
+    template <typename DerivedPolicy, typename InputIterator, typename Predicate>
+    __host__ __device__ typename thrust::iterator_traits<InputIterator>::difference_type
+             count_if(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                      InputIterator                                               first,
+                      InputIterator                                               last,
+                      Predicate                                                   pred);
 
-
-/*! \p count_if finds the number of elements in <tt>[first,last)</tt> for which 
+    /*! \p count_if finds the number of elements in <tt>[first,last)</tt> for which 
  *  a predicate is \c true. More precisely, \p count_if returns the number of iterators
  *  \c i in <tt>[first, last)</tt> such that <tt>pred(*i) == true</tt>.
  *
@@ -219,17 +216,14 @@ __host__ __device__
  *
  *  \see http://www.sgi.com/tech/stl/count.html
  */
-template <typename InputIterator, typename Predicate>
-  typename thrust::iterator_traits<InputIterator>::difference_type
-    count_if(InputIterator first, InputIterator last, Predicate pred);
+    template <typename InputIterator, typename Predicate>
+    typename thrust::iterator_traits<InputIterator>::difference_type
+        count_if(InputIterator first, InputIterator last, Predicate pred);
 
-
-/*! \} // end counting
+    /*! \} // end counting
  *  \} // end reductions
  */
-
 
 } // end thrust
 
 #include <thrust/detail/count.inl>
-

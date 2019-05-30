@@ -26,57 +26,54 @@
  ******************************************************************************/
 #pragma once
 
-
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
 #include <thrust/distance.h>
 #include <thrust/system/cuda/config.h>
-#include <thrust/system/cuda/execution_policy.h>
 #include <thrust/system/cuda/detail/parallel_for.h>
-#include <thrust/distance.h>
+#include <thrust/system/cuda/execution_policy.h>
 
 BEGIN_NS_THRUST
-namespace cuda_cub {
-
-namespace __tabulate {
-
-  template <class Iterator, class TabulateOp, class Size>
-  struct functor
-  {
-    Iterator items;
-    TabulateOp op;
-
-    __host__ __device__
-    functor(Iterator items_, TabulateOp op_)
-        : items(items_), op(op_) {}
-
-    void __device__ operator()(Size idx)
-    {
-      items[idx] = op(idx);
-    }
-  };    // struct functor
-
-}    // namespace __tabulate
-
-template <class Derived,
-          class Iterator,
-          class TabulateOp>
-void __host__ __device__
-tabulate(execution_policy<Derived>& policy,
-         Iterator                   first,
-         Iterator                   last,
-         TabulateOp                 tabulate_op)
+namespace cuda_cub
 {
-  typedef typename iterator_traits<Iterator>::difference_type size_type;
 
-  size_type count = thrust::distance(first, last);
+    namespace __tabulate
+    {
 
-  typedef __tabulate::functor<Iterator, TabulateOp, size_type> functor_t;
+        template <class Iterator, class TabulateOp, class Size>
+        struct functor
+        {
+            Iterator   items;
+            TabulateOp op;
 
-  cuda_cub::parallel_for(policy,
-                         functor_t(first, tabulate_op),
-                         count);
-}
+            __host__ __device__ functor(Iterator items_, TabulateOp op_)
+                : items(items_)
+                , op(op_)
+            {
+            }
 
-}    // namespace cuda_cub
+            void __device__ operator()(Size idx)
+            {
+                items[idx] = op(idx);
+            }
+        }; // struct functor
+
+    } // namespace __tabulate
+
+    template <class Derived, class Iterator, class TabulateOp>
+    void __host__ __device__ tabulate(execution_policy<Derived>& policy,
+                                      Iterator                   first,
+                                      Iterator                   last,
+                                      TabulateOp                 tabulate_op)
+    {
+        typedef typename iterator_traits<Iterator>::difference_type size_type;
+
+        size_type count = thrust::distance(first, last);
+
+        typedef __tabulate::functor<Iterator, TabulateOp, size_type> functor_t;
+
+        cuda_cub::parallel_for(policy, functor_t(first, tabulate_op), count);
+    }
+
+} // namespace cuda_cub
 END_NS_THRUST
 #endif

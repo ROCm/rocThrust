@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file type_traits.h
  *  \brief Temporarily define some type traits
  *         until nvcc can compile tr1::type_traits.
@@ -28,27 +27,27 @@
 namespace thrust
 {
 
-namespace detail
-{
+    namespace detail
+    {
 
-template<typename T> struct has_trivial_assign
-  : public integral_constant<
-      bool,
-      (is_pod<T>::value && !is_const<T>::value)
+        template <typename T>
+        struct has_trivial_assign
+            : public integral_constant<bool,
+                                       (is_pod<T>::value && !is_const<T>::value)
 #if THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_MSVC
-      || __has_trivial_assign(T)
+                                           || __has_trivial_assign(T)
 #elif THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_GCC
 // only use the intrinsic for >= 4.3
-#if (__GNUC__ >= 4) && (__GNUC_MINOR__ >= 3)
-      || __has_trivial_assign(T)
+#if(__GNUC__ >= 4) && (__GNUC_MINOR__ >= 3)
+                                           || __has_trivial_assign(T)
 #endif // GCC VERSION
 #elif THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_CLANG
-      || __has_trivial_assign(T)
+                                           || __has_trivial_assign(T)
 #endif // THRUST_HOST_COMPILER
-    >
-{};
+                                       >
+        {
+        };
 
-} // end detail
+    } // end detail
 
 } // end thrust
-

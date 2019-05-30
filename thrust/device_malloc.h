@@ -14,26 +14,25 @@
  *  limitations under the License.
  */
 
-
 /*! \file device_malloc.h
  *  \brief Allocates storage in device memory
  */
 
 #pragma once
 
+#include <cstddef> // for std::size_t
 #include <thrust/detail/config.h>
 #include <thrust/device_ptr.h>
-#include <cstddef> // for std::size_t
 
 namespace thrust
 {
 
-/*! \addtogroup allocation_functions Allocation Functions
+    /*! \addtogroup allocation_functions Allocation Functions
  *  \ingroup memory_management_functions
  *  \{
  */
 
-/*! This version of \p device_malloc allocates sequential device storage
+    /*! This version of \p device_malloc allocates sequential device storage
  *  for bytes.
  *
  *  \param n The number of bytes to allocate sequentially
@@ -61,9 +60,9 @@ namespace thrust
  *  \see device_ptr
  *  \see device_free
  */
-inline thrust::device_ptr<void> device_malloc(const std::size_t n);
+    inline thrust::device_ptr<void> device_malloc(const std::size_t n);
 
-/*! This version of \p device_malloc allocates sequential device storage for
+    /*! This version of \p device_malloc allocates sequential device storage for
  *  new objects of the given type.
  *
  *  \param n The number of objects of type T to allocate
@@ -91,13 +90,12 @@ inline thrust::device_ptr<void> device_malloc(const std::size_t n);
  *  \see device_ptr
  *  \see device_free
  */
-template<typename T>
-  inline thrust::device_ptr<T> device_malloc(const std::size_t n);
+    template <typename T>
+    inline thrust::device_ptr<T> device_malloc(const std::size_t n);
 
-/*! \}
+    /*! \}
  */
 
 } // end thrust
 
 #include <thrust/detail/device_malloc.inl>
-

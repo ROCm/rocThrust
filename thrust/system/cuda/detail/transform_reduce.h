@@ -26,42 +26,31 @@
  ******************************************************************************/
 #pragma once
 
-
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
 #include <iterator>
-#include <thrust/system/cuda/detail/reduce.h>
 #include <thrust/distance.h>
+#include <thrust/system/cuda/detail/reduce.h>
 
 BEGIN_NS_THRUST
-namespace cuda_cub {
-
-template <class Derived,
-          class InputIt,
-          class TransformOp,
-          class T,
-          class ReduceOp>
-T __host__ __device__
-transform_reduce(execution_policy<Derived> &policy,
-                 InputIt                    first,
-                 InputIt                    last,
-                 TransformOp                transform_op,
-                 T                          init,
-                 ReduceOp                   reduce_op)
+namespace cuda_cub
 {
-  typedef typename iterator_traits<InputIt>::difference_type size_type;
-  size_type num_items = static_cast<size_type>(thrust::distance(first, last));
-  typedef transform_input_iterator_t<T,
-                                     InputIt,
-                                     TransformOp>
-      transformed_iterator_t;
 
-  return cuda_cub::reduce_n(policy,
-                            transformed_iterator_t(first, transform_op),
-                            num_items,
-                            init,
-                            reduce_op);
-}
+    template <class Derived, class InputIt, class TransformOp, class T, class ReduceOp>
+    T __host__ __device__ transform_reduce(execution_policy<Derived>& policy,
+                                           InputIt                    first,
+                                           InputIt                    last,
+                                           TransformOp                transform_op,
+                                           T                          init,
+                                           ReduceOp                   reduce_op)
+    {
+        typedef typename iterator_traits<InputIt>::difference_type size_type;
+        size_type num_items = static_cast<size_type>(thrust::distance(first, last));
+        typedef transform_input_iterator_t<T, InputIt, TransformOp> transformed_iterator_t;
 
-}    // namespace cuda_cub
+        return cuda_cub::reduce_n(
+            policy, transformed_iterator_t(first, transform_op), num_items, init, reduce_op);
+    }
+
+} // namespace cuda_cub
 END_NS_THRUST
 #endif

@@ -26,77 +26,67 @@
  ******************************************************************************/
 #pragma once
 
-
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
 #include <iterator>
 #include <thrust/system/cuda/config.h>
 
-#include <thrust/system/cuda/detail/util.h>
-#include <thrust/system/cuda/detail/parallel_for.h>
 #include <thrust/detail/function.h>
 #include <thrust/distance.h>
+#include <thrust/system/cuda/detail/parallel_for.h>
+#include <thrust/system/cuda/detail/util.h>
 
 BEGIN_NS_THRUST
 
-namespace cuda_cub {
+namespace cuda_cub
+{
 
-  // for_each functor
-  template <class Input, class UnaryOp>
-  struct for_each_f
-  {
-    Input input;
-    UnaryOp op;
-
-    THRUST_FUNCTION
-    for_each_f(Input input, UnaryOp op)
-        : input(input), op(op) {}
-
-    template <class Size>
-    THRUST_DEVICE_FUNCTION void operator()(Size idx)
+    // for_each functor
+    template <class Input, class UnaryOp>
+    struct for_each_f
     {
-      op(raw_reference_cast(input[idx]));
+        Input   input;
+        UnaryOp op;
+
+        THRUST_FUNCTION
+        for_each_f(Input input, UnaryOp op)
+            : input(input)
+            , op(op)
+        {
+        }
+
+        template <class Size>
+        THRUST_DEVICE_FUNCTION void operator()(Size idx)
+        {
+            op(raw_reference_cast(input[idx]));
+        }
+    };
+
+    //-------------------------
+    // Thrust API entry points
+    //-------------------------
+
+    // for_each_n
+    template <class Derived, class Input, class Size, class UnaryOp>
+    Input THRUST_FUNCTION
+          for_each_n(execution_policy<Derived>& policy, Input first, Size count, UnaryOp op)
+    {
+        typedef detail::wrapped_function<UnaryOp, void> wrapped_t;
+        wrapped_t                                       wrapped_op(op);
+
+        cuda_cub::parallel_for(policy, for_each_f<Input, wrapped_t>(first, wrapped_op), count);
+        return first + count;
     }
-  };
 
-  //-------------------------
-  // Thrust API entry points
-  //-------------------------
-
-  // for_each_n
-  template <class Derived,
-            class Input,
-            class Size,
-            class UnaryOp>
-  Input THRUST_FUNCTION
-  for_each_n(execution_policy<Derived> &policy,
-             Input                      first,
-             Size                       count,
-             UnaryOp                    op)
-  {
-    typedef detail::wrapped_function<UnaryOp, void> wrapped_t;
-    wrapped_t wrapped_op(op);
-
-    cuda_cub::parallel_for(policy,
-                           for_each_f<Input, wrapped_t>(first, wrapped_op),
-                           count);
-    return first + count;
-  }
-
-  // for_each
-  template <class Derived,
-            class Input,
-            class UnaryOp>
-  Input THRUST_FUNCTION
-  for_each(execution_policy<Derived> &policy,
-           Input                      first,
-           Input                      last,
-           UnaryOp                    op)
-  {
-    typedef typename iterator_traits<Input>::difference_type size_type;
-    size_type count = static_cast<size_type>(thrust::distance(first,last));
-    return cuda_cub::for_each_n(policy, first,  count, op);
-  }
-}    // namespace cuda_cub
+    // for_each
+    template <class Derived, class Input, class UnaryOp>
+    Input THRUST_FUNCTION
+          for_each(execution_policy<Derived>& policy, Input first, Input last, UnaryOp op)
+    {
+        typedef typename iterator_traits<Input>::difference_type size_type;
+        size_type count = static_cast<size_type>(thrust::distance(first, last));
+        return cuda_cub::for_each_n(policy, first, count, op);
+    }
+} // namespace cuda_cub
 
 END_NS_THRUST
 #endif

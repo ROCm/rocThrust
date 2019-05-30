@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file binary_search.h
  *  \brief Search for values in sorted ranges.
  */
@@ -28,29 +27,24 @@
 namespace thrust
 {
 
-    
-/*! \addtogroup algorithms
+    /*! \addtogroup algorithms
  */
 
-
-/*! \addtogroup searching
+    /*! \addtogroup searching
  *  \ingroup algorithms
  *  \{
  */
 
-
-/*! \addtogroup binary_search Binary Search
+    /*! \addtogroup binary_search Binary Search
  *  \ingroup searching
  *  \{
  */
 
+    //////////////////////
+    // Scalar Functions //
+    //////////////////////
 
-//////////////////////   
-// Scalar Functions //
-//////////////////////
-
-
-/*! \p lower_bound is a version of binary search: it attempts to find
+    /*! \p lower_bound is a version of binary search: it attempts to find
  * the element value in an ordered range <tt>[first, last)</tt>. 
  * Specifically, it returns the first position where value could be
  * inserted without violating the ordering. This version of 
@@ -99,15 +93,14 @@ namespace thrust
  *  \see \p equal_range
  *  \see \p binary_search
  */
-template<typename DerivedPolicy, typename ForwardIterator, typename LessThanComparable>
-__host__ __device__
-ForwardIterator lower_bound(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                            ForwardIterator first,
-                            ForwardIterator last,
-                            const LessThanComparable &value);
+    template <typename DerivedPolicy, typename ForwardIterator, typename LessThanComparable>
+    __host__ __device__ ForwardIterator
+                        lower_bound(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    ForwardIterator                                             first,
+                                    ForwardIterator                                             last,
+                                    const LessThanComparable&                                   value);
 
-
-/*! \p lower_bound is a version of binary search: it attempts to find
+    /*! \p lower_bound is a version of binary search: it attempts to find
  * the element value in an ordered range <tt>[first, last)</tt>. 
  * Specifically, it returns the first position where value could be
  * inserted without violating the ordering. This version of 
@@ -151,13 +144,11 @@ ForwardIterator lower_bound(const thrust::detail::execution_policy_base<DerivedP
  *  \see \p equal_range
  *  \see \p binary_search
  */
-template <class ForwardIterator, class LessThanComparable>
-ForwardIterator lower_bound(ForwardIterator first, 
-                            ForwardIterator last,
-                            const LessThanComparable& value);
+    template <class ForwardIterator, class LessThanComparable>
+    ForwardIterator
+        lower_bound(ForwardIterator first, ForwardIterator last, const LessThanComparable& value);
 
-
-/*! \p lower_bound is a version of binary search: it attempts to find
+    /*! \p lower_bound is a version of binary search: it attempts to find
  * the element value in an ordered range <tt>[first, last)</tt>. 
  * Specifically, it returns the first position where value could be
  * inserted without violating the ordering. This version of 
@@ -210,16 +201,18 @@ ForwardIterator lower_bound(ForwardIterator first,
  *  \see \p equal_range
  *  \see \p binary_search
  */
-template<typename DerivedPolicy, typename ForwardIterator, typename T, typename StrictWeakOrdering>
-__host__ __device__
-ForwardIterator lower_bound(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                            ForwardIterator first,
-                            ForwardIterator last,
-                            const T &value,
-                            StrictWeakOrdering comp);
+    template <typename DerivedPolicy,
+              typename ForwardIterator,
+              typename T,
+              typename StrictWeakOrdering>
+    __host__ __device__ ForwardIterator
+                        lower_bound(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    ForwardIterator                                             first,
+                                    ForwardIterator                                             last,
+                                    const T&                                                    value,
+                                    StrictWeakOrdering                                          comp);
 
-
-/*! \p lower_bound is a version of binary search: it attempts to find
+    /*! \p lower_bound is a version of binary search: it attempts to find
  * the element value in an ordered range <tt>[first, last)</tt>. 
  * Specifically, it returns the first position where value could be
  * inserted without violating the ordering. This version of 
@@ -267,14 +260,13 @@ ForwardIterator lower_bound(const thrust::detail::execution_policy_base<DerivedP
  *  \see \p equal_range
  *  \see \p binary_search
  */
-template <class ForwardIterator, class T, class StrictWeakOrdering>
-ForwardIterator lower_bound(ForwardIterator first,
-                            ForwardIterator last,
-                            const T& value, 
-                            StrictWeakOrdering comp);
+    template <class ForwardIterator, class T, class StrictWeakOrdering>
+    ForwardIterator lower_bound(ForwardIterator    first,
+                                ForwardIterator    last,
+                                const T&           value,
+                                StrictWeakOrdering comp);
 
-
-/*! \p upper_bound is a version of binary search: it attempts to find
+    /*! \p upper_bound is a version of binary search: it attempts to find
  * the element value in an ordered range <tt>[first, last)</tt>. 
  * Specifically, it returns the last position where value could be
  * inserted without violating the ordering. This version of 
@@ -324,15 +316,14 @@ ForwardIterator lower_bound(ForwardIterator first,
  *  \see \p equal_range
  *  \see \p binary_search
  */
-template<typename DerivedPolicy, typename ForwardIterator, typename LessThanComparable>
-__host__ __device__
-ForwardIterator upper_bound(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                            ForwardIterator first,
-                            ForwardIterator last,
-                            const LessThanComparable &value);
+    template <typename DerivedPolicy, typename ForwardIterator, typename LessThanComparable>
+    __host__ __device__ ForwardIterator
+                        upper_bound(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    ForwardIterator                                             first,
+                                    ForwardIterator                                             last,
+                                    const LessThanComparable&                                   value);
 
-
-/*! \p upper_bound is a version of binary search: it attempts to find
+    /*! \p upper_bound is a version of binary search: it attempts to find
  * the element value in an ordered range <tt>[first, last)</tt>. 
  * Specifically, it returns the last position where value could be
  * inserted without violating the ordering. This version of 
@@ -377,13 +368,11 @@ ForwardIterator upper_bound(const thrust::detail::execution_policy_base<DerivedP
  *  \see \p equal_range
  *  \see \p binary_search
  */
-template <class ForwardIterator, class LessThanComparable>
-ForwardIterator upper_bound(ForwardIterator first, 
-                            ForwardIterator last,
-                            const LessThanComparable& value);
+    template <class ForwardIterator, class LessThanComparable>
+    ForwardIterator
+        upper_bound(ForwardIterator first, ForwardIterator last, const LessThanComparable& value);
 
-
-/*! \p upper_bound is a version of binary search: it attempts to find
+    /*! \p upper_bound is a version of binary search: it attempts to find
  * the element value in an ordered range <tt>[first, last)</tt>. 
  * Specifically, it returns the last position where value could be
  * inserted without violating the ordering. This version of 
@@ -436,15 +425,18 @@ ForwardIterator upper_bound(ForwardIterator first,
  *  \see \p equal_range
  *  \see \p binary_search
  */
-template<typename DerivedPolicy, typename ForwardIterator, typename T, typename StrictWeakOrdering>
-__host__ __device__
-ForwardIterator upper_bound(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                            ForwardIterator first,
-                            ForwardIterator last,
-                            const T &value,
-                            StrictWeakOrdering comp);
+    template <typename DerivedPolicy,
+              typename ForwardIterator,
+              typename T,
+              typename StrictWeakOrdering>
+    __host__ __device__ ForwardIterator
+                        upper_bound(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    ForwardIterator                                             first,
+                                    ForwardIterator                                             last,
+                                    const T&                                                    value,
+                                    StrictWeakOrdering                                          comp);
 
-/*! \p upper_bound is a version of binary search: it attempts to find
+    /*! \p upper_bound is a version of binary search: it attempts to find
  * the element value in an ordered range <tt>[first, last)</tt>. 
  * Specifically, it returns the last position where value could be
  * inserted without violating the ordering. This version of 
@@ -492,14 +484,13 @@ ForwardIterator upper_bound(const thrust::detail::execution_policy_base<DerivedP
  *  \see \p equal_range
  *  \see \p binary_search
  */
-template <class ForwardIterator, class T, class StrictWeakOrdering>
-ForwardIterator upper_bound(ForwardIterator first,
-                            ForwardIterator last,
-                            const T& value, 
-                            StrictWeakOrdering comp);
+    template <class ForwardIterator, class T, class StrictWeakOrdering>
+    ForwardIterator upper_bound(ForwardIterator    first,
+                                ForwardIterator    last,
+                                const T&           value,
+                                StrictWeakOrdering comp);
 
-
-/*! \p binary_search is a version of binary search: it attempts to find
+    /*! \p binary_search is a version of binary search: it attempts to find
  * the element value in an ordered range <tt>[first, last)</tt>. 
  * It returns \c true if an element that is equivalent to \c value 
  * is present in <tt>[first, last)</tt> and \c false if no such element
@@ -548,15 +539,14 @@ ForwardIterator upper_bound(ForwardIterator first,
  *  \see \p upper_bound
  *  \see \p equal_range
  */
-template <typename DerivedPolicy, typename ForwardIterator, typename LessThanComparable>
-__host__ __device__
-bool binary_search(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                   ForwardIterator first, 
-                   ForwardIterator last,
-                   const LessThanComparable& value);
+    template <typename DerivedPolicy, typename ForwardIterator, typename LessThanComparable>
+    __host__ __device__ bool
+             binary_search(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                           ForwardIterator                                             first,
+                           ForwardIterator                                             last,
+                           const LessThanComparable&                                   value);
 
-
-/*! \p binary_search is a version of binary search: it attempts to find
+    /*! \p binary_search is a version of binary search: it attempts to find
  * the element value in an ordered range <tt>[first, last)</tt>. 
  * It returns \c true if an element that is equivalent to \c value 
  * is present in <tt>[first, last)</tt> and \c false if no such element
@@ -600,13 +590,11 @@ bool binary_search(const thrust::detail::execution_policy_base<DerivedPolicy> &e
  *  \see \p upper_bound
  *  \see \p equal_range
  */
-template <class ForwardIterator, class LessThanComparable>
-bool binary_search(ForwardIterator first, 
-                   ForwardIterator last,
-                   const LessThanComparable& value);
+    template <class ForwardIterator, class LessThanComparable>
+    bool
+        binary_search(ForwardIterator first, ForwardIterator last, const LessThanComparable& value);
 
-
-/*! \p binary_search is a version of binary search: it attempts to find
+    /*! \p binary_search is a version of binary search: it attempts to find
  * the element value in an ordered range <tt>[first, last)</tt>. 
  * It returns \c true if an element that is equivalent to \c value 
  * is present in <tt>[first, last)</tt> and \c false if no such element
@@ -658,16 +646,18 @@ bool binary_search(ForwardIterator first,
  *  \see \p upper_bound
  *  \see \p equal_range
  */
-template <typename DerivedPolicy, typename ForwardIterator, typename T, typename StrictWeakOrdering>
-__host__ __device__
-bool binary_search(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                   ForwardIterator first,
-                   ForwardIterator last,
-                   const T& value, 
-                   StrictWeakOrdering comp);
+    template <typename DerivedPolicy,
+              typename ForwardIterator,
+              typename T,
+              typename StrictWeakOrdering>
+    __host__ __device__ bool
+             binary_search(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                           ForwardIterator                                             first,
+                           ForwardIterator                                             last,
+                           const T&                                                    value,
+                           StrictWeakOrdering                                          comp);
 
-
-/*! \p binary_search is a version of binary search: it attempts to find
+    /*! \p binary_search is a version of binary search: it attempts to find
  * the element value in an ordered range <tt>[first, last)</tt>. 
  * It returns \c true if an element that is equivalent to \c value 
  * is present in <tt>[first, last)</tt> and \c false if no such element
@@ -714,14 +704,13 @@ bool binary_search(const thrust::detail::execution_policy_base<DerivedPolicy> &e
  *  \see \p upper_bound
  *  \see \p equal_range
  */
-template <class ForwardIterator, class T, class StrictWeakOrdering>
-bool binary_search(ForwardIterator first,
-                   ForwardIterator last,
-                   const T& value, 
-                   StrictWeakOrdering comp);
+    template <class ForwardIterator, class T, class StrictWeakOrdering>
+    bool binary_search(ForwardIterator    first,
+                       ForwardIterator    last,
+                       const T&           value,
+                       StrictWeakOrdering comp);
 
-
-/*! \p equal_range is a version of binary search: it attempts to find
+    /*! \p equal_range is a version of binary search: it attempts to find
  * the element value in an ordered range <tt>[first, last)</tt>. The 
  * value returned by \p equal_range is essentially a combination of
  * the values returned by \p lower_bound and \p upper_bound: it returns
@@ -783,16 +772,14 @@ bool binary_search(ForwardIterator first,
  *  \see \p upper_bound
  *  \see \p binary_search
  */
-template <typename DerivedPolicy, typename ForwardIterator, typename LessThanComparable>
-__host__ __device__
-thrust::pair<ForwardIterator, ForwardIterator>
-equal_range(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-            ForwardIterator first,
-            ForwardIterator last,
-            const LessThanComparable& value);
+    template <typename DerivedPolicy, typename ForwardIterator, typename LessThanComparable>
+    __host__ __device__ thrust::pair<ForwardIterator, ForwardIterator>
+                        equal_range(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    ForwardIterator                                             first,
+                                    ForwardIterator                                             last,
+                                    const LessThanComparable&                                   value);
 
-
-/*! \p equal_range is a version of binary search: it attempts to find
+    /*! \p equal_range is a version of binary search: it attempts to find
  * the element value in an ordered range <tt>[first, last)</tt>. The 
  * value returned by \p equal_range is essentially a combination of
  * the values returned by \p lower_bound and \p upper_bound: it returns
@@ -849,14 +836,11 @@ equal_range(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
  *  \see \p upper_bound
  *  \see \p binary_search
  */
-template <class ForwardIterator, class LessThanComparable>
-thrust::pair<ForwardIterator, ForwardIterator>
-equal_range(ForwardIterator first,
-            ForwardIterator last,
-            const LessThanComparable& value);
+    template <class ForwardIterator, class LessThanComparable>
+    thrust::pair<ForwardIterator, ForwardIterator>
+        equal_range(ForwardIterator first, ForwardIterator last, const LessThanComparable& value);
 
-
-/*! \p equal_range is a version of binary search: it attempts to find
+    /*! \p equal_range is a version of binary search: it attempts to find
  * the element value in an ordered range <tt>[first, last)</tt>. The 
  * value returned by \p equal_range is essentially a combination of
  * the values returned by \p lower_bound and \p upper_bound: it returns
@@ -922,17 +906,18 @@ equal_range(ForwardIterator first,
  *  \see \p upper_bound
  *  \see \p binary_search
  */
-template <typename DerivedPolicy, typename ForwardIterator, typename T, typename StrictWeakOrdering>
-__host__ __device__
-thrust::pair<ForwardIterator, ForwardIterator>
-equal_range(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-            ForwardIterator first,
-            ForwardIterator last,
-            const T& value,
-            StrictWeakOrdering comp);
+    template <typename DerivedPolicy,
+              typename ForwardIterator,
+              typename T,
+              typename StrictWeakOrdering>
+    __host__ __device__ thrust::pair<ForwardIterator, ForwardIterator>
+                        equal_range(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    ForwardIterator                                             first,
+                                    ForwardIterator                                             last,
+                                    const T&                                                    value,
+                                    StrictWeakOrdering                                          comp);
 
-
-/*! \p equal_range is a version of binary search: it attempts to find
+    /*! \p equal_range is a version of binary search: it attempts to find
  * the element value in an ordered range <tt>[first, last)</tt>. The 
  * value returned by \p equal_range is essentially a combination of
  * the values returned by \p lower_bound and \p upper_bound: it returns
@@ -993,26 +978,22 @@ equal_range(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
  *  \see \p upper_bound
  *  \see \p binary_search
  */
-template <class ForwardIterator, class T, class StrictWeakOrdering>
-thrust::pair<ForwardIterator, ForwardIterator>
-equal_range(ForwardIterator first,
-            ForwardIterator last,
-            const T& value,
-            StrictWeakOrdering comp);
+    template <class ForwardIterator, class T, class StrictWeakOrdering>
+    thrust::pair<ForwardIterator, ForwardIterator> equal_range(ForwardIterator    first,
+                                                               ForwardIterator    last,
+                                                               const T&           value,
+                                                               StrictWeakOrdering comp);
 
-
-/*! \addtogroup vectorized_binary_search Vectorized Searches
+    /*! \addtogroup vectorized_binary_search Vectorized Searches
  *  \ingroup binary_search
  *  \{
  */
 
+    //////////////////////
+    // Vector Functions //
+    //////////////////////
 
-//////////////////////
-// Vector Functions //
-//////////////////////
-
-
-/*! \p lower_bound is a vectorized version of binary search: for each 
+    /*! \p lower_bound is a vectorized version of binary search: for each 
  * iterator \c v in <tt>[values_first, values_last)</tt> it attempts to
  * find the value <tt>*v</tt> in an ordered range <tt>[first, last)</tt>.
  * Specifically, it returns the index of first position where value could
@@ -1076,17 +1057,19 @@ equal_range(ForwardIterator first,
  *  \see \p equal_range
  *  \see \p binary_search
  */
-template <typename DerivedPolicy, typename ForwardIterator, typename InputIterator, typename OutputIterator>
-__host__ __device__
-OutputIterator lower_bound(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                           ForwardIterator first, 
-                           ForwardIterator last,
-                           InputIterator values_first, 
-                           InputIterator values_last,
-                           OutputIterator result);
+    template <typename DerivedPolicy,
+              typename ForwardIterator,
+              typename InputIterator,
+              typename OutputIterator>
+    __host__ __device__ OutputIterator
+                        lower_bound(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    ForwardIterator                                             first,
+                                    ForwardIterator                                             last,
+                                    InputIterator                                               values_first,
+                                    InputIterator                                               values_last,
+                                    OutputIterator                                              result);
 
-
-/*! \p lower_bound is a vectorized version of binary search: for each 
+    /*! \p lower_bound is a vectorized version of binary search: for each 
  * iterator \c v in <tt>[values_first, values_last)</tt> it attempts to
  * find the value <tt>*v</tt> in an ordered range <tt>[first, last)</tt>.
  * Specifically, it returns the index of first position where value could
@@ -1143,15 +1126,14 @@ OutputIterator lower_bound(const thrust::detail::execution_policy_base<DerivedPo
  *  \see \p equal_range
  *  \see \p binary_search
  */
-template <class ForwardIterator, class InputIterator, class OutputIterator>
-OutputIterator lower_bound(ForwardIterator first, 
-                           ForwardIterator last,
-                           InputIterator values_first, 
-                           InputIterator values_last,
-                           OutputIterator result);
+    template <class ForwardIterator, class InputIterator, class OutputIterator>
+    OutputIterator lower_bound(ForwardIterator first,
+                               ForwardIterator last,
+                               InputIterator   values_first,
+                               InputIterator   values_last,
+                               OutputIterator  result);
 
-
-/*! \p lower_bound is a vectorized version of binary search: for each 
+    /*! \p lower_bound is a vectorized version of binary search: for each 
  * iterator \c v in <tt>[values_first, values_last)</tt> it attempts to
  * find the value <tt>*v</tt> in an ordered range <tt>[first, last)</tt>.
  * Specifically, it returns the index of first position where value could
@@ -1218,18 +1200,21 @@ OutputIterator lower_bound(ForwardIterator first,
  *  \see \p equal_range
  *  \see \p binary_search
  */
-template <typename DerivedPolicy, typename ForwardIterator, typename InputIterator, typename OutputIterator, typename StrictWeakOrdering>
-__host__ __device__
-OutputIterator lower_bound(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                           ForwardIterator first, 
-                           ForwardIterator last,
-                           InputIterator values_first, 
-                           InputIterator values_last,
-                           OutputIterator result,
-                           StrictWeakOrdering comp);
+    template <typename DerivedPolicy,
+              typename ForwardIterator,
+              typename InputIterator,
+              typename OutputIterator,
+              typename StrictWeakOrdering>
+    __host__ __device__ OutputIterator
+                        lower_bound(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    ForwardIterator                                             first,
+                                    ForwardIterator                                             last,
+                                    InputIterator                                               values_first,
+                                    InputIterator                                               values_last,
+                                    OutputIterator                                              result,
+                                    StrictWeakOrdering                                          comp);
 
-
-/*! \p lower_bound is a vectorized version of binary search: for each 
+    /*! \p lower_bound is a vectorized version of binary search: for each 
  * iterator \c v in <tt>[values_first, values_last)</tt> it attempts to
  * find the value <tt>*v</tt> in an ordered range <tt>[first, last)</tt>.
  * Specifically, it returns the index of first position where value could
@@ -1291,16 +1276,18 @@ OutputIterator lower_bound(const thrust::detail::execution_policy_base<DerivedPo
  *  \see \p equal_range
  *  \see \p binary_search
  */
-template <class ForwardIterator, class InputIterator, class OutputIterator, class StrictWeakOrdering>
-OutputIterator lower_bound(ForwardIterator first, 
-                           ForwardIterator last,
-                           InputIterator values_first, 
-                           InputIterator values_last,
-                           OutputIterator result,
-                           StrictWeakOrdering comp);
+    template <class ForwardIterator,
+              class InputIterator,
+              class OutputIterator,
+              class StrictWeakOrdering>
+    OutputIterator lower_bound(ForwardIterator    first,
+                               ForwardIterator    last,
+                               InputIterator      values_first,
+                               InputIterator      values_last,
+                               OutputIterator     result,
+                               StrictWeakOrdering comp);
 
-
-/*! \p upper_bound is a vectorized version of binary search: for each 
+    /*! \p upper_bound is a vectorized version of binary search: for each 
  * iterator \c v in <tt>[values_first, values_last)</tt> it attempts to
  * find the value <tt>*v</tt> in an ordered range <tt>[first, last)</tt>.
  * Specifically, it returns the index of last position where value could
@@ -1364,17 +1351,19 @@ OutputIterator lower_bound(ForwardIterator first,
  *  \see \p equal_range
  *  \see \p binary_search
  */
-template <typename DerivedPolicy, typename ForwardIterator, typename InputIterator, typename OutputIterator>
-__host__ __device__
-OutputIterator upper_bound(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                           ForwardIterator first, 
-                           ForwardIterator last,
-                           InputIterator values_first, 
-                           InputIterator values_last,
-                           OutputIterator result);
+    template <typename DerivedPolicy,
+              typename ForwardIterator,
+              typename InputIterator,
+              typename OutputIterator>
+    __host__ __device__ OutputIterator
+                        upper_bound(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    ForwardIterator                                             first,
+                                    ForwardIterator                                             last,
+                                    InputIterator                                               values_first,
+                                    InputIterator                                               values_last,
+                                    OutputIterator                                              result);
 
-
-/*! \p upper_bound is a vectorized version of binary search: for each 
+    /*! \p upper_bound is a vectorized version of binary search: for each 
  * iterator \c v in <tt>[values_first, values_last)</tt> it attempts to
  * find the value <tt>*v</tt> in an ordered range <tt>[first, last)</tt>.
  * Specifically, it returns the index of last position where value could
@@ -1431,15 +1420,14 @@ OutputIterator upper_bound(const thrust::detail::execution_policy_base<DerivedPo
  *  \see \p equal_range
  *  \see \p binary_search
  */
-template <class ForwardIterator, class InputIterator, class OutputIterator>
-OutputIterator upper_bound(ForwardIterator first, 
-                           ForwardIterator last,
-                           InputIterator values_first, 
-                           InputIterator values_last,
-                           OutputIterator result);
+    template <class ForwardIterator, class InputIterator, class OutputIterator>
+    OutputIterator upper_bound(ForwardIterator first,
+                               ForwardIterator last,
+                               InputIterator   values_first,
+                               InputIterator   values_last,
+                               OutputIterator  result);
 
-
-/*! \p upper_bound is a vectorized version of binary search: for each 
+    /*! \p upper_bound is a vectorized version of binary search: for each 
  * iterator \c v in <tt>[values_first, values_last)</tt> it attempts to
  * find the value <tt>*v</tt> in an ordered range <tt>[first, last)</tt>.
  * Specifically, it returns the index of first position where value could
@@ -1508,18 +1496,21 @@ OutputIterator upper_bound(ForwardIterator first,
  *  \see \p equal_range
  *  \see \p binary_search
  */
-template <typename DerivedPolicy, typename ForwardIterator, typename InputIterator, typename OutputIterator, typename StrictWeakOrdering>
-__host__ __device__
-OutputIterator upper_bound(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                           ForwardIterator first, 
-                           ForwardIterator last,
-                           InputIterator values_first, 
-                           InputIterator values_last,
-                           OutputIterator result,
-                           StrictWeakOrdering comp);
+    template <typename DerivedPolicy,
+              typename ForwardIterator,
+              typename InputIterator,
+              typename OutputIterator,
+              typename StrictWeakOrdering>
+    __host__ __device__ OutputIterator
+                        upper_bound(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    ForwardIterator                                             first,
+                                    ForwardIterator                                             last,
+                                    InputIterator                                               values_first,
+                                    InputIterator                                               values_last,
+                                    OutputIterator                                              result,
+                                    StrictWeakOrdering                                          comp);
 
-
-/*! \p upper_bound is a vectorized version of binary search: for each 
+    /*! \p upper_bound is a vectorized version of binary search: for each 
  * iterator \c v in <tt>[values_first, values_last)</tt> it attempts to
  * find the value <tt>*v</tt> in an ordered range <tt>[first, last)</tt>.
  * Specifically, it returns the index of first position where value could
@@ -1581,16 +1572,18 @@ OutputIterator upper_bound(const thrust::detail::execution_policy_base<DerivedPo
  *  \see \p equal_range
  *  \see \p binary_search
  */
-template <class ForwardIterator, class InputIterator, class OutputIterator, class StrictWeakOrdering>
-OutputIterator upper_bound(ForwardIterator first, 
-                           ForwardIterator last,
-                           InputIterator values_first, 
-                           InputIterator values_last,
-                           OutputIterator result,
-                           StrictWeakOrdering comp);
+    template <class ForwardIterator,
+              class InputIterator,
+              class OutputIterator,
+              class StrictWeakOrdering>
+    OutputIterator upper_bound(ForwardIterator    first,
+                               ForwardIterator    last,
+                               InputIterator      values_first,
+                               InputIterator      values_last,
+                               OutputIterator     result,
+                               StrictWeakOrdering comp);
 
-
-/*! \p binary_search is a vectorized version of binary search: for each 
+    /*! \p binary_search is a vectorized version of binary search: for each 
  * iterator \c v in <tt>[values_first, values_last)</tt> it attempts to
  * find the value <tt>*v</tt> in an ordered range <tt>[first, last)</tt>.
  * It returns \c true if an element that is equivalent to \c value 
@@ -1655,17 +1648,19 @@ OutputIterator upper_bound(ForwardIterator first,
  *  \see \p upper_bound
  *  \see \p equal_range
  */
-template <typename DerivedPolicy, typename ForwardIterator, typename InputIterator, typename OutputIterator>
-__host__ __device__
-OutputIterator binary_search(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                             ForwardIterator first, 
-                             ForwardIterator last,
-                             InputIterator values_first, 
-                             InputIterator values_last,
-                             OutputIterator result);
+    template <typename DerivedPolicy,
+              typename ForwardIterator,
+              typename InputIterator,
+              typename OutputIterator>
+    __host__ __device__ OutputIterator
+                        binary_search(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                      ForwardIterator                                             first,
+                                      ForwardIterator                                             last,
+                                      InputIterator                                               values_first,
+                                      InputIterator                                               values_last,
+                                      OutputIterator                                              result);
 
-
-/*! \p binary_search is a vectorized version of binary search: for each 
+    /*! \p binary_search is a vectorized version of binary search: for each 
  * iterator \c v in <tt>[values_first, values_last)</tt> it attempts to
  * find the value <tt>*v</tt> in an ordered range <tt>[first, last)</tt>.
  * It returns \c true if an element that is equivalent to \c value 
@@ -1723,15 +1718,14 @@ OutputIterator binary_search(const thrust::detail::execution_policy_base<Derived
  *  \see \p upper_bound
  *  \see \p equal_range
  */
-template <class ForwardIterator, class InputIterator, class OutputIterator>
-OutputIterator binary_search(ForwardIterator first, 
-                             ForwardIterator last,
-                             InputIterator values_first, 
-                             InputIterator values_last,
-                             OutputIterator result);
+    template <class ForwardIterator, class InputIterator, class OutputIterator>
+    OutputIterator binary_search(ForwardIterator first,
+                                 ForwardIterator last,
+                                 InputIterator   values_first,
+                                 InputIterator   values_last,
+                                 OutputIterator  result);
 
-
-/*! \p binary_search is a vectorized version of binary search: for each 
+    /*! \p binary_search is a vectorized version of binary search: for each 
  * iterator \c v in <tt>[values_first, values_last)</tt> it attempts to
  * find the value <tt>*v</tt> in an ordered range <tt>[first, last)</tt>.
  * It returns \c true if an element that is equivalent to \c value 
@@ -1801,18 +1795,21 @@ OutputIterator binary_search(ForwardIterator first,
  *  \see \p upper_bound
  *  \see \p equal_range
  */
-template <typename DerivedPolicy, typename ForwardIterator, typename InputIterator, typename OutputIterator, typename StrictWeakOrdering>
-__host__ __device__
-OutputIterator binary_search(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                             ForwardIterator first, 
-                             ForwardIterator last,
-                             InputIterator values_first, 
-                             InputIterator values_last,
-                             OutputIterator result,
-                             StrictWeakOrdering comp);
+    template <typename DerivedPolicy,
+              typename ForwardIterator,
+              typename InputIterator,
+              typename OutputIterator,
+              typename StrictWeakOrdering>
+    __host__ __device__ OutputIterator
+                        binary_search(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                      ForwardIterator                                             first,
+                                      ForwardIterator                                             last,
+                                      InputIterator                                               values_first,
+                                      InputIterator                                               values_last,
+                                      OutputIterator                                              result,
+                                      StrictWeakOrdering                                          comp);
 
-
-/*! \p binary_search is a vectorized version of binary search: for each 
+    /*! \p binary_search is a vectorized version of binary search: for each 
  * iterator \c v in <tt>[values_first, values_last)</tt> it attempts to
  * find the value <tt>*v</tt> in an ordered range <tt>[first, last)</tt>.
  * It returns \c true if an element that is equivalent to \c value 
@@ -1875,28 +1872,26 @@ OutputIterator binary_search(const thrust::detail::execution_policy_base<Derived
  *  \see \p upper_bound
  *  \see \p equal_range
  */
-template <class ForwardIterator, class InputIterator, class OutputIterator, class StrictWeakOrdering>
-OutputIterator binary_search(ForwardIterator first, 
-                             ForwardIterator last,
-                             InputIterator values_first, 
-                             InputIterator values_last,
-                             OutputIterator result,
-                             StrictWeakOrdering comp);
+    template <class ForwardIterator,
+              class InputIterator,
+              class OutputIterator,
+              class StrictWeakOrdering>
+    OutputIterator binary_search(ForwardIterator    first,
+                                 ForwardIterator    last,
+                                 InputIterator      values_first,
+                                 InputIterator      values_last,
+                                 OutputIterator     result,
+                                 StrictWeakOrdering comp);
 
-
-/*! \} // end vectorized_binary_search
+    /*! \} // end vectorized_binary_search
  */
 
-
-/*! \} // end binary_search
+    /*! \} // end binary_search
  */
 
-
-/*! \} // end searching
+    /*! \} // end searching
  */
-
 
 } // end namespace thrust
 
 #include <thrust/detail/binary_search.inl>
-

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file thrust/iterator/transform_iterator.h
  *  \brief An iterator which adapts another iterator by applying a function to the result of its dereference 
  */
@@ -35,24 +34,24 @@
 #include <thrust/detail/config.h>
 
 // #include the details first
+#include <thrust/detail/type_traits.h>
 #include <thrust/iterator/detail/transform_iterator.inl>
 #include <thrust/iterator/iterator_facade.h>
 #include <thrust/iterator/iterator_traits.h>
-#include <thrust/detail/type_traits.h>
 
 namespace thrust
 {
 
-/*! \addtogroup iterators
+    /*! \addtogroup iterators
  *  \{
  */
 
-/*! \addtogroup fancyiterator Fancy Iterators
+    /*! \addtogroup fancyiterator Fancy Iterators
  *  \ingroup iterators
  *  \{
  */
 
-/*! \p transform_iterator is an iterator which represents a pointer into a range
+    /*! \p transform_iterator is an iterator which represents a pointer into a range
  *  of values after transformation by a function. This iterator is useful for 
  *  creating a range filled with the result of applying an operation to another range
  *  without either explicitly storing it in memory, or explicitly executing the transformation.
@@ -186,63 +185,75 @@ namespace thrust
  *
  *  \see make_transform_iterator
  */
-template <class AdaptableUnaryFunction, class Iterator, class Reference = use_default, class Value = use_default>
-  class transform_iterator
-    : public detail::transform_iterator_base<AdaptableUnaryFunction, Iterator, Reference, Value>::type
-{
-  /*! \cond
+    template <class AdaptableUnaryFunction,
+              class Iterator,
+              class Reference = use_default,
+              class Value     = use_default>
+    class transform_iterator
+        : public detail::
+              transform_iterator_base<AdaptableUnaryFunction, Iterator, Reference, Value>::type
+    {
+        /*! \cond
    */
-  public:
-    typedef typename
-    detail::transform_iterator_base<AdaptableUnaryFunction, Iterator, Reference, Value>::type
-    super_t;
+    public:
+        typedef typename detail::
+            transform_iterator_base<AdaptableUnaryFunction, Iterator, Reference, Value>::type
+                super_t;
 
-    friend class thrust::iterator_core_access;
-  /*! \endcond
+        friend class thrust::iterator_core_access;
+        /*! \endcond
    */
 
-  public:
-    /*! Null constructor does nothing.
+    public:
+        /*! Null constructor does nothing.
      */
-    __host__ __device__
-    transform_iterator() {}
-  
-    /*! This constructor takes as arguments an \c Iterator and an \c AdaptableUnaryFunction
+        __host__ __device__ transform_iterator() {}
+
+        /*! This constructor takes as arguments an \c Iterator and an \c AdaptableUnaryFunction
      *  and copies them to a new \p transform_iterator.
      *
      *  \param x An \c Iterator pointing to the input to this \p transform_iterator's \c AdaptableUnaryFunction.
      *  \param f An \c AdaptableUnaryFunction used to transform the objects pointed to by \p x.
      */
-    __host__ __device__
-    transform_iterator(Iterator const& x, AdaptableUnaryFunction f)
-      : super_t(x), m_f(f) {
-    }
-  
-    /*! This explicit constructor copies the value of a given \c Iterator and creates
+        __host__ __device__ transform_iterator(Iterator const& x, AdaptableUnaryFunction f)
+            : super_t(x)
+            , m_f(f)
+        {
+        }
+
+        /*! This explicit constructor copies the value of a given \c Iterator and creates
      *  this \p transform_iterator's \c AdaptableUnaryFunction using its null constructor.
      *
      *  \param x An \c Iterator to copy.
      */
-    __host__ __device__
-    explicit transform_iterator(Iterator const& x)
-      : super_t(x) { }
+        __host__ __device__ explicit transform_iterator(Iterator const& x)
+            : super_t(x)
+        {
+        }
 
-    /*! This copy constructor creates a new \p transform_iterator from another
+        /*! This copy constructor creates a new \p transform_iterator from another
      *  \p transform_iterator.
      *
      *  \param other The \p transform_iterator to copy.
      */
-    template<typename OtherAdaptableUnaryFunction,
-             typename OtherIterator,
-             typename OtherReference,
-             typename OtherValue>
-    __host__ __device__
-    transform_iterator(const transform_iterator<OtherAdaptableUnaryFunction, OtherIterator, OtherReference, OtherValue> &other,
-                       typename thrust::detail::enable_if_convertible<OtherIterator, Iterator>::type* = 0,
-                       typename thrust::detail::enable_if_convertible<OtherAdaptableUnaryFunction, AdaptableUnaryFunction>::type* = 0)
-      : super_t(other.base()), m_f(other.functor()) {}
+        template <typename OtherAdaptableUnaryFunction,
+                  typename OtherIterator,
+                  typename OtherReference,
+                  typename OtherValue>
+        __host__ __device__ transform_iterator(
+            const transform_iterator<OtherAdaptableUnaryFunction,
+                                     OtherIterator,
+                                     OtherReference,
+                                     OtherValue>& other,
+            typename thrust::detail::enable_if_convertible<OtherIterator, Iterator>::type* = 0,
+            typename thrust::detail::enable_if_convertible<OtherAdaptableUnaryFunction,
+                                                           AdaptableUnaryFunction>::type*  = 0)
+            : super_t(other.base())
+            , m_f(other.functor())
+        {
+        }
 
-    /*! Copy assignment operator copies from another \p transform_iterator.
+        /*! Copy assignment operator copies from another \p transform_iterator.
      *  \p other The other \p transform_iterator to copy
      *  \return <tt>*this</tt>
      *
@@ -252,78 +263,77 @@ template <class AdaptableUnaryFunction, class Iterator, class Reference = use_de
      *
      *        In any case, this \p transform_iterator's underlying iterator will be copy assigned.
      */
-    __host__ __device__
-    transform_iterator &operator=(const transform_iterator &other)
-    {
-      return do_assign(other,
-      // XXX gcc 4.2.1 crashes on is_copy_assignable; just assume the functor is assignable as a WAR
-#if (THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_GCC) && (THRUST_GCC_VERSION <= 40201)
-          thrust::detail::true_type()
+        __host__ __device__ transform_iterator& operator=(const transform_iterator& other)
+        {
+            return do_assign(other,
+            // XXX gcc 4.2.1 crashes on is_copy_assignable; just assume the functor is assignable as a WAR
+#if(THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_GCC) && (THRUST_GCC_VERSION <= 40201)
+                             thrust::detail::true_type()
 #else
-          typename thrust::detail::is_copy_assignable<AdaptableUnaryFunction>::type()
+                             typename thrust::detail::is_copy_assignable<
+                                 AdaptableUnaryFunction>::type()
 #endif // THRUST_HOST_COMPILER
-      );
-    }
+            );
+        }
 
-    /*! This method returns a copy of this \p transform_iterator's \c AdaptableUnaryFunction.
+        /*! This method returns a copy of this \p transform_iterator's \c AdaptableUnaryFunction.
      *  \return A copy of this \p transform_iterator's \c AdaptableUnaryFunction.
      */
-    __host__ __device__
-    AdaptableUnaryFunction functor() const
-      { return m_f; }
+        __host__ __device__ AdaptableUnaryFunction functor() const
+        {
+            return m_f;
+        }
 
-    /*! \cond
+        /*! \cond
      */
-  private:
-    __host__ __device__
-    transform_iterator &do_assign(const transform_iterator &other, thrust::detail::true_type)
-    {
-      super_t::operator=(other);
+    private:
+        __host__ __device__ transform_iterator& do_assign(const transform_iterator& other,
+                                                          thrust::detail::true_type)
+        {
+            super_t::operator=(other);
 
-      // do assign to m_f
-      m_f = other.functor();
+            // do assign to m_f
+            m_f = other.functor();
 
-      return *this;
-    }
+            return *this;
+        }
 
-    __host__ __device__
-    transform_iterator &do_assign(const transform_iterator &other, thrust::detail::false_type)
-    {
-      super_t::operator=(other);
+        __host__ __device__ transform_iterator& do_assign(const transform_iterator& other,
+                                                          thrust::detail::false_type)
+        {
+            super_t::operator=(other);
 
-      // don't assign to m_f
+            // don't assign to m_f
 
-      return *this;
-    }
+            return *this;
+        }
 
-    // MSVC 2013 and 2015 incorrectly warning about returning a reference to
-    // a local/temporary here.
-    // See goo.gl/LELTNp
-    __THRUST_DISABLE_MSVC_WARNING_BEGIN(4172)
+        // MSVC 2013 and 2015 incorrectly warning about returning a reference to
+        // a local/temporary here.
+        // See goo.gl/LELTNp
+        __THRUST_DISABLE_MSVC_WARNING_BEGIN(4172)
 
-    __thrust_exec_check_disable__
-    __host__ __device__
-    typename super_t::reference dereference() const
-    {  
-      // Create a temporary to allow iterators with wrapped references to
-      // convert to their value type before calling m_f. Note that this
-      // disallows non-constant operations through m_f. 
-      typename thrust::iterator_value<Iterator>::type x = *this->base();
-      return m_f(x);
-    }
+        __thrust_exec_check_disable__ __host__ __device__ typename super_t::reference
+                                               dereference() const
+        {
+            // Create a temporary to allow iterators with wrapped references to
+            // convert to their value type before calling m_f. Note that this
+            // disallows non-constant operations through m_f.
+            typename thrust::iterator_value<Iterator>::type x = *this->base();
+            return m_f(x);
+        }
 
-    __THRUST_DISABLE_MSVC_WARNING_END(4172)
+        __THRUST_DISABLE_MSVC_WARNING_END(4172)
 
-    // tag this as mutable per Dave Abrahams in this thread:
-    // http://lists.boost.org/Archives/boost/2004/05/65332.php
-    mutable AdaptableUnaryFunction m_f;
+        // tag this as mutable per Dave Abrahams in this thread:
+        // http://lists.boost.org/Archives/boost/2004/05/65332.php
+        mutable AdaptableUnaryFunction m_f;
 
-    /*! \endcond
+        /*! \endcond
      */
-}; // end transform_iterator
+    }; // end transform_iterator
 
-
-/*! \p make_transform_iterator creates a \p transform_iterator
+    /*! \p make_transform_iterator creates a \p transform_iterator
  *  from an \c Iterator and \c AdaptableUnaryFunction.
  *
  *  \param it The \c Iterator pointing to the input range of the
@@ -334,19 +344,17 @@ template <class AdaptableUnaryFunction, class Iterator, class Reference = use_de
  *          \p it by \p fun.
  *  \see transform_iterator
  */
-template <class AdaptableUnaryFunction, class Iterator>
-inline __host__ __device__
-transform_iterator<AdaptableUnaryFunction, Iterator>
-make_transform_iterator(Iterator it, AdaptableUnaryFunction fun)
-{
-  return transform_iterator<AdaptableUnaryFunction, Iterator>(it, fun);
-} // end make_transform_iterator
+    template <class AdaptableUnaryFunction, class Iterator>
+    inline __host__ __device__ transform_iterator<AdaptableUnaryFunction, Iterator>
+                               make_transform_iterator(Iterator it, AdaptableUnaryFunction fun)
+    {
+        return transform_iterator<AdaptableUnaryFunction, Iterator>(it, fun);
+    } // end make_transform_iterator
 
-/*! \} // end fancyiterators
+    /*! \} // end fancyiterators
  */
 
-/*! \} // end iterators
+    /*! \} // end iterators
  */
 
 } // end thrust
-

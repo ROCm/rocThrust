@@ -17,5 +17,4 @@
 #pragma once
 
 #define THRUST_PP_STRINGIZE_(expr) #expr
-#define THRUST_PP_STRINGIZE(expr)  THRUST_PP_STRINGIZE_(expr)
-
+#define THRUST_PP_STRINGIZE(expr) THRUST_PP_STRINGIZE_(expr)

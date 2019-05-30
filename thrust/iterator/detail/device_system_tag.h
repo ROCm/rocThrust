@@ -26,7 +26,7 @@
 namespace thrust
 {
 
-typedef thrust::system::__THRUST_DEVICE_SYSTEM_NAMESPACE::tag device_system_tag;
+    typedef thrust::system::__THRUST_DEVICE_SYSTEM_NAMESPACE::tag device_system_tag;
 
 } // end thrust
 
@@ -34,7 +34,6 @@ typedef thrust::system::__THRUST_DEVICE_SYSTEM_NAMESPACE::tag device_system_tag;
 namespace thrust
 {
 
-typedef THRUST_DEPRECATED device_system_tag device_space_tag;
+    typedef THRUST_DEPRECATED device_system_tag device_space_tag;
 
 } // end thrust
-

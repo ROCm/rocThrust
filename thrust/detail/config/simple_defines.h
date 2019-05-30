@@ -21,8 +21,7 @@
 #pragma once
 
 #define THRUST_UNKNOWN 0
-#define THRUST_FALSE   0
-#define THRUST_TRUE    1
+#define THRUST_FALSE 0
+#define THRUST_TRUE 1
 
 #define THRUST_PREVENT_MACRO_SUBSTITUTION
-

@@ -36,50 +36,60 @@
 // is that macro expansion of macro arguments does not
 // occur in THRUST_DO_JOIN2 but does in THRUST_DO_JOIN.
 //
-#define THRUST_JOIN( X, Y ) THRUST_DO_JOIN( X, Y )
-#define THRUST_DO_JOIN( X, Y ) THRUST_DO_JOIN2(X,Y)
-#define THRUST_DO_JOIN2( X, Y ) X##Y
+#define THRUST_JOIN(X, Y) THRUST_DO_JOIN(X, Y)
+#define THRUST_DO_JOIN(X, Y) THRUST_DO_JOIN2(X, Y)
+#define THRUST_DO_JOIN2(X, Y) X##Y
 
 namespace thrust
 {
 
-namespace detail
-{
+    namespace detail
+    {
 
-// HP aCC cannot deal with missing names for template value parameters
-template <bool x> struct STATIC_ASSERTION_FAILURE;
+        // HP aCC cannot deal with missing names for template value parameters
+        template <bool x>
+        struct STATIC_ASSERTION_FAILURE;
 
-template <> struct STATIC_ASSERTION_FAILURE<true> { enum { value = 1 }; };
+        template <>
+        struct STATIC_ASSERTION_FAILURE<true>
+        {
+            enum
+            {
+                value = 1
+            };
+        };
 
-// HP aCC cannot deal with missing names for template value parameters
-template<int x> struct static_assert_test{};
+        // HP aCC cannot deal with missing names for template value parameters
+        template <int x>
+        struct static_assert_test
+        {
+        };
 
-template<typename, bool x>
-  struct depend_on_instantiation
-{
-  static const bool value = x;
-};
+        template <typename, bool x>
+        struct depend_on_instantiation
+        {
+            static const bool value = x;
+        };
 
-} // end detail
+    } // end detail
 
 } // end thrust
 
-#if (THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_GCC) && (THRUST_GCC_VERSION >= 40800)
-  // gcc 4.8+ will complain about this typedef being unused unless we annotate it as such
-#  define THRUST_STATIC_ASSERT( B ) \
-   typedef ::thrust::detail::static_assert_test<\
-      sizeof(::thrust::detail::STATIC_ASSERTION_FAILURE< (bool)( B ) >)>\
-         THRUST_JOIN(thrust_static_assert_typedef_, __LINE__) __attribute__((unused))
-#elif (THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_CLANG)
-  // clang will complain about this typedef being unused unless we annotate it as such
-#  define THRUST_STATIC_ASSERT( B ) \
-   typedef ::thrust::detail::static_assert_test<\
-      sizeof(::thrust::detail::STATIC_ASSERTION_FAILURE< (bool)( B ) >)>\
-         THRUST_JOIN(thrust_static_assert_typedef_, __LINE__) __attribute__((unused))
+#if(THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_GCC) && (THRUST_GCC_VERSION >= 40800)
+// gcc 4.8+ will complain about this typedef being unused unless we annotate it as such
+#define THRUST_STATIC_ASSERT(B)                                 \
+    typedef ::thrust::detail::static_assert_test<sizeof(        \
+        ::thrust::detail::STATIC_ASSERTION_FAILURE<(bool)(B)>)> \
+        THRUST_JOIN(thrust_static_assert_typedef_, __LINE__) __attribute__((unused))
+#elif(THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_CLANG)
+// clang will complain about this typedef being unused unless we annotate it as such
+#define THRUST_STATIC_ASSERT(B)                                 \
+    typedef ::thrust::detail::static_assert_test<sizeof(        \
+        ::thrust::detail::STATIC_ASSERTION_FAILURE<(bool)(B)>)> \
+        THRUST_JOIN(thrust_static_assert_typedef_, __LINE__) __attribute__((unused))
 #else
-#  define THRUST_STATIC_ASSERT( B ) \
-   typedef ::thrust::detail::static_assert_test<\
-      sizeof(::thrust::detail::STATIC_ASSERTION_FAILURE< (bool)( B ) >)>\
-         THRUST_JOIN(thrust_static_assert_typedef_, __LINE__)
+#define THRUST_STATIC_ASSERT(B)                                 \
+    typedef ::thrust::detail::static_assert_test<sizeof(        \
+        ::thrust::detail::STATIC_ASSERTION_FAILURE<(bool)(B)>)> \
+        THRUST_JOIN(thrust_static_assert_typedef_, __LINE__)
 #endif // gcc 4.8+
-

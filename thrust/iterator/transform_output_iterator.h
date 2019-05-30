@@ -27,16 +27,16 @@
 namespace thrust
 {
 
-/*! \addtogroup iterators
+    /*! \addtogroup iterators
  *  \{
  */
 
-/*! \addtogroup fancyiterator Fancy Iterators
+    /*! \addtogroup fancyiterator Fancy Iterators
  *  \ingroup iterators
  *  \{
  */
 
-/*! \p transform_output_iterator is a special kind of output iterator which
+    /*! \p transform_output_iterator is a special kind of output iterator which
  * transforms a value written upon dereference. This iterator is useful
  * for transforming an output from algorithms without explicitly storing the
  * intermediate result in the memory and applying subsequent transformation, 
@@ -87,25 +87,23 @@ namespace thrust
  *  \see make_transform_output_iterator
  */
 
-template <typename UnaryFunction, typename OutputIterator>
-  class transform_output_iterator
-    : public detail::transform_output_iterator_base<UnaryFunction, OutputIterator>::type
-{
+    template <typename UnaryFunction, typename OutputIterator>
+    class transform_output_iterator
+        : public detail::transform_output_iterator_base<UnaryFunction, OutputIterator>::type
+    {
 
-  /*! \cond
+        /*! \cond
    */
 
-  public:
+    public:
+        typedef typename detail::transform_output_iterator_base<UnaryFunction, OutputIterator>::type
+            super_t;
 
-    typedef typename
-    detail::transform_output_iterator_base<UnaryFunction, OutputIterator>::type
-    super_t;
-
-    friend class thrust::iterator_core_access;
-  /*! \endcond
+        friend class thrust::iterator_core_access;
+        /*! \endcond
    */
 
-  /*! This constructor takes as argument an \c OutputIterator and an \c
+        /*! This constructor takes as argument an \c OutputIterator and an \c
    * UnaryFunction and copies them to a new \p transform_output_iterator
    *
    * \param out An \c OutputIterator pointing to the output range whereto the result of 
@@ -113,30 +111,28 @@ template <typename UnaryFunction, typename OutputIterator>
    * \param fun An \c UnaryFunction used to transform the objects assigned to
    *            this \p transform_output_iterator.
    */
-    __host__ __device__
-    transform_output_iterator(OutputIterator const& out, UnaryFunction fun) : super_t(out), fun(fun)
-    {
-    }
+        __host__ __device__ transform_output_iterator(OutputIterator const& out, UnaryFunction fun)
+            : super_t(out)
+            , fun(fun)
+        {
+        }
 
-    /*! \cond
+        /*! \cond
      */
-  private:
+    private:
+        __host__ __device__ typename super_t::reference dereference() const
+        {
+            return detail::transform_output_iterator_proxy<UnaryFunction, OutputIterator>(
+                this->base_reference(), fun);
+        }
 
-    __host__ __device__
-    typename super_t::reference dereference() const
-    {
-      return detail::transform_output_iterator_proxy<
-        UnaryFunction, OutputIterator
-      >(this->base_reference(), fun);
-    }
+        UnaryFunction fun;
 
-    UnaryFunction fun;
-
-    /*! \endcond
+        /*! \endcond
      */
-}; // end transform_output_iterator
+    }; // end transform_output_iterator
 
-/* \p make_transform_output_iterator creates a \p transform_output_iterator from
+    /* \p make_transform_output_iterator creates a \p transform_output_iterator from
  * an \c OutputIterator and \c UnaryFunction.
  *
  * \param out The \c OutputIterator pointing to the output range of the newly
@@ -146,19 +142,17 @@ template <typename UnaryFunction, typename OutputIterator>
  * \see transform_output_iterator
  */
 
-template <typename UnaryFunction, typename OutputIterator>
-transform_output_iterator<UnaryFunction, OutputIterator>
-__host__ __device__
-make_transform_output_iterator(OutputIterator out, UnaryFunction fun)
-{
-    return transform_output_iterator<UnaryFunction, OutputIterator>(out, fun);
-} // end make_transform_output_iterator
+    template <typename UnaryFunction, typename OutputIterator>
+    transform_output_iterator<UnaryFunction, OutputIterator>
+        __host__ __device__ make_transform_output_iterator(OutputIterator out, UnaryFunction fun)
+    {
+        return transform_output_iterator<UnaryFunction, OutputIterator>(out, fun);
+    } // end make_transform_output_iterator
 
-/*! \} // end fancyiterators
+    /*! \} // end fancyiterators
  */
 
-/*! \} // end iterators
+    /*! \} // end iterators
  */
 
 } // end thrust
-

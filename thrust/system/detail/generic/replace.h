@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 #pragma once
 
 #include <thrust/detail/config.h>
@@ -22,77 +21,85 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
+                template <typename DerivedPolicy,
+                          typename InputIterator,
+                          typename OutputIterator,
+                          typename Predicate,
+                          typename T>
+                __host__ __device__ OutputIterator
+                                    replace_copy_if(thrust::execution_policy<DerivedPolicy>& exec,
+                                                    InputIterator                            first,
+                                                    InputIterator                            last,
+                                                    OutputIterator                           result,
+                                                    Predicate                                pred,
+                                                    const T&                                 new_value);
 
-template<typename DerivedPolicy, typename InputIterator, typename OutputIterator, typename Predicate, typename T>
-__host__ __device__
-  OutputIterator replace_copy_if(thrust::execution_policy<DerivedPolicy> &exec,
-                                 InputIterator first,
-                                 InputIterator last,
-                                 OutputIterator result,
-                                 Predicate pred,
-                                 const T &new_value);
+                template <typename DerivedPolicy,
+                          typename InputIterator1,
+                          typename InputIterator2,
+                          typename OutputIterator,
+                          typename Predicate,
+                          typename T>
+                __host__ __device__ OutputIterator
+                                    replace_copy_if(thrust::execution_policy<DerivedPolicy>& exec,
+                                                    InputIterator1                           first,
+                                                    InputIterator1                           last,
+                                                    InputIterator2                           stencil,
+                                                    OutputIterator                           result,
+                                                    Predicate                                pred,
+                                                    const T&                                 new_value);
 
+                template <typename DerivedPolicy,
+                          typename InputIterator,
+                          typename OutputIterator,
+                          typename T>
+                __host__ __device__ OutputIterator
+                                    replace_copy(thrust::execution_policy<DerivedPolicy>& exec,
+                                                 InputIterator                            first,
+                                                 InputIterator                            last,
+                                                 OutputIterator                           result,
+                                                 const T&                                 old_value,
+                                                 const T&                                 new_value);
 
-template<typename DerivedPolicy, typename InputIterator1, typename InputIterator2, typename OutputIterator, typename Predicate, typename T>
-__host__ __device__
-  OutputIterator replace_copy_if(thrust::execution_policy<DerivedPolicy> &exec,
-                                 InputIterator1 first,
-                                 InputIterator1 last,
-                                 InputIterator2 stencil,
-                                 OutputIterator result,
-                                 Predicate pred,
-                                 const T &new_value);
+                template <typename DerivedPolicy,
+                          typename ForwardIterator,
+                          typename Predicate,
+                          typename T>
+                __host__ __device__ void replace_if(thrust::execution_policy<DerivedPolicy>& exec,
+                                                    ForwardIterator                          first,
+                                                    ForwardIterator                          last,
+                                                    Predicate                                pred,
+                                                    const T& new_value);
 
+                template <typename DerivedPolicy,
+                          typename ForwardIterator,
+                          typename InputIterator,
+                          typename Predicate,
+                          typename T>
+                __host__ __device__ void replace_if(thrust::execution_policy<DerivedPolicy>& exec,
+                                                    ForwardIterator                          first,
+                                                    ForwardIterator                          last,
+                                                    InputIterator stencil,
+                                                    Predicate     pred,
+                                                    const T&      new_value);
 
-template<typename DerivedPolicy, typename InputIterator, typename OutputIterator, typename T>
-__host__ __device__
-  OutputIterator replace_copy(thrust::execution_policy<DerivedPolicy> &exec,
-                              InputIterator first,
-                              InputIterator last,
-                              OutputIterator result,
-                              const T &old_value,
-                              const T &new_value);
+                template <typename DerivedPolicy, typename ForwardIterator, typename T>
+                __host__ __device__ void replace(thrust::execution_policy<DerivedPolicy>& exec,
+                                                 ForwardIterator                          first,
+                                                 ForwardIterator                          last,
+                                                 const T&                                 old_value,
+                                                 const T& new_value);
 
-
-template<typename DerivedPolicy, typename ForwardIterator, typename Predicate, typename T>
-__host__ __device__
-  void replace_if(thrust::execution_policy<DerivedPolicy> &exec,
-                  ForwardIterator first,
-                  ForwardIterator last,
-                  Predicate pred,
-                  const T &new_value);
-
-
-template<typename DerivedPolicy, typename ForwardIterator, typename InputIterator, typename Predicate, typename T>
-__host__ __device__
-  void replace_if(thrust::execution_policy<DerivedPolicy> &exec,
-                  ForwardIterator first,
-                  ForwardIterator last,
-                  InputIterator stencil,
-                  Predicate pred,
-                  const T &new_value);
-
-
-template<typename DerivedPolicy, typename ForwardIterator, typename T>
-__host__ __device__
-  void replace(thrust::execution_policy<DerivedPolicy> &exec,
-               ForwardIterator first,
-               ForwardIterator last,
-               const T &old_value,
-               const T &new_value);
-
-
-} // end namespace generic
-} // end namespace detail
-} // end namespace system
+            } // end namespace generic
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/detail/generic/replace.inl>
-

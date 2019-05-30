@@ -22,59 +22,56 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace sequential
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace sequential
+            {
 
+                // this awkward sequence of definitions arises
+                // from the desire both for tag to derive
+                // from execution_policy and for execution_policy
+                // to convert to tag (when execution_policy is not
+                // an ancestor of tag)
 
-// this awkward sequence of definitions arises
-// from the desire both for tag to derive
-// from execution_policy and for execution_policy
-// to convert to tag (when execution_policy is not
-// an ancestor of tag)
+                // forward declaration of tag
+                struct tag;
 
-// forward declaration of tag
-struct tag;
+                // forward declaration of execution_policy
+                template <typename>
+                struct execution_policy;
 
-// forward declaration of execution_policy
-template<typename> struct execution_policy;
+                // specialize execution_policy for tag
+                template <>
+                struct execution_policy<tag> : thrust::execution_policy<tag>
+                {
+                };
 
-// specialize execution_policy for tag
-template<>
-  struct execution_policy<tag>
-    : thrust::execution_policy<tag>
-{};
+                // tag's definition comes before the generic definition of execution_policy
+                struct tag : execution_policy<tag>
+                {
+                    __host__ __device__ tag() {}
+                };
 
-// tag's definition comes before the generic definition of execution_policy
-struct tag : execution_policy<tag>
-{
-  __host__ __device__ tag() {}
-};
-
-// allow conversion to tag when it is not a successor
-template<typename Derived>
-  struct execution_policy
-    : thrust::execution_policy<Derived>
-{
-  // allow conversion to tag
-  inline operator tag () const
-  {
-    return tag();
-  }
-};
-
+                // allow conversion to tag when it is not a successor
+                template <typename Derived>
+                struct execution_policy : thrust::execution_policy<Derived>
+                {
+                    // allow conversion to tag
+                    inline operator tag() const
+                    {
+                        return tag();
+                    }
+                };
 
 #if defined(__CUDA_ARCH__) || defined(__HIP_DEVICE_COMPILE__)
-static const __device__ tag seq;
+                static const __device__ tag seq;
 #else
-static const tag seq;
+                static const tag seq;
 #endif
 
-
-} // end sequential
-} // end detail
-} // end system
+            } // end sequential
+        } // end detail
+    } // end system
 } // end thrust

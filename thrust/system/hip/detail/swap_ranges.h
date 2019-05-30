@@ -40,58 +40,56 @@ BEGIN_NS_THRUST
 
 namespace hip_rocprim
 {
-namespace __swap_ranges
-{
-    template <class ItemsIt1, class ItemsIt2>
-    struct swap_f
+    namespace __swap_ranges
     {
-        ItemsIt1 items1;
-        ItemsIt2 items2;
-
-        typedef typename iterator_traits<ItemsIt1>::value_type value1_type;
-        typedef typename iterator_traits<ItemsIt2>::value_type value2_type;
-
-        THRUST_HIP_FUNCTION
-        swap_f(ItemsIt1 items1_, ItemsIt2 items2_)
-            : items1(items1_)
-            , items2(items2_)
+        template <class ItemsIt1, class ItemsIt2>
+        struct swap_f
         {
-        }
+            ItemsIt1 items1;
+            ItemsIt2 items2;
 
-        template <class Size>
-        void THRUST_HIP_DEVICE_FUNCTION operator()(Size idx)
-        {
-            value1_type item1 = items1[idx];
-            value2_type item2 = items2[idx];
-            // XXX thrust::swap is buggy
-            // if reference_type of ItemIt1/ItemsIt2
-            // is a proxy reference, then KABOOM!
-            // to avoid this, just copy the value first before swap
-            // *todo* specialize on real & proxy references
-            using thrust::swap;
-            swap(item1, item2);
-            items1[idx] = item1;
-            items2[idx] = item2;
-        }
-    };
-} // namespace __swap_ranges
+            typedef typename iterator_traits<ItemsIt1>::value_type value1_type;
+            typedef typename iterator_traits<ItemsIt2>::value_type value2_type;
 
-template <class Derived, class ItemsIt1, class ItemsIt2>
-ItemsIt2 THRUST_HIP_FUNCTION
-swap_ranges(execution_policy<Derived>& policy,
-            ItemsIt1                   first1,
-            ItemsIt1                   last1,
-            ItemsIt2                   first2)
-{
-    typedef typename iterator_traits<ItemsIt1>::difference_type size_type;
+            THRUST_HIP_FUNCTION
+            swap_f(ItemsIt1 items1_, ItemsIt2 items2_)
+                : items1(items1_)
+                , items2(items2_)
+            {
+            }
 
-    size_type num_items = static_cast<size_type>(thrust::distance(first1, last1));
+            template <class Size>
+            void THRUST_HIP_DEVICE_FUNCTION operator()(Size idx)
+            {
+                value1_type item1 = items1[idx];
+                value2_type item2 = items2[idx];
+                // XXX thrust::swap is buggy
+                // if reference_type of ItemIt1/ItemsIt2
+                // is a proxy reference, then KABOOM!
+                // to avoid this, just copy the value first before swap
+                // *todo* specialize on real & proxy references
+                using thrust::swap;
+                swap(item1, item2);
+                items1[idx] = item1;
+                items2[idx] = item2;
+            }
+        };
+    } // namespace __swap_ranges
 
-    hip_rocprim::parallel_for(
-        policy, __swap_ranges::swap_f<ItemsIt1, ItemsIt2>(first1, first2), num_items
-    );
-    return first2 + num_items;
-}
+    template <class Derived, class ItemsIt1, class ItemsIt2>
+    ItemsIt2 THRUST_HIP_FUNCTION swap_ranges(execution_policy<Derived>& policy,
+                                             ItemsIt1                   first1,
+                                             ItemsIt1                   last1,
+                                             ItemsIt2                   first2)
+    {
+        typedef typename iterator_traits<ItemsIt1>::difference_type size_type;
+
+        size_type num_items = static_cast<size_type>(thrust::distance(first1, last1));
+
+        hip_rocprim::parallel_for(
+            policy, __swap_ranges::swap_f<ItemsIt1, ItemsIt2>(first1, first2), num_items);
+        return first2 + num_items;
+    }
 
 } // namespace hip_rocprim
 

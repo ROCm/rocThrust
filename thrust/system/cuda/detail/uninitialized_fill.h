@@ -26,82 +26,74 @@
  ******************************************************************************/
 #pragma once
 
-
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
 #include <iterator>
 #include <thrust/distance.h>
 #include <thrust/system/cuda/detail/execution_policy.h>
-#include <thrust/system/cuda/detail/util.h>
 #include <thrust/system/cuda/detail/parallel_for.h>
+#include <thrust/system/cuda/detail/util.h>
 
 BEGIN_NS_THRUST
 
-namespace cuda_cub {
+namespace cuda_cub
+{
 
-namespace __uninitialized_fill {
-
-  template <class Iterator, class T>
-  struct functor
-  {
-    Iterator  items;
-    T         value;
-
-    typedef typename iterator_traits<Iterator>::value_type value_type;
-
-    THRUST_FUNCTION
-    functor(Iterator items_, T const& value_)
-        : items(items_), value(value_) {}
-
-    template<class Size>
-    void THRUST_DEVICE_FUNCTION operator()(Size idx)
+    namespace __uninitialized_fill
     {
-      value_type& out = raw_reference_cast(items[idx]);
+
+        template <class Iterator, class T>
+        struct functor
+        {
+            Iterator items;
+            T        value;
+
+            typedef typename iterator_traits<Iterator>::value_type value_type;
+
+            THRUST_FUNCTION
+            functor(Iterator items_, T const& value_)
+                : items(items_)
+                , value(value_)
+            {
+            }
+
+            template <class Size>
+            void THRUST_DEVICE_FUNCTION operator()(Size idx)
+            {
+                value_type& out = raw_reference_cast(items[idx]);
 
 #if defined(__CUDA__) && defined(__clang__)
-      // XXX unsafe. cuda-clang is seemingly unable to call ::new in device code
-      out = value;
+                // XXX unsafe. cuda-clang is seemingly unable to call ::new in device code
+                out = value;
 #else
-      ::new (static_cast<void *>(&out)) value_type(value);
+                ::new(static_cast<void*>(&out)) value_type(value);
 #endif
+            }
+        }; // struct functor
+
+    } // namespace __uninitialized_copy
+
+    template <class Derived, class Iterator, class Size, class T>
+    Iterator __host__ __device__ uninitialized_fill_n(execution_policy<Derived>& policy,
+                                                      Iterator                   first,
+                                                      Size                       count,
+                                                      T const&                   x)
+    {
+        typedef __uninitialized_fill::functor<Iterator, T> functor_t;
+
+        cuda_cub::parallel_for(policy, functor_t(first, x), count);
+        return first + count;
     }
-  };    // struct functor
 
-}    // namespace __uninitialized_copy
+    template <class Derived, class Iterator, class T>
+    void __host__ __device__ uninitialized_fill(execution_policy<Derived>& policy,
+                                                Iterator                   first,
+                                                Iterator                   last,
+                                                T const&                   x)
+    {
+        cuda_cub::uninitialized_fill_n(policy, first, thrust::distance(first, last), x);
+    }
 
-template <class Derived,
-          class Iterator,
-          class Size,
-          class T>
-Iterator __host__ __device__
-uninitialized_fill_n(execution_policy<Derived>& policy,
-                     Iterator                   first,
-                     Size                       count,
-                     T const&                   x)
-{
-  typedef __uninitialized_fill::functor<Iterator,T> functor_t;
-
-  cuda_cub::parallel_for(policy,
-                         functor_t(first, x),
-                         count);
-  return first + count;
-}
-
-template <class Derived,
-          class Iterator,
-          class T>
-void __host__ __device__
-uninitialized_fill(execution_policy<Derived>& policy,
-                   Iterator                   first,
-                   Iterator                   last,
-                   T const&                   x)
-{
-  cuda_cub::uninitialized_fill_n(policy,
-                              first,
-                              thrust::distance(first, last),
-                              x);
-}
-
-}    // namespace cuda_cub
+} // namespace cuda_cub
 
 END_NS_THRUST
 #endif

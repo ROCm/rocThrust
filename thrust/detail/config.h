@@ -20,4 +20,3 @@
 #pragma once
 
 #include <thrust/detail/config/config.h>
-

@@ -14,76 +14,69 @@
  *  limitations under the License.
  */
 
-
 #pragma once
 
 #include <thrust/detail/config.h>
-#include <thrust/system/detail/generic/tag.h>
 #include <thrust/iterator/iterator_traits.h>
+#include <thrust/system/detail/generic/tag.h>
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
+                template <typename DerivedPolicy,
+                          typename InputIterator1,
+                          typename InputIterator2,
+                          typename OutputIterator1,
+                          typename OutputIterator2>
+                __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                                    reduce_by_key(thrust::execution_policy<DerivedPolicy>& exec,
+                                                  InputIterator1                           keys_first,
+                                                  InputIterator1                           keys_last,
+                                                  InputIterator2                           values_first,
+                                                  OutputIterator1                          keys_output,
+                                                  OutputIterator2                          values_output);
 
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator1,
-         typename OutputIterator2>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-    reduce_by_key(thrust::execution_policy<DerivedPolicy> &exec,
-                  InputIterator1 keys_first, 
-                  InputIterator1 keys_last,
-                  InputIterator2 values_first,
-                  OutputIterator1 keys_output,
-                  OutputIterator2 values_output);
+                template <typename DerivedPolicy,
+                          typename InputIterator1,
+                          typename InputIterator2,
+                          typename OutputIterator1,
+                          typename OutputIterator2,
+                          typename BinaryPredicate>
+                __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                                    reduce_by_key(thrust::execution_policy<DerivedPolicy>& exec,
+                                                  InputIterator1                           keys_first,
+                                                  InputIterator1                           keys_last,
+                                                  InputIterator2                           values_first,
+                                                  OutputIterator1                          keys_output,
+                                                  OutputIterator2                          values_output,
+                                                  BinaryPredicate                          binary_pred);
 
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename BinaryPredicate>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-    reduce_by_key(thrust::execution_policy<DerivedPolicy> &exec,
-                  InputIterator1 keys_first, 
-                  InputIterator1 keys_last,
-                  InputIterator2 values_first,
-                  OutputIterator1 keys_output,
-                  OutputIterator2 values_output,
-                  BinaryPredicate binary_pred);
+                template <typename DerivedPolicy,
+                          typename InputIterator1,
+                          typename InputIterator2,
+                          typename OutputIterator1,
+                          typename OutputIterator2,
+                          typename BinaryPredicate,
+                          typename BinaryFunction>
+                __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                                    reduce_by_key(thrust::execution_policy<DerivedPolicy>& exec,
+                                                  InputIterator1                           keys_first,
+                                                  InputIterator1                           keys_last,
+                                                  InputIterator2                           values_first,
+                                                  OutputIterator1                          keys_output,
+                                                  OutputIterator2                          values_output,
+                                                  BinaryPredicate                          binary_pred,
+                                                  BinaryFunction                           binary_op);
 
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename BinaryPredicate,
-         typename BinaryFunction>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-    reduce_by_key(thrust::execution_policy<DerivedPolicy> &exec,
-                  InputIterator1 keys_first, 
-                  InputIterator1 keys_last,
-                  InputIterator2 values_first,
-                  OutputIterator1 keys_output,
-                  OutputIterator2 values_output,
-                  BinaryPredicate binary_pred,
-                  BinaryFunction binary_op);
-
-
-} // end namespace generic
-} // end namespace detail
-} // end namespace system
+            } // end namespace generic
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/detail/generic/reduce_by_key.inl>
-

@@ -24,52 +24,45 @@
 
 #include <thrust/detail/config.h>
 #include <thrust/detail/execution_policy.h>
-#include <thrust/system/detail/generic/tag.h>
 #include <thrust/detail/static_assert.h>
+#include <thrust/system/detail/generic/tag.h>
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
+                template <typename DerivedPolicy, typename InputIterator, typename UnaryFunction>
+                __host__ __device__ InputIterator for_each(thrust::execution_policy<DerivedPolicy>&,
+                                                           InputIterator first,
+                                                           InputIterator,
+                                                           UnaryFunction);
+                // {
+                //   // unimplemented
+                //   THRUST_STATIC_ASSERT( (thrust::detail::depend_on_instantiation<InputIterator, false>::value) );
+                //   return first;
+                // } // end for_each()
 
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename UnaryFunction>
-__host__ __device__
-InputIterator for_each(thrust::execution_policy<DerivedPolicy> &,
-                       InputIterator first,
-                       InputIterator ,
-                       UnaryFunction );
-// {
-//   // unimplemented
-//   THRUST_STATIC_ASSERT( (thrust::detail::depend_on_instantiation<InputIterator, false>::value) );
-//   return first;
-// } // end for_each()
+                template <typename DerivedPolicy,
+                          typename InputIterator,
+                          typename Size,
+                          typename UnaryFunction>
+                __host__ __device__ InputIterator
+                                    for_each_n(thrust::execution_policy<DerivedPolicy>&,
+                                               InputIterator first,
+                                               Size,
+                                               UnaryFunction);
+                // {
+                //   // unimplemented
+                //   THRUST_STATIC_ASSERT( (thrust::detail::depend_on_instantiation<InputIterator, false>::value) );
+                //   return first;
+                // } // end for_each_n()
 
-
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename Size,
-         typename UnaryFunction>
-__host__ __device__
-InputIterator for_each_n(thrust::execution_policy<DerivedPolicy> &,
-                         InputIterator first,
-                         Size ,
-                         UnaryFunction );
-// {
-//   // unimplemented
-//   THRUST_STATIC_ASSERT( (thrust::detail::depend_on_instantiation<InputIterator, false>::value) );
-//   return first;
-// } // end for_each_n()
-
-
-} // end namespace generic
-} // end namespace detail
-} // end namespace system
+            } // end namespace generic
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
-

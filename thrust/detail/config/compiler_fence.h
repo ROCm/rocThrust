@@ -28,7 +28,10 @@
 #define __thrust_compiler_fence() _ReadWriteBarrier()
 #else
 
-#define __thrust_compiler_fence() do {} while (0)
+#define __thrust_compiler_fence() \
+    do                            \
+    {                             \
+    } while(0)
 
 #endif // _DEBUG
 
@@ -39,7 +42,10 @@
 #define __thrust_compiler_fence() __sync_synchronize()
 #else
 // allow the code to compile without any guarantees
-#define __thrust_compiler_fence() do {} while (0)
+#define __thrust_compiler_fence() \
+    do                            \
+    {                             \
+    } while(0)
 #endif // THRUST_GCC_VERSION
 
 // unknown case
@@ -48,7 +54,9 @@
 #elif THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_UNKNOWN
 
 // allow the code to compile without any guarantees
-#define __thrust_compiler_fence() do {} while (0)
+#define __thrust_compiler_fence() \
+    do                            \
+    {                             \
+    } while(0)
 
 #endif
-

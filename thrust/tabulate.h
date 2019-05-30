@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file tabulate.h
  *  \brief Fills a range with the tabulation of a function
  */
@@ -27,13 +26,11 @@
 namespace thrust
 {
 
-
-/*! \addtogroup transformations
+    /*! \addtogroup transformations
  *  \{
  */
 
-
-/*! \p tabulate fills the range <tt>[first, last)</tt> with the value of a function applied to each
+    /*! \p tabulate fills the range <tt>[first, last)</tt> with the value of a function applied to each
  *     element's index.
  *
  *  For each iterator \c i in the range <tt>[first, last)</tt>, \p tabulate performs the assignment
@@ -72,15 +69,14 @@ namespace thrust
  *  \see thrust::generate
  *  \see thrust::sequence
  */
-template<typename DerivedPolicy, typename ForwardIterator, typename UnaryOperation>
-__host__ __device__
-  void tabulate(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                ForwardIterator first,
-                ForwardIterator last,
-                UnaryOperation unary_op);
+    template <typename DerivedPolicy, typename ForwardIterator, typename UnaryOperation>
+    __host__ __device__ void
+             tabulate(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                      ForwardIterator                                             first,
+                      ForwardIterator                                             last,
+                      UnaryOperation                                              unary_op);
 
-
-/*! \p tabulate fills the range <tt>[first, last)</tt> with the value of a function applied to each
+    /*! \p tabulate fills the range <tt>[first, last)</tt> with the value of a function applied to each
  *     element's index.
  *
  *  For each iterator \c i in the range <tt>[first, last)</tt>, \p tabulate performs the assignment
@@ -113,17 +109,12 @@ __host__ __device__
  *  \see thrust::generate
  *  \see thrust::sequence
  */
-template<typename ForwardIterator, typename UnaryOperation>
-  void tabulate(ForwardIterator first,
-                ForwardIterator last,
-                UnaryOperation unary_op);
+    template <typename ForwardIterator, typename UnaryOperation>
+    void tabulate(ForwardIterator first, ForwardIterator last, UnaryOperation unary_op);
 
-
-/*! \} // end transformations
+    /*! \} // end transformations
  */
-
 
 } // end namespace thrust
 
 #include <thrust/detail/tabulate.inl>
-

@@ -26,71 +26,60 @@
  ******************************************************************************/
 #pragma once
 
-
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
 #include <thrust/system/cuda/detail/execution_policy.h>
 
 BEGIN_NS_THRUST
-namespace cuda_cub {
+namespace cuda_cub
+{
 
-template <class Derived, class ItemsIt, class ResultIt>
-ResultIt __host__ __device__
-reverse_copy(execution_policy<Derived> &policy,
-             ItemsIt                    first,
-             ItemsIt                    last,
-             ResultIt                   result);
+    template <class Derived, class ItemsIt, class ResultIt>
+    ResultIt __host__ __device__ reverse_copy(execution_policy<Derived>& policy,
+                                              ItemsIt                    first,
+                                              ItemsIt                    last,
+                                              ResultIt                   result);
 
-template <class Derived, class ItemsIt>
-void __host__ __device__
-reverse(execution_policy<Derived> &policy,
-        ItemsIt                    first,
-        ItemsIt                    last);
+    template <class Derived, class ItemsIt>
+    void __host__ __device__ reverse(execution_policy<Derived>& policy,
+                                     ItemsIt                    first,
+                                     ItemsIt                    last);
 
-}    // namespace cuda_cub
+} // namespace cuda_cub
 END_NS_THRUST
 
 #include <thrust/advance.h>
 #include <thrust/distance.h>
-#include <thrust/system/cuda/detail/swap_ranges.h>
-#include <thrust/system/cuda/detail/copy.h>
 #include <thrust/iterator/reverse_iterator.h>
+#include <thrust/system/cuda/detail/copy.h>
+#include <thrust/system/cuda/detail/swap_ranges.h>
 
 BEGIN_NS_THRUST
-namespace cuda_cub {
-
-template <class Derived,
-          class ItemsIt,
-          class ResultIt>
-ResultIt __host__ __device__
-reverse_copy(execution_policy<Derived> &policy,
-             ItemsIt                    first,
-             ItemsIt                    last,
-             ResultIt                   result)
+namespace cuda_cub
 {
-  return cuda_cub::copy(policy,
-                        make_reverse_iterator(last),
-                        make_reverse_iterator(first),
-                        result);
-}
 
-template <class Derived,
-          class ItemsIt>
-void __host__ __device__
-reverse(execution_policy<Derived> &policy,
-        ItemsIt                    first,
-        ItemsIt                    last)
-{
-  typedef typename thrust::iterator_difference<ItemsIt>::type difference_type;
+    template <class Derived, class ItemsIt, class ResultIt>
+    ResultIt __host__ __device__ reverse_copy(execution_policy<Derived>& policy,
+                                              ItemsIt                    first,
+                                              ItemsIt                    last,
+                                              ResultIt                   result)
+    {
+        return cuda_cub::copy(
+            policy, make_reverse_iterator(last), make_reverse_iterator(first), result);
+    }
 
-  // find the midpoint of [first,last)
-  difference_type N = thrust::distance(first, last);
-  ItemsIt mid(first);
-  advance(mid, N / 2);
+    template <class Derived, class ItemsIt>
+    void __host__ __device__ reverse(execution_policy<Derived>& policy, ItemsIt first, ItemsIt last)
+    {
+        typedef typename thrust::iterator_difference<ItemsIt>::type difference_type;
 
-  cuda_cub::swap_ranges(policy, first, mid, make_reverse_iterator(last));
-}
+        // find the midpoint of [first,last)
+        difference_type N = thrust::distance(first, last);
+        ItemsIt         mid(first);
+        advance(mid, N / 2);
 
+        cuda_cub::swap_ranges(policy, first, mid, make_reverse_iterator(last));
+    }
 
-}    // namespace cuda_cub
+} // namespace cuda_cub
 END_NS_THRUST
 #endif

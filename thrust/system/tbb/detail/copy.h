@@ -21,37 +21,31 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace tbb
-{
-namespace detail
-{
+    namespace system
+    {
+        namespace tbb
+        {
+            namespace detail
+            {
 
+                template <typename DerivedPolicy, typename InputIterator, typename OutputIterator>
+                OutputIterator copy(execution_policy<DerivedPolicy>& exec,
+                                    InputIterator                    first,
+                                    InputIterator                    last,
+                                    OutputIterator                   result);
 
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator>
-OutputIterator copy(execution_policy<DerivedPolicy> &exec,
-                    InputIterator first,
-                    InputIterator last,
-                    OutputIterator result);
+                template <typename DerivedPolicy,
+                          typename InputIterator,
+                          typename Size,
+                          typename OutputIterator>
+                OutputIterator copy_n(execution_policy<DerivedPolicy>& exec,
+                                      InputIterator                    first,
+                                      Size                             n,
+                                      OutputIterator                   result);
 
-
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename Size,
-         typename OutputIterator>
-OutputIterator copy_n(execution_policy<DerivedPolicy> &exec,
-                      InputIterator first,
-                      Size n,
-                      OutputIterator result);
-
-
-} // end namespace detail
-} // end namespace tbb
-} // end namespace system
+            } // end namespace detail
+        } // end namespace tbb
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/tbb/detail/copy.inl>
-

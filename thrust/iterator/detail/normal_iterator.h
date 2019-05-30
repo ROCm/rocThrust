@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file normal_iterator.h
  *  \brief Defines the interface to an iterator class
  *         which adapts a pointer type.
@@ -22,55 +21,48 @@
 
 #pragma once
 
-#include <thrust/iterator/iterator_adaptor.h>
-#include <thrust/iterator/detail/is_trivial_iterator.h>
 #include <thrust/detail/type_traits.h>
+#include <thrust/iterator/detail/is_trivial_iterator.h>
+#include <thrust/iterator/iterator_adaptor.h>
 
 namespace thrust
 {
-namespace detail
-{
+    namespace detail
+    {
 
+        template <typename Pointer>
+        class normal_iterator : public iterator_adaptor<normal_iterator<Pointer>, Pointer>
+        {
+            typedef iterator_adaptor<normal_iterator<Pointer>, Pointer> super_t;
 
-template<typename Pointer>
-  class normal_iterator
-    : public iterator_adaptor<
-        normal_iterator<Pointer>,
-        Pointer
-      >
-{
-  typedef iterator_adaptor<normal_iterator<Pointer>, Pointer> super_t;
+        public:
+            __host__ __device__ normal_iterator() {}
 
-  public:
-    __host__ __device__
-    normal_iterator() {}
+            __host__ __device__ normal_iterator(Pointer p)
+                : super_t(p)
+            {
+            }
 
-    __host__ __device__
-    normal_iterator(Pointer p)
-      : super_t(p) {}
-    
-    template<typename OtherPointer>
-    __host__ __device__
-    normal_iterator(const normal_iterator<OtherPointer> &other,
-                    typename thrust::detail::enable_if_convertible<
-                      OtherPointer,
-                      Pointer
-                    >::type * = 0)
-      : super_t(other.base()) {}
+            template <typename OtherPointer>
+            __host__ __device__ normal_iterator(
+                const normal_iterator<OtherPointer>& other,
+                typename thrust::detail::enable_if_convertible<OtherPointer, Pointer>::type* = 0)
+                : super_t(other.base())
+            {
+            }
 
-}; // end normal_iterator
+        }; // end normal_iterator
 
+        template <typename Pointer>
+        inline __host__ __device__ normal_iterator<Pointer> make_normal_iterator(Pointer ptr)
+        {
+            return normal_iterator<Pointer>(ptr);
+        }
 
-template<typename Pointer>
-  inline __host__ __device__ normal_iterator<Pointer> make_normal_iterator(Pointer ptr)
-{
-  return normal_iterator<Pointer>(ptr);
-}
+        template <typename T>
+        struct is_trivial_iterator<normal_iterator<T>> : public true_type
+        {
+        };
 
-
-template<typename T> struct is_trivial_iterator< normal_iterator<T> > : public true_type {};
-
-
-} // end detail
+    } // end detail
 } // end thrust
-

@@ -24,36 +24,33 @@
 #include <thrust/swap.h>
 
 BEGIN_NS_THRUST
-namespace cuda_cub {
-
-
-template<typename Pointer1, typename Pointer2>
-inline __host__ __device__
-void iter_swap(tag, Pointer1 a, Pointer2 b)
+namespace cuda_cub
 {
-  // XXX war nvbugs/881631
-  struct war_nvbugs_881631
-  {
-    __host__ inline static void host_path(Pointer1 a, Pointer2 b)
-    {
-      cuda_cub::swap_ranges(a, a + 1, b);
-    }
 
-    __device__ inline static void device_path(Pointer1 a, Pointer2 b)
+    template <typename Pointer1, typename Pointer2>
+    inline __host__ __device__ void iter_swap(tag, Pointer1 a, Pointer2 b)
     {
-      using thrust::swap;
-      swap(*thrust::raw_pointer_cast(a),
-           *thrust::raw_pointer_cast(b));
-    }
-  };
+        // XXX war nvbugs/881631
+        struct war_nvbugs_881631
+        {
+            __host__ inline static void host_path(Pointer1 a, Pointer2 b)
+            {
+                cuda_cub::swap_ranges(a, a + 1, b);
+            }
+
+            __device__ inline static void device_path(Pointer1 a, Pointer2 b)
+            {
+                using thrust::swap;
+                swap(*thrust::raw_pointer_cast(a), *thrust::raw_pointer_cast(b));
+            }
+        };
 
 #ifndef __CUDA_ARCH__
-  return war_nvbugs_881631::host_path(a,b);
+        return war_nvbugs_881631::host_path(a, b);
 #else
-  return war_nvbugs_881631::device_path(a,b);
+        return war_nvbugs_881631::device_path(a, b);
 #endif // __CUDA_ARCH__
-} // end iter_swap()
-
+    } // end iter_swap()
 
 } // end cuda_cub
 END_NS_THRUST

@@ -27,37 +27,31 @@
 
 #pragma once
 
+#include <cstdio>
 #include <thrust/detail/config.h>
 #include <thrust/system/cuda/detail/util.h>
-#include <cstdio>
 
 namespace thrust
 {
-namespace system
-{
-namespace cuda
-{
-namespace detail
-{
+    namespace system
+    {
+        namespace cuda
+        {
+            namespace detail
+            {
 
+                inline __device__ void terminate()
+                {
+                    thrust::cuda_cub::terminate();
+                }
 
-inline __device__
-void terminate()
-{
-  thrust::cuda_cub::terminate();
-}
+                inline __host__ __device__ void terminate_with_message(const char* message)
+                {
+                    printf("%s\n", message);
+                    thrust::cuda_cub::terminate();
+                }
 
-
-inline __host__ __device__
-void terminate_with_message(const char* message)
-{
-  printf("%s\n", message);
-  thrust::cuda_cub::terminate();
-}
-
-
-} // end detail
-} // end cuda
-} // end system
+            } // end detail
+        } // end cuda
+    } // end system
 } // end thrust
-

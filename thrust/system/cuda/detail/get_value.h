@@ -18,68 +18,64 @@
 
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
 #include <thrust/detail/config.h>
-#include <thrust/system/cuda/config.h>
-#include <thrust/system/cuda/detail/cross_system.h>
 #include <thrust/detail/raw_pointer_cast.h>
 #include <thrust/iterator/iterator_traits.h>
+#include <thrust/system/cuda/config.h>
+#include <thrust/system/cuda/detail/cross_system.h>
 
 BEGIN_NS_THRUST
-namespace cuda_cub {
-
-
-namespace
+namespace cuda_cub
 {
 
-
-template<typename DerivedPolicy, typename Pointer>
-inline __host__ __device__
-  typename thrust::iterator_value<Pointer>::type
-    get_value_msvc2005_war(execution_policy<DerivedPolicy> &exec, Pointer ptr)
-{
-  typedef typename thrust::iterator_value<Pointer>::type result_type;
-
-  // XXX war nvbugs/881631
-  struct war_nvbugs_881631
-  {
-    __host__ inline static result_type host_path(execution_policy<DerivedPolicy> &exec, Pointer ptr)
+    namespace
     {
-      // when called from host code, implement with assign_value
-      // note that this requires a type with default constructor
-      result_type result;
 
-      thrust::host_system_tag host_tag;
-      cross_system<thrust::host_system_tag, DerivedPolicy> systems(host_tag, exec);
-      assign_value(systems, &result, ptr);
+        template <typename DerivedPolicy, typename Pointer>
+        inline __host__ __device__ typename thrust::iterator_value<Pointer>::type
+                        get_value_msvc2005_war(execution_policy<DerivedPolicy>& exec, Pointer ptr)
+        {
+            typedef typename thrust::iterator_value<Pointer>::type result_type;
 
-      return result;
-    }
+            // XXX war nvbugs/881631
+            struct war_nvbugs_881631
+            {
+                __host__ inline static result_type host_path(execution_policy<DerivedPolicy>& exec,
+                                                             Pointer                          ptr)
+                {
+                    // when called from host code, implement with assign_value
+                    // note that this requires a type with default constructor
+                    result_type result;
 
-    __device__ inline static result_type device_path(execution_policy<DerivedPolicy> &, Pointer ptr)
-    {
-      // when called from device code, just do simple deref
-      return *thrust::raw_pointer_cast(ptr);
-    }
-  };
+                    thrust::host_system_tag                              host_tag;
+                    cross_system<thrust::host_system_tag, DerivedPolicy> systems(host_tag, exec);
+                    assign_value(systems, &result, ptr);
+
+                    return result;
+                }
+
+                __device__ inline static result_type device_path(execution_policy<DerivedPolicy>&,
+                                                                 Pointer ptr)
+                {
+                    // when called from device code, just do simple deref
+                    return *thrust::raw_pointer_cast(ptr);
+                }
+            };
 
 #ifndef __CUDA_ARCH__
-  return war_nvbugs_881631::host_path(exec, ptr);
+            return war_nvbugs_881631::host_path(exec, ptr);
 #else
-  return war_nvbugs_881631::device_path(exec, ptr);
+            return war_nvbugs_881631::device_path(exec, ptr);
 #endif // __CUDA_ARCH__
-} // end get_value_msvc2005_war()
+        } // end get_value_msvc2005_war()
 
+    } // end anon namespace
 
-} // end anon namespace
-
-
-template<typename DerivedPolicy, typename Pointer>
-inline __host__ __device__
-  typename thrust::iterator_value<Pointer>::type
-    get_value(execution_policy<DerivedPolicy> &exec, Pointer ptr)
-{
-  return get_value_msvc2005_war(exec,ptr);
-} // end get_value()
-
+    template <typename DerivedPolicy, typename Pointer>
+    inline __host__ __device__ typename thrust::iterator_value<Pointer>::type
+                    get_value(execution_policy<DerivedPolicy>& exec, Pointer ptr)
+    {
+        return get_value_msvc2005_war(exec, ptr);
+    } // end get_value()
 
 } // end cuda_cub
 END_NS_THRUST

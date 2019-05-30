@@ -20,18 +20,13 @@
 
 namespace thrust
 {
-namespace detail
-{
+    namespace detail
+    {
 
+        template <typename Allocator, typename Pointer, typename Size>
+        __host__ __device__ inline void default_construct_range(Allocator& a, Pointer p, Size n);
 
-template<typename Allocator, typename Pointer, typename Size>
-__host__ __device__
-inline void default_construct_range(Allocator &a, Pointer p, Size n);
-
-
-} // end detail
+    } // end detail
 } // end thrust
 
 #include <thrust/detail/allocator/default_construct_range.inl>
-
-

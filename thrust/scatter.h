@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file scatter.h
  *  \brief Irregular copying to a destination range
  */
@@ -27,14 +26,12 @@
 namespace thrust
 {
 
-
-/*! \addtogroup scattering
+    /*! \addtogroup scattering
  *  \ingroup copying
  *  \{
  */
 
-
-/*! \p scatter copies elements from a source range into an output array
+    /*! \p scatter copies elements from a source range into an output array
  *  according to a map. For each iterator \c i in the range [\p first, \p last),
  *  the value \c *i is assigned to <tt>output[*(map + (i - first))]</tt>. The 
  *  output iterator must permit random access. If the same index 
@@ -86,19 +83,18 @@ namespace thrust
  *
  *  \note \p scatter is the inverse of thrust::gather.
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename RandomAccessIterator>
-__host__ __device__
-  void scatter(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-               InputIterator1 first,
-               InputIterator1 last,
-               InputIterator2 map,
-               RandomAccessIterator result);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename RandomAccessIterator>
+    __host__ __device__ void
+             scatter(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                     InputIterator1                                              first,
+                     InputIterator1                                              last,
+                     InputIterator2                                              map,
+                     RandomAccessIterator                                        result);
 
-
-/*! \p scatter copies elements from a source range into an output array
+    /*! \p scatter copies elements from a source range into an output array
  *  according to a map. For each iterator \c i in the range [\p first, \p last),
  *  the value \c *i is assigned to <tt>output[*(map + (i - first))]</tt>. The 
  *  output iterator must permit random access. If the same index 
@@ -144,16 +140,13 @@ __host__ __device__
  *
  *  \note \p scatter is the inverse of thrust::gather.
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename RandomAccessIterator>
-  void scatter(InputIterator1 first,
-               InputIterator1 last,
-               InputIterator2 map,
-               RandomAccessIterator result);
+    template <typename InputIterator1, typename InputIterator2, typename RandomAccessIterator>
+    void scatter(InputIterator1       first,
+                 InputIterator1       last,
+                 InputIterator2       map,
+                 RandomAccessIterator result);
 
-
-/*! \p scatter_if conditionally copies elements from a source range into an 
+    /*! \p scatter_if conditionally copies elements from a source range into an 
  *  output array according to a map. For each iterator \c i in the 
  *  range <tt>[first, last)</tt> such that <tt>*(stencil + (i - first))</tt> is
  *  true, the value \c *i is assigned to <tt>output[*(map + (i - first))]</tt>.
@@ -200,21 +193,20 @@ template<typename InputIterator1,
  *
  *  \note \p scatter_if is the inverse of thrust::gather_if.
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename RandomAccessIterator>
-__host__ __device__
-  void scatter_if(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                  InputIterator1 first,
-                  InputIterator1 last,
-                  InputIterator2 map,
-                  InputIterator3 stencil,
-                  RandomAccessIterator output);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename RandomAccessIterator>
+    __host__ __device__ void
+             scatter_if(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                        InputIterator1                                              first,
+                        InputIterator1                                              last,
+                        InputIterator2                                              map,
+                        InputIterator3                                              stencil,
+                        RandomAccessIterator                                        output);
 
-
-/*! \p scatter_if conditionally copies elements from a source range into an 
+    /*! \p scatter_if conditionally copies elements from a source range into an 
  *  output array according to a map. For each iterator \c i in the 
  *  range <tt>[first, last)</tt> such that <tt>*(stencil + (i - first))</tt> is
  *  true, the value \c *i is assigned to <tt>output[*(map + (i - first))]</tt>.
@@ -256,18 +248,17 @@ __host__ __device__
  *
  *  \note \p scatter_if is the inverse of thrust::gather_if.
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename RandomAccessIterator>
-  void scatter_if(InputIterator1 first,
-                  InputIterator1 last,
-                  InputIterator2 map,
-                  InputIterator3 stencil,
-                  RandomAccessIterator output);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename RandomAccessIterator>
+    void scatter_if(InputIterator1       first,
+                    InputIterator1       last,
+                    InputIterator2       map,
+                    InputIterator3       stencil,
+                    RandomAccessIterator output);
 
-
-/*! \p scatter_if conditionally copies elements from a source range into an 
+    /*! \p scatter_if conditionally copies elements from a source range into an 
  *  output array according to a map. For each iterator \c i in the 
  *  range <tt>[first, last)</tt> such that <tt>pred(*(stencil + (i - first)))</tt> is
  *  \c true, the value \c *i is assigned to <tt>output[*(map + (i - first))]</tt>.
@@ -328,23 +319,22 @@ template<typename InputIterator1,
  *  
  *  \note \p scatter_if is the inverse of thrust::gather_if.
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename RandomAccessIterator,
-         typename Predicate>
-__host__ __device__
-  void scatter_if(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                  InputIterator1 first,
-                  InputIterator1 last,
-                  InputIterator2 map,
-                  InputIterator3 stencil,
-                  RandomAccessIterator output,
-                  Predicate pred);
-                  
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename RandomAccessIterator,
+              typename Predicate>
+    __host__ __device__ void
+             scatter_if(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                        InputIterator1                                              first,
+                        InputIterator1                                              last,
+                        InputIterator2                                              map,
+                        InputIterator3                                              stencil,
+                        RandomAccessIterator                                        output,
+                        Predicate                                                   pred);
 
-/*! \p scatter_if conditionally copies elements from a source range into an 
+    /*! \p scatter_if conditionally copies elements from a source range into an 
  *  output array according to a map. For each iterator \c i in the 
  *  range <tt>[first, last)</tt> such that <tt>pred(*(stencil + (i - first)))</tt> is
  *  \c true, the value \c *i is assigned to <tt>output[*(map + (i - first))]</tt>.
@@ -400,24 +390,21 @@ __host__ __device__
  *  
  *  \note \p scatter_if is the inverse of thrust::gather_if.
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename RandomAccessIterator,
-         typename Predicate>
-  void scatter_if(InputIterator1 first,
-                  InputIterator1 last,
-                  InputIterator2 map,
-                  InputIterator3 stencil,
-                  RandomAccessIterator output,
-                  Predicate pred);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename RandomAccessIterator,
+              typename Predicate>
+    void scatter_if(InputIterator1       first,
+                    InputIterator1       last,
+                    InputIterator2       map,
+                    InputIterator3       stencil,
+                    RandomAccessIterator output,
+                    Predicate            pred);
 
-
-/*! \} // end scattering
+    /*! \} // end scattering
  */
-
 
 } // end namespace thrust
 
 #include <thrust/detail/scatter.inl>
-

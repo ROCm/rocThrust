@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file binary_search.h
  *  \brief Sequential implementation of binary search algorithms.
  */
@@ -22,136 +21,121 @@
 #pragma once
 
 #include <thrust/advance.h>
+#include <thrust/detail/function.h>
 #include <thrust/distance.h>
 #include <thrust/iterator/iterator_traits.h>
-#include <thrust/detail/function.h>
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace sequential
-{
-
-
-__thrust_exec_check_disable__
-template<typename DerivedPolicy,
-         typename ForwardIterator,
-         typename T,
-         typename StrictWeakOrdering>
-__host__ __device__
-ForwardIterator lower_bound(sequential::execution_policy<DerivedPolicy> &,
-                            ForwardIterator first,
-                            ForwardIterator last,
-                            const T& val,
-                            StrictWeakOrdering comp)
-{
-  // wrap comp
-  thrust::detail::wrapped_function<
-    StrictWeakOrdering,
-    bool
-  > wrapped_comp(comp);
-
-  typedef typename thrust::iterator_difference<ForwardIterator>::type difference_type;
-
-  difference_type len = thrust::distance(first, last);
-
-  while(len > 0)
-  {
-    difference_type half = len >> 1;
-    ForwardIterator middle = first;
-
-    thrust::advance(middle, half);
-
-    if(wrapped_comp(*middle, val))
+    namespace system
     {
-      first = middle;
-      ++first;
-      len = len - half - 1;
-    }
-    else
-    {
-      len = half;
-    }
-  }
+        namespace detail
+        {
+            namespace sequential
+            {
 
-  return first;
-}
+                __thrust_exec_check_disable__ template <typename DerivedPolicy,
+                                                        typename ForwardIterator,
+                                                        typename T,
+                                                        typename StrictWeakOrdering>
+                __host__ __device__ ForwardIterator
+                                    lower_bound(sequential::execution_policy<DerivedPolicy>&,
+                                                ForwardIterator    first,
+                                                ForwardIterator    last,
+                                                const T&           val,
+                                                StrictWeakOrdering comp)
+                {
+                    // wrap comp
+                    thrust::detail::wrapped_function<StrictWeakOrdering, bool> wrapped_comp(comp);
 
+                    typedef
+                        typename thrust::iterator_difference<ForwardIterator>::type difference_type;
 
-__thrust_exec_check_disable__
-template<typename DerivedPolicy,
-         typename ForwardIterator,
-         typename T,
-         typename StrictWeakOrdering>
-__host__ __device__
-ForwardIterator upper_bound(sequential::execution_policy<DerivedPolicy> &,
-                            ForwardIterator first,
-                            ForwardIterator last,
-                            const T& val, 
-                            StrictWeakOrdering comp)
-{
-  // wrap comp
-  thrust::detail::wrapped_function<
-    StrictWeakOrdering,
-    bool
-  > wrapped_comp(comp);
+                    difference_type len = thrust::distance(first, last);
 
-  typedef typename thrust::iterator_difference<ForwardIterator>::type difference_type;
+                    while(len > 0)
+                    {
+                        difference_type half   = len >> 1;
+                        ForwardIterator middle = first;
 
-  difference_type len = thrust::distance(first, last);
+                        thrust::advance(middle, half);
 
-  while(len > 0)
-  {
-    difference_type half = len >> 1;
-    ForwardIterator middle = first;
+                        if(wrapped_comp(*middle, val))
+                        {
+                            first = middle;
+                            ++first;
+                            len = len - half - 1;
+                        }
+                        else
+                        {
+                            len = half;
+                        }
+                    }
 
-    thrust::advance(middle, half);
+                    return first;
+                }
 
-    if(wrapped_comp(val, *middle))
-    {
-      len = half;
-    }
-    else
-    {
-      first = middle;
-      ++first;
-      len = len - half - 1;
-    }
-  }
+                __thrust_exec_check_disable__ template <typename DerivedPolicy,
+                                                        typename ForwardIterator,
+                                                        typename T,
+                                                        typename StrictWeakOrdering>
+                __host__ __device__ ForwardIterator
+                                    upper_bound(sequential::execution_policy<DerivedPolicy>&,
+                                                ForwardIterator    first,
+                                                ForwardIterator    last,
+                                                const T&           val,
+                                                StrictWeakOrdering comp)
+                {
+                    // wrap comp
+                    thrust::detail::wrapped_function<StrictWeakOrdering, bool> wrapped_comp(comp);
 
-  return first;
-}
+                    typedef
+                        typename thrust::iterator_difference<ForwardIterator>::type difference_type;
 
+                    difference_type len = thrust::distance(first, last);
 
-__thrust_exec_check_disable__
-template<typename DerivedPolicy,
-         typename ForwardIterator,
-         typename T,
-         typename StrictWeakOrdering>
-__host__ __device__
-bool binary_search(sequential::execution_policy<DerivedPolicy> &exec,
-                   ForwardIterator first,
-                   ForwardIterator last,
-                   const T& val, 
-                   StrictWeakOrdering comp)
-{
-  ForwardIterator iter = sequential::lower_bound(exec, first, last, val, comp);
+                    while(len > 0)
+                    {
+                        difference_type half   = len >> 1;
+                        ForwardIterator middle = first;
 
-  // wrap comp
-  thrust::detail::wrapped_function<
-    StrictWeakOrdering,
-    bool
-  > wrapped_comp(comp);
+                        thrust::advance(middle, half);
 
-  return iter != last && !wrapped_comp(val,*iter);
-}
+                        if(wrapped_comp(val, *middle))
+                        {
+                            len = half;
+                        }
+                        else
+                        {
+                            first = middle;
+                            ++first;
+                            len = len - half - 1;
+                        }
+                    }
 
+                    return first;
+                }
 
-} // end namespace sequential
-} // end namespace detail
-} // end namespace system
+                __thrust_exec_check_disable__ template <typename DerivedPolicy,
+                                                        typename ForwardIterator,
+                                                        typename T,
+                                                        typename StrictWeakOrdering>
+                __host__ __device__ bool
+                         binary_search(sequential::execution_policy<DerivedPolicy>& exec,
+                                       ForwardIterator                              first,
+                                       ForwardIterator                              last,
+                                       const T&                                     val,
+                                       StrictWeakOrdering                           comp)
+                {
+                    ForwardIterator iter = sequential::lower_bound(exec, first, last, val, comp);
+
+                    // wrap comp
+                    thrust::detail::wrapped_function<StrictWeakOrdering, bool> wrapped_comp(comp);
+
+                    return iter != last && !wrapped_comp(val, *iter);
+                }
+
+            } // end namespace sequential
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
-

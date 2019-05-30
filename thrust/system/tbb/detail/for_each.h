@@ -21,34 +21,33 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace tbb
-{
-namespace detail
-{
+    namespace system
+    {
+        namespace tbb
+        {
+            namespace detail
+            {
 
-template<typename DerivedPolicy,
-         typename RandomAccessIterator,
-         typename UnaryFunction>
-  RandomAccessIterator for_each(execution_policy<DerivedPolicy> &exec,
-                                RandomAccessIterator first,
-                                RandomAccessIterator last,
-                                UnaryFunction f);
+                template <typename DerivedPolicy,
+                          typename RandomAccessIterator,
+                          typename UnaryFunction>
+                RandomAccessIterator for_each(execution_policy<DerivedPolicy>& exec,
+                                              RandomAccessIterator             first,
+                                              RandomAccessIterator             last,
+                                              UnaryFunction                    f);
 
-template<typename DerivedPolicy,
-         typename RandomAccessIterator,
-         typename Size,
-         typename UnaryFunction>
-  RandomAccessIterator for_each_n(execution_policy<DerivedPolicy> &exec,
-                                  RandomAccessIterator first,
-                                  Size n,
-                                  UnaryFunction f);
+                template <typename DerivedPolicy,
+                          typename RandomAccessIterator,
+                          typename Size,
+                          typename UnaryFunction>
+                RandomAccessIterator for_each_n(execution_policy<DerivedPolicy>& exec,
+                                                RandomAccessIterator             first,
+                                                Size                             n,
+                                                UnaryFunction                    f);
 
-} // end namespace detail
-} // end namespace tbb
-} // end namespace system
+            } // end namespace detail
+        } // end namespace tbb
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/tbb/detail/for_each.inl>
-

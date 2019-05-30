@@ -16,80 +16,67 @@
 
 #pragma once
 
-#include <thrust/detail/config.h>
 #include <limits>
-
+#include <thrust/detail/config.h>
 
 namespace thrust
 {
-namespace detail
-{
-
-
-template<typename Integer>
-__host__ __device__ __thrust_forceinline__
-Integer clz(Integer x)
-{
-  // XXX optimize by lowering to intrinsics
-  
-  int num_bits = 8 * sizeof(Integer);
-  int num_bits_minus_one = num_bits - 1;
-
-  for(int i = num_bits_minus_one; i >= 0; --i)
-  {
-    if((Integer(1) << i) & x)
+    namespace detail
     {
-      return num_bits_minus_one - i;
-    }
-  }
 
-  return num_bits;
-}
+        template <typename Integer>
+        __host__ __device__ __thrust_forceinline__ Integer clz(Integer x)
+        {
+            // XXX optimize by lowering to intrinsics
 
+            int num_bits           = 8 * sizeof(Integer);
+            int num_bits_minus_one = num_bits - 1;
 
-template<typename Integer>
-__host__ __device__ __thrust_forceinline__
-bool is_power_of_2(Integer x)
-{
-  return 0 == (x & (x - 1));
-}
+            for(int i = num_bits_minus_one; i >= 0; --i)
+            {
+                if((Integer(1) << i) & x)
+                {
+                    return num_bits_minus_one - i;
+                }
+            }
 
+            return num_bits;
+        }
 
-template<typename Integer>
-__host__ __device__ __thrust_forceinline__
-Integer log2(Integer x)
-{
-  Integer num_bits = 8 * sizeof(Integer);
-  Integer num_bits_minus_one = num_bits - 1;
+        template <typename Integer>
+        __host__ __device__ __thrust_forceinline__ bool is_power_of_2(Integer x)
+        {
+            return 0 == (x & (x - 1));
+        }
 
-  return num_bits_minus_one - clz(x);
-}
+        template <typename Integer>
+        __host__ __device__ __thrust_forceinline__ Integer log2(Integer x)
+        {
+            Integer num_bits           = 8 * sizeof(Integer);
+            Integer num_bits_minus_one = num_bits - 1;
 
+            return num_bits_minus_one - clz(x);
+        }
 
-template<typename Integer>
-__host__ __device__ __thrust_forceinline__
-Integer log2_ri(Integer x)
-{
-  Integer result = log2(x);
+        template <typename Integer>
+        __host__ __device__ __thrust_forceinline__ Integer log2_ri(Integer x)
+        {
+            Integer result = log2(x);
 
-  // this is where we round up to the nearest log
-  if(!is_power_of_2(x))
-  {
-    ++result;
-  }
+            // this is where we round up to the nearest log
+            if(!is_power_of_2(x))
+            {
+                ++result;
+            }
 
-  return result;
-}
+            return result;
+        }
 
+        template <typename Integer>
+        __host__ __device__ __thrust_forceinline__ bool is_odd(Integer x)
+        {
+            return 1 & x;
+        }
 
-template<typename Integer>
-__host__ __device__ __thrust_forceinline__
-bool is_odd(Integer x)
-{
-  return 1 & x;
-}
-
-
-} // end detail
+    } // end detail
 } // end thrust
-

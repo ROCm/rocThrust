@@ -27,60 +27,56 @@
 #pragma once
 
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
-#include <thrust/system/cuda/detail/util.h>
-#include <thrust/system/cuda/detail/parallel_for.h>
 #include <thrust/distance.h>
+#include <thrust/system/cuda/detail/parallel_for.h>
+#include <thrust/system/cuda/detail/util.h>
 
 BEGIN_NS_THRUST
-namespace cuda_cub {
+namespace cuda_cub
+{
 
-namespace __fill {
-
-  // fill functor
-  template<class Iterator, class T>
-  struct functor
-  {
-    Iterator it;
-    T value;
-
-    THRUST_FUNCTION
-    functor(Iterator it, T value)
-        : it(it), value(value) {}
-
-    template<class Size>
-    THRUST_DEVICE_FUNCTION void operator()(Size idx)
+    namespace __fill
     {
-      it[idx] = value;
-    }
-  }; // struct functor
 
-}    // namespace __fill
+        // fill functor
+        template <class Iterator, class T>
+        struct functor
+        {
+            Iterator it;
+            T        value;
 
-template <class Derived, class OutputIterator, class Size, class T>
-OutputIterator __host__ __device__
-fill_n(execution_policy<Derived>& policy,
-       OutputIterator             first,
-       Size                       count,
-       const T&                   value)
-{
-  cuda_cub::parallel_for(policy,
-                         __fill::functor<OutputIterator, T>(
-                             first,
-                             value),
-                         count);
-  return first + count;
-}    // func fill_n
+            THRUST_FUNCTION
+            functor(Iterator it, T value)
+                : it(it)
+                , value(value)
+            {
+            }
 
-template <class Derived, class ForwardIterator, class T>
-void __host__ __device__
-fill(execution_policy<Derived>& policy,
-     ForwardIterator            first,
-     ForwardIterator            last,
-     const T&                   value)
-{
-  cuda_cub::fill_n(policy, first, thrust::distance(first,last), value);
-} // func filll
+            template <class Size>
+            THRUST_DEVICE_FUNCTION void operator()(Size idx)
+            {
+                it[idx] = value;
+            }
+        }; // struct functor
 
+    } // namespace __fill
+
+    template <class Derived, class OutputIterator, class Size, class T>
+    OutputIterator __host__ __device__
+                            fill_n(execution_policy<Derived>& policy, OutputIterator first, Size count, const T& value)
+    {
+        cuda_cub::parallel_for(policy, __fill::functor<OutputIterator, T>(first, value), count);
+        return first + count;
+    } // func fill_n
+
+    template <class Derived, class ForwardIterator, class T>
+    void __host__ __device__ fill(execution_policy<Derived>& policy,
+                                  ForwardIterator            first,
+                                  ForwardIterator            last,
+                                  const T&                   value)
+    {
+        cuda_cub::fill_n(policy, first, thrust::distance(first, last), value);
+    } // func filll
 
 } // namespace cuda_cub
 END_NS_THRUST

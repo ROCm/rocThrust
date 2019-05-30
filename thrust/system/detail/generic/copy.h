@@ -21,39 +21,33 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
+                template <typename DerivedPolicy, typename InputIterator, typename OutputIterator>
+                __host__ __device__ OutputIterator
+                                    copy(thrust::execution_policy<DerivedPolicy>& exec,
+                                         InputIterator                            first,
+                                         InputIterator                            last,
+                                         OutputIterator                           result);
 
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator>
-__host__ __device__
-  OutputIterator copy(thrust::execution_policy<DerivedPolicy> &exec,
-                      InputIterator  first,
-                      InputIterator  last,
-                      OutputIterator result);
+                template <typename DerivedPolicy,
+                          typename InputIterator,
+                          typename Size,
+                          typename OutputIterator>
+                __host__ __device__ OutputIterator
+                                    copy_n(thrust::execution_policy<DerivedPolicy>& exec,
+                                           InputIterator                            first,
+                                           Size                                     n,
+                                           OutputIterator                           result);
 
-
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename Size,
-         typename OutputIterator>
-__host__ __device__
-  OutputIterator copy_n(thrust::execution_policy<DerivedPolicy> &exec,
-                        InputIterator  first,
-                        Size           n,
-                        OutputIterator result);
-
-
-} // end generic
-} // end detail
-} // end system
+            } // end generic
+        } // end detail
+    } // end system
 } // end thrust
 
 #include <thrust/system/detail/generic/copy.inl>
-

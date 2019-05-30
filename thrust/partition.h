@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file partition.h
  *  \brief Reorganizes a range based on a predicate
  */
@@ -28,8 +27,7 @@
 namespace thrust
 {
 
-
-/*! \addtogroup reordering
+    /*! \addtogroup reordering
  *  \ingroup algorithms
  *
  *  \addtogroup partitioning
@@ -37,8 +35,7 @@ namespace thrust
  *  \{
  */
 
-
-/*! \p partition reorders the elements <tt>[first, last)</tt> based on the function
+    /*! \p partition reorders the elements <tt>[first, last)</tt> based on the function
  *  object \p pred, such that all of the elements that satisfy \p pred precede the
  *  elements that fail to satisfy it. The postcondition is that, for some iterator
  *  \c middle in the range <tt>[first, last)</tt>, <tt>pred(*i)</tt> is \c true for every
@@ -94,17 +91,14 @@ namespace thrust
  *  \see \p stable_partition
  *  \see \p partition_copy
  */
-template<typename DerivedPolicy,
-         typename ForwardIterator,
-         typename Predicate>
-__host__ __device__
-  ForwardIterator partition(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                            ForwardIterator first,
-                            ForwardIterator last,
-                            Predicate pred);
+    template <typename DerivedPolicy, typename ForwardIterator, typename Predicate>
+    __host__ __device__ ForwardIterator
+                        partition(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                  ForwardIterator                                             first,
+                                  ForwardIterator                                             last,
+                                  Predicate                                                   pred);
 
-
-/*! \p partition reorders the elements <tt>[first, last)</tt> based on the function
+    /*! \p partition reorders the elements <tt>[first, last)</tt> based on the function
  *  object \p pred, such that all of the elements that satisfy \p pred precede the
  *  elements that fail to satisfy it. The postcondition is that, for some iterator
  *  \c middle in the range <tt>[first, last)</tt>, <tt>pred(*i)</tt> is \c true for every
@@ -154,14 +148,10 @@ __host__ __device__
  *  \see \p stable_partition
  *  \see \p partition_copy
  */
-template<typename ForwardIterator,
-         typename Predicate>
-  ForwardIterator partition(ForwardIterator first,
-                            ForwardIterator last,
-                            Predicate pred);
+    template <typename ForwardIterator, typename Predicate>
+    ForwardIterator partition(ForwardIterator first, ForwardIterator last, Predicate pred);
 
-
-/*! \p partition reorders the elements <tt>[first, last)</tt> based on the function
+    /*! \p partition reorders the elements <tt>[first, last)</tt> based on the function
  *  object \p pred applied to a stencil range <tt>[stencil, stencil + (last - first))</tt>,
  *  such that all of the elements whose corresponding stencil element satisfies \p pred precede all of the elements whose
  *  corresponding stencil element fails to satisfy it. The postcondition is that, for some iterator
@@ -222,19 +212,18 @@ template<typename ForwardIterator,
  *  \see \p stable_partition
  *  \see \p partition_copy
  */
-template<typename DerivedPolicy,
-         typename ForwardIterator,
-         typename InputIterator,
-         typename Predicate>
-__host__ __device__
-  ForwardIterator partition(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                            ForwardIterator first,
-                            ForwardIterator last,
-                            InputIterator stencil,
-                            Predicate pred);
+    template <typename DerivedPolicy,
+              typename ForwardIterator,
+              typename InputIterator,
+              typename Predicate>
+    __host__ __device__ ForwardIterator
+                        partition(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                  ForwardIterator                                             first,
+                                  ForwardIterator                                             last,
+                                  InputIterator                                               stencil,
+                                  Predicate                                                   pred);
 
-
-/*! \p partition reorders the elements <tt>[first, last)</tt> based on the function
+    /*! \p partition reorders the elements <tt>[first, last)</tt> based on the function
  *  object \p pred applied to a stencil range <tt>[stencil, stencil + (last - first))</tt>,
  *  such that all of the elements whose corresponding stencil element satisfies \p pred precede all of the elements whose
  *  corresponding stencil element fails to satisfy it. The postcondition is that, for some iterator
@@ -290,16 +279,13 @@ __host__ __device__
  *  \see \p stable_partition
  *  \see \p partition_copy
  */
-template<typename ForwardIterator,
-         typename InputIterator,
-         typename Predicate>
-  ForwardIterator partition(ForwardIterator first,
-                            ForwardIterator last,
-                            InputIterator stencil,
-                            Predicate pred);
+    template <typename ForwardIterator, typename InputIterator, typename Predicate>
+    ForwardIterator partition(ForwardIterator first,
+                              ForwardIterator last,
+                              InputIterator   stencil,
+                              Predicate       pred);
 
-
-/*! \p partition_copy differs from \ref partition only in that the reordered
+    /*! \p partition_copy differs from \ref partition only in that the reordered
  *  sequence is written to difference output sequences, rather than in place.
  *
  *  \p partition_copy copies the elements <tt>[first, last)</tt> based on the
@@ -366,22 +352,20 @@ template<typename ForwardIterator,
  *  \see \p stable_partition_copy
  *  \see \p partition
  */
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename Predicate>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-    partition_copy(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                   InputIterator first,
-                   InputIterator last,
-                   OutputIterator1 out_true,
-                   OutputIterator2 out_false,
-                   Predicate pred);
+    template <typename DerivedPolicy,
+              typename InputIterator,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename Predicate>
+    __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                        partition_copy(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                       InputIterator                                               first,
+                                       InputIterator                                               last,
+                                       OutputIterator1                                             out_true,
+                                       OutputIterator2                                             out_false,
+                                       Predicate                                                   pred);
 
-
-/*! \p partition_copy differs from \ref partition only in that the reordered
+    /*! \p partition_copy differs from \ref partition only in that the reordered
  *  sequence is written to difference output sequences, rather than in place.
  *
  *  \p partition_copy copies the elements <tt>[first, last)</tt> based on the
@@ -443,19 +427,17 @@ __host__ __device__
  *  \see \p stable_partition_copy
  *  \see \p partition
  */
-template<typename InputIterator,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename Predicate>
-  thrust::pair<OutputIterator1,OutputIterator2>
-    partition_copy(InputIterator first,
-                   InputIterator last,
-                   OutputIterator1 out_true,
-                   OutputIterator2 out_false,
-                   Predicate pred);
+    template <typename InputIterator,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename Predicate>
+    thrust::pair<OutputIterator1, OutputIterator2> partition_copy(InputIterator   first,
+                                                                  InputIterator   last,
+                                                                  OutputIterator1 out_true,
+                                                                  OutputIterator2 out_false,
+                                                                  Predicate       pred);
 
-
-/*! \p partition_copy differs from \ref partition only in that the reordered
+    /*! \p partition_copy differs from \ref partition only in that the reordered
  *  sequence is written to difference output sequences, rather than in place.
  *
  *  \p partition_copy copies the elements <tt>[first, last)</tt> based on the
@@ -520,24 +502,22 @@ template<typename InputIterator,
  *  \see \p stable_partition_copy
  *  \see \p partition
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename Predicate>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-    partition_copy(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                   InputIterator1 first,
-                   InputIterator1 last,
-                   InputIterator2 stencil,
-                   OutputIterator1 out_true,
-                   OutputIterator2 out_false,
-                   Predicate pred);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename Predicate>
+    __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                        partition_copy(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                       InputIterator1                                              first,
+                                       InputIterator1                                              last,
+                                       InputIterator2                                              stencil,
+                                       OutputIterator1                                             out_true,
+                                       OutputIterator2                                             out_false,
+                                       Predicate                                                   pred);
 
-
-/*! \p partition_copy differs from \ref partition only in that the reordered
+    /*! \p partition_copy differs from \ref partition only in that the reordered
  *  sequence is written to difference output sequences, rather than in place.
  *
  *  \p partition_copy copies the elements <tt>[first, last)</tt> based on the
@@ -596,21 +576,19 @@ __host__ __device__
  *  \see \p stable_partition_copy
  *  \see \p partition
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename Predicate>
-  thrust::pair<OutputIterator1,OutputIterator2>
-    partition_copy(InputIterator1 first,
-                   InputIterator1 last,
-                   InputIterator2 stencil,
-                   OutputIterator1 out_true,
-                   OutputIterator2 out_false,
-                   Predicate pred);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename Predicate>
+    thrust::pair<OutputIterator1, OutputIterator2> partition_copy(InputIterator1  first,
+                                                                  InputIterator1  last,
+                                                                  InputIterator2  stencil,
+                                                                  OutputIterator1 out_true,
+                                                                  OutputIterator2 out_false,
+                                                                  Predicate       pred);
 
-
-/*! \p stable_partition is much like \ref partition : it reorders the elements in the
+    /*! \p stable_partition is much like \ref partition : it reorders the elements in the
  *  range <tt>[first, last)</tt> based on the function object \p pred, such that all of
  *  the elements that satisfy \p pred precede all of the elements that fail to satisfy
  *  it. The postcondition is that, for some iterator \p middle in the range
@@ -669,17 +647,14 @@ template<typename InputIterator1,
  *  \see \p partition
  *  \see \p stable_partition_copy
  */
-template<typename DerivedPolicy,
-         typename ForwardIterator,
-         typename Predicate>
-__host__ __device__
-  ForwardIterator stable_partition(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                   ForwardIterator first,
-                                   ForwardIterator last,
-                                   Predicate pred);
+    template <typename DerivedPolicy, typename ForwardIterator, typename Predicate>
+    __host__ __device__ ForwardIterator
+                        stable_partition(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                         ForwardIterator                                             first,
+                                         ForwardIterator                                             last,
+                                         Predicate                                                   pred);
 
-
-/*! \p stable_partition is much like \ref partition : it reorders the elements in the
+    /*! \p stable_partition is much like \ref partition : it reorders the elements in the
  *  range <tt>[first, last)</tt> based on the function object \p pred, such that all of
  *  the elements that satisfy \p pred precede all of the elements that fail to satisfy
  *  it. The postcondition is that, for some iterator \p middle in the range
@@ -732,14 +707,10 @@ __host__ __device__
  *  \see \p partition
  *  \see \p stable_partition_copy
  */
-template<typename ForwardIterator,
-         typename Predicate>
-  ForwardIterator stable_partition(ForwardIterator first,
-                                   ForwardIterator last,
-                                   Predicate pred);
+    template <typename ForwardIterator, typename Predicate>
+    ForwardIterator stable_partition(ForwardIterator first, ForwardIterator last, Predicate pred);
 
-
-/*! \p stable_partition is much like \p partition: it reorders the elements in the
+    /*! \p stable_partition is much like \p partition: it reorders the elements in the
  *  range <tt>[first, last)</tt> based on the function object \p pred applied to a stencil
  *  range <tt>[stencil, stencil + (last - first))</tt>, such that all of
  *  the elements whose corresponding stencil element satisfies \p pred precede all of the elements whose
@@ -802,19 +773,18 @@ template<typename ForwardIterator,
  *  \see \p partition
  *  \see \p stable_partition_copy
  */
-template<typename DerivedPolicy,
-         typename ForwardIterator,
-         typename InputIterator,
-         typename Predicate>
-__host__ __device__
-  ForwardIterator stable_partition(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                   ForwardIterator first,
-                                   ForwardIterator last,
-                                   InputIterator stencil,
-                                   Predicate pred);
+    template <typename DerivedPolicy,
+              typename ForwardIterator,
+              typename InputIterator,
+              typename Predicate>
+    __host__ __device__ ForwardIterator
+                        stable_partition(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                         ForwardIterator                                             first,
+                                         ForwardIterator                                             last,
+                                         InputIterator                                               stencil,
+                                         Predicate                                                   pred);
 
-
-/*! \p stable_partition is much like \p partition: it reorders the elements in the
+    /*! \p stable_partition is much like \p partition: it reorders the elements in the
  *  range <tt>[first, last)</tt> based on the function object \p pred applied to a stencil
  *  range <tt>[stencil, stencil + (last - first))</tt>, such that all of
  *  the elements whose corresponding stencil element satisfies \p pred precede all of the elements whose
@@ -872,16 +842,13 @@ __host__ __device__
  *  \see \p partition
  *  \see \p stable_partition_copy
  */
-template<typename ForwardIterator,
-         typename InputIterator,
-         typename Predicate>
-  ForwardIterator stable_partition(ForwardIterator first,
-                                   ForwardIterator last,
-                                   InputIterator stencil,
-                                   Predicate pred);
+    template <typename ForwardIterator, typename InputIterator, typename Predicate>
+    ForwardIterator stable_partition(ForwardIterator first,
+                                     ForwardIterator last,
+                                     InputIterator   stencil,
+                                     Predicate       pred);
 
-
-/*! \p stable_partition_copy differs from \ref stable_partition only in that the reordered
+    /*! \p stable_partition_copy differs from \ref stable_partition only in that the reordered
  *  sequence is written to different output sequences, rather than in place.
  *
  *  \p stable_partition_copy copies the elements <tt>[first, last)</tt> based on the
@@ -950,22 +917,20 @@ template<typename ForwardIterator,
  *  \see \p partition_copy
  *  \see \p stable_partition
  */
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename Predicate>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-    stable_partition_copy(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                          InputIterator first,
-                          InputIterator last,
-                          OutputIterator1 out_true,
-                          OutputIterator2 out_false,
-                          Predicate pred);
+    template <typename DerivedPolicy,
+              typename InputIterator,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename Predicate>
+    __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                        stable_partition_copy(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                              InputIterator                                               first,
+                                              InputIterator                                               last,
+                                              OutputIterator1                                             out_true,
+                                              OutputIterator2                                             out_false,
+                                              Predicate                                                   pred);
 
-
-/*! \p stable_partition_copy differs from \ref stable_partition only in that the reordered
+    /*! \p stable_partition_copy differs from \ref stable_partition only in that the reordered
  *  sequence is written to different output sequences, rather than in place.
  *
  *  \p stable_partition_copy copies the elements <tt>[first, last)</tt> based on the
@@ -1029,19 +994,17 @@ __host__ __device__
  *  \see \p partition_copy
  *  \see \p stable_partition
  */
-template<typename InputIterator,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename Predicate>
-  thrust::pair<OutputIterator1,OutputIterator2>
-    stable_partition_copy(InputIterator first,
-                          InputIterator last,
-                          OutputIterator1 out_true,
-                          OutputIterator2 out_false,
-                          Predicate pred);
+    template <typename InputIterator,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename Predicate>
+    thrust::pair<OutputIterator1, OutputIterator2> stable_partition_copy(InputIterator   first,
+                                                                         InputIterator   last,
+                                                                         OutputIterator1 out_true,
+                                                                         OutputIterator2 out_false,
+                                                                         Predicate       pred);
 
-
-/*! \p stable_partition_copy differs from \ref stable_partition only in that the reordered
+    /*! \p stable_partition_copy differs from \ref stable_partition only in that the reordered
  *  sequence is written to different output sequences, rather than in place.
  *
  *  \p stable_partition_copy copies the elements <tt>[first, last)</tt> based on the
@@ -1107,24 +1070,22 @@ template<typename InputIterator,
  *  \see \p partition_copy
  *  \see \p stable_partition
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename Predicate>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-    stable_partition_copy(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                          InputIterator1 first,
-                          InputIterator1 last,
-                          InputIterator2 stencil,
-                          OutputIterator1 out_true,
-                          OutputIterator2 out_false,
-                          Predicate pred);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename Predicate>
+    __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                        stable_partition_copy(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                              InputIterator1                                              first,
+                                              InputIterator1                                              last,
+                                              InputIterator2                                              stencil,
+                                              OutputIterator1                                             out_true,
+                                              OutputIterator2                                             out_false,
+                                              Predicate                                                   pred);
 
-
-/*! \p stable_partition_copy differs from \ref stable_partition only in that the reordered
+    /*! \p stable_partition_copy differs from \ref stable_partition only in that the reordered
  *  sequence is written to different output sequences, rather than in place.
  *
  *  \p stable_partition_copy copies the elements <tt>[first, last)</tt> based on the
@@ -1185,32 +1146,29 @@ __host__ __device__
  *  \see \p partition_copy
  *  \see \p stable_partition
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename Predicate>
-  thrust::pair<OutputIterator1,OutputIterator2>
-    stable_partition_copy(InputIterator1 first,
-                          InputIterator1 last,
-                          InputIterator2 stencil,
-                          OutputIterator1 out_true,
-                          OutputIterator2 out_false,
-                          Predicate pred);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename Predicate>
+    thrust::pair<OutputIterator1, OutputIterator2> stable_partition_copy(InputIterator1  first,
+                                                                         InputIterator1  last,
+                                                                         InputIterator2  stencil,
+                                                                         OutputIterator1 out_true,
+                                                                         OutputIterator2 out_false,
+                                                                         Predicate       pred);
 
-
-/*! \} // end stream_compaction
+    /*! \} // end stream_compaction
  */
 
-/*! \} // end reordering
+    /*! \} // end reordering
  */
 
-/*! \addtogroup searching
+    /*! \addtogroup searching
  *  \{
  */
 
-
-/*! \p partition_point returns an iterator pointing to the end of the true
+    /*! \p partition_point returns an iterator pointing to the end of the true
  *  partition of a partitioned range. \p partition_point requires the input range
  *  <tt>[first,last)</tt> to be a partition; that is, all elements which satisfy
  *  <tt>pred</tt> shall appear before those that do not.
@@ -1260,15 +1218,14 @@ template<typename InputIterator1,
  *  \see \p partition
  *  \see \p find_if_not
  */
-template<typename DerivedPolicy, typename ForwardIterator, typename Predicate>
-__host__ __device__
-  ForwardIterator partition_point(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                  ForwardIterator first,
-                                  ForwardIterator last,
-                                  Predicate pred);
+    template <typename DerivedPolicy, typename ForwardIterator, typename Predicate>
+    __host__ __device__ ForwardIterator
+                        partition_point(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                        ForwardIterator                                             first,
+                                        ForwardIterator                                             last,
+                                        Predicate                                                   pred);
 
-
-/*! \p partition_point returns an iterator pointing to the end of the true
+    /*! \p partition_point returns an iterator pointing to the end of the true
  *  partition of a partitioned range. \p partition_point requires the input range
  *  <tt>[first,last)</tt> to be a partition; that is, all elements which satisfy
  *  <tt>pred</tt> shall appear before those that do not.
@@ -1312,22 +1269,19 @@ __host__ __device__
  *  \see \p partition
  *  \see \p find_if_not
  */
-template<typename ForwardIterator, typename Predicate>
-  ForwardIterator partition_point(ForwardIterator first,
-                                  ForwardIterator last,
-                                  Predicate pred);
+    template <typename ForwardIterator, typename Predicate>
+    ForwardIterator partition_point(ForwardIterator first, ForwardIterator last, Predicate pred);
 
-/*! \} // searching
+    /*! \} // searching
  */
 
-/*! \addtogroup reductions
+    /*! \addtogroup reductions
  *  \{
  *  \addtogroup predicates
  *  \{
  */
 
-
-/*! \p is_partitioned returns \c true if the given range 
+    /*! \p is_partitioned returns \c true if the given range 
  *  is partitioned with respect to a predicate, and \c false otherwise.
  *
  *  Specifically, \p is_partitioned returns \c true if <tt>[first, last)</tt>
@@ -1373,15 +1327,14 @@ template<typename ForwardIterator, typename Predicate>
  *
  *  \see \p partition
  */
-template<typename DerivedPolicy, typename InputIterator, typename Predicate>
-__host__ __device__
-  bool is_partitioned(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                      InputIterator first,
-                      InputIterator last,
-                      Predicate pred);
+    template <typename DerivedPolicy, typename InputIterator, typename Predicate>
+    __host__ __device__ bool
+             is_partitioned(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                            InputIterator                                               first,
+                            InputIterator                                               last,
+                            Predicate                                                   pred);
 
-
-/*! \p is_partitioned returns \c true if the given range 
+    /*! \p is_partitioned returns \c true if the given range 
  *  is partitioned with respect to a predicate, and \c false otherwise.
  *
  *  Specifically, \p is_partitioned returns \c true if <tt>[first, last)</tt>
@@ -1422,18 +1375,13 @@ __host__ __device__
  *
  *  \see \p partition
  */
-template<typename InputIterator, typename Predicate>
-  bool is_partitioned(InputIterator first,
-                      InputIterator last,
-                      Predicate pred);
+    template <typename InputIterator, typename Predicate>
+    bool is_partitioned(InputIterator first, InputIterator last, Predicate pred);
 
-
-/*! \} // end predicates
+    /*! \} // end predicates
  *  \} // end reductions
  */
-
 
 } // end thrust
 
 #include <thrust/detail/partition.inl>
-

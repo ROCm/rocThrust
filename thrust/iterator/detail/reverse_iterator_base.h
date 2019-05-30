@@ -22,21 +22,20 @@
 namespace thrust
 {
 
-template <typename> class reverse_iterator;
+    template <typename>
+    class reverse_iterator;
 
-namespace detail
-{
+    namespace detail
+    {
 
-template<typename BidirectionalIterator>
-  struct reverse_iterator_base
-{
-  typedef thrust::iterator_adaptor<
-    thrust::reverse_iterator<BidirectionalIterator>,
-    BidirectionalIterator
-  > type;
-}; // end reverse_iterator_base
+        template <typename BidirectionalIterator>
+        struct reverse_iterator_base
+        {
+            typedef thrust::iterator_adaptor<thrust::reverse_iterator<BidirectionalIterator>,
+                                             BidirectionalIterator>
+                type;
+        }; // end reverse_iterator_base
 
-} // end detail
+    } // end detail
 
 } // end thrust
-

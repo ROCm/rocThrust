@@ -16,117 +16,110 @@
 
 #pragma once
 
-#include <thrust/detail/config.h>
-#include <limits>
 #include <limits.h>
+#include <limits>
+#include <thrust/detail/config.h>
 
 namespace thrust
 {
 
-namespace detail
-{
+    namespace detail
+    {
 
-template<typename T>
-  class integer_traits
-{
-  public:
-    static const bool is_integral = false;
-};
+        template <typename T>
+        class integer_traits
+        {
+        public:
+            static const bool is_integral = false;
+        };
 
-template<typename T, T min_val, T max_val>
-  class integer_traits_base
-{
-  public:
-    static const bool is_integral = true;
-    static const T const_min = min_val;
-    static const T const_max = max_val;
-};
+        template <typename T, T min_val, T max_val>
+        class integer_traits_base
+        {
+        public:
+            static const bool is_integral = true;
+            static const T    const_min   = min_val;
+            static const T    const_max   = max_val;
+        };
 
+        template <>
+        class integer_traits<bool> : public std::numeric_limits<bool>,
+                                     public integer_traits_base<bool, false, true>
+        {
+        };
 
-template<>
-  class integer_traits<bool>
-    : public std::numeric_limits<bool>,
-      public integer_traits_base<bool, false, true>
-{};
+        template <>
+        class integer_traits<char> : public std::numeric_limits<char>,
+                                     public integer_traits_base<char, CHAR_MIN, CHAR_MAX>
+        {
+        };
 
+        template <>
+        class integer_traits<signed char>
+            : public std::numeric_limits<signed char>,
+              public integer_traits_base<signed char, SCHAR_MIN, SCHAR_MAX>
+        {
+        };
 
-template<>
-  class integer_traits<char>
-    : public std::numeric_limits<char>,
-      public integer_traits_base<char, CHAR_MIN, CHAR_MAX>
-{};
+        template <>
+        class integer_traits<unsigned char>
+            : public std::numeric_limits<unsigned char>,
+              public integer_traits_base<unsigned char, 0, UCHAR_MAX>
+        {
+        };
 
+        template <>
+        class integer_traits<short> : public std::numeric_limits<short>,
+                                      public integer_traits_base<short, SHRT_MIN, SHRT_MAX>
+        {
+        };
 
-template<>
-  class integer_traits<signed char>
-    : public std::numeric_limits<signed char>,
-      public integer_traits_base<signed char, SCHAR_MIN, SCHAR_MAX>
-{};
+        template <>
+        class integer_traits<unsigned short>
+            : public std::numeric_limits<unsigned short>,
+              public integer_traits_base<unsigned short, 0, USHRT_MAX>
+        {
+        };
 
+        template <>
+        class integer_traits<int> : public std::numeric_limits<int>,
+                                    public integer_traits_base<int, INT_MIN, INT_MAX>
+        {
+        };
 
-template<>
-  class integer_traits<unsigned char>
-    : public std::numeric_limits<unsigned char>,
-      public integer_traits_base<unsigned char, 0, UCHAR_MAX>
-{};
+        template <>
+        class integer_traits<unsigned int> : public std::numeric_limits<unsigned int>,
+                                             public integer_traits_base<unsigned int, 0, UINT_MAX>
+        {
+        };
 
+        template <>
+        class integer_traits<long> : public std::numeric_limits<long>,
+                                     public integer_traits_base<long, LONG_MIN, LONG_MAX>
+        {
+        };
 
-template<>
-  class integer_traits<short>
-    : public std::numeric_limits<short>,
-      public integer_traits_base<short, SHRT_MIN, SHRT_MAX>
-{};
+        template <>
+        class integer_traits<unsigned long>
+            : public std::numeric_limits<unsigned long>,
+              public integer_traits_base<unsigned long, 0, ULONG_MAX>
+        {
+        };
 
+        template <>
+        class integer_traits<long long>
+            : public std::numeric_limits<long long>,
+              public integer_traits_base<long long, LLONG_MIN, LLONG_MAX>
+        {
+        };
 
-template<>
-  class integer_traits<unsigned short>
-    : public std::numeric_limits<unsigned short>,
-      public integer_traits_base<unsigned short, 0, USHRT_MAX>
-{};
+        template <>
+        class integer_traits<unsigned long long>
+            : public std::numeric_limits<unsigned long long>,
+              public integer_traits_base<unsigned long long, 0, ULLONG_MAX>
+        {
+        };
 
-
-template<>
-  class integer_traits<int>
-    : public std::numeric_limits<int>,
-      public integer_traits_base<int, INT_MIN, INT_MAX>
-{};
-
-
-template<>
-  class integer_traits<unsigned int>
-    : public std::numeric_limits<unsigned int>,
-      public integer_traits_base<unsigned int, 0, UINT_MAX>
-{};
-
-
-template<>
-  class integer_traits<long>
-    : public std::numeric_limits<long>,
-      public integer_traits_base<long, LONG_MIN, LONG_MAX>
-{};
-
-
-template<>
-  class integer_traits<unsigned long>
-    : public std::numeric_limits<unsigned long>,
-      public integer_traits_base<unsigned long, 0, ULONG_MAX>
-{};
-
-
-template<>
-  class integer_traits<long long>
-    : public std::numeric_limits<long long>,
-      public integer_traits_base<long long, LLONG_MIN, LLONG_MAX>
-{};
-
-
-template<>
-  class integer_traits<unsigned long long>
-    : public std::numeric_limits<unsigned long long>,
-      public integer_traits_base<unsigned long long, 0, ULLONG_MAX>
-{};
-
-} // end detail
+    } // end detail
 
 } // end thrust
-

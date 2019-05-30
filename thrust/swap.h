@@ -30,15 +30,15 @@
 namespace thrust
 {
 
-/*! \addtogroup utility
+    /*! \addtogroup utility
  *  \{
  */
 
-/*! \addtogroup swap
+    /*! \addtogroup swap
  *  \{
  */
 
-/*! \p swap assigns the contents of \c a to \c b and the
+    /*! \p swap assigns the contents of \c a to \c b and the
  *  contents of \c b to \c a. This is used as a primitive operation
  *  by many other algorithms.
  *  
@@ -62,23 +62,20 @@ namespace thrust
  *  // x == 2, y == 1
  *  \endcode
  */
-template<typename Assignable1, typename Assignable2>
-__host__ __device__ 
-inline void swap(Assignable1 &a, Assignable2 &b);
+    template <typename Assignable1, typename Assignable2>
+    __host__ __device__ inline void swap(Assignable1& a, Assignable2& b);
 
-/*! \} // swap
+    /*! \} // swap
  */
 
-/*! \} // utility
+    /*! \} // utility
  */
 
-
-/*! \addtogroup copying
+    /*! \addtogroup copying
  *  \{
  */
 
-
-/*! \p swap_ranges swaps each of the elements in the range <tt>[first1, last1)</tt>
+    /*! \p swap_ranges swaps each of the elements in the range <tt>[first1, last1)</tt>
  *  with the corresponding element in the range <tt>[first2, first2 + (last1 - first1))</tt>.
  *  That is, for each integer \c n such that <tt>0 <= n < (last1 - first1)</tt>, it swaps
  *  <tt>*(first1 + n)</tt> and <tt>*(first2 + n)</tt>. The return value is
@@ -124,17 +121,14 @@ inline void swap(Assignable1 &a, Assignable2 &b);
  *  \see http://www.sgi.com/tech/stl/swap_ranges.html
  *  \see \c swap
  */
-template<typename DerivedPolicy,
-         typename ForwardIterator1,
-         typename ForwardIterator2>
-__host__ __device__
-  ForwardIterator2 swap_ranges(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                               ForwardIterator1 first1,
-                               ForwardIterator1 last1,
-                               ForwardIterator2 first2);
+    template <typename DerivedPolicy, typename ForwardIterator1, typename ForwardIterator2>
+    __host__ __device__ ForwardIterator2
+                        swap_ranges(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    ForwardIterator1                                            first1,
+                                    ForwardIterator1                                            last1,
+                                    ForwardIterator2                                            first2);
 
-
-/*! \p swap_ranges swaps each of the elements in the range <tt>[first1, last1)</tt>
+    /*! \p swap_ranges swaps each of the elements in the range <tt>[first1, last1)</tt>
  *  with the corresponding element in the range <tt>[first2, first2 + (last1 - first1))</tt>.
  *  That is, for each integer \c n such that <tt>0 <= n < (last1 - first1)</tt>, it swaps
  *  <tt>*(first1 + n)</tt> and <tt>*(first2 + n)</tt>. The return value is
@@ -174,18 +168,13 @@ __host__ __device__
  *  \see http://www.sgi.com/tech/stl/swap_ranges.html
  *  \see \c swap
  */
-template<typename ForwardIterator1,
-         typename ForwardIterator2>
-  ForwardIterator2 swap_ranges(ForwardIterator1 first1,
-                               ForwardIterator1 last1,
-                               ForwardIterator2 first2);
+    template <typename ForwardIterator1, typename ForwardIterator2>
+    ForwardIterator2
+        swap_ranges(ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterator2 first2);
 
-
-/*! \} // copying
+    /*! \} // copying
  */
-
 
 } // end thrust
 
 #include <thrust/detail/swap.inl>
-

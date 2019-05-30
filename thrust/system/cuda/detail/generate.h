@@ -26,64 +26,57 @@
  ******************************************************************************/
 #pragma once
 
-
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
 #include <iterator>
 #include <thrust/system/cuda/config.h>
 
-#include <thrust/system/cuda/detail/for_each.h>
 #include <thrust/distance.h>
+#include <thrust/system/cuda/detail/for_each.h>
 
 BEGIN_NS_THRUST
-namespace cuda_cub {
-
-// for_each functor
-template <class Generator>
-struct generate_f
+namespace cuda_cub
 {
-  Generator generator;
 
-  THRUST_FUNCTION
-  generate_f(Generator generator_) : generator(generator_) {}
+    // for_each functor
+    template <class Generator>
+    struct generate_f
+    {
+        Generator generator;
 
-  template<class T>
-  THRUST_DEVICE_FUNCTION void operator()(T const& value)
-  {
-    T & lvalue = const_cast<T&>(value);
-    lvalue = generator();
-  }
-};
+        THRUST_FUNCTION
+        generate_f(Generator generator_)
+            : generator(generator_)
+        {
+        }
 
-// for_each_n
-template <class Derived,
-          class OutputIt,
-          class Size,
-          class Generator>
-OutputIt __host__ __device__
-generate_n(execution_policy<Derived> &policy,
-           OutputIt                   result,
-           Size                       count,
-           Generator                  generator)
-{
-  return cuda_cub::for_each_n(policy,
-                              result,
-                              count,
-                              generate_f<Generator>(generator));
-}
+        template <class T>
+        THRUST_DEVICE_FUNCTION void operator()(T const& value)
+        {
+            T& lvalue = const_cast<T&>(value);
+            lvalue    = generator();
+        }
+    };
 
-  // for_each
-template <class Derived,
-          class OutputIt,
-          class Generator>
-void __host__ __device__
-generate(execution_policy<Derived> &policy,
-         OutputIt                   first,
-         OutputIt                   last,
-         Generator                  generator)
-{
-  cuda_cub::generate_n(policy, first, thrust::distance(first, last), generator);
-}
+    // for_each_n
+    template <class Derived, class OutputIt, class Size, class Generator>
+    OutputIt __host__ __device__ generate_n(execution_policy<Derived>& policy,
+                                            OutputIt                   result,
+                                            Size                       count,
+                                            Generator                  generator)
+    {
+        return cuda_cub::for_each_n(policy, result, count, generate_f<Generator>(generator));
+    }
 
-}    // namespace cuda_cub
+    // for_each
+    template <class Derived, class OutputIt, class Generator>
+    void __host__ __device__ generate(execution_policy<Derived>& policy,
+                                      OutputIt                   first,
+                                      OutputIt                   last,
+                                      Generator                  generator)
+    {
+        cuda_cub::generate_n(policy, first, thrust::distance(first, last), generator);
+    }
+
+} // namespace cuda_cub
 END_NS_THRUST
 #endif

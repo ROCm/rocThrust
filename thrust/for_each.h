@@ -13,7 +13,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file for_each.h
  *  \brief Applies a function to each element in a range
  */
@@ -21,20 +20,18 @@
 #pragma once
 
 #include <thrust/detail/config.h>
-#include <thrust/detail/type_traits.h>
 #include <thrust/detail/execution_policy.h>
+#include <thrust/detail/type_traits.h>
 
 namespace thrust
 {
 
-
-/*! \addtogroup modifying
+    /*! \addtogroup modifying
  *  \ingroup transformations
  *  \{
  */
 
-
-/*! \p for_each applies the function object \p f to each element
+    /*! \p for_each applies the function object \p f to each element
  *  in the range <tt>[first, last)</tt>; \p f's return value, if any,
  *  is ignored. Unlike the C++ Standard Template Library function
  *  <tt>std::for_each</tt>, this version offers no guarantee on
@@ -88,17 +85,14 @@ namespace thrust
  *  \see for_each_n
  *  \see http://www.sgi.com/tech/stl/for_each.html
  */
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename UnaryFunction>
-__host__ __device__
-InputIterator for_each(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                       InputIterator first,
-                       InputIterator last,
-                       UnaryFunction f);
+    template <typename DerivedPolicy, typename InputIterator, typename UnaryFunction>
+    __host__ __device__ InputIterator
+                        for_each(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                 InputIterator                                               first,
+                                 InputIterator                                               last,
+                                 UnaryFunction                                               f);
 
-
-/*! \p for_each_n applies the function object \p f to each element
+    /*! \p for_each_n applies the function object \p f to each element
  *  in the range <tt>[first, first + n)</tt>; \p f's return value, if any,
  *  is ignored. Unlike the C++ Standard Template Library function
  *  <tt>std::for_each</tt>, this version offers no guarantee on
@@ -151,17 +145,14 @@ InputIterator for_each(const thrust::detail::execution_policy_base<DerivedPolicy
  *  \see for_each
  *  \see http://www.sgi.com/tech/stl/for_each.html
  */
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename Size,
-         typename UnaryFunction>
-__host__ __device__
-InputIterator for_each_n(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                         InputIterator first,
-                         Size n,
-                         UnaryFunction f);
+    template <typename DerivedPolicy, typename InputIterator, typename Size, typename UnaryFunction>
+    __host__ __device__ InputIterator
+                        for_each_n(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                   InputIterator                                               first,
+                                   Size                                                        n,
+                                   UnaryFunction                                               f);
 
-/*! \p for_each applies the function object \p f to each element
+    /*! \p for_each applies the function object \p f to each element
  *  in the range <tt>[first, last)</tt>; \p f's return value, if any,
  *  is ignored. Unlike the C++ Standard Template Library function
  *  <tt>std::for_each</tt>, this version offers no guarantee on
@@ -209,14 +200,10 @@ InputIterator for_each_n(const thrust::detail::execution_policy_base<DerivedPoli
  *  \see for_each_n
  *  \see http://www.sgi.com/tech/stl/for_each.html
  */
-template<typename InputIterator,
-         typename UnaryFunction>
-InputIterator for_each(InputIterator first,
-                       InputIterator last,
-                       UnaryFunction f);
+    template <typename InputIterator, typename UnaryFunction>
+    InputIterator for_each(InputIterator first, InputIterator last, UnaryFunction f);
 
-
-/*! \p for_each_n applies the function object \p f to each element
+    /*! \p for_each_n applies the function object \p f to each element
  *  in the range <tt>[first, first + n)</tt>; \p f's return value, if any,
  *  is ignored. Unlike the C++ Standard Template Library function
  *  <tt>std::for_each</tt>, this version offers no guarantee on
@@ -264,17 +251,12 @@ InputIterator for_each(InputIterator first,
  *  \see for_each
  *  \see http://www.sgi.com/tech/stl/for_each.html
  */
-template<typename InputIterator,
-         typename Size,
-         typename UnaryFunction>
-InputIterator for_each_n(InputIterator first,
-                         Size n,
-                         UnaryFunction f);
+    template <typename InputIterator, typename Size, typename UnaryFunction>
+    InputIterator for_each_n(InputIterator first, Size n, UnaryFunction f);
 
-/*! \} // end modifying
+    /*! \} // end modifying
  */
 
 } // end namespace thrust
 
 #include <thrust/detail/for_each.inl>
-

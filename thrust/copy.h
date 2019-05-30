@@ -15,7 +15,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file copy.h
  *  \brief Copies elements from one range to another
  */
@@ -28,16 +27,15 @@
 namespace thrust
 {
 
-/*! \addtogroup algorithms
+    /*! \addtogroup algorithms
  */
 
-/*! \addtogroup copying
+    /*! \addtogroup copying
  *  \ingroup algorithms
  *  \{
  */
 
-
-/*! \p copy copies elements from the range [\p first, \p last) to the range
+    /*! \p copy copies elements from the range [\p first, \p last) to the range
  *  [\p result, \p result + (\p last - \p first)). That is, it performs
  *  the assignments *\p result = *\p first, *(\p result + \c 1) = *(\p first + \c 1),
  *  and so on. Generally, for every integer \c n from \c 0 to \p last - \p first, \p copy
@@ -81,15 +79,14 @@ namespace thrust
  *  // vec1 is now a copy of vec0
  *  \endcode
  */
-template<typename DerivedPolicy, typename InputIterator, typename OutputIterator>
-__host__ __device__
-  OutputIterator copy(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                      InputIterator first,
-                      InputIterator last,
-                      OutputIterator result);
+    template <typename DerivedPolicy, typename InputIterator, typename OutputIterator>
+    __host__ __device__ OutputIterator
+                        copy(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                             InputIterator                                               first,
+                             InputIterator                                               last,
+                             OutputIterator                                              result);
 
-
-/*! \p copy_n copies elements from the range <tt>[first, first + n)</tt> to the range
+    /*! \p copy_n copies elements from the range <tt>[first, first + n)</tt> to the range
  *  <tt>[result, result + n)</tt>. That is, it performs the assignments <tt>*result = *first, *(result + 1) = *(first + 1)</tt>,
  *  and so on. Generally, for every integer \c i from \c 0 to \c n, \p copy
  *  performs the assignment *(\p result + \c i) = *(\p first + \c i). Unlike
@@ -134,16 +131,17 @@ __host__ __device__
  *  \see http://www.sgi.com/tech/stl/copy_n.html
  *  \see thrust::copy
  */
-template<typename DerivedPolicy, typename InputIterator, typename Size, typename OutputIterator>
-__host__ __device__
-  OutputIterator copy_n(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                        InputIterator first,
-                        Size n,
-                        OutputIterator result);
+    template <typename DerivedPolicy,
+              typename InputIterator,
+              typename Size,
+              typename OutputIterator>
+    __host__ __device__ OutputIterator
+                        copy_n(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                               InputIterator                                               first,
+                               Size                                                        n,
+                               OutputIterator                                              result);
 
-
-
-/*! \p copy copies elements from the range [\p first, \p last) to the range
+    /*! \p copy copies elements from the range [\p first, \p last) to the range
  *  [\p result, \p result + (\p last - \p first)). That is, it performs
  *  the assignments *\p result = *\p first, *(\p result + \c 1) = *(\p first + \c 1),
  *  and so on. Generally, for every integer \c n from \c 0 to \p last - \p first, \p copy
@@ -183,12 +181,10 @@ __host__ __device__
  *  // vec1 is now a copy of vec0
  *  \endcode
  */
-template<typename InputIterator, typename OutputIterator>
-  OutputIterator copy(InputIterator first,
-                      InputIterator last,
-                      OutputIterator result);
+    template <typename InputIterator, typename OutputIterator>
+    OutputIterator copy(InputIterator first, InputIterator last, OutputIterator result);
 
-/*! \p copy_n copies elements from the range <tt>[first, first + n)</tt> to the range
+    /*! \p copy_n copies elements from the range <tt>[first, first + n)</tt> to the range
  *  <tt>[result, result + n)</tt>. That is, it performs the assignments <tt>*result = *first, *(result + 1) = *(first + 1)</tt>,
  *  and so on. Generally, for every integer \c i from \c 0 to \c n, \p copy
  *  performs the assignment *(\p result + \c i) = *(\p first + \c i). Unlike
@@ -228,20 +224,17 @@ template<typename InputIterator, typename OutputIterator>
  *  \see http://www.sgi.com/tech/stl/copy_n.html
  *  \see thrust::copy
  */
-template<typename InputIterator, typename Size, typename OutputIterator>
-  OutputIterator copy_n(InputIterator first,
-                        Size n,
-                        OutputIterator result);
+    template <typename InputIterator, typename Size, typename OutputIterator>
+    OutputIterator copy_n(InputIterator first, Size n, OutputIterator result);
 
-/*! \} // end copying
+    /*! \} // end copying
  */
 
-/*! \addtogroup stream_compaction
+    /*! \addtogroup stream_compaction
  *  \{
  */
 
-
-/*! This version of \p copy_if copies elements from the range <tt>[first,last)</tt>
+    /*! This version of \p copy_if copies elements from the range <tt>[first,last)</tt>
  *  to a range beginning at \p result, except that any element which causes \p pred
  *  to be \c false is not copied. \p copy_if is stable, meaning that the relative
  *  order of elements that are copied is unchanged.
@@ -297,17 +290,18 @@ template<typename InputIterator, typename Size, typename OutputIterator>
  *
  *  \see \c remove_copy_if
  */
-template<typename DerivedPolicy, typename InputIterator, typename OutputIterator, typename Predicate>
-__host__ __device__
-  OutputIterator copy_if(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                         InputIterator first,
-                         InputIterator last,
-                         OutputIterator result,
-                         Predicate pred);
+    template <typename DerivedPolicy,
+              typename InputIterator,
+              typename OutputIterator,
+              typename Predicate>
+    __host__ __device__ OutputIterator
+                        copy_if(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                InputIterator                                               first,
+                                InputIterator                                               last,
+                                OutputIterator                                              result,
+                                Predicate                                                   pred);
 
-
-
-/*! This version of \p copy_if copies elements from the range <tt>[first,last)</tt>
+    /*! This version of \p copy_if copies elements from the range <tt>[first,last)</tt>
  *  to a range beginning at \p result, except that any element which causes \p pred
  *  to \c false is not copied. \p copy_if is stable, meaning that the relative
  *  order of elements that are copied is unchanged.
@@ -358,16 +352,11 @@ __host__ __device__
  *
  *  \see \c remove_copy_if
  */
-template<typename InputIterator,
-         typename OutputIterator,
-         typename Predicate>
-  OutputIterator copy_if(InputIterator first,
-                         InputIterator last,
-                         OutputIterator result,
-                         Predicate pred);
+    template <typename InputIterator, typename OutputIterator, typename Predicate>
+    OutputIterator
+        copy_if(InputIterator first, InputIterator last, OutputIterator result, Predicate pred);
 
-
-/*! This version of \p copy_if copies elements from the range <tt>[first,last)</tt>
+    /*! This version of \p copy_if copies elements from the range <tt>[first,last)</tt>
  *  to a range beginning at \p result, except that any element whose corresponding stencil
  *  element causes \p pred to be \c false is not copied. \p copy_if is stable, meaning
  *  that the relative order of elements that are copied is unchanged.
@@ -428,17 +417,20 @@ template<typename InputIterator,
  *
  *  \see \c remove_copy_if
  */
-template<typename DerivedPolicy, typename InputIterator1, typename InputIterator2, typename OutputIterator, typename Predicate>
-__host__ __device__
-  OutputIterator copy_if(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                         InputIterator1 first,
-                         InputIterator1 last,
-                         InputIterator2 stencil,
-                         OutputIterator result,
-                         Predicate pred);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename Predicate>
+    __host__ __device__ OutputIterator
+                        copy_if(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                InputIterator1                                              first,
+                                InputIterator1                                              last,
+                                InputIterator2                                              stencil,
+                                OutputIterator                                              result,
+                                Predicate                                                   pred);
 
-
-/*! This version of \p copy_if copies elements from the range <tt>[first,last)</tt>
+    /*! This version of \p copy_if copies elements from the range <tt>[first,last)</tt>
  *  to a range beginning at \p result, except that any element whose corresponding stencil
  *  element causes \p pred to be \c false is not copied. \p copy_if is stable, meaning
  *  that the relative order of elements that are copied is unchanged.
@@ -494,17 +486,17 @@ __host__ __device__
  *
  *  \see \c remove_copy_if
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename Predicate>
-  OutputIterator copy_if(InputIterator1 first,
-                         InputIterator1 last,
-                         InputIterator2 stencil,
-                         OutputIterator result,
-                         Predicate pred);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename Predicate>
+    OutputIterator copy_if(InputIterator1 first,
+                           InputIterator1 last,
+                           InputIterator2 stencil,
+                           OutputIterator result,
+                           Predicate      pred);
 
-/*! \} // end stream_compaction
+    /*! \} // end stream_compaction
  */
 
 } // end namespace thrust

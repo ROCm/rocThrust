@@ -18,43 +18,41 @@
 
 #pragma once
 
+#include <cmath>
 #include <thrust/complex.h>
 #include <thrust/detail/type_traits.h>
-#include <cmath>
 
-namespace thrust {
-
-template <typename T0, typename T1>
-__host__ __device__
-complex<typename detail::promoted_numerical_type<T0, T1>::type>
-pow(const complex<T0>& x, const complex<T1>& y)
+namespace thrust
 {
-  typedef typename detail::promoted_numerical_type<T0, T1>::type T;
-  return exp(log(complex<T>(x)) * complex<T>(y));
-}
 
-template <typename T0, typename T1>
-__host__ __device__
-complex<typename detail::promoted_numerical_type<T0, T1>::type>
-pow(const complex<T0>& x, const T1& y)
-{
-  typedef typename detail::promoted_numerical_type<T0, T1>::type T;
-  return exp(log(complex<T>(x)) * T(y));
-}
+    template <typename T0, typename T1>
+    __host__ __device__ complex<typename detail::promoted_numerical_type<T0, T1>::type>
+                        pow(const complex<T0>& x, const complex<T1>& y)
+    {
+        typedef typename detail::promoted_numerical_type<T0, T1>::type T;
+        return exp(log(complex<T>(x)) * complex<T>(y));
+    }
 
-template <typename T0, typename T1>
-__host__ __device__
-complex<typename detail::promoted_numerical_type<T0, T1>::type>
-pow(const T0& x, const complex<T1>& y)
-{
-  typedef typename detail::promoted_numerical_type<T0, T1>::type T;
-  #ifdef __HIP_DEVICE_COMPILE__
-    using ::log;
-  #else
-    // Find `log` by ADL.
-    using std::log;
-  #endif
-  return exp(log(T(x)) * complex<T>(y));
-}
+    template <typename T0, typename T1>
+    __host__ __device__ complex<typename detail::promoted_numerical_type<T0, T1>::type>
+                        pow(const complex<T0>& x, const T1& y)
+    {
+        typedef typename detail::promoted_numerical_type<T0, T1>::type T;
+        return exp(log(complex<T>(x)) * T(y));
+    }
+
+    template <typename T0, typename T1>
+    __host__ __device__ complex<typename detail::promoted_numerical_type<T0, T1>::type>
+                        pow(const T0& x, const complex<T1>& y)
+    {
+        typedef typename detail::promoted_numerical_type<T0, T1>::type T;
+#ifdef __HIP_DEVICE_COMPILE__
+        using ::log;
+#else
+        // Find `log` by ADL.
+        using std::log;
+#endif
+        return exp(log(T(x)) * complex<T>(y));
+    }
 
 } // end namespace thrust

@@ -22,64 +22,65 @@
 namespace thrust
 {
 
-namespace system
-{
+    namespace system
+    {
 
-namespace detail
-{
+        namespace detail
+        {
 
-namespace generic
-{
+            namespace generic
+            {
 
-namespace scalar
-{
+                namespace scalar
+                {
 
-template<typename RandomAccessIterator, typename Size, typename T, typename BinaryPredicate>
-__host__ __device__
-RandomAccessIterator lower_bound_n(RandomAccessIterator first,
-                                   Size n,
-                                   const T &val,
-                                   BinaryPredicate comp);
+                    template <typename RandomAccessIterator,
+                              typename Size,
+                              typename T,
+                              typename BinaryPredicate>
+                    __host__ __device__ RandomAccessIterator lower_bound_n(
+                        RandomAccessIterator first, Size n, const T& val, BinaryPredicate comp);
 
-template<typename RandomAccessIterator, typename T, typename BinaryPredicate>
-__host__ __device__
-RandomAccessIterator lower_bound(RandomAccessIterator first, RandomAccessIterator last,
-                                 const T &val,
-                                 BinaryPredicate comp);
+                    template <typename RandomAccessIterator, typename T, typename BinaryPredicate>
+                    __host__ __device__ RandomAccessIterator lower_bound(RandomAccessIterator first,
+                                                                         RandomAccessIterator last,
+                                                                         const T&             val,
+                                                                         BinaryPredicate      comp);
 
-template<typename RandomAccessIterator, typename Size, typename T, typename BinaryPredicate>
-__host__ __device__
-RandomAccessIterator upper_bound_n(RandomAccessIterator first,
-                                   Size n,
-                                   const T &val,
-                                   BinaryPredicate comp);
+                    template <typename RandomAccessIterator,
+                              typename Size,
+                              typename T,
+                              typename BinaryPredicate>
+                    __host__ __device__ RandomAccessIterator upper_bound_n(
+                        RandomAccessIterator first, Size n, const T& val, BinaryPredicate comp);
 
-template<typename RandomAccessIterator, typename T, typename BinaryPredicate>
-__host__ __device__
-RandomAccessIterator upper_bound(RandomAccessIterator first, RandomAccessIterator last,
-                                 const T &val,
-                                 BinaryPredicate comp);
+                    template <typename RandomAccessIterator, typename T, typename BinaryPredicate>
+                    __host__ __device__ RandomAccessIterator upper_bound(RandomAccessIterator first,
+                                                                         RandomAccessIterator last,
+                                                                         const T&             val,
+                                                                         BinaryPredicate      comp);
 
-template<typename RandomAccessIterator, typename T, typename BinaryPredicate>
-__host__ __device__
-  pair<RandomAccessIterator,RandomAccessIterator>
-    equal_range(RandomAccessIterator first, RandomAccessIterator last,
-                const T &val,
-                BinaryPredicate comp);
+                    template <typename RandomAccessIterator, typename T, typename BinaryPredicate>
+                    __host__ __device__ pair<RandomAccessIterator, RandomAccessIterator>
+                                        equal_range(RandomAccessIterator first,
+                                                    RandomAccessIterator last,
+                                                    const T&             val,
+                                                    BinaryPredicate      comp);
 
-template<typename RandomAccessIterator, typename T, typename Compare>
-__host__ __device__
-bool binary_search(RandomAccessIterator first, RandomAccessIterator last, const T &value, Compare comp);
+                    template <typename RandomAccessIterator, typename T, typename Compare>
+                    __host__ __device__ bool binary_search(RandomAccessIterator first,
+                                                           RandomAccessIterator last,
+                                                           const T&             value,
+                                                           Compare              comp);
 
-} // end scalar
+                } // end scalar
 
-} // end generic
+            } // end generic
 
-} // end detail
+        } // end detail
 
-} // end system
+    } // end system
 
 } // end thrust
 
 #include <thrust/system/detail/generic/scalar/binary_search.inl>
-

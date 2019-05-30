@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file logical.h
  *  \brief Logical operations on ranges
  */
@@ -27,16 +26,14 @@
 namespace thrust
 {
 
-
-/*! \addtogroup reductions
+    /*! \addtogroup reductions
  *  \{
  *  \addtogroup logical
  *  \ingroup reductions
  *  \{
  */
 
-
-/*! \p all_of determines whether all elements in a range satify a predicate.
+    /*! \p all_of determines whether all elements in a range satify a predicate.
  *  Specifically, \p all_of returns \c true if <tt>pred(*i)</tt> is \c true
  *  for every iterator \c i in the range <tt>[first, last)</tt> and 
  *  \c false otherwise.
@@ -72,12 +69,14 @@ namespace thrust
  *  \see none_of
  *  \see transform_reduce
  */
-template<typename DerivedPolicy, typename InputIterator, typename Predicate>
-__host__ __device__
-bool all_of(const thrust::detail::execution_policy_base<DerivedPolicy> &exec, InputIterator first, InputIterator last, Predicate pred);
+    template <typename DerivedPolicy, typename InputIterator, typename Predicate>
+    __host__ __device__ bool
+             all_of(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                    InputIterator                                               first,
+                    InputIterator                                               last,
+                    Predicate                                                   pred);
 
-
-/*! \p all_of determines whether all elements in a range satify a predicate.
+    /*! \p all_of determines whether all elements in a range satify a predicate.
  * Specifically, \p all_of returns \c true if <tt>pred(*i)</tt> is \c true
  * for every iterator \c i in the range <tt>[first, last)</tt> and 
  * \c false otherwise.
@@ -108,11 +107,10 @@ bool all_of(const thrust::detail::execution_policy_base<DerivedPolicy> &exec, In
  *  \see none_of
  *  \see transform_reduce
  */
-template<typename InputIterator, typename Predicate>
-bool all_of(InputIterator first, InputIterator last, Predicate pred);
+    template <typename InputIterator, typename Predicate>
+    bool all_of(InputIterator first, InputIterator last, Predicate pred);
 
-
-/*! \p any_of determines whether any element in a range satifies a predicate.
+    /*! \p any_of determines whether any element in a range satifies a predicate.
  *  Specifically, \p any_of returns \c true if <tt>pred(*i)</tt> is \c true
  *  for any iterator \c i in the range <tt>[first, last)</tt> and 
  *  \c false otherwise.
@@ -149,12 +147,14 @@ bool all_of(InputIterator first, InputIterator last, Predicate pred);
  *  \see none_of
  *  \see transform_reduce
  */
-template<typename DerivedPolicy, typename InputIterator, typename Predicate>
-__host__ __device__
-bool any_of(const thrust::detail::execution_policy_base<DerivedPolicy> &exec, InputIterator first, InputIterator last, Predicate pred);
-   
+    template <typename DerivedPolicy, typename InputIterator, typename Predicate>
+    __host__ __device__ bool
+             any_of(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                    InputIterator                                               first,
+                    InputIterator                                               last,
+                    Predicate                                                   pred);
 
-/*! \p any_of determines whether any element in a range satifies a predicate.
+    /*! \p any_of determines whether any element in a range satifies a predicate.
  * Specifically, \p any_of returns \c true if <tt>pred(*i)</tt> is \c true
  * for any iterator \c i in the range <tt>[first, last)</tt> and 
  * \c false otherwise.
@@ -186,11 +186,10 @@ bool any_of(const thrust::detail::execution_policy_base<DerivedPolicy> &exec, In
  *  \see none_of
  *  \see transform_reduce
  */
-template<typename InputIterator, typename Predicate>
-bool any_of(InputIterator first, InputIterator last, Predicate pred);
+    template <typename InputIterator, typename Predicate>
+    bool any_of(InputIterator first, InputIterator last, Predicate pred);
 
-
-/*! \p none_of determines whether no element in a range satifies a predicate.
+    /*! \p none_of determines whether no element in a range satifies a predicate.
  *  Specifically, \p none_of returns \c true if there is no iterator \c i in 
  *  the range <tt>[first, last)</tt> such that <tt>pred(*i)</tt> is \c true,
  *  and \c false otherwise.
@@ -227,12 +226,14 @@ bool any_of(InputIterator first, InputIterator last, Predicate pred);
  *  \see any_of
  *  \see transform_reduce
  */
-template<typename DerivedPolicy, typename InputIterator, typename Predicate>
-__host__ __device__
-bool none_of(const thrust::detail::execution_policy_base<DerivedPolicy> &exec, InputIterator first, InputIterator last, Predicate pred);
+    template <typename DerivedPolicy, typename InputIterator, typename Predicate>
+    __host__ __device__ bool
+             none_of(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                     InputIterator                                               first,
+                     InputIterator                                               last,
+                     Predicate                                                   pred);
 
-
-/*! \p none_of determines whether no element in a range satifies a predicate.
+    /*! \p none_of determines whether no element in a range satifies a predicate.
  *  Specifically, \p none_of returns \c true if there is no iterator \c i in 
  *  the range <tt>[first, last)</tt> such that <tt>pred(*i)</tt> is \c true,
  *  and \c false otherwise.
@@ -264,16 +265,13 @@ bool none_of(const thrust::detail::execution_policy_base<DerivedPolicy> &exec, I
  *  \see any_of
  *  \see transform_reduce
  */
-template<typename InputIterator, typename Predicate>
-bool none_of(InputIterator first, InputIterator last, Predicate pred);
+    template <typename InputIterator, typename Predicate>
+    bool none_of(InputIterator first, InputIterator last, Predicate pred);
 
-
-/*! \} // end logical
+    /*! \} // end logical
  *  \} // end reductions
  */
-
 
 } // end namespace thrust
 
 #include <thrust/detail/logical.inl>
-

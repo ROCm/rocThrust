@@ -38,19 +38,17 @@ namespace hip_rocprim
 {
 
     template <class Derived, class InputIt1, class InputIt2, class BinaryPred>
-    pair<InputIt1, InputIt2> THRUST_HIP_FUNCTION
-    mismatch(execution_policy<Derived>& policy,
-             InputIt1                   first1,
-             InputIt1                   last1,
-             InputIt2                   first2,
-             BinaryPred                 binary_pred);
+    pair<InputIt1, InputIt2> THRUST_HIP_FUNCTION mismatch(execution_policy<Derived>& policy,
+                                                          InputIt1                   first1,
+                                                          InputIt1                   last1,
+                                                          InputIt2                   first2,
+                                                          BinaryPred                 binary_pred);
 
     template <class Derived, class InputIt1, class InputIt2>
-    pair<InputIt1, InputIt2> THRUST_HIP_FUNCTION
-    mismatch(execution_policy<Derived>& policy,
-             InputIt1                   first1,
-             InputIt1                   last1,
-             InputIt2                   first2);
+    pair<InputIt1, InputIt2> THRUST_HIP_FUNCTION mismatch(execution_policy<Derived>& policy,
+                                                          InputIt1                   first1,
+                                                          InputIt1                   last1,
+                                                          InputIt2                   first2);
 } // namespace hip_rocprim
 END_NS_THRUST
 
@@ -61,12 +59,11 @@ namespace hip_rocprim
 {
 
     template <class Derived, class InputIt1, class InputIt2, class BinaryPred>
-    pair<InputIt1, InputIt2> THRUST_HIP_FUNCTION
-    mismatch(execution_policy<Derived>& policy,
-             InputIt1                   first1,
-             InputIt1                   last1,
-             InputIt2                   first2,
-             BinaryPred                 binary_pred)
+    pair<InputIt1, InputIt2> THRUST_HIP_FUNCTION mismatch(execution_policy<Derived>& policy,
+                                                          InputIt1                   first1,
+                                                          InputIt1                   last1,
+                                                          InputIt2                   first2,
+                                                          BinaryPred                 binary_pred)
     {
         typedef transform_pair_of_input_iterators_t<bool, InputIt1, InputIt2, BinaryPred>
             transform_t;
@@ -81,11 +78,10 @@ namespace hip_rocprim
     }
 
     template <class Derived, class InputIt1, class InputIt2>
-    pair<InputIt1, InputIt2> THRUST_HIP_FUNCTION
-    mismatch(execution_policy<Derived>& policy,
-             InputIt1                   first1,
-             InputIt1                   last1,
-             InputIt2                   first2)
+    pair<InputIt1, InputIt2> THRUST_HIP_FUNCTION mismatch(execution_policy<Derived>& policy,
+                                                          InputIt1                   first1,
+                                                          InputIt1                   last1,
+                                                          InputIt2                   first2)
     {
         typedef typename thrust::iterator_value<InputIt1>::type InputType1;
         return hip_rocprim::mismatch(policy, first1, last1, first2, equal_to<InputType1>());

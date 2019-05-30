@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 #pragma once
 
 #include <thrust/detail/config.h>
@@ -22,30 +21,32 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
+                template <typename DerivedPolicy,
+                          typename InputIterator,
+                          typename EqualityComparable>
+                __host__ __device__ typename thrust::iterator_traits<InputIterator>::difference_type
+                         count(thrust::execution_policy<DerivedPolicy>& exec,
+                               InputIterator                            first,
+                               InputIterator                            last,
+                               const EqualityComparable&                value);
 
-template <typename DerivedPolicy, typename InputIterator, typename EqualityComparable>
-__host__ __device__
-typename thrust::iterator_traits<InputIterator>::difference_type
-count(thrust::execution_policy<DerivedPolicy> &exec, InputIterator first, InputIterator last, const EqualityComparable& value);
+                template <typename DerivedPolicy, typename InputIterator, typename Predicate>
+                __host__ __device__ typename thrust::iterator_traits<InputIterator>::difference_type
+                         count_if(thrust::execution_policy<DerivedPolicy>& exec,
+                                  InputIterator                            first,
+                                  InputIterator                            last,
+                                  Predicate                                pred);
 
-
-template <typename DerivedPolicy, typename InputIterator, typename Predicate>
-__host__ __device__
-typename thrust::iterator_traits<InputIterator>::difference_type
-count_if(thrust::execution_policy<DerivedPolicy> &exec, InputIterator first, InputIterator last, Predicate pred);
-
-
-} // end namespace generic
-} // end namespace detail
-} // end namespace system
+            } // end namespace generic
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/detail/generic/count.inl>
-

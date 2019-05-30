@@ -27,7 +27,8 @@
 // and only nvcc knows what to do with __host__ and __device__,
 // define them to be the empty string for other compilers
 
-#if (THRUST_DEVICE_COMPILER != THRUST_DEVICE_COMPILER_NVCC) && (THRUST_DEVICE_COMPILER != THRUST_DEVICE_COMPILER_HCC)
+#if(THRUST_DEVICE_COMPILER != THRUST_DEVICE_COMPILER_NVCC) \
+    && (THRUST_DEVICE_COMPILER != THRUST_DEVICE_COMPILER_HCC)
 
 // since __host__ & __device__ might have already be defined, only
 // #define them if not defined already
@@ -42,4 +43,3 @@
 #endif // __device__
 
 #endif
-

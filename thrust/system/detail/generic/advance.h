@@ -14,28 +14,25 @@
  *  limitations under the License.
  */
 
-
 #pragma once
 
 #include <thrust/detail/config.h>
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
-template<typename InputIterator, typename Distance>
-__host__ __device__
-void advance(InputIterator& i, Distance n);
+                template <typename InputIterator, typename Distance>
+                __host__ __device__ void advance(InputIterator& i, Distance n);
 
-} // end namespace generic
-} // end namespace detail
-} // end namespace system
+            } // end namespace generic
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/detail/generic/advance.inl>
-

@@ -17,58 +17,56 @@
 #pragma once
 
 #include <thrust/detail/config.h>
+#include <thrust/detail/use_default.h>
 #include <thrust/iterator/iterator_adaptor.h>
 #include <thrust/iterator/iterator_traits.h>
-#include <thrust/detail/use_default.h>
 
 namespace thrust
 {
-namespace detail
-{
+    namespace detail
+    {
 
-template <typename,typename> class tagged_iterator;
+        template <typename, typename>
+        class tagged_iterator;
 
-template<typename Iterator, typename Tag>
-  struct tagged_iterator_base
-{
-  typedef thrust::iterator_adaptor<
-    tagged_iterator<Iterator,Tag>,
-    Iterator,
-    typename thrust::iterator_value<Iterator>::type,
-    Tag,
-    typename thrust::iterator_traversal<Iterator>::type,
-    typename thrust::iterator_reference<Iterator>::type,
-    typename thrust::iterator_difference<Iterator>::type
-  > type;
-}; // end tagged_iterator_base
+        template <typename Iterator, typename Tag>
+        struct tagged_iterator_base
+        {
+            typedef thrust::iterator_adaptor<tagged_iterator<Iterator, Tag>,
+                                             Iterator,
+                                             typename thrust::iterator_value<Iterator>::type,
+                                             Tag,
+                                             typename thrust::iterator_traversal<Iterator>::type,
+                                             typename thrust::iterator_reference<Iterator>::type,
+                                             typename thrust::iterator_difference<Iterator>::type>
+                type;
+        }; // end tagged_iterator_base
 
-template<typename Iterator, typename Tag>
-  class tagged_iterator
-    : public tagged_iterator_base<Iterator,Tag>::type
-{
-  private:
-    typedef typename tagged_iterator_base<Iterator,Tag>::type super_t;
+        template <typename Iterator, typename Tag>
+        class tagged_iterator : public tagged_iterator_base<Iterator, Tag>::type
+        {
+        private:
+            typedef typename tagged_iterator_base<Iterator, Tag>::type super_t;
 
-  public:
-    __host__ __device__
-    tagged_iterator() {}
+        public:
+            __host__ __device__ tagged_iterator() {}
 
-    __host__ __device__
-    explicit tagged_iterator(Iterator x)
-      : super_t(x) {}
-}; // end tagged_iterator
+            __host__ __device__ explicit tagged_iterator(Iterator x)
+                : super_t(x)
+            {
+            }
+        }; // end tagged_iterator
 
+        // specialize is_trivial_iterator for tagged_iterator
+        template <typename>
+        struct is_trivial_iterator;
 
-// specialize is_trivial_iterator for tagged_iterator
-template<typename> struct is_trivial_iterator;
+        // tagged_iterator is trivial if its base iterator is
+        template <typename BaseIterator, typename Tag>
+        struct is_trivial_iterator<tagged_iterator<BaseIterator, Tag>>
+            : is_trivial_iterator<BaseIterator>
+        {
+        };
 
-// tagged_iterator is trivial if its base iterator is
-template<typename BaseIterator, typename Tag>
-  struct is_trivial_iterator<tagged_iterator<BaseIterator,Tag> >
-    : is_trivial_iterator<BaseIterator>
-{};
-
-
-} // end detail
+    } // end detail
 } // end thrust
-

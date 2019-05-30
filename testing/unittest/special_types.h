@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
- 
+
 #pragma once
 
 #include <iostream>
@@ -25,36 +25,32 @@ struct FixedVector
 {
     T data[N];
 
-    __host__ __device__
-    FixedVector()
+    __host__ __device__ FixedVector()
     {
-        #pragma nounroll
+#pragma nounroll
         for(unsigned int i = 0; i < N; i++)
             data[i] = T();
     }
 
-    __host__ __device__
-    FixedVector(T init)
+    __host__ __device__ FixedVector(T init)
     {
-        #pragma nounroll
+#pragma nounroll
         for(unsigned int i = 0; i < N; i++)
             data[i] = init;
     }
 
-    __host__ __device__
-    FixedVector operator+(const FixedVector& bs) const
+    __host__ __device__ FixedVector operator+(const FixedVector& bs) const
     {
         FixedVector output;
-        #pragma nounroll
+#pragma nounroll
         for(unsigned int i = 0; i < N; i++)
             output.data[i] = data[i] + bs.data[i];
         return output;
     }
 
-    __host__ __device__
-    bool operator<(const FixedVector& bs) const
+    __host__ __device__ bool operator<(const FixedVector& bs) const
     {
-        #pragma nounroll
+#pragma nounroll
         for(unsigned int i = 0; i < N; i++)
         {
             if(data[i] < bs.data[i])
@@ -65,10 +61,9 @@ struct FixedVector
         return false;
     }
 
-    __host__ __device__
-    bool operator==(const FixedVector& bs) const
+    __host__ __device__ bool operator==(const FixedVector& bs) const
     {
-        #pragma nounroll
+#pragma nounroll
         for(unsigned int i = 0; i < N; i++)
         {
             if(!(data[i] == bs.data[i]))
@@ -78,128 +73,125 @@ struct FixedVector
     }
 };
 
-template<typename Key, typename Value>
-  struct key_value
+template <typename Key, typename Value>
+struct key_value
 {
-  typedef Key   key_type;
-  typedef Value value_type;
+    typedef Key   key_type;
+    typedef Value value_type;
 
-  __host__ __device__
-  key_value(void)
-    : key(), value()
-  {}
+    __host__ __device__ key_value(void)
+        : key()
+        , value()
+    {
+    }
 
-  __host__ __device__
-  key_value(key_type k, value_type v)
-    : key(k), value(v)
-  {}
+    __host__ __device__ key_value(key_type k, value_type v)
+        : key(k)
+        , value(v)
+    {
+    }
 
-  __host__ __device__
-  bool operator<(const key_value &rhs) const
-  {
-    return key < rhs.key;
-  }
+    __host__ __device__ bool operator<(const key_value& rhs) const
+    {
+        return key < rhs.key;
+    }
 
-  __host__ __device__
-  bool operator>(const key_value &rhs) const
-  {
-    return key > rhs.key;
-  }
+    __host__ __device__ bool operator>(const key_value& rhs) const
+    {
+        return key > rhs.key;
+    }
 
-  __host__ __device__
-  bool operator==(const key_value &rhs) const
-  {
-    return key == rhs.key && value == rhs.value;
-  }
+    __host__ __device__ bool operator==(const key_value& rhs) const
+    {
+        return key == rhs.key && value == rhs.value;
+    }
 
-  __host__ __device__
-  bool operator!=(const key_value &rhs) const
-  {
-    return !operator==(rhs);
-  }
+    __host__ __device__ bool operator!=(const key_value& rhs) const
+    {
+        return !operator==(rhs);
+    }
 
-  friend std::ostream &operator<<(std::ostream &os, const key_value &kv)
-  {
-    return os << "(" << kv.key << ", " << kv.value << ")";
-  }
+    friend std::ostream& operator<<(std::ostream& os, const key_value& kv)
+    {
+        return os << "(" << kv.key << ", " << kv.value << ")";
+    }
 
-  key_type key;
-  value_type value;
+    key_type   key;
+    value_type value;
 };
 
 struct user_swappable
 {
-  inline __host__ __device__
-  user_swappable(bool swapped = false)
-    : was_swapped(swapped)
-  {}
+    inline __host__ __device__ user_swappable(bool swapped = false)
+        : was_swapped(swapped)
+    {
+    }
 
-  bool was_swapped;
+    bool was_swapped;
 };
 
-inline __host__ __device__
-bool operator==(const user_swappable &x, const user_swappable &y)
+inline __host__ __device__ bool operator==(const user_swappable& x, const user_swappable& y)
 {
-  return x.was_swapped == y.was_swapped;
+    return x.was_swapped == y.was_swapped;
 }
 
-inline __host__ __device__
-void swap(user_swappable &x, user_swappable &y)
+inline __host__ __device__ void swap(user_swappable& x, user_swappable& y)
 {
-  x.was_swapped = true;
-  y.was_swapped = false;
+    x.was_swapped = true;
+    y.was_swapped = false;
 }
 
 class my_system : public thrust::device_execution_policy<my_system>
 {
-  public:
+public:
     my_system(int)
-      : correctly_dispatched(false),
-        num_copies(0)
-    {}
+        : correctly_dispatched(false)
+        , num_copies(0)
+    {
+    }
 
-    my_system(const my_system &other)
-      : correctly_dispatched(false),
-        num_copies(other.num_copies + 1)
-    {}
+    my_system(const my_system& other)
+        : correctly_dispatched(false)
+        , num_copies(other.num_copies + 1)
+    {
+    }
 
     void validate_dispatch()
     {
-      correctly_dispatched = (num_copies == 0);
+        correctly_dispatched = (num_copies == 0);
     }
 
     bool is_valid()
     {
-      return correctly_dispatched;
+        return correctly_dispatched;
     }
 
-  private:
+private:
     bool correctly_dispatched;
 
     // count the number of copies so that we can validate
     // that dispatch does not introduce any
     unsigned int num_copies;
 
-
     // disallow default construction
     my_system();
 };
 
-struct my_tag : thrust::device_execution_policy<my_tag> {};
+struct my_tag : thrust::device_execution_policy<my_tag>
+{
+};
 
 namespace unittest
 {
 
+    using thrust::detail::int16_t;
+    using thrust::detail::int32_t;
+    using thrust::detail::int64_t;
+    using thrust::detail::int8_t;
 
-using thrust::detail::int8_t;
-using thrust::detail::int16_t;
-using thrust::detail::int32_t;
-using thrust::detail::int64_t;
-
-using thrust::detail::uint8_t;
-using thrust::detail::uint16_t;
-using thrust::detail::uint32_t;
-using thrust::detail::uint64_t;
-
+    using thrust::detail::uint16_t;
+    using thrust::detail::uint32_t;
+    using thrust::detail::uint64_t;
+    using thrust::detail::uint8_t;
 
 }

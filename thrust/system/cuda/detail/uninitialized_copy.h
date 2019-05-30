@@ -26,84 +26,76 @@
  ******************************************************************************/
 #pragma once
 
-
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
 #include <iterator>
 #include <thrust/distance.h>
 #include <thrust/system/cuda/detail/execution_policy.h>
-#include <thrust/system/cuda/detail/util.h>
 #include <thrust/system/cuda/detail/parallel_for.h>
+#include <thrust/system/cuda/detail/util.h>
 
 BEGIN_NS_THRUST
 
-namespace cuda_cub {
+namespace cuda_cub
+{
 
-namespace __uninitialized_copy {
-
-  template <class InputIt, class OutputIt>
-  struct functor
-  {
-    InputIt  input;
-    OutputIt output;
-
-    typedef typename iterator_traits<InputIt>::value_type  InputType;
-    typedef typename iterator_traits<OutputIt>::value_type OutputType;
-
-    THRUST_FUNCTION
-    functor(InputIt input_, OutputIt output_)
-        : input(input_), output(output_) {}
-
-    template<class Size>
-    void THRUST_DEVICE_FUNCTION operator()(Size idx)
+    namespace __uninitialized_copy
     {
-      InputType const &in  = raw_reference_cast(input[idx]);
-      OutputType &     out = raw_reference_cast(output[idx]);
+
+        template <class InputIt, class OutputIt>
+        struct functor
+        {
+            InputIt  input;
+            OutputIt output;
+
+            typedef typename iterator_traits<InputIt>::value_type  InputType;
+            typedef typename iterator_traits<OutputIt>::value_type OutputType;
+
+            THRUST_FUNCTION
+            functor(InputIt input_, OutputIt output_)
+                : input(input_)
+                , output(output_)
+            {
+            }
+
+            template <class Size>
+            void THRUST_DEVICE_FUNCTION operator()(Size idx)
+            {
+                InputType const& in  = raw_reference_cast(input[idx]);
+                OutputType&      out = raw_reference_cast(output[idx]);
 
 #if defined(__CUDA__) && defined(__clang__)
-      // XXX unsafe, but clang is seemngly unable to call in-place new
-      out = in;
+                // XXX unsafe, but clang is seemngly unable to call in-place new
+                out = in;
 #else
-      ::new (static_cast<void *>(&out)) OutputType(in);
+                ::new(static_cast<void*>(&out)) OutputType(in);
 #endif
+            }
+        }; // struct functor
+
+    } // namespace __uninitialized_copy
+
+    template <class Derived, class InputIt, class Size, class OutputIt>
+    OutputIt __host__ __device__ uninitialized_copy_n(execution_policy<Derived>& policy,
+                                                      InputIt                    first,
+                                                      Size                       count,
+                                                      OutputIt                   result)
+    {
+        typedef __uninitialized_copy::functor<InputIt, OutputIt> functor_t;
+
+        cuda_cub::parallel_for(policy, functor_t(first, result), count);
+        return result + count;
     }
-  };    // struct functor
 
-}    // namespace __uninitialized_copy
+    template <class Derived, class InputIt, class OutputIt>
+    OutputIt __host__ __device__ uninitialized_copy(execution_policy<Derived>& policy,
+                                                    InputIt                    first,
+                                                    InputIt                    last,
+                                                    OutputIt                   result)
+    {
+        return cuda_cub::uninitialized_copy_n(policy, first, thrust::distance(first, last), result);
+    }
 
-template <class Derived,
-          class InputIt,
-          class Size,
-          class OutputIt>
-OutputIt __host__ __device__
-uninitialized_copy_n(execution_policy<Derived> &policy,
-                     InputIt                    first,
-                     Size                       count,
-                     OutputIt                   result)
-{
-  typedef __uninitialized_copy::functor<InputIt,OutputIt> functor_t;
-
-  cuda_cub::parallel_for(policy,
-                         functor_t(first, result),
-                         count);
-  return result + count;
-}
-
-template <class Derived,
-          class InputIt,
-          class OutputIt>
-OutputIt __host__ __device__
-uninitialized_copy(execution_policy<Derived>& policy,
-                   InputIt                    first,
-                   InputIt                    last,
-                   OutputIt                   result)
-{
-  return cuda_cub::uninitialized_copy_n(policy,
-                                        first,
-                                        thrust::distance(first, last),
-                                        result);
-}
-
-}    // namespace cuda_
+} // namespace cuda_
 
 END_NS_THRUST
 #endif

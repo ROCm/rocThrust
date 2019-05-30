@@ -37,19 +37,18 @@
 BEGIN_NS_THRUST
 namespace hip_rocprim
 {
-namespace __copy
-{
-    template <class Derived, class InputIt, class OutputIt>
-    OutputIt THRUST_HIP_FUNCTION
-    device_to_device(execution_policy<Derived>& policy,
-                     InputIt                    first,
-                     InputIt                    last,
-                     OutputIt                   result)
+    namespace __copy
     {
-        typedef typename thrust::iterator_traits<InputIt>::value_type InputTy;
-        return hip_rocprim::transform(policy, first, last, result, thrust::identity<InputTy>());
-    }
-} // namespace __copy
+        template <class Derived, class InputIt, class OutputIt>
+        OutputIt THRUST_HIP_FUNCTION device_to_device(execution_policy<Derived>& policy,
+                                                      InputIt                    first,
+                                                      InputIt                    last,
+                                                      OutputIt                   result)
+        {
+            typedef typename thrust::iterator_traits<InputIt>::value_type InputTy;
+            return hip_rocprim::transform(policy, first, last, result, thrust::identity<InputTy>());
+        }
+    } // namespace __copy
 } // namespace hip_rocprim
 END_NS_THRUST
 #endif

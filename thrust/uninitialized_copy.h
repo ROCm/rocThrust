@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file uninitialized_copy.h
  *  \brief Copy construction into a range of uninitialized elements from a source range
  */
@@ -27,13 +26,11 @@
 namespace thrust
 {
 
-
-/*! \addtogroup copying
+    /*! \addtogroup copying
  *  \{
  */
 
-
-/*! In \c thrust, the function \c thrust::device_new allocates memory for
+    /*! In \c thrust, the function \c thrust::device_new allocates memory for
  *  an object and then creates an object at that location by calling a constructor.
  *  Occasionally, however, it is useful to separate those two operations.
  *  If each iterator in the range <tt>[result, result + (last - first))</tt> points
@@ -93,15 +90,14 @@ namespace thrust
  *  \see \c device_new
  *  \see \c device_malloc
  */
-template<typename DerivedPolicy, typename InputIterator, typename ForwardIterator>
-__host__ __device__
-  ForwardIterator uninitialized_copy(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                     InputIterator first,
-                                     InputIterator last,
-                                     ForwardIterator result);
+    template <typename DerivedPolicy, typename InputIterator, typename ForwardIterator>
+    __host__ __device__ ForwardIterator
+                        uninitialized_copy(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                           InputIterator                                               first,
+                                           InputIterator                                               last,
+                                           ForwardIterator                                             result);
 
-
-/*! In \c thrust, the function \c thrust::device_new allocates memory for
+    /*! In \c thrust, the function \c thrust::device_new allocates memory for
  *  an object and then creates an object at that location by calling a constructor.
  *  Occasionally, however, it is useful to separate those two operations.
  *  If each iterator in the range <tt>[result, result + (last - first))</tt> points
@@ -155,13 +151,11 @@ __host__ __device__
  *  \see \c device_new
  *  \see \c device_malloc
  */
-template<typename InputIterator, typename ForwardIterator>
-  ForwardIterator uninitialized_copy(InputIterator first,
-                                     InputIterator last,
-                                     ForwardIterator result);
+    template <typename InputIterator, typename ForwardIterator>
+    ForwardIterator
+        uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator result);
 
-
-/*! In \c thrust, the function \c thrust::device_new allocates memory for
+    /*! In \c thrust, the function \c thrust::device_new allocates memory for
  *  an object and then creates an object at that location by calling a constructor.
  *  Occasionally, however, it is useful to separate those two operations.
  *  If each iterator in the range <tt>[result, result + n)</tt> points
@@ -223,15 +217,17 @@ template<typename InputIterator, typename ForwardIterator>
  *  \see \c device_new
  *  \see \c device_malloc
  */
-template<typename DerivedPolicy, typename InputIterator, typename Size, typename ForwardIterator>
-__host__ __device__
-  ForwardIterator uninitialized_copy_n(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                       InputIterator first,
-                                       Size n,
-                                       ForwardIterator result);
+    template <typename DerivedPolicy,
+              typename InputIterator,
+              typename Size,
+              typename ForwardIterator>
+    __host__ __device__ ForwardIterator
+                        uninitialized_copy_n(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                             InputIterator                                               first,
+                                             Size                                                        n,
+                                             ForwardIterator                                             result);
 
-
-/*! In \c thrust, the function \c thrust::device_new allocates memory for
+    /*! In \c thrust, the function \c thrust::device_new allocates memory for
  *  an object and then creates an object at that location by calling a constructor.
  *  Occasionally, however, it is useful to separate those two operations.
  *  If each iterator in the range <tt>[result, result + n)</tt> points
@@ -287,17 +283,12 @@ __host__ __device__
  *  \see \c device_new
  *  \see \c device_malloc
  */
-template<typename InputIterator, typename Size, typename ForwardIterator>
-  ForwardIterator uninitialized_copy_n(InputIterator first,
-                                       Size n,
-                                       ForwardIterator result);
+    template <typename InputIterator, typename Size, typename ForwardIterator>
+    ForwardIterator uninitialized_copy_n(InputIterator first, Size n, ForwardIterator result);
 
-
-/*! \} // copying
+    /*! \} // copying
  */
-
 
 } // end thrust
 
 #include <thrust/detail/uninitialized_copy.inl>
-

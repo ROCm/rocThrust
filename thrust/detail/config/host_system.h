@@ -17,9 +17,9 @@
 #pragma once
 
 // reserve 0 for undefined
-#define THRUST_HOST_SYSTEM_CPP    1
-#define THRUST_HOST_SYSTEM_OMP    2
-#define THRUST_HOST_SYSTEM_TBB    3
+#define THRUST_HOST_SYSTEM_CPP 1
+#define THRUST_HOST_SYSTEM_OMP 2
+#define THRUST_HOST_SYSTEM_TBB 3
 
 #ifndef THRUST_HOST_SYSTEM
 #define THRUST_HOST_SYSTEM THRUST_HOST_SYSTEM_CPP
@@ -33,17 +33,17 @@
 #define THRUST_HOST_BACKEND_TBB THRUST_HOST_SYSTEM_TBB
 
 #ifdef THRUST_HOST_BACKEND
-#  if THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_MSVC
-#    pragma message("------------------------------------------------------------------------------")
-#    pragma message("| WARNING: THRUST_HOST_BACKEND is deprecated; use THRUST_HOST_SYSTEM instead |")
-#    pragma message("------------------------------------------------------------------------------")
-#  else
-#    warning ------------------------------------------------------------------------------
-#    warning | WARNING: THRUST_HOST_BACKEND is deprecated; use THRUST_HOST_SYSTEM instead |
-#    warning ------------------------------------------------------------------------------
-#  endif // THRUST_HOST_COMPILER
-#  undef THRUST_HOST_SYSTEM
-#  define THRUST_HOST_SYSTEM THRUST_HOST_BACKEND
+#if THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_MSVC
+#pragma message("------------------------------------------------------------------------------")
+#pragma message("| WARNING: THRUST_HOST_BACKEND is deprecated; use THRUST_HOST_SYSTEM instead |")
+#pragma message("------------------------------------------------------------------------------")
+#else
+#warning------------------------------------------------------------------------------
+#warning | WARNING: THRUST_HOST_BACKEND is deprecated; use THRUST_HOST_SYSTEM instead |
+#warning------------------------------------------------------------------------------
+#endif // THRUST_HOST_COMPILER
+#undef THRUST_HOST_SYSTEM
+#define THRUST_HOST_SYSTEM THRUST_HOST_BACKEND
 #endif // THRUST_HOST_BACKEND
 
 #if THRUST_HOST_SYSTEM == THRUST_HOST_SYSTEM_CPP
@@ -54,5 +54,4 @@
 #define __THRUST_HOST_SYSTEM_NAMESPACE tbb
 #endif
 
-#define __THRUST_HOST_SYSTEM_ROOT thrust/system/__THRUST_HOST_SYSTEM_NAMESPACE
-
+#define __THRUST_HOST_SYSTEM_ROOT thrust / system / __THRUST_HOST_SYSTEM_NAMESPACE

@@ -35,25 +35,25 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace hip
-{
-namespace detail
-{
+    namespace system
+    {
+        namespace hip
+        {
+            namespace detail
+            {
 
-void THRUST_HIP_DEVICE_FUNCTION terminate()
-{
-    thrust::hip_rocprim::terminate();
-}
+                void THRUST_HIP_DEVICE_FUNCTION terminate()
+                {
+                    thrust::hip_rocprim::terminate();
+                }
 
-void THRUST_HIP_FUNCTION terminate_with_message(const char* message)
-{
-    printf("%s\n", message);
-    thrust::hip_rocprim::terminate();
-}
+                void THRUST_HIP_FUNCTION terminate_with_message(const char* message)
+                {
+                    printf("%s\n", message);
+                    thrust::hip_rocprim::terminate();
+                }
 
-} // end detail
-} // end hip
-} // end system
+            } // end detail
+        } // end hip
+    } // end system
 } // end thrust

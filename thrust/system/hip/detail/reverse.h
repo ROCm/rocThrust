@@ -34,17 +34,15 @@ BEGIN_NS_THRUST
 namespace hip_rocprim
 {
     template <class Derived, class ItemsIt, class ResultIt>
-    ResultIt __host__ __device__
-    reverse_copy(execution_policy<Derived>& policy,
-                 ItemsIt                    first,
-                 ItemsIt                    last,
-                 ResultIt                   result);
+    ResultIt __host__ __device__ reverse_copy(execution_policy<Derived>& policy,
+                                              ItemsIt                    first,
+                                              ItemsIt                    last,
+                                              ResultIt                   result);
 
     template <class Derived, class ItemsIt>
-    void __host__ __device__
-    reverse(execution_policy<Derived>& policy,
-            ItemsIt                    first,
-            ItemsIt                    last);
+    void __host__ __device__ reverse(execution_policy<Derived>& policy,
+                                     ItemsIt                    first,
+                                     ItemsIt                    last);
 } // namespace hip_rocprim
 END_NS_THRUST
 
@@ -58,20 +56,17 @@ BEGIN_NS_THRUST
 namespace hip_rocprim
 {
     template <class Derived, class ItemsIt, class ResultIt>
-    ResultIt THRUST_HIP_FUNCTION
-    reverse_copy(execution_policy<Derived>& policy,
-                 ItemsIt                    first,
-                 ItemsIt                    last,
-                 ResultIt                   result)
+    ResultIt THRUST_HIP_FUNCTION reverse_copy(execution_policy<Derived>& policy,
+                                              ItemsIt                    first,
+                                              ItemsIt                    last,
+                                              ResultIt                   result)
     {
         return hip_rocprim::copy(
-            policy, make_reverse_iterator(last), make_reverse_iterator(first), result
-        );
+            policy, make_reverse_iterator(last), make_reverse_iterator(first), result);
     }
 
     template <class Derived, class ItemsIt>
-    void THRUST_HIP_FUNCTION
-    reverse(execution_policy<Derived>& policy, ItemsIt first, ItemsIt last)
+    void THRUST_HIP_FUNCTION reverse(execution_policy<Derived>& policy, ItemsIt first, ItemsIt last)
     {
         typedef typename thrust::iterator_difference<ItemsIt>::type difference_type;
 

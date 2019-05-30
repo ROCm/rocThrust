@@ -18,11 +18,11 @@
 #pragma once
 
 // reserve 0 for undefined
-#define THRUST_DEVICE_SYSTEM_CUDA    1
-#define THRUST_DEVICE_SYSTEM_OMP     2
-#define THRUST_DEVICE_SYSTEM_TBB     3
-#define THRUST_DEVICE_SYSTEM_CPP     4
-#define THRUST_DEVICE_SYSTEM_HIP     5
+#define THRUST_DEVICE_SYSTEM_CUDA 1
+#define THRUST_DEVICE_SYSTEM_OMP 2
+#define THRUST_DEVICE_SYSTEM_TBB 3
+#define THRUST_DEVICE_SYSTEM_CPP 4
+#define THRUST_DEVICE_SYSTEM_HIP 5
 
 #ifndef THRUST_DEVICE_SYSTEM
 #define THRUST_DEVICE_SYSTEM THRUST_DEVICE_SYSTEM_CUDA
@@ -33,22 +33,25 @@
 // XXX eliminate the following in Thrust 1.7
 
 #define THRUST_DEVICE_BACKEND_CUDA THRUST_DEVICE_SYSTEM_CUDA
-#define THRUST_DEVICE_BACKEND_OMP  THRUST_DEVICE_SYSTEM_OMP
-#define THRUST_DEVICE_BACKEND_TBB  THRUST_DEVICE_SYSTEM_TBB
-#define THRUST_DEVICE_BACKEND_HIP  THRUST_DEVICE_SYSTEM_HIP
+#define THRUST_DEVICE_BACKEND_OMP THRUST_DEVICE_SYSTEM_OMP
+#define THRUST_DEVICE_BACKEND_TBB THRUST_DEVICE_SYSTEM_TBB
+#define THRUST_DEVICE_BACKEND_HIP THRUST_DEVICE_SYSTEM_HIP
 
 #ifdef THRUST_DEVICE_BACKEND
-#  if THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_MSVC
-#    pragma message("----------------------------------------------------------------------------------")
-#    pragma message("| WARNING: THRUST_DEVICE_BACKEND is deprecated; use THRUST_DEVICE_SYSTEM instead |")
-#    pragma message("----------------------------------------------------------------------------------")
-#  else
-#    warning ----------------------------------------------------------------------------------
-#    warning | WARNING: THRUST_DEVICE_BACKEND is deprecated; use THRUST_DEVICE_SYSTEM instead |
-#    warning ----------------------------------------------------------------------------------
-#  endif // THRUST_HOST_COMPILER
-#  undef THRUST_DEVICE_SYSTEM
-#  define THRUST_DEVICE_SYSTEM THRUST_DEVICE_BACKEND
+#if THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_MSVC
+#pragma message( \
+    "----------------------------------------------------------------------------------")
+#pragma message( \
+    "| WARNING: THRUST_DEVICE_BACKEND is deprecated; use THRUST_DEVICE_SYSTEM instead |")
+#pragma message( \
+    "----------------------------------------------------------------------------------")
+#else
+#warning----------------------------------------------------------------------------------
+#warning | WARNING: THRUST_DEVICE_BACKEND is deprecated; use THRUST_DEVICE_SYSTEM instead |
+#warning----------------------------------------------------------------------------------
+#endif // THRUST_HOST_COMPILER
+#undef THRUST_DEVICE_SYSTEM
+#define THRUST_DEVICE_SYSTEM THRUST_DEVICE_BACKEND
 #endif // THRUST_DEVICE_BACKEND
 
 #if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
@@ -63,5 +66,4 @@
 #define __THRUST_DEVICE_SYSTEM_NAMESPACE hip
 #endif
 
-#define __THRUST_DEVICE_SYSTEM_ROOT thrust/system/__THRUST_DEVICE_SYSTEM_NAMESPACE
-
+#define __THRUST_DEVICE_SYSTEM_ROOT thrust / system / __THRUST_DEVICE_SYSTEM_NAMESPACE

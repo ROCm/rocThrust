@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 #pragma once
 
 #include <thrust/detail/config.h>
@@ -22,15 +21,12 @@
 namespace thrust
 {
 
-__thrust_exec_check_disable__
-template<typename Assignable1, typename Assignable2>
-__host__ __device__
-inline void swap(Assignable1 &a, Assignable2 &b)
-{
-  Assignable1 temp = a;
-  a = b;
-  b = temp;
-} // end swap()
+    __thrust_exec_check_disable__ template <typename Assignable1, typename Assignable2>
+    __host__ __device__ inline void swap(Assignable1& a, Assignable2& b)
+    {
+        Assignable1 temp = a;
+        a                = b;
+        b                = temp;
+    } // end swap()
 
 } // end namespace thrust
-

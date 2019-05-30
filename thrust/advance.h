@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file advance.h
  *  \brief Advance an iterator by a given distance.
  */
@@ -26,12 +25,11 @@
 namespace thrust
 {
 
-
-/*! \addtogroup iterators
+    /*! \addtogroup iterators
  *  \{
  */
 
-/*! \p advance(i, n) increments the iterator \p i by the distance \p n. 
+    /*! \p advance(i, n) increments the iterator \p i by the distance \p n. 
  *  If <tt>n > 0</tt> it is equivalent to executing <tt>++i</tt> \p n
  *  times, and if <tt>n < 0</tt> it is equivalent to executing <tt>--i</tt>
  *  \p n times. If <tt>n == 0</tt>, the call has no effect.
@@ -61,14 +59,12 @@ namespace thrust
  *
  *  \see http://www.sgi.com/tech/stl/advance.html
  */
-template <typename InputIterator, typename Distance>
-__host__ __device__
-void advance(InputIterator& i, Distance n);
+    template <typename InputIterator, typename Distance>
+    __host__ __device__ void advance(InputIterator& i, Distance n);
 
-/*! \} // end iterators
+    /*! \} // end iterators
  */
 
 } // end thrust
 
 #include <thrust/detail/advance.inl>
-

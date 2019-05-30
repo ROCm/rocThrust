@@ -18,136 +18,126 @@
 
 #include <thrust/detail/config.h>
 
-#include <thrust/iterator/iterator_traits.h>
 #include <thrust/detail/function.h>
+#include <thrust/iterator/iterator_traits.h>
 #include <thrust/system/detail/sequential/copy_backward.h>
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace sequential
-{
-
-
-__thrust_exec_check_disable__
-template<typename RandomAccessIterator,
-         typename StrictWeakOrdering>
-__host__ __device__
-void insertion_sort(RandomAccessIterator first,
-                    RandomAccessIterator last,
-                    StrictWeakOrdering comp)
-{
-  typedef typename thrust::iterator_value<RandomAccessIterator>::type value_type;
-
-  if(first == last) return;
-
-  // wrap comp
-  thrust::detail::wrapped_function<
-    StrictWeakOrdering,
-    bool
-  > wrapped_comp(comp);
-
-  for(RandomAccessIterator i = first + 1; i != last; ++i)
-  {
-    value_type tmp = *i;
-
-    if(wrapped_comp(tmp, *first))
+    namespace system
     {
-      // tmp is the smallest value encountered so far
-      sequential::copy_backward(first, i, i + 1);
+        namespace detail
+        {
+            namespace sequential
+            {
 
-      *first = tmp;
-    }
-    else
-    {
-      // tmp is not the smallest value, can avoid checking for j == first
-      RandomAccessIterator j = i;
-      RandomAccessIterator k = i - 1;
+                __thrust_exec_check_disable__ template <typename RandomAccessIterator,
+                                                        typename StrictWeakOrdering>
+                __host__ __device__ void insertion_sort(RandomAccessIterator first,
+                                                        RandomAccessIterator last,
+                                                        StrictWeakOrdering   comp)
+                {
+                    typedef typename thrust::iterator_value<RandomAccessIterator>::type value_type;
 
-      while(wrapped_comp(tmp, *k))
-      {
-        *j = *k;
-        j = k;
-        --k;
-      }
+                    if(first == last)
+                        return;
 
-      *j = tmp;
-    }
-  }
-}
+                    // wrap comp
+                    thrust::detail::wrapped_function<StrictWeakOrdering, bool> wrapped_comp(comp);
 
+                    for(RandomAccessIterator i = first + 1; i != last; ++i)
+                    {
+                        value_type tmp = *i;
 
-__thrust_exec_check_disable__
-template<typename RandomAccessIterator1,
-         typename RandomAccessIterator2,
-         typename StrictWeakOrdering>
-__host__ __device__
-void insertion_sort_by_key(RandomAccessIterator1 first1,
-                           RandomAccessIterator1 last1,
-                           RandomAccessIterator2 first2,
-                           StrictWeakOrdering comp)
-{
-  typedef typename thrust::iterator_value<RandomAccessIterator1>::type value_type1;
-  typedef typename thrust::iterator_value<RandomAccessIterator2>::type value_type2;
+                        if(wrapped_comp(tmp, *first))
+                        {
+                            // tmp is the smallest value encountered so far
+                            sequential::copy_backward(first, i, i + 1);
 
-  if(first1 == last1) return;
+                            *first = tmp;
+                        }
+                        else
+                        {
+                            // tmp is not the smallest value, can avoid checking for j == first
+                            RandomAccessIterator j = i;
+                            RandomAccessIterator k = i - 1;
 
-  // wrap comp
-  thrust::detail::wrapped_function<
-    StrictWeakOrdering,
-    bool
-  > wrapped_comp(comp);
+                            while(wrapped_comp(tmp, *k))
+                            {
+                                *j = *k;
+                                j  = k;
+                                --k;
+                            }
 
-  RandomAccessIterator1 i1 = first1 + 1;
-  RandomAccessIterator2 i2 = first2 + 1;
+                            *j = tmp;
+                        }
+                    }
+                }
 
-  for(; i1 != last1; ++i1, ++i2)
-  {
-    value_type1 tmp1 = *i1;
-    value_type2 tmp2 = *i2;
+                __thrust_exec_check_disable__ template <typename RandomAccessIterator1,
+                                                        typename RandomAccessIterator2,
+                                                        typename StrictWeakOrdering>
+                __host__ __device__ void insertion_sort_by_key(RandomAccessIterator1 first1,
+                                                               RandomAccessIterator1 last1,
+                                                               RandomAccessIterator2 first2,
+                                                               StrictWeakOrdering    comp)
+                {
+                    typedef
+                        typename thrust::iterator_value<RandomAccessIterator1>::type value_type1;
+                    typedef
+                        typename thrust::iterator_value<RandomAccessIterator2>::type value_type2;
 
-    if(wrapped_comp(tmp1, *first1))
-    {
-      // tmp is the smallest value encountered so far
-      sequential::copy_backward(first1, i1, i1 + 1);
-      sequential::copy_backward(first2, i2, i2 + 1);
+                    if(first1 == last1)
+                        return;
 
-      *first1 = tmp1;
-      *first2 = tmp2;
-    }
-    else
-    {
-      // tmp is not the smallest value, can avoid checking for j == first
-      RandomAccessIterator1 j1 = i1;
-      RandomAccessIterator1 k1 = i1 - 1;
+                    // wrap comp
+                    thrust::detail::wrapped_function<StrictWeakOrdering, bool> wrapped_comp(comp);
 
-      RandomAccessIterator2 j2 = i2;
-      RandomAccessIterator2 k2 = i2 - 1;
+                    RandomAccessIterator1 i1 = first1 + 1;
+                    RandomAccessIterator2 i2 = first2 + 1;
 
-      while(wrapped_comp(tmp1, *k1))
-      {
-        *j1 = *k1;
-        *j2 = *k2;
+                    for(; i1 != last1; ++i1, ++i2)
+                    {
+                        value_type1 tmp1 = *i1;
+                        value_type2 tmp2 = *i2;
 
-        j1 = k1;
-        j2 = k2;
+                        if(wrapped_comp(tmp1, *first1))
+                        {
+                            // tmp is the smallest value encountered so far
+                            sequential::copy_backward(first1, i1, i1 + 1);
+                            sequential::copy_backward(first2, i2, i2 + 1);
 
-        --k1;
-        --k2;
-      }
+                            *first1 = tmp1;
+                            *first2 = tmp2;
+                        }
+                        else
+                        {
+                            // tmp is not the smallest value, can avoid checking for j == first
+                            RandomAccessIterator1 j1 = i1;
+                            RandomAccessIterator1 k1 = i1 - 1;
 
-      *j1 = tmp1;
-      *j2 = tmp2;
-    }
-  }
-}
+                            RandomAccessIterator2 j2 = i2;
+                            RandomAccessIterator2 k2 = i2 - 1;
 
+                            while(wrapped_comp(tmp1, *k1))
+                            {
+                                *j1 = *k1;
+                                *j2 = *k2;
 
-} // end namespace sequential
-} // end namespace detail
-} // end namespace system
+                                j1 = k1;
+                                j2 = k2;
+
+                                --k1;
+                                --k2;
+                            }
+
+                            *j1 = tmp1;
+                            *j2 = tmp2;
+                        }
+                    }
+                }
+
+            } // end namespace sequential
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
-

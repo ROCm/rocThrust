@@ -24,131 +24,145 @@
 
 #pragma once
 
+#include <cmath>
+#include <limits>
 #include <thrust/detail/config.h>
 #include <thrust/pair.h>
 #include <thrust/random/uniform_real_distribution.h>
-#include <limits>
-#include <cmath>
 
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HCC
-  #include <thrust/random/detail/erfcinv.h>
+#include <thrust/random/detail/erfcinv.h>
 #endif
-
 
 namespace thrust
 {
-namespace random
-{
-namespace detail
-{
-
-// this version samples the normal distribution directly
-// and uses the non-standard math function erfcinv
-template<typename RealType>
-  class normal_distribution_nvcc
-{
-  protected:
-    template<typename UniformRandomNumberGenerator>
-    __host__ __device__
-    RealType sample(UniformRandomNumberGenerator &urng, const RealType mean, const RealType stddev)
+    namespace random
     {
-      typedef typename UniformRandomNumberGenerator::result_type uint_type;
-      const uint_type urng_range = UniformRandomNumberGenerator::max - UniformRandomNumberGenerator::min;
+        namespace detail
+        {
 
-      // Constants for conversion
-      const RealType S1 = static_cast<RealType>(1) / urng_range;
-      const RealType S2 = S1 / 2;
+            // this version samples the normal distribution directly
+            // and uses the non-standard math function erfcinv
+            template <typename RealType>
+            class normal_distribution_nvcc
+            {
+            protected:
+                template <typename UniformRandomNumberGenerator>
+                __host__ __device__ RealType sample(UniformRandomNumberGenerator& urng,
+                                                    const RealType                mean,
+                                                    const RealType                stddev)
+                {
+                    typedef typename UniformRandomNumberGenerator::result_type uint_type;
+                    const uint_type                                            urng_range
+                        = UniformRandomNumberGenerator::max - UniformRandomNumberGenerator::min;
 
-      RealType S3 = static_cast<RealType>(-1.4142135623730950488016887242097); // -sqrt(2)
+                    // Constants for conversion
+                    const RealType S1 = static_cast<RealType>(1) / urng_range;
+                    const RealType S2 = S1 / 2;
 
-      // Get the integer value
-      uint_type u = urng() - UniformRandomNumberGenerator::min;
+                    RealType S3
+                        = static_cast<RealType>(-1.4142135623730950488016887242097); // -sqrt(2)
 
-      // Ensure the conversion to float will give a value in the range [0,0.5)
-      if(u > (urng_range / 2))
-      {
-        u = urng_range - u;
-        S3 = -S3;
-      }
+                    // Get the integer value
+                    uint_type u = urng() - UniformRandomNumberGenerator::min;
 
-      // Convert to floating point in [0,0.5)
-      RealType p = u*S1 + S2;
+                    // Ensure the conversion to float will give a value in the range [0,0.5)
+                    if(u > (urng_range / 2))
+                    {
+                        u  = urng_range - u;
+                        S3 = -S3;
+                    }
 
-      // Apply inverse error function
-      return mean + stddev * S3 * erfcinv(2 * p);
-    }
+                    // Convert to floating point in [0,0.5)
+                    RealType p = u * S1 + S2;
 
-    // no-op
-    __host__ __device__
-    void reset() {}
-};
+                    // Apply inverse error function
+                    return mean + stddev * S3 * erfcinv(2 * p);
+                }
 
-// this version samples the normal distribution using
-// Marsaglia's "polar method"
-template<typename RealType>
-  class normal_distribution_portable
-{
-  protected:
-    normal_distribution_portable()
-      : m_r1(), m_r2(), m_cached_rho(), m_valid(false)
-    {}
+                // no-op
+                __host__ __device__ void reset() {}
+            };
 
-    normal_distribution_portable(const normal_distribution_portable &other)
-      : m_r1(other.m_r1), m_r2(other.m_r2), m_cached_rho(other.m_cached_rho), m_valid(other.m_valid)
-    {}
+            // this version samples the normal distribution using
+            // Marsaglia's "polar method"
+            template <typename RealType>
+            class normal_distribution_portable
+            {
+            protected:
+                normal_distribution_portable()
+                    : m_r1()
+                    , m_r2()
+                    , m_cached_rho()
+                    , m_valid(false)
+                {
+                }
 
-    void reset()
-    {
-      m_valid = false;
-    }
+                normal_distribution_portable(const normal_distribution_portable& other)
+                    : m_r1(other.m_r1)
+                    , m_r2(other.m_r2)
+                    , m_cached_rho(other.m_cached_rho)
+                    , m_valid(other.m_valid)
+                {
+                }
 
-    // note that we promise to call this member function with the same mean and stddev
-    template<typename UniformRandomNumberGenerator>
-    __host__ __device__
-    RealType sample(UniformRandomNumberGenerator &urng, const RealType mean, const RealType stddev)
-    {
-      // implementation from Boost
-      // allow for Koenig lookup
-      using std::sqrt; using std::log; using std::sin; using std::cos;
+                void reset()
+                {
+                    m_valid = false;
+                }
 
-      if(!m_valid)
-      {
-        uniform_real_distribution<RealType> u01;
-        m_r1 = u01(urng);
-        m_r2 = u01(urng);
-        m_cached_rho = sqrt(-RealType(2) * log(RealType(1)-m_r2));
+                // note that we promise to call this member function with the same mean and stddev
+                template <typename UniformRandomNumberGenerator>
+                __host__ __device__ RealType sample(UniformRandomNumberGenerator& urng,
+                                                    const RealType                mean,
+                                                    const RealType                stddev)
+                {
+                    // implementation from Boost
+                    // allow for Koenig lookup
+                    using std::cos;
+                    using std::log;
+                    using std::sin;
+                    using std::sqrt;
 
-        m_valid = true;
-      }
-      else
-      {
-        m_valid = false;
-      }
+                    if(!m_valid)
+                    {
+                        uniform_real_distribution<RealType> u01;
+                        m_r1         = u01(urng);
+                        m_r2         = u01(urng);
+                        m_cached_rho = sqrt(-RealType(2) * log(RealType(1) - m_r2));
 
-      const RealType pi = RealType(3.14159265358979323846);
+                        m_valid = true;
+                    }
+                    else
+                    {
+                        m_valid = false;
+                    }
 
-      RealType result = m_cached_rho * (m_valid ?
-                          cos(RealType(2)*pi*m_r1) :
-                          sin(RealType(2)*pi*m_r1));
+                    const RealType pi = RealType(3.14159265358979323846);
 
-      return mean + stddev * result;
-    }
+                    RealType result
+                        = m_cached_rho
+                          * (m_valid ? cos(RealType(2) * pi * m_r1) : sin(RealType(2) * pi * m_r1));
 
-  private:
-    RealType m_r1, m_r2, m_cached_rho;
-    bool m_valid;
-};
+                    return mean + stddev * result;
+                }
 
-template<typename RealType>
-  struct normal_distribution_base
-{
-#if (THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC) || (THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HCC)
-  typedef normal_distribution_nvcc<RealType> type;
+            private:
+                RealType m_r1, m_r2, m_cached_rho;
+                bool     m_valid;
+            };
+
+            template <typename RealType>
+            struct normal_distribution_base
+            {
+#if(THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC) \
+    || (THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HCC)
+                typedef normal_distribution_nvcc<RealType> type;
 #else
-  typedef normal_distribution_portable<RealType> type;
+                typedef normal_distribution_portable<RealType> type;
 #endif
-};
+            };
 
-} // end detail
-} // end random
+        } // end detail
+    } // end random
 } // end thrust

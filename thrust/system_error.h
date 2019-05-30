@@ -25,11 +25,11 @@
 namespace thrust
 {
 
-/*! \addtogroup system System Access
+    /*! \addtogroup system System Access
  *  \{
  */
 
-/*! \namespace thrust::system
+    /*! \namespace thrust::system
  *  \brief \p thrust::system is the namespace which contains functionality for manipulating
  *         memory specific to one of Thrust's backend systems. It also contains functionality
  *         for reporting error conditions originating from the operating system or other
@@ -37,11 +37,11 @@ namespace thrust
  *         They are provided in a separate namespace for import convenience but are
  *         also aliased in the top-level \p thrust namespace for easy access.
  */
-namespace system
-{
-} // end system
+    namespace system
+    {
+    } // end system
 
-/*! \} // end system
+    /*! \} // end system
  */
 
 } // end thrust

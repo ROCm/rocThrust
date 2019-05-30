@@ -22,7 +22,7 @@
 namespace thrust
 {
 
-template<typename Element, typename Pointer, typename Derived = use_default> class reference;
+    template <typename Element, typename Pointer, typename Derived = use_default>
+    class reference;
 
 } // end thrust
-

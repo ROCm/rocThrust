@@ -16,38 +16,36 @@
 
 #pragma once
 
-#include <thrust/iterator/iterator_adaptor.h>
-#include <thrust/iterator/iterator_traits.h>
 #include <thrust/detail/type_traits.h>
 #include <thrust/iterator/detail/minimum_system.h>
+#include <thrust/iterator/iterator_adaptor.h>
+#include <thrust/iterator/iterator_traits.h>
 
 namespace thrust
 {
 
-template<typename,typename> class permutation_iterator;
+    template <typename, typename>
+    class permutation_iterator;
 
+    namespace detail
+    {
 
-namespace detail
-{
+        template <typename ElementIterator, typename IndexIterator>
+        struct permutation_iterator_base
+        {
+            typedef typename thrust::iterator_system<ElementIterator>::type System1;
+            typedef typename thrust::iterator_system<IndexIterator>::type   System2;
 
-template<typename ElementIterator,
-         typename IndexIterator>
-  struct permutation_iterator_base
-{
-  typedef typename thrust::iterator_system<ElementIterator>::type System1;
-  typedef typename thrust::iterator_system<IndexIterator>::type System2;
+            typedef thrust::iterator_adaptor<
+                permutation_iterator<ElementIterator, IndexIterator>,
+                IndexIterator,
+                typename thrust::iterator_value<ElementIterator>::type,
+                typename detail::minimum_system<System1, System2>::type,
+                thrust::use_default,
+                typename thrust::iterator_reference<ElementIterator>::type>
+                type;
+        }; // end permutation_iterator_base
 
-  typedef thrust::iterator_adaptor<
-    permutation_iterator<ElementIterator,IndexIterator>,
-    IndexIterator,
-    typename thrust::iterator_value<ElementIterator>::type,
-    typename detail::minimum_system<System1,System2>::type,
-    thrust::use_default,
-    typename thrust::iterator_reference<ElementIterator>::type
-  > type;
-}; // end permutation_iterator_base
-
-} // end detail
+    } // end detail
 
 } // end thrust
-

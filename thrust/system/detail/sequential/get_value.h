@@ -17,30 +17,26 @@
 #pragma once
 
 #include <thrust/detail/config.h>
-#include <thrust/system/detail/sequential/execution_policy.h>
 #include <thrust/detail/raw_pointer_cast.h>
+#include <thrust/system/detail/sequential/execution_policy.h>
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace sequential
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace sequential
+            {
 
+                template <typename DerivedPolicy, typename Pointer>
+                __host__ __device__ typename thrust::iterator_value<Pointer>::type
+                         get_value(sequential::execution_policy<DerivedPolicy>&, Pointer ptr)
+                {
+                    return *thrust::raw_pointer_cast(ptr);
+                } // end get_value()
 
-template<typename DerivedPolicy, typename Pointer>
-__host__ __device__
-  typename thrust::iterator_value<Pointer>::type
-    get_value(sequential::execution_policy<DerivedPolicy> &, Pointer ptr)
-{
-  return *thrust::raw_pointer_cast(ptr);
-} // end get_value()
-
-
-} // end sequential
-} // end detail
-} // end system
+            } // end sequential
+        } // end detail
+    } // end system
 } // end thrust
-

@@ -26,171 +26,131 @@
  ******************************************************************************/
 #pragma once
 
-
 #include <thrust/system/cuda/config.h>
-#include <thrust/system/cuda/detail/execution_policy.h>
 #include <thrust/system/cuda/detail/cross_system.h>
+#include <thrust/system/cuda/detail/execution_policy.h>
 
 BEGIN_NS_THRUST
 
 template <typename DerivedPolicy, typename InputIt, typename OutputIt>
-__host__ __device__ OutputIt
-copy(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-     InputIt                                                     first,
-     InputIt                                                     last,
-     OutputIt                                                    result);
+__host__ __device__ OutputIt copy(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                  InputIt                                                     first,
+                                  InputIt                                                     last,
+                                  OutputIt result);
 
 template <class DerivedPolicy, class InputIt, class Size, class OutputIt>
 __host__ __device__ OutputIt
-copy_n(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-       InputIt                                                     first,
-       Size                                                        n,
-       OutputIt                                                    result);
+                    copy_n(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                           InputIt                                                     first,
+                           Size                                                        n,
+                           OutputIt                                                    result);
 
-namespace cuda_cub {
+namespace cuda_cub
+{
 
-// D->D copy requires NVCC compiler
-template <class System,
-          class InputIterator,
-          class OutputIterator>
-OutputIterator __host__ __device__
-copy(execution_policy<System> &system,
-     InputIterator             first,
-     InputIterator             last,
-     OutputIterator            result);
+    // D->D copy requires NVCC compiler
+    template <class System, class InputIterator, class OutputIterator>
+    OutputIterator __host__ __device__ copy(execution_policy<System>& system,
+                                            InputIterator             first,
+                                            InputIterator             last,
+                                            OutputIterator            result);
 
-template <class System1,
-          class System2,
-          class InputIterator,
-          class OutputIterator>
-OutputIterator __host__
-copy(cross_system<System1, System2> systems,
-     InputIterator  first,
-     InputIterator  last,
-     OutputIterator result);
+    template <class System1, class System2, class InputIterator, class OutputIterator>
+    OutputIterator __host__ copy(cross_system<System1, System2> systems,
+                                 InputIterator                  first,
+                                 InputIterator                  last,
+                                 OutputIterator                 result);
 
-template <class System,
-          class InputIterator,
-          class Size,
-          class OutputIterator>
-OutputIterator __host__ __device__
-copy_n(execution_policy<System> &system,
-       InputIterator             first,
-       Size                      n,
-       OutputIterator            result);
+    template <class System, class InputIterator, class Size, class OutputIterator>
+    OutputIterator __host__ __device__ copy_n(execution_policy<System>& system,
+                                              InputIterator             first,
+                                              Size                      n,
+                                              OutputIterator            result);
 
-template <class System1,
-          class System2,
-          class InputIterator,
-          class Size,
-          class OutputIterator>
-OutputIterator __host__
-copy_n(cross_system<System1, System2> systems,
-       InputIterator  first,
-       Size           n,
-       OutputIterator result);
+    template <class System1, class System2, class InputIterator, class Size, class OutputIterator>
+    OutputIterator __host__ copy_n(cross_system<System1, System2> systems,
+                                   InputIterator                  first,
+                                   Size                           n,
+                                   OutputIterator                 result);
 
-}    // namespace cuda_
+} // namespace cuda_
 END_NS_THRUST
 
-
-
-#include <thrust/system/cuda/detail/internal/copy_device_to_device.h>
 #include <thrust/system/cuda/detail/internal/copy_cross_system.h>
+#include <thrust/system/cuda/detail/internal/copy_device_to_device.h>
 #include <thrust/system/cuda/detail/par_to_seq.h>
 
 BEGIN_NS_THRUST
-namespace cuda_cub {
-
+namespace cuda_cub
+{
 
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
-// D->D copy requires NVCC compiler
+    // D->D copy requires NVCC compiler
 
-__thrust_exec_check_disable__
-template <class System,
-          class InputIterator,
-          class OutputIterator>
-OutputIterator __host__ __device__
-copy(execution_policy<System> &system,
-     InputIterator             first,
-     InputIterator             last,
-     OutputIterator            result)
-{
-  OutputIterator ret = result;
-  if (__THRUST_HAS_CUDART__)
-  {
-    ret = __copy::device_to_device(system, first, last, result);
-  }
-  else
-  {
+    __thrust_exec_check_disable__ template <class System, class InputIterator, class OutputIterator>
+    OutputIterator __host__ __device__ copy(execution_policy<System>& system,
+                                            InputIterator             first,
+                                            InputIterator             last,
+                                            OutputIterator            result)
+    {
+        OutputIterator ret = result;
+        if(__THRUST_HAS_CUDART__)
+        {
+            ret = __copy::device_to_device(system, first, last, result);
+        }
+        else
+        {
 #if !__THRUST_HAS_CUDART__
-    ret = thrust::copy(cvt_to_seq(derived_cast(system)),
-                       first,
-                       last,
-                       result);
+            ret = thrust::copy(cvt_to_seq(derived_cast(system)), first, last, result);
 #endif
-  }
+        }
 
-  return ret;
-}    // end copy()
+        return ret;
+    } // end copy()
 
-__thrust_exec_check_disable__
-template <class System,
-          class InputIterator,
-          class Size,
-          class OutputIterator>
-OutputIterator __host__ __device__
-copy_n(execution_policy<System> &system,
-       InputIterator             first,
-       Size                      n,
-       OutputIterator            result)
-{
-  OutputIterator ret = result;
-  if (__THRUST_HAS_CUDART__)
-  {
-    ret = __copy::device_to_device(system, first, first + n, result);
-  }
-  else
-  {
+    __thrust_exec_check_disable__ template <class System,
+                                            class InputIterator,
+                                            class Size,
+                                            class OutputIterator>
+    OutputIterator __host__ __device__
+                            copy_n(execution_policy<System>& system, InputIterator first, Size n, OutputIterator result)
+    {
+        OutputIterator ret = result;
+        if(__THRUST_HAS_CUDART__)
+        {
+            ret = __copy::device_to_device(system, first, first + n, result);
+        }
+        else
+        {
 #if !__THRUST_HAS_CUDART__
-    ret = thrust::copy_n(cvt_to_seq(derived_cast(system)), first, n, result);
+            ret = thrust::copy_n(cvt_to_seq(derived_cast(system)), first, n, result);
 #endif
-  }
+        }
 
-  return ret;
-} // end copy_n()
+        return ret;
+    } // end copy_n()
 #endif
 
-template <class System1,
-          class System2,
-          class InputIterator,
-          class OutputIterator>
-OutputIterator __host__
-copy(cross_system<System1, System2> systems,
-     InputIterator  first,
-     InputIterator  last,
-     OutputIterator result)
-{
-  return __copy::cross_system_copy(systems,first,last,result);
-} // end copy()
+    template <class System1, class System2, class InputIterator, class OutputIterator>
+    OutputIterator __host__ copy(cross_system<System1, System2> systems,
+                                 InputIterator                  first,
+                                 InputIterator                  last,
+                                 OutputIterator                 result)
+    {
+        return __copy::cross_system_copy(systems, first, last, result);
+    } // end copy()
 
-template <class System1,
-          class System2,
-          class InputIterator,
-          class Size,
-          class OutputIterator>
-OutputIterator __host__
-copy_n(cross_system<System1, System2> systems,
-       InputIterator  first,
-       Size           n,
-       OutputIterator result)
-{
-  return __copy::cross_system_copy_n(systems, first, n, result);
-} // end copy_n()
+    template <class System1, class System2, class InputIterator, class Size, class OutputIterator>
+    OutputIterator __host__ copy_n(cross_system<System1, System2> systems,
+                                   InputIterator                  first,
+                                   Size                           n,
+                                   OutputIterator                 result)
+    {
+        return __copy::cross_system_copy_n(systems, first, n, result);
+    } // end copy_n()
 
-
-}    // namespace cuda_cub
+} // namespace cuda_cub
 END_NS_THRUST
 
-#include <thrust/memory.h>
 #include <thrust/detail/temporary_array.h>
+#include <thrust/memory.h>

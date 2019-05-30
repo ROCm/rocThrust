@@ -14,46 +14,46 @@
  *  limitations under the License.
  */
 
-
 #pragma once
 
 #include <thrust/detail/config.h>
-#include <thrust/system/detail/generic/tag.h>
 #include <thrust/iterator/iterator_traits.h>
+#include <thrust/system/detail/generic/tag.h>
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
+                template <typename DerivedPolicy, typename InputIterator>
+                __host__ __device__ typename thrust::iterator_traits<InputIterator>::value_type
+                         reduce(thrust::execution_policy<DerivedPolicy>& exec,
+                                InputIterator                            first,
+                                InputIterator                            last);
 
-template<typename DerivedPolicy, typename InputIterator>
-__host__ __device__
-  typename thrust::iterator_traits<InputIterator>::value_type
-    reduce(thrust::execution_policy<DerivedPolicy> &exec, InputIterator first, InputIterator last);
+                template <typename DerivedPolicy, typename InputIterator, typename T>
+                __host__ __device__ T reduce(thrust::execution_policy<DerivedPolicy>& exec,
+                                             InputIterator                            first,
+                                             InputIterator                            last,
+                                             T                                        init);
 
+                template <typename DerivedPolicy,
+                          typename InputIterator,
+                          typename T,
+                          typename BinaryFunction>
+                __host__ __device__ T reduce(thrust::execution_policy<DerivedPolicy>& exec,
+                                             InputIterator                            first,
+                                             InputIterator                            last,
+                                             T                                        init,
+                                             BinaryFunction                           binary_op);
 
-template<typename DerivedPolicy, typename InputIterator, typename T>
-__host__ __device__
-  T reduce(thrust::execution_policy<DerivedPolicy> &exec, InputIterator first, InputIterator last, T init);
-
-
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename T,
-         typename BinaryFunction>
-__host__ __device__
-  T reduce(thrust::execution_policy<DerivedPolicy> &exec, InputIterator first, InputIterator last, T init, BinaryFunction binary_op);
-
-
-} // end namespace generic
-} // end namespace detail
-} // end namespace system
+            } // end namespace generic
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/detail/generic/reduce.inl>
-

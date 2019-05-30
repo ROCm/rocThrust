@@ -17,51 +17,47 @@
 #pragma once
 
 #include <thrust/detail/config.h>
-#include <thrust/system/tbb/detail/execution_policy.h>
 #include <thrust/pair.h>
+#include <thrust/system/tbb/detail/execution_policy.h>
 
 namespace thrust
 {
-namespace system
-{
-namespace tbb
-{
-namespace detail
-{
+    namespace system
+    {
+        namespace tbb
+        {
+            namespace detail
+            {
 
+                template <typename DerivedPolicy,
+                          typename ForwardIterator1,
+                          typename ForwardIterator2,
+                          typename BinaryPredicate>
+                thrust::pair<ForwardIterator1, ForwardIterator2>
+                    unique_by_key(execution_policy<DerivedPolicy>& exec,
+                                  ForwardIterator1                 keys_first,
+                                  ForwardIterator1                 keys_last,
+                                  ForwardIterator2                 values_first,
+                                  BinaryPredicate                  binary_pred);
 
-template<typename DerivedPolicy,
-         typename ForwardIterator1,
-         typename ForwardIterator2,
-         typename BinaryPredicate>
-  thrust::pair<ForwardIterator1,ForwardIterator2>
-    unique_by_key(execution_policy<DerivedPolicy> &exec,
-                  ForwardIterator1 keys_first, 
-                  ForwardIterator1 keys_last,
-                  ForwardIterator2 values_first,
-                  BinaryPredicate binary_pred);
+                template <typename DerivedPolicy,
+                          typename InputIterator1,
+                          typename InputIterator2,
+                          typename OutputIterator1,
+                          typename OutputIterator2,
+                          typename BinaryPredicate>
+                thrust::pair<OutputIterator1, OutputIterator2>
+                    unique_by_key_copy(execution_policy<DerivedPolicy>& exec,
+                                       InputIterator1                   keys_first,
+                                       InputIterator1                   keys_last,
+                                       InputIterator2                   values_first,
+                                       OutputIterator1                  keys_output,
+                                       OutputIterator2                  values_output,
+                                       BinaryPredicate                  binary_pred);
 
-
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename BinaryPredicate>
-  thrust::pair<OutputIterator1,OutputIterator2>
-    unique_by_key_copy(execution_policy<DerivedPolicy> &exec,
-                       InputIterator1 keys_first, 
-                       InputIterator1 keys_last,
-                       InputIterator2 values_first,
-                       OutputIterator1 keys_output,
-                       OutputIterator2 values_output,
-                       BinaryPredicate binary_pred);
-
-
-} // end namespace detail
-} // end namespace tbb 
-} // end namespace system
+            } // end namespace detail
+        } // end namespace tbb
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/tbb/detail/unique_by_key.inl>
-

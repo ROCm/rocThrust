@@ -69,12 +69,12 @@ public:
 namespace hip_rocprim
 {
 
-/*! \addtogroup system_backends Systems
+    /*! \addtogroup system_backends Systems
  *  \ingroup system
  *  \{
  */
 
-/*! \namespace thrust::system::hip
+    /*! \namespace thrust::system::hip
  *  \brief \p thrust::system::hip is the namespace containing functionality for allocating, manipulating,
  *         and deallocating memory available to Thrust's hip backend system.
  *         The identifiers are provided in a separate namespace underneath <tt>thrust::system</tt>
@@ -83,11 +83,11 @@ namespace hip_rocprim
  *
  */
 
-// forward declaration of reference for pointer
-template <typename Element>
-class reference;
+    // forward declaration of reference for pointer
+    template <typename Element>
+    class reference;
 
-/*! \p pointer stores a pointer to an object allocated in memory available to the hip system.
+    /*! \p pointer stores a pointer to an object allocated in memory available to the hip system.
  *  This type provides type safety when dispatching standard algorithms on ranges resident
  *  in hip memory.
  *
@@ -109,107 +109,107 @@ class reference;
  *  \see raw_pointer_cast
  */
 
-template <typename T>
-class pointer : public thrust::pointer<T,
-                                        thrust::hip_rocprim::tag,
-                                        thrust::hip_rocprim::reference<T>,
-                                        thrust::hip_rocprim::pointer<T>>
-{
-
-private:
-    typedef thrust::pointer<T,
-                            thrust::hip_rocprim::tag,
-                            thrust::hip_rocprim::reference<T>,
-                            thrust::hip_rocprim::pointer<T>>
-        super_t;
-
-public:
-    /*! \p pointer's no-argument constructor initializes its encapsulated pointer to \c 0.
-     */
-    __host__ __device__ pointer()
-        : super_t()
+    template <typename T>
+    class pointer : public thrust::pointer<T,
+                                           thrust::hip_rocprim::tag,
+                                           thrust::hip_rocprim::reference<T>,
+                                           thrust::hip_rocprim::pointer<T>>
     {
-    }
 
-    /*! This constructor allows construction of a <tt>pointer<const T></tt> from a <tt>T*</tt>.
+    private:
+        typedef thrust::pointer<T,
+                                thrust::hip_rocprim::tag,
+                                thrust::hip_rocprim::reference<T>,
+                                thrust::hip_rocprim::pointer<T>>
+            super_t;
+
+    public:
+        /*! \p pointer's no-argument constructor initializes its encapsulated pointer to \c 0.
+     */
+        __host__ __device__ pointer()
+            : super_t()
+        {
+        }
+
+        /*! This constructor allows construction of a <tt>pointer<const T></tt> from a <tt>T*</tt>.
      *
      *  \param ptr A raw pointer to copy from, presumed to point to a location in memory
      *         accessible by the \p hip system.
      *  \tparam OtherT \p OtherT shall be convertible to \p T.
      */
-    template <typename OtherT>
-    __host__ __device__ explicit pointer(OtherT* ptr)
-        : super_t(ptr)
-    {
-    }
+        template <typename OtherT>
+        __host__ __device__ explicit pointer(OtherT* ptr)
+            : super_t(ptr)
+        {
+        }
 
-    __host__ __device__ explicit pointer(T* ptr)
-        : super_t(ptr)
-    {
-    }
+        __host__ __device__ explicit pointer(T* ptr)
+            : super_t(ptr)
+        {
+        }
 
-    /*! This constructor allows construction from another pointer-like object with related type.
+        /*! This constructor allows construction from another pointer-like object with related type.
      *
      *  \param other The \p OtherPointer to copy.
      *  \tparam OtherPointer The system tag associated with \p OtherPointer shall be convertible
      *          to \p thrust::system::hip::tag and its element type shall be convertible to \p T.
      */
-    template <typename OtherPointer>
-    __host__ __device__
-                pointer(const OtherPointer& other,
-                        typename thrust::detail::enable_if_pointer_is_convertible<OtherPointer,
-                                                                            pointer>::type* = 0)
-        : super_t(other)
-    {
-    }
+        template <typename OtherPointer>
+        __host__ __device__
+                 pointer(const OtherPointer& other,
+                         typename thrust::detail::enable_if_pointer_is_convertible<OtherPointer,
+                                                                              pointer>::type* = 0)
+            : super_t(other)
+        {
+        }
 
-    /*! Assignment operator allows assigning from another pointer-like object with related type.
+        /*! Assignment operator allows assigning from another pointer-like object with related type.
      *
      *  \param other The other pointer-like object to assign from.
      *  \tparam OtherPointer The system tag associated with \p OtherPointer shall be convertible
      *          to \p thrust::system::hip::tag and its element type shall be convertible to \p T.
      */
-    template <typename OtherPointer>
-    __host__ __device__ typename thrust::detail::
-        enable_if_pointer_is_convertible<OtherPointer, pointer, pointer&>::type
-        operator=(const OtherPointer& other)
-    {
-        return super_t::operator=(other);
-    }
-}; // struct pointer
+        template <typename OtherPointer>
+        __host__ __device__ typename thrust::detail::
+            enable_if_pointer_is_convertible<OtherPointer, pointer, pointer&>::type
+            operator=(const OtherPointer& other)
+        {
+            return super_t::operator=(other);
+        }
+    }; // struct pointer
 
-/*! \p reference is a wrapped reference to an object stored in memory available to the \p hip system.
+    /*! \p reference is a wrapped reference to an object stored in memory available to the \p hip system.
  *  \p reference is the type of the result of dereferencing a \p hip::pointer.
  *
  *  \tparam T Specifies the type of the referenced object.
  */
-template <typename T>
-class reference : public thrust::reference<T,
-                                            thrust::hip_rocprim::pointer<T>,
-                                            thrust::hip_rocprim::reference<T>>
-{
+    template <typename T>
+    class reference : public thrust::reference<T,
+                                               thrust::hip_rocprim::pointer<T>,
+                                               thrust::hip_rocprim::reference<T>>
+    {
 
-private:
-    typedef thrust::
-        reference<T, thrust::hip_rocprim::pointer<T>, thrust::hip_rocprim::reference<T>>
-            super_t;
+    private:
+        typedef thrust::
+            reference<T, thrust::hip_rocprim::pointer<T>, thrust::hip_rocprim::reference<T>>
+                super_t;
 
-public:
-    typedef typename super_t::value_type value_type;
-    typedef typename super_t::pointer    pointer;
+    public:
+        typedef typename super_t::value_type value_type;
+        typedef typename super_t::pointer    pointer;
 
-    /*! This constructor initializes this \p reference to refer to an object
+        /*! This constructor initializes this \p reference to refer to an object
      *  pointed to by the given \p pointer. After this \p reference is constructed,
      *  it shall refer to the object pointed to by \p ptr.
      *
      *  \param ptr A \p pointer to copy from.
      */
-    __host__ __device__ explicit reference(const pointer& ptr)
-        : super_t(ptr)
-    {
-    }
+        __host__ __device__ explicit reference(const pointer& ptr)
+            : super_t(ptr)
+        {
+        }
 
-    /*! This constructor accepts a const reference to another \p reference of related type.
+        /*! This constructor accepts a const reference to another \p reference of related type.
      *  After this \p reference is constructed, it shall refer to the same object as \p other.
      *
      *  \param other A \p reference to copy from.
@@ -218,40 +218,40 @@ public:
      *  \note This constructor is templated primarily to allow initialization of <tt>reference<const T></tt>
      *        from <tt>reference<T></tt>.
      */
-    template <typename OtherT>
-    __host__ __device__ reference(
-        const reference<OtherT>& other,
-        typename thrust::detail::enable_if_convertible<typename reference<OtherT>::pointer,
-                                                        pointer>::type* = 0)
-        : super_t(other)
-    {
-    }
+        template <typename OtherT>
+        __host__ __device__ reference(
+            const reference<OtherT>& other,
+            typename thrust::detail::enable_if_convertible<typename reference<OtherT>::pointer,
+                                                           pointer>::type* = 0)
+            : super_t(other)
+        {
+        }
 
-    /*! Copy assignment operator copy assigns from another \p reference of related type.
+        /*! Copy assignment operator copy assigns from another \p reference of related type.
      *
      *  \param other The other \p reference to assign from.
      *  \return <tt>*this</tt>
      *  \tparam OtherT The element type of the other \p reference.
      */
-    template <typename OtherT>
-    __host__ __device__ reference& operator=(const reference<OtherT>& other);
+        template <typename OtherT>
+        __host__ __device__ reference& operator=(const reference<OtherT>& other);
 
-    /*! Assignment operator assigns from a \p value_type.
+        /*! Assignment operator assigns from a \p value_type.
      *
      *  \param x The \p value_type to assign from.
      *  \return <tt>*this</tt>
      */
-    __host__ __device__ reference& operator=(const value_type& x);
-}; // struct reference
+        __host__ __device__ reference& operator=(const value_type& x);
+    }; // struct reference
 
-/*! Exchanges the values of two objects referred to by \p reference.
+    /*! Exchanges the values of two objects referred to by \p reference.
  *  \p x The first \p reference of interest.
  *  \p y The second \p reference ot interest.
  */
-template <typename T>
-__host__ __device__ void swap(reference<T> x, reference<T> y);
+    template <typename T>
+    __host__ __device__ void swap(reference<T> x, reference<T> y);
 
-/*! Allocates an area of memory available to Thrust's <tt>hip</tt> system.
+    /*! Allocates an area of memory available to Thrust's <tt>hip</tt> system.
  *  \param n Number of bytes to allocate.
  *  \return A <tt>hip::pointer<void></tt> pointing to the beginning of the newly
  *          allocated memory. A null <tt>hip::pointer<void></tt> is returned if
@@ -261,9 +261,9 @@ __host__ __device__ void swap(reference<T> x, reference<T> y);
  *  \see hip::free
  *  \see std::malloc
  */
-inline __host__ __device__ pointer<void> malloc(std::size_t n);
+    inline __host__ __device__ pointer<void> malloc(std::size_t n);
 
-/*! Allocates a typed area of memory available to Thrust's <tt>hip</tt> system.
+    /*! Allocates a typed area of memory available to Thrust's <tt>hip</tt> system.
  *  \param n Number of elements to allocate.
  *  \return A <tt>hip::pointer<T></tt> pointing to the beginning of the newly
  *          allocated memory. A null <tt>hip::pointer<T></tt> is returned if
@@ -273,83 +273,83 @@ inline __host__ __device__ pointer<void> malloc(std::size_t n);
  *  \see hip::free
  *  \see std::malloc
  */
-template <typename T>
-inline __host__ __device__ pointer<T> malloc(std::size_t n);
+    template <typename T>
+    inline __host__ __device__ pointer<T> malloc(std::size_t n);
 
-/*! Deallocates an area of memory previously allocated by <tt>hip::malloc</tt>.
+    /*! Deallocates an area of memory previously allocated by <tt>hip::malloc</tt>.
  *  \param ptr A <tt>hip::pointer<void></tt> pointing to the beginning of an area
  *         of memory previously allocated with <tt>hip::malloc</tt>.
  *  \see hip::malloc
  *  \see std::free
  */
-inline __host__ __device__ void free(pointer<void> ptr);
+    inline __host__ __device__ void free(pointer<void> ptr);
 
-// XXX upon c++11
-// template<typename T> using allocator =
-// thrust::detail::malloc_allocator<T,tag,pointer<T> >;
-//
+    // XXX upon c++11
+    // template<typename T> using allocator =
+    // thrust::detail::malloc_allocator<T,tag,pointer<T> >;
+    //
 
-/*! \p hip::allocator is the default allocator used by the \p hip system's containers such as
+    /*! \p hip::allocator is the default allocator used by the \p hip system's containers such as
  *  <tt>hip::vector</tt> if no user-specified allocator is provided. \p hip::allocator allocates
  *  (deallocates) storage with \p hip::malloc (\p hip::free).
  */
-template <typename T>
-struct allocator : thrust::detail::malloc_allocator<T, tag, pointer<T>>
-{
-    /*! The \p rebind metafunction provides the type of an \p allocator
+    template <typename T>
+    struct allocator : thrust::detail::malloc_allocator<T, tag, pointer<T>>
+    {
+        /*! The \p rebind metafunction provides the type of an \p allocator
      *  instantiated with another type.
      *
      *  \tparam U The other type to use for instantiation.
      */
-    template <typename U>
-    struct rebind
-    {
-        /*! The typedef \p other gives the type of the rebound \p allocator.
+        template <typename U>
+        struct rebind
+        {
+            /*! The typedef \p other gives the type of the rebound \p allocator.
          */
-        typedef allocator<U> other;
-    };
+            typedef allocator<U> other;
+        };
 
-    /*! No-argument constructor has no effect.
+        /*! No-argument constructor has no effect.
      */
-    __host__ __device__ inline allocator() {}
+        __host__ __device__ inline allocator() {}
 
-    /*! Copy constructor has no effect.
+        /*! Copy constructor has no effect.
      */
-    __host__ __device__ inline allocator(const allocator&)
-        : thrust::detail::malloc_allocator<T, tag, thrust::hip_rocprim::pointer<T>>()
-    {
-    }
+        __host__ __device__ inline allocator(const allocator&)
+            : thrust::detail::malloc_allocator<T, tag, thrust::hip_rocprim::pointer<T>>()
+        {
+        }
 
-    /*! Constructor from other \p allocator has no effect.
+        /*! Constructor from other \p allocator has no effect.
      */
-    template <typename U>
-    __host__ __device__ inline allocator(const allocator<U>&)
-    {
-    }
+        template <typename U>
+        __host__ __device__ inline allocator(const allocator<U>&)
+        {
+        }
 
-    /*! Destructor has no effect.
+        /*! Destructor has no effect.
      */
-    __host__ __device__ inline ~allocator() {}
-}; // struct allocator
+        __host__ __device__ inline ~allocator() {}
+    }; // struct allocator
 
 } // namespace hip_rocprim
 
 namespace system
 {
 
-/*! \namespace thrust::hip
+    /*! \namespace thrust::hip
  *  \brief \p thrust::hip is a top-level alias for thrust::system::hip.
  */
 
-namespace hip
-{
-    using thrust::hip_rocprim::allocator;
-    using thrust::hip_rocprim::free;
-    using thrust::hip_rocprim::malloc;
-    using thrust::hip_rocprim::pointer;
-    using thrust::hip_rocprim::reference;
-    using thrust::hip_rocprim::swap;
-} // namespace hip
+    namespace hip
+    {
+        using thrust::hip_rocprim::allocator;
+        using thrust::hip_rocprim::free;
+        using thrust::hip_rocprim::malloc;
+        using thrust::hip_rocprim::pointer;
+        using thrust::hip_rocprim::reference;
+        using thrust::hip_rocprim::swap;
+    } // namespace hip
 } /// namespace system
 
 namespace hip

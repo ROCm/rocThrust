@@ -20,17 +20,16 @@
 
 #include <thrust/detail/config.h>
 
-#include <thrust/detail/type_traits/pointer_traits.h>
+#include <thrust/detail/malloc_and_free.h>
 #include <thrust/detail/pointer.h>
-#include <thrust/detail/reference.h>
 #include <thrust/detail/raw_pointer_cast.h>
 #include <thrust/detail/raw_reference_cast.h>
-#include <thrust/detail/malloc_and_free.h>
+#include <thrust/detail/reference.h>
 #include <thrust/detail/temporary_buffer.h>
+#include <thrust/detail/type_traits/pointer_traits.h>
 
 namespace thrust
 {
-
 
 /*! \addtogroup memory_management Memory Management
  *  \addtogroup memory_management_classes Memory Management Classes
@@ -253,22 +252,20 @@ template<typename Element, typename Pointer, typename Derived = thrust::use_defa
 };
 #endif
 
-/*! \}
+    /*! \}
  */
 
-/*!
+    /*!
  *  \addtogroup memory_management_functions Memory Management Functions
  *  \ingroup memory_management
  *  \{
  */
 
-
-/*! \addtogroup allocation_functions
+    /*! \addtogroup allocation_functions
  *  \{
  */
 
-
-/*! This version of \p malloc allocates untyped uninitialized storage associated with a given system.
+    /*! This version of \p malloc allocates untyped uninitialized storage associated with a given system.
  *
  *  \param system The Thrust system with which to associate the storage.
  *  \param n The number of bytes of storage to allocate.
@@ -300,12 +297,11 @@ template<typename Element, typename Pointer, typename Derived = thrust::use_defa
  *  \see free
  *  \see device_malloc
  */
-template<typename DerivedPolicy>
-__host__ __device__
-pointer<void,DerivedPolicy> malloc(const thrust::detail::execution_policy_base<DerivedPolicy> &system, std::size_t n);
+    template <typename DerivedPolicy>
+    __host__ __device__ pointer<void, DerivedPolicy>
+                        malloc(const thrust::detail::execution_policy_base<DerivedPolicy>& system, std::size_t n);
 
-
-/*! This version of \p malloc allocates typed uninitialized storage associated with a given system.
+    /*! This version of \p malloc allocates typed uninitialized storage associated with a given system.
  *
  *  \param system The Thrust system with which to associate the storage.
  *  \param n The number of elements of type \c T which the storage should accomodate.
@@ -338,12 +334,11 @@ pointer<void,DerivedPolicy> malloc(const thrust::detail::execution_policy_base<D
  *  \see free
  *  \see device_malloc
  */
-template<typename T, typename DerivedPolicy>
-__host__ __device__
-pointer<T,DerivedPolicy> malloc(const thrust::detail::execution_policy_base<DerivedPolicy> &system, std::size_t n);
+    template <typename T, typename DerivedPolicy>
+    __host__ __device__ pointer<T, DerivedPolicy>
+                        malloc(const thrust::detail::execution_policy_base<DerivedPolicy>& system, std::size_t n);
 
-
-/*! \p get_temporary_buffer returns a pointer to storage associated with a given Thrust system sufficient to store up to
+    /*! \p get_temporary_buffer returns a pointer to storage associated with a given Thrust system sufficient to store up to
  *  \p n objects of type \c T. If not enough storage is available to accomodate \p n objects, an implementation may return
  *  a smaller buffer. The number of objects the returned buffer can accomodate is also returned.
  *
@@ -391,22 +386,20 @@ pointer<T,DerivedPolicy> malloc(const thrust::detail::execution_policy_base<Deri
  *  \see malloc
  *  \see return_temporary_buffer
  */
-template<typename T, typename DerivedPolicy>
-__host__ __device__
-thrust::pair<thrust::pointer<T,DerivedPolicy>, typename thrust::pointer<T,DerivedPolicy>::difference_type>
-get_temporary_buffer(const thrust::detail::execution_policy_base<DerivedPolicy> &system, typename thrust::pointer<T,DerivedPolicy>::difference_type n);
+    template <typename T, typename DerivedPolicy>
+    __host__ __device__ thrust::pair<thrust::pointer<T, DerivedPolicy>,
+                                     typename thrust::pointer<T, DerivedPolicy>::difference_type>
+                        get_temporary_buffer(const thrust::detail::execution_policy_base<DerivedPolicy>& system,
+                                             typename thrust::pointer<T, DerivedPolicy>::difference_type n);
 
-
-/*! \} allocation_functions
+    /*! \} allocation_functions
  */
 
-
-/*! \addtogroup deallocation_functions
+    /*! \addtogroup deallocation_functions
  *  \{
  */
 
-
-/*! \p free deallocates the storage previously allocated by \p thrust::malloc.
+    /*! \p free deallocates the storage previously allocated by \p thrust::malloc.
  *
  *  \param system The Thrust system with which the storage is associated.
  *  \param ptr A pointer previously returned by \p thrust::malloc. If \p ptr is null, \p free
@@ -434,12 +427,11 @@ get_temporary_buffer(const thrust::detail::execution_policy_base<DerivedPolicy> 
  *  thrust::free(device_sys, ptr);
  *  \endcode
  */
-template<typename DerivedPolicy, typename Pointer>
-__host__ __device__
-void free(const thrust::detail::execution_policy_base<DerivedPolicy> &system, Pointer ptr);
+    template <typename DerivedPolicy, typename Pointer>
+    __host__ __device__ void
+             free(const thrust::detail::execution_policy_base<DerivedPolicy>& system, Pointer ptr);
 
-
-/*! \p return_temporary_buffer deallocates storage associated with a given Thrust system previously allocated by \p get_temporary_buffer.
+    /*! \p return_temporary_buffer deallocates storage associated with a given Thrust system previously allocated by \p get_temporary_buffer.
  *
  *  Thrust uses \p return_temporary_buffer internally when deallocating temporary storage required by algorithm implementations.
  *
@@ -480,29 +472,26 @@ void free(const thrust::detail::execution_policy_base<DerivedPolicy> &system, Po
  *  \see free
  *  \see get_temporary_buffer
  */
-template<typename DerivedPolicy, typename Pointer>
-__host__ __device__
-void return_temporary_buffer(const thrust::detail::execution_policy_base<DerivedPolicy> &system, Pointer p);
+    template <typename DerivedPolicy, typename Pointer>
+    __host__ __device__ void
+             return_temporary_buffer(const thrust::detail::execution_policy_base<DerivedPolicy>& system,
+                                     Pointer                                                     p);
 
-
-/*! \} deallocation_functions
+    /*! \} deallocation_functions
  */
 
-
-/*! \p raw_pointer_cast creates a "raw" pointer from a pointer-like type,
+    /*! \p raw_pointer_cast creates a "raw" pointer from a pointer-like type,
  *  simply returning the wrapped pointer, should it exist.
  *
  *  \param ptr The pointer of interest.
  *  \return <tt>ptr.get()</tt>, if the expression is well formed; <tt>ptr</tt>, otherwise.
  *  \see raw_reference_cast
  */
-template<typename Pointer>
-__host__ __device__
-inline typename thrust::detail::pointer_traits<Pointer>::raw_pointer
-  raw_pointer_cast(const Pointer &ptr);
+    template <typename Pointer>
+    __host__ __device__ inline typename thrust::detail::pointer_traits<Pointer>::raw_pointer
+             raw_pointer_cast(const Pointer& ptr);
 
-
-/*! \p raw_reference_cast creates a "raw" reference from a wrapped reference type,
+    /*! \p raw_reference_cast creates a "raw" reference from a wrapped reference type,
  *  simply returning the underlying reference, should it exist.
  *
  *  If the argument is not a reference wrapper, the result is a reference to the argument.
@@ -513,13 +502,10 @@ inline typename thrust::detail::pointer_traits<Pointer>::raw_pointer
  *        and one for non-<tt>const</tt>.
  *  \see raw_pointer_cast
  */
-template<typename T>
-__host__ __device__
-inline typename detail::raw_reference<T>::type
-  raw_reference_cast(T &ref);
+    template <typename T>
+    __host__ __device__ inline typename detail::raw_reference<T>::type raw_reference_cast(T& ref);
 
-
-/*! \p raw_reference_cast creates a "raw" reference from a wrapped reference type,
+    /*! \p raw_reference_cast creates a "raw" reference from a wrapped reference type,
  *  simply returning the underlying reference, should it exist.
  *
  *  If the argument is not a reference wrapper, the result is a reference to the argument.
@@ -530,14 +516,11 @@ inline typename detail::raw_reference<T>::type
  *        and one for non-<tt>const</tt>.
  *  \see raw_pointer_cast
  */
-template<typename T>
-__host__ __device__
-inline typename detail::raw_reference<const T>::type
-  raw_reference_cast(const T &ref);
+    template <typename T>
+    __host__ __device__ inline typename detail::raw_reference<const T>::type
+             raw_reference_cast(const T& ref);
 
-
-/*! \}
+    /*! \}
  */
 
 } // end thrust
-

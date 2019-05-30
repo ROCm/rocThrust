@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file transform_scan.h
  *  \brief Fused transform / prefix-sum
  */
@@ -27,22 +26,20 @@
 namespace thrust
 {
 
-
-/*! \addtogroup algorithms
+    /*! \addtogroup algorithms
  */
 
-/*! \addtogroup prefixsums Prefix Sums
+    /*! \addtogroup prefixsums Prefix Sums
  *  \ingroup algorithms
  *  \{
  */
-	
-/*! \addtogroup transformed_prefixsums Transformed Prefix Sums
+
+    /*! \addtogroup transformed_prefixsums Transformed Prefix Sums
  *  \ingroup prefixsums
  *  \{
  */
 
-
-/*! \p transform_inclusive_scan fuses the \p transform and \p inclusive_scan
+    /*! \p transform_inclusive_scan fuses the \p transform and \p inclusive_scan
  *  operations.  \p transform_inclusive_scan is equivalent to performing a
  *  tranformation defined by \p unary_op into a temporary sequence and then
  *  performing an \p inclusive_scan on the tranformed sequence.  In most
@@ -98,21 +95,20 @@ namespace thrust
  *  \see \p inclusive_scan
  *
  */
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator,
-         typename UnaryFunction,
-         typename AssociativeOperator>
-__host__ __device__
-  OutputIterator transform_inclusive_scan(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                          InputIterator first,
-                                          InputIterator last,
-                                          OutputIterator result,
-                                          UnaryFunction unary_op,
-                                          AssociativeOperator binary_op);
+    template <typename DerivedPolicy,
+              typename InputIterator,
+              typename OutputIterator,
+              typename UnaryFunction,
+              typename AssociativeOperator>
+    __host__ __device__ OutputIterator
+                        transform_inclusive_scan(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                                 InputIterator                                               first,
+                                                 InputIterator                                               last,
+                                                 OutputIterator                                              result,
+                                                 UnaryFunction       unary_op,
+                                                 AssociativeOperator binary_op);
 
-
-/*! \p transform_inclusive_scan fuses the \p transform and \p inclusive_scan
+    /*! \p transform_inclusive_scan fuses the \p transform and \p inclusive_scan
  *  operations.  \p transform_inclusive_scan is equivalent to performing a
  *  tranformation defined by \p unary_op into a temporary sequence and then
  *  performing an \p inclusive_scan on the tranformed sequence.  In most
@@ -161,18 +157,17 @@ __host__ __device__
  *  \see \p inclusive_scan
  *
  */
-template<typename InputIterator,
-         typename OutputIterator,
-         typename UnaryFunction,
-         typename AssociativeOperator>
-  OutputIterator transform_inclusive_scan(InputIterator first,
-                                          InputIterator last,
-                                          OutputIterator result,
-                                          UnaryFunction unary_op,
-                                          AssociativeOperator binary_op);
+    template <typename InputIterator,
+              typename OutputIterator,
+              typename UnaryFunction,
+              typename AssociativeOperator>
+    OutputIterator transform_inclusive_scan(InputIterator       first,
+                                            InputIterator       last,
+                                            OutputIterator      result,
+                                            UnaryFunction       unary_op,
+                                            AssociativeOperator binary_op);
 
-
-/*! \p transform_exclusive_scan fuses the \p transform and \p exclusive_scan
+    /*! \p transform_exclusive_scan fuses the \p transform and \p exclusive_scan
  *  operations.  \p transform_exclusive_scan is equivalent to performing a
  *  tranformation defined by \p unary_op into a temporary sequence and then
  *  performing an \p exclusive_scan on the tranformed sequence.  In most
@@ -230,23 +225,22 @@ template<typename InputIterator,
  *  \see \p exclusive_scan
  *
  */
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator,
-         typename UnaryFunction,
-         typename T,
-         typename AssociativeOperator>
-__host__ __device__
-  OutputIterator transform_exclusive_scan(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                          InputIterator first,
-                                          InputIterator last,
-                                          OutputIterator result,
-                                          UnaryFunction unary_op,
-                                          T init,
-                                          AssociativeOperator binary_op);
+    template <typename DerivedPolicy,
+              typename InputIterator,
+              typename OutputIterator,
+              typename UnaryFunction,
+              typename T,
+              typename AssociativeOperator>
+    __host__ __device__ OutputIterator
+                        transform_exclusive_scan(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                                 InputIterator                                               first,
+                                                 InputIterator                                               last,
+                                                 OutputIterator                                              result,
+                                                 UnaryFunction       unary_op,
+                                                 T                   init,
+                                                 AssociativeOperator binary_op);
 
-
-/*! \p transform_exclusive_scan fuses the \p transform and \p exclusive_scan
+    /*! \p transform_exclusive_scan fuses the \p transform and \p exclusive_scan
  *  operations.  \p transform_exclusive_scan is equivalent to performing a
  *  tranformation defined by \p unary_op into a temporary sequence and then
  *  performing an \p exclusive_scan on the tranformed sequence.  In most
@@ -297,28 +291,24 @@ __host__ __device__
  *  \see \p exclusive_scan
  *
  */
-template<typename InputIterator,
-         typename OutputIterator,
-         typename UnaryFunction,
-         typename T,
-         typename AssociativeOperator>
-  OutputIterator transform_exclusive_scan(InputIterator first,
-                                          InputIterator last,
-                                          OutputIterator result,
-                                          UnaryFunction unary_op,
-                                          T init,
-                                          AssociativeOperator binary_op);
+    template <typename InputIterator,
+              typename OutputIterator,
+              typename UnaryFunction,
+              typename T,
+              typename AssociativeOperator>
+    OutputIterator transform_exclusive_scan(InputIterator       first,
+                                            InputIterator       last,
+                                            OutputIterator      result,
+                                            UnaryFunction       unary_op,
+                                            T                   init,
+                                            AssociativeOperator binary_op);
 
-
-/*! \} // end transformed_prefixsums
+    /*! \} // end transformed_prefixsums
  */
 
-
-/*! \} // end prefixsums
+    /*! \} // end prefixsums
  */
 
-	
 } // end namespace thrust
 
 #include <thrust/detail/transform_scan.inl>
-

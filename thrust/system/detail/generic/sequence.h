@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 #pragma once
 
 #include <thrust/detail/config.h>
@@ -22,43 +21,34 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
+                template <typename DerivedPolicy, typename ForwardIterator>
+                __host__ __device__ void sequence(thrust::execution_policy<DerivedPolicy>& exec,
+                                                  ForwardIterator                          first,
+                                                  ForwardIterator                          last);
 
-template<typename DerivedPolicy,
-         typename ForwardIterator>
-__host__ __device__
-  void sequence(thrust::execution_policy<DerivedPolicy> &exec,
-                ForwardIterator first,
-                ForwardIterator last);
+                template <typename DerivedPolicy, typename ForwardIterator, typename T>
+                __host__ __device__ void sequence(thrust::execution_policy<DerivedPolicy>& exec,
+                                                  ForwardIterator                          first,
+                                                  ForwardIterator                          last,
+                                                  T                                        init);
 
+                template <typename DerivedPolicy, typename ForwardIterator, typename T>
+                __host__ __device__ void sequence(thrust::execution_policy<DerivedPolicy>& exec,
+                                                  ForwardIterator                          first,
+                                                  ForwardIterator                          last,
+                                                  T                                        init,
+                                                  T                                        step);
 
-template<typename DerivedPolicy, typename ForwardIterator, typename T>
-__host__ __device__
-  void sequence(thrust::execution_policy<DerivedPolicy> &exec,
-                ForwardIterator first,
-                ForwardIterator last,
-                T init);
-
-
-template<typename DerivedPolicy, typename ForwardIterator, typename T>
-__host__ __device__
-  void sequence(thrust::execution_policy<DerivedPolicy> &exec,
-                ForwardIterator first,
-                ForwardIterator last,
-                T init,
-                T step);
-
-
-} // end namespace generic
-} // end namespace detail
-} // end namespace system
+            } // end namespace generic
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/detail/generic/sequence.inl>
-

@@ -17,43 +17,39 @@
 #pragma once
 
 #include <thrust/detail/config.h>
-#include <thrust/system/tbb/detail/execution_policy.h>
 #include <thrust/pair.h>
+#include <thrust/system/tbb/detail/execution_policy.h>
 
 namespace thrust
 {
-namespace system
-{
-namespace tbb
-{
-namespace detail
-{
+    namespace system
+    {
+        namespace tbb
+        {
+            namespace detail
+            {
 
+                template <typename ExecutionPolicy,
+                          typename ForwardIterator,
+                          typename BinaryPredicate>
+                ForwardIterator unique(execution_policy<ExecutionPolicy>& exec,
+                                       ForwardIterator                    first,
+                                       ForwardIterator                    last,
+                                       BinaryPredicate                    binary_pred);
 
-template<typename ExecutionPolicy,
-         typename ForwardIterator,
-         typename BinaryPredicate>
-  ForwardIterator unique(execution_policy<ExecutionPolicy> &exec,
-                         ForwardIterator first,
-                         ForwardIterator last,
-                         BinaryPredicate binary_pred);
+                template <typename ExecutionPolicy,
+                          typename InputIterator,
+                          typename OutputIterator,
+                          typename BinaryPredicate>
+                OutputIterator unique_copy(execution_policy<ExecutionPolicy>& exec,
+                                           InputIterator                      first,
+                                           InputIterator                      last,
+                                           OutputIterator                     output,
+                                           BinaryPredicate                    binary_pred);
 
-
-template<typename ExecutionPolicy,
-         typename InputIterator,
-         typename OutputIterator,
-         typename BinaryPredicate>
-  OutputIterator unique_copy(execution_policy<ExecutionPolicy> &exec,
-                             InputIterator first,
-                             InputIterator last,
-                             OutputIterator output,
-                             BinaryPredicate binary_pred);
-
-
-} // end namespace detail
-} // end namespace tbb 
-} // end namespace system
+            } // end namespace detail
+        } // end namespace tbb
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/tbb/detail/unique.inl>
-

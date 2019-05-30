@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file mismatch.h
  *  \brief Search for differences between ranges
  */
@@ -28,17 +27,15 @@
 namespace thrust
 {
 
-
-/*! \addtogroup algorithms
+    /*! \addtogroup algorithms
  */
 
-/*! \addtogroup searching
+    /*! \addtogroup searching
  *  \ingroup algorithms
  *  \{
  */
 
-
-/*! \p mismatch finds the first position where the two ranges <tt>[first1, last1)</tt>
+    /*! \p mismatch finds the first position where the two ranges <tt>[first1, last1)</tt>
  *  and <tt>[first2, first2 + (last1 - first1))</tt> differ. The two versions of 
  *  \p mismatch use different tests for whether elements differ.
  *
@@ -86,15 +83,14 @@ namespace thrust
  *  \see find
  *  \see find_if
  */
-template<typename DerivedPolicy, typename InputIterator1, typename InputIterator2>
-__host__ __device__
-thrust::pair<InputIterator1, InputIterator2> mismatch(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                                      InputIterator1 first1,
-                                                      InputIterator1 last1,
-                                                      InputIterator2 first2);
+    template <typename DerivedPolicy, typename InputIterator1, typename InputIterator2>
+    __host__ __device__ thrust::pair<InputIterator1, InputIterator2>
+                        mismatch(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                 InputIterator1                                              first1,
+                                 InputIterator1                                              last1,
+                                 InputIterator2                                              first2);
 
-
-/*! \p mismatch finds the first position where the two ranges <tt>[first1, last1)</tt>
+    /*! \p mismatch finds the first position where the two ranges <tt>[first1, last1)</tt>
  * and <tt>[first2, first2 + (last1 - first1))</tt> differ. The two versions of 
  * \p mismatch use different tests for whether elements differ.
  *
@@ -137,13 +133,11 @@ thrust::pair<InputIterator1, InputIterator2> mismatch(const thrust::detail::exec
  *  \see find
  *  \see find_if
  */
-template <typename InputIterator1, typename InputIterator2>
-thrust::pair<InputIterator1, InputIterator2> mismatch(InputIterator1 first1,
-                                                      InputIterator1 last1,
-                                                      InputIterator2 first2);
+    template <typename InputIterator1, typename InputIterator2>
+    thrust::pair<InputIterator1, InputIterator2>
+        mismatch(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2);
 
-
-/*! \p mismatch finds the first position where the two ranges <tt>[first1, last1)</tt>
+    /*! \p mismatch finds the first position where the two ranges <tt>[first1, last1)</tt>
  *  and <tt>[first2, first2 + (last1 - first1))</tt> differ. The two versions of 
  *  \p mismatch use different tests for whether elements differ.
  *
@@ -192,16 +186,18 @@ thrust::pair<InputIterator1, InputIterator2> mismatch(InputIterator1 first1,
  *  \see find
  *  \see find_if
  */
-template<typename DerivedPolicy, typename InputIterator1, typename InputIterator2, typename BinaryPredicate>
-__host__ __device__
-thrust::pair<InputIterator1, InputIterator2> mismatch(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                                      InputIterator1 first1,
-                                                      InputIterator1 last1,
-                                                      InputIterator2 first2,
-                                                      BinaryPredicate pred);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename BinaryPredicate>
+    __host__ __device__ thrust::pair<InputIterator1, InputIterator2>
+                        mismatch(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                 InputIterator1                                              first1,
+                                 InputIterator1                                              last1,
+                                 InputIterator2                                              first2,
+                                 BinaryPredicate                                             pred);
 
-
-/*! \p mismatch finds the first position where the two ranges <tt>[first1, last1)</tt>
+    /*! \p mismatch finds the first position where the two ranges <tt>[first1, last1)</tt>
  * and <tt>[first2, first2 + (last1 - first1))</tt> differ. The two versions of 
  * \p mismatch use different tests for whether elements differ.
  *
@@ -245,16 +241,15 @@ thrust::pair<InputIterator1, InputIterator2> mismatch(const thrust::detail::exec
  *  \see find
  *  \see find_if
  */
-template <typename InputIterator1, typename InputIterator2, typename BinaryPredicate>
-thrust::pair<InputIterator1, InputIterator2> mismatch(InputIterator1 first1,
-                                                      InputIterator1 last1,
-                                                      InputIterator2 first2,
-                                                      BinaryPredicate pred);
+    template <typename InputIterator1, typename InputIterator2, typename BinaryPredicate>
+    thrust::pair<InputIterator1, InputIterator2> mismatch(InputIterator1  first1,
+                                                          InputIterator1  last1,
+                                                          InputIterator2  first2,
+                                                          BinaryPredicate pred);
 
-/*! \} // end searching
+    /*! \} // end searching
  */
 
 } // end namespace thrust
 
 #include <thrust/detail/mismatch.inl>
-

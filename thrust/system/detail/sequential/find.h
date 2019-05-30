@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file find.h
  *  \brief Sequential implementation of find_if. 
  */
@@ -27,45 +26,37 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace sequential
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace sequential
+            {
 
+                __thrust_exec_check_disable__ template <typename DerivedPolicy,
+                                                        typename InputIterator,
+                                                        typename Predicate>
+                __host__ __device__ InputIterator find_if(execution_policy<DerivedPolicy>&,
+                                                          InputIterator first,
+                                                          InputIterator last,
+                                                          Predicate     pred)
+                {
+                    // wrap pred
+                    thrust::detail::wrapped_function<Predicate, bool> wrapped_pred(pred);
 
-__thrust_exec_check_disable__
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename Predicate>
-__host__ __device__
-InputIterator find_if(execution_policy<DerivedPolicy> &,
-                      InputIterator first,
-                      InputIterator last,
-                      Predicate pred)
-{
-  // wrap pred
-  thrust::detail::wrapped_function<
-    Predicate,
-    bool
-  > wrapped_pred(pred);
+                    while(first != last)
+                    {
+                        if(wrapped_pred(*first))
+                            return first;
 
-  while(first != last)
-  {
-    if (wrapped_pred(*first))
-      return first;
+                        ++first;
+                    }
 
-    ++first;
-  }
+                    // return first so zip_iterator works correctly
+                    return first;
+                }
 
-  // return first so zip_iterator works correctly
-  return first;
-}
-
-
-} // end namespace sequential
-} // end namespace detail
-} // end namespace system
+            } // end namespace sequential
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
-

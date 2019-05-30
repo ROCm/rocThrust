@@ -22,12 +22,11 @@
 namespace thrust
 {
 
-template<typename Pointer>
-  inline __host__ __device__ typename thrust::detail::pointer_traits<Pointer>::raw_pointer
-    raw_pointer_cast(const Pointer &ptr)
-{
-  return thrust::detail::pointer_traits<Pointer>::get(ptr);
-} // end raw_pointer_cast()
+    template <typename Pointer>
+    inline __host__ __device__ typename thrust::detail::pointer_traits<Pointer>::raw_pointer
+                    raw_pointer_cast(const Pointer& ptr)
+    {
+        return thrust::detail::pointer_traits<Pointer>::get(ptr);
+    } // end raw_pointer_cast()
 
 } // end thrust
-

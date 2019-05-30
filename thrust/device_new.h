@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file device_new.h
  *  \brief Constructs new elements in device memory
  */
@@ -30,12 +29,12 @@
 namespace thrust
 {
 
-/*!
+    /*!
  *  \addtogroup allocation_functions Allocation Functions
  *  \{
  */
 
-/*! \p device_new implements the placement \c new operator for types
+    /*! \p device_new implements the placement \c new operator for types
  *  resident in device memory. \p device_new calls <tt>T</tt>'s null
  *  constructor on a array of objects in device memory.
  *  No memory is allocated by this function.
@@ -47,11 +46,10 @@ namespace thrust
  *
  *  \see device_ptr
  */
-template <typename T>
-  device_ptr<T> device_new(device_ptr<void> p,
-                           const size_t n = 1);
+    template <typename T>
+    device_ptr<T> device_new(device_ptr<void> p, const size_t n = 1);
 
-/*! \p device_new implements the placement new operator for types
+    /*! \p device_new implements the placement new operator for types
  *  resident in device memory. \p device_new calls <tt>T</tt>'s copy
  *  constructor on a array of objects in device memory. No memory is
  *  allocated by this function.
@@ -65,24 +63,21 @@ template <typename T>
  *  \see device_ptr
  *  \see fill
  */
-template <typename T>
-  device_ptr<T> device_new(device_ptr<void> p,
-                           const T &exemplar,
-                           const size_t n = 1);
+    template <typename T>
+    device_ptr<T> device_new(device_ptr<void> p, const T& exemplar, const size_t n = 1);
 
-/*! \p device_new implements the new operator for types resident in device memory.
+    /*! \p device_new implements the new operator for types resident in device memory.
  *  It allocates device memory large enough to hold \p n new objects of type \c T.
  *
  *  \param n The number of objects to allocate. Defaults to \c 1.
  *  \return A \p device_ptr to the newly allocated region of device memory.
  */
-template <typename T>
-  device_ptr<T> device_new(const size_t n = 1);
+    template <typename T>
+    device_ptr<T> device_new(const size_t n = 1);
 
-/*! \}
+    /*! \}
  */
 
 } // end thrust
 
 #include <thrust/detail/device_new.inl>
-

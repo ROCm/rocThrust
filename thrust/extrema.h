@@ -27,8 +27,7 @@
 namespace thrust
 {
 
-
-/*! This version of \p min returns the smaller of two values, given a comparison operation.
+    /*! This version of \p min returns the smaller of two values, given a comparison operation.
  *  \param lhs The first value to compare.
  *  \param rhs The second value to compare.
  *  \param comp A comparison operation.
@@ -70,12 +69,12 @@ namespace thrust
  *  \note Returns the first argument when the arguments are equivalent.
  *  \see max
  */
-template<typename T, typename BinaryPredicate>
-__host__ __device__
-  T min THRUST_PREVENT_MACRO_SUBSTITUTION (const T &lhs, const T &rhs, BinaryPredicate comp);
+    template <typename T, typename BinaryPredicate>
+    __host__ __device__ T min THRUST_PREVENT_MACRO_SUBSTITUTION(const T&        lhs,
+                                                                const T&        rhs,
+                                                                BinaryPredicate comp);
 
-
-/*! This version of \p min returns the smaller of two values.
+    /*! This version of \p min returns the smaller of two values.
  *  \param lhs The first value to compare.
  *  \param rhs The second value to compare.
  *  \return The smaller element.
@@ -99,12 +98,10 @@ __host__ __device__
  *  \note Returns the first argument when the arguments are equivalent.
  *  \see max
  */
-template<typename T>
-__host__ __device__
-  T min THRUST_PREVENT_MACRO_SUBSTITUTION (const T &lhs, const T &rhs);
+    template <typename T>
+    __host__ __device__ T min THRUST_PREVENT_MACRO_SUBSTITUTION(const T& lhs, const T& rhs);
 
-
-/*! This version of \p max returns the larger of two values, given a comparison operation.
+    /*! This version of \p max returns the larger of two values, given a comparison operation.
  *  \param lhs The first value to compare.
  *  \param rhs The second value to compare.
  *  \param comp A comparison operation.
@@ -146,12 +143,12 @@ __host__ __device__
  *  \note Returns the first argument when the arguments are equivalent.
  *  \see min
  */
-template<typename T, typename BinaryPredicate>
-__host__ __device__
-  T max THRUST_PREVENT_MACRO_SUBSTITUTION (const T &lhs, const T &rhs, BinaryPredicate comp);
+    template <typename T, typename BinaryPredicate>
+    __host__ __device__ T max THRUST_PREVENT_MACRO_SUBSTITUTION(const T&        lhs,
+                                                                const T&        rhs,
+                                                                BinaryPredicate comp);
 
-
-/*! This version of \p max returns the larger of two values.
+    /*! This version of \p max returns the larger of two values.
  *  \param lhs The first value to compare.
  *  \param rhs The second value to compare.
  *  \return The larger element.
@@ -175,19 +172,17 @@ __host__ __device__
  *  \note Returns the first argument when the arguments are equivalent.
  *  \see min
  */
-template<typename T>
-__host__ __device__
-  T max THRUST_PREVENT_MACRO_SUBSTITUTION (const T &lhs, const T &rhs);
+    template <typename T>
+    __host__ __device__ T max THRUST_PREVENT_MACRO_SUBSTITUTION(const T& lhs, const T& rhs);
 
-
-/*! \addtogroup reductions
+    /*! \addtogroup reductions
  *  \{
  *  \addtogroup extrema
  *  \ingroup reductions
  *  \{
  */
 
-/*! \p min_element finds the smallest element in the range <tt>[first, last)</tt>.
+    /*! \p min_element finds the smallest element in the range <tt>[first, last)</tt>.
  *  It returns the first iterator \c i in <tt>[first, last)</tt>
  *  such that no other iterator in <tt>[first, last)</tt> points to a value smaller
  *  than \c *i. The return value is \p last if and only if <tt>[first, last)</tt> is an
@@ -224,12 +219,13 @@ __host__ __device__
  *
  *  \see http://www.sgi.com/tech/stl/min_element.html 
  */
-template<typename DerivedPolicy, typename ForwardIterator>
-__host__ __device__
-ForwardIterator min_element(const thrust::detail::execution_policy_base<DerivedPolicy> &exec, ForwardIterator first, ForwardIterator last);
+    template <typename DerivedPolicy, typename ForwardIterator>
+    __host__ __device__ ForwardIterator
+                        min_element(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    ForwardIterator                                             first,
+                                    ForwardIterator                                             last);
 
-
-/*! \p min_element finds the smallest element in the range <tt>[first, last)</tt>.
+    /*! \p min_element finds the smallest element in the range <tt>[first, last)</tt>.
  *  It returns the first iterator \c i in <tt>[first, last)</tt>
  *  such that no other iterator in <tt>[first, last)</tt> points to a value smaller
  *  than \c *i. The return value is \p last if and only if <tt>[first, last)</tt> is an
@@ -262,11 +258,10 @@ ForwardIterator min_element(const thrust::detail::execution_policy_base<DerivedP
  *
  *  \see http://www.sgi.com/tech/stl/min_element.html 
  */
-template <typename ForwardIterator>
-ForwardIterator min_element(ForwardIterator first, ForwardIterator last);
+    template <typename ForwardIterator>
+    ForwardIterator min_element(ForwardIterator first, ForwardIterator last);
 
-
-/*! \p min_element finds the smallest element in the range <tt>[first, last)</tt>.
+    /*! \p min_element finds the smallest element in the range <tt>[first, last)</tt>.
  *  It returns the first iterator \c i in <tt>[first, last)</tt>
  *  such that no other iterator in <tt>[first, last)</tt> points to a value smaller
  *  than \c *i. The return value is \p last if and only if <tt>[first, last)</tt> is an
@@ -327,12 +322,14 @@ ForwardIterator min_element(ForwardIterator first, ForwardIterator last);
  *
  *  \see http://www.sgi.com/tech/stl/min_element.html 
  */
-template<typename DerivedPolicy, typename ForwardIterator, typename BinaryPredicate>
-__host__ __device__
-ForwardIterator min_element(const thrust::detail::execution_policy_base<DerivedPolicy> &exec, ForwardIterator first, ForwardIterator last, BinaryPredicate comp);
+    template <typename DerivedPolicy, typename ForwardIterator, typename BinaryPredicate>
+    __host__ __device__ ForwardIterator
+                        min_element(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    ForwardIterator                                             first,
+                                    ForwardIterator                                             last,
+                                    BinaryPredicate                                             comp);
 
-
-/*! \p min_element finds the smallest element in the range <tt>[first, last)</tt>.
+    /*! \p min_element finds the smallest element in the range <tt>[first, last)</tt>.
  *  It returns the first iterator \c i in <tt>[first, last)</tt>
  *  such that no other iterator in <tt>[first, last)</tt> points to a value smaller
  *  than \c *i. The return value is \p last if and only if <tt>[first, last)</tt> is an
@@ -387,12 +384,10 @@ ForwardIterator min_element(const thrust::detail::execution_policy_base<DerivedP
  *
  *  \see http://www.sgi.com/tech/stl/min_element.html 
  */
-template <typename ForwardIterator, typename BinaryPredicate>
-ForwardIterator min_element(ForwardIterator first, ForwardIterator last,
-                            BinaryPredicate comp);
+    template <typename ForwardIterator, typename BinaryPredicate>
+    ForwardIterator min_element(ForwardIterator first, ForwardIterator last, BinaryPredicate comp);
 
-
-/*! \p max_element finds the largest element in the range <tt>[first, last)</tt>.
+    /*! \p max_element finds the largest element in the range <tt>[first, last)</tt>.
  *  It returns the first iterator \c i in <tt>[first, last)</tt>
  *  such that no other iterator in <tt>[first, last)</tt> points to a value larger
  *  than \c *i. The return value is \p last if and only if <tt>[first, last)</tt> is an
@@ -429,12 +424,13 @@ ForwardIterator min_element(ForwardIterator first, ForwardIterator last,
  *
  *  \see http://www.sgi.com/tech/stl/max_element.html 
  */
-template<typename DerivedPolicy, typename ForwardIterator>
-__host__ __device__
-ForwardIterator max_element(const thrust::detail::execution_policy_base<DerivedPolicy> &exec, ForwardIterator first, ForwardIterator last);
+    template <typename DerivedPolicy, typename ForwardIterator>
+    __host__ __device__ ForwardIterator
+                        max_element(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    ForwardIterator                                             first,
+                                    ForwardIterator                                             last);
 
-
-/*! \p max_element finds the largest element in the range <tt>[first, last)</tt>.
+    /*! \p max_element finds the largest element in the range <tt>[first, last)</tt>.
  *  It returns the first iterator \c i in <tt>[first, last)</tt>
  *  such that no other iterator in <tt>[first, last)</tt> points to a value larger
  *  than \c *i. The return value is \p last if and only if <tt>[first, last)</tt> is an
@@ -466,11 +462,10 @@ ForwardIterator max_element(const thrust::detail::execution_policy_base<DerivedP
  *
  *  \see http://www.sgi.com/tech/stl/max_element.html 
  */
-template <typename ForwardIterator>
-ForwardIterator max_element(ForwardIterator first, ForwardIterator last);
+    template <typename ForwardIterator>
+    ForwardIterator max_element(ForwardIterator first, ForwardIterator last);
 
-
-/*! \p max_element finds the largest element in the range <tt>[first, last)</tt>.
+    /*! \p max_element finds the largest element in the range <tt>[first, last)</tt>.
  *  It returns the first iterator \c i in <tt>[first, last)</tt>
  *  such that no other iterator in <tt>[first, last)</tt> points to a value larger
  *  than \c *i. The return value is \p last if and only if <tt>[first, last)</tt> is an
@@ -531,12 +526,14 @@ ForwardIterator max_element(ForwardIterator first, ForwardIterator last);
  *
  *  \see http://www.sgi.com/tech/stl/max_element.html 
  */
-template<typename DerivedPolicy, typename ForwardIterator, typename BinaryPredicate>
-__host__ __device__
-ForwardIterator max_element(const thrust::detail::execution_policy_base<DerivedPolicy> &exec, ForwardIterator first, ForwardIterator last, BinaryPredicate comp);
+    template <typename DerivedPolicy, typename ForwardIterator, typename BinaryPredicate>
+    __host__ __device__ ForwardIterator
+                        max_element(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    ForwardIterator                                             first,
+                                    ForwardIterator                                             last,
+                                    BinaryPredicate                                             comp);
 
-
-/*! \p max_element finds the largest element in the range <tt>[first, last)</tt>.
+    /*! \p max_element finds the largest element in the range <tt>[first, last)</tt>.
  *  It returns the first iterator \c i in <tt>[first, last)</tt>
  *  such that no other iterator in <tt>[first, last)</tt> points to a value larger
  *  than \c *i. The return value is \p last if and only if <tt>[first, last)</tt> is an
@@ -591,12 +588,10 @@ ForwardIterator max_element(const thrust::detail::execution_policy_base<DerivedP
  *
  *  \see http://www.sgi.com/tech/stl/max_element.html 
  */
-template <typename ForwardIterator, typename BinaryPredicate>
-ForwardIterator max_element(ForwardIterator first, ForwardIterator last,
-                            BinaryPredicate comp);
+    template <typename ForwardIterator, typename BinaryPredicate>
+    ForwardIterator max_element(ForwardIterator first, ForwardIterator last, BinaryPredicate comp);
 
-
-/*! \p minmax_element finds the smallest and largest elements in the range <tt>[first, last)</tt>.
+    /*! \p minmax_element finds the smallest and largest elements in the range <tt>[first, last)</tt>.
  *  It returns a pair of iterators <tt>(imin, imax)</tt> where \c imin is the same iterator
  *  returned by \p min_element and \c imax is the same iterator returned by \p max_element.
  *  This function is potentially more efficient than separate calls to \p min_element and \p max_element.
@@ -631,12 +626,13 @@ ForwardIterator max_element(ForwardIterator first, ForwardIterator last,
  *  \see max_element
  *  \see http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1840.pdf
  */
-template<typename DerivedPolicy, typename ForwardIterator>
-__host__ __device__
-thrust::pair<ForwardIterator,ForwardIterator> minmax_element(const thrust::detail::execution_policy_base<DerivedPolicy> &exec, ForwardIterator first, ForwardIterator last);
+    template <typename DerivedPolicy, typename ForwardIterator>
+    __host__ __device__ thrust::pair<ForwardIterator, ForwardIterator>
+                        minmax_element(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                       ForwardIterator                                             first,
+                                       ForwardIterator                                             last);
 
-
-/*! \p minmax_element finds the smallest and largest elements in the range <tt>[first, last)</tt>.
+    /*! \p minmax_element finds the smallest and largest elements in the range <tt>[first, last)</tt>.
  *  It returns a pair of iterators <tt>(imin, imax)</tt> where \c imin is the same iterator
  *  returned by \p min_element and \c imax is the same iterator returned by \p max_element.
  *  This function is potentially more efficient than separate calls to \p min_element and \p max_element.
@@ -666,12 +662,11 @@ thrust::pair<ForwardIterator,ForwardIterator> minmax_element(const thrust::detai
  *  \see max_element
  *  \see http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1840.pdf
  */
-template <typename ForwardIterator>
-thrust::pair<ForwardIterator,ForwardIterator> minmax_element(ForwardIterator first, 
-                                                             ForwardIterator last);
+    template <typename ForwardIterator>
+    thrust::pair<ForwardIterator, ForwardIterator> minmax_element(ForwardIterator first,
+                                                                  ForwardIterator last);
 
-
-/*! \p minmax_element finds the smallest and largest elements in the range <tt>[first, last)</tt>.
+    /*! \p minmax_element finds the smallest and largest elements in the range <tt>[first, last)</tt>.
  *  It returns a pair of iterators <tt>(imin, imax)</tt> where \c imin is the same iterator
  *  returned by \p min_element and \c imax is the same iterator returned by \p max_element.
  *  This function is potentially more efficient than separate calls to \p min_element and \p max_element.
@@ -730,12 +725,14 @@ thrust::pair<ForwardIterator,ForwardIterator> minmax_element(ForwardIterator fir
  *  \see max_element
  *  \see http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1840.pdf
  */
-template<typename DerivedPolicy, typename ForwardIterator, typename BinaryPredicate>
-__host__ __device__
-thrust::pair<ForwardIterator,ForwardIterator> minmax_element(const thrust::detail::execution_policy_base<DerivedPolicy> &exec, ForwardIterator first, ForwardIterator last, BinaryPredicate comp);
+    template <typename DerivedPolicy, typename ForwardIterator, typename BinaryPredicate>
+    __host__ __device__ thrust::pair<ForwardIterator, ForwardIterator>
+                        minmax_element(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                       ForwardIterator                                             first,
+                                       ForwardIterator                                             last,
+                                       BinaryPredicate                                             comp);
 
-
-/*! \p minmax_element finds the smallest and largest elements in the range <tt>[first, last)</tt>.
+    /*! \p minmax_element finds the smallest and largest elements in the range <tt>[first, last)</tt>.
  *  It returns a pair of iterators <tt>(imin, imax)</tt> where \c imin is the same iterator
  *  returned by \p min_element and \c imax is the same iterator returned by \p max_element.
  *  This function is potentially more efficient than separate calls to \p min_element and \p max_element.
@@ -788,12 +785,11 @@ thrust::pair<ForwardIterator,ForwardIterator> minmax_element(const thrust::detai
  *  \see max_element
  *  \see http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1840.pdf
  */
-template <typename ForwardIterator, typename BinaryPredicate>
-thrust::pair<ForwardIterator,ForwardIterator> minmax_element(ForwardIterator first, 
-                                                             ForwardIterator last,
-                                                             BinaryPredicate comp);
+    template <typename ForwardIterator, typename BinaryPredicate>
+    thrust::pair<ForwardIterator, ForwardIterator>
+        minmax_element(ForwardIterator first, ForwardIterator last, BinaryPredicate comp);
 
-/*! \} // end extrema
+    /*! \} // end extrema
  *  \} // end reductions
  */
 
@@ -801,4 +797,3 @@ thrust::pair<ForwardIterator,ForwardIterator> minmax_element(ForwardIterator fir
 
 #include <thrust/detail/extrema.inl>
 #include <thrust/detail/minmax.h>
-

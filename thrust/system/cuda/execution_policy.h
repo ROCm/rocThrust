@@ -81,4 +81,3 @@
 #include <thrust/system/cuda/detail/sort.h>
 
 // work in progress
-

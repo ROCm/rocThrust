@@ -21,36 +21,31 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace sequential
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace sequential
+            {
 
+                template <typename DerivedPolicy, typename RandomAccessIterator>
+                __host__ __device__ void
+                         stable_radix_sort(sequential::execution_policy<DerivedPolicy>& exec,
+                                           RandomAccessIterator                         begin,
+                                           RandomAccessIterator                         end);
 
-template<typename DerivedPolicy,
-         typename RandomAccessIterator>
-__host__ __device__
-void stable_radix_sort(sequential::execution_policy<DerivedPolicy> &exec,
-                       RandomAccessIterator begin,
-                       RandomAccessIterator end);
+                template <typename DerivedPolicy,
+                          typename RandomAccessIterator1,
+                          typename RandomAccessIterator2>
+                __host__ __device__ void
+                         stable_radix_sort_by_key(sequential::execution_policy<DerivedPolicy>& exec,
+                                                  RandomAccessIterator1 keys_begin,
+                                                  RandomAccessIterator1 keys_end,
+                                                  RandomAccessIterator2 values_begin);
 
-
-template<typename DerivedPolicy,
-         typename RandomAccessIterator1,
-         typename RandomAccessIterator2>
-__host__ __device__
-void stable_radix_sort_by_key(sequential::execution_policy<DerivedPolicy> &exec,
-                              RandomAccessIterator1 keys_begin,
-                              RandomAccessIterator1 keys_end,
-                              RandomAccessIterator2 values_begin);
-
-
-} // end namespace sequential
-} // end namespace detail
-} // end namespace system
+            } // end namespace sequential
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/detail/sequential/stable_radix_sort.inl>
-

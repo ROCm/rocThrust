@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file remove.h
  *  \brief Functions for removing elements from a range
  */
@@ -27,15 +26,13 @@
 namespace thrust
 {
 
-
-/*! \addtogroup stream_compaction Stream Compaction
+    /*! \addtogroup stream_compaction Stream Compaction
  *  \ingroup reordering
  *  \{
  *
  */
 
-
-/*! \p remove removes from the range <tt>[first, last)</tt> all elements that are
+    /*! \p remove removes from the range <tt>[first, last)</tt> all elements that are
  *  equal to \p value. That is, \p remove returns an iterator \p new_last such
  *  that the range <tt>[first, new_last)</tt> contains no elements equal to
  *  \p value. The iterators in the range <tt>[new_first,last)</tt> are all still
@@ -92,17 +89,14 @@ namespace thrust
  *  \see remove_copy
  *  \see remove_copy_if
  */
-template<typename DerivedPolicy,
-         typename ForwardIterator,
-         typename T>
-__host__ __device__
-  ForwardIterator remove(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                         ForwardIterator first,
-                         ForwardIterator last,
-                         const T &value);
+    template <typename DerivedPolicy, typename ForwardIterator, typename T>
+    __host__ __device__ ForwardIterator
+                        remove(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                               ForwardIterator                                             first,
+                               ForwardIterator                                             last,
+                               const T&                                                    value);
 
-
-/*! \p remove removes from the range <tt>[first, last)</tt> all elements that are
+    /*! \p remove removes from the range <tt>[first, last)</tt> all elements that are
  *  equal to \p value. That is, \p remove returns an iterator \p new_last such
  *  that the range <tt>[first, new_last)</tt> contains no elements equal to
  *  \p value. The iterators in the range <tt>[new_first,last)</tt> are all still
@@ -154,14 +148,10 @@ __host__ __device__
  *  \see remove_copy
  *  \see remove_copy_if
  */
-template<typename ForwardIterator,
-         typename T>
-  ForwardIterator remove(ForwardIterator first,
-                         ForwardIterator last,
-                         const T &value);
+    template <typename ForwardIterator, typename T>
+    ForwardIterator remove(ForwardIterator first, ForwardIterator last, const T& value);
 
-
-/*! \p remove_copy copies elements that are not equal to \p value from the range
+    /*! \p remove_copy copies elements that are not equal to \p value from the range
  *  <tt>[first, last)</tt> to a range beginning at \p result. The return value is
  *  the end of the resulting range. This operation is stable, meaning that the
  *  relative order of the elements that are copied is the same as in
@@ -208,19 +198,15 @@ template<typename ForwardIterator,
  *  \see remove_if
  *  \see remove_copy_if
  */
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator,
-         typename T>
-__host__ __device__
-  OutputIterator remove_copy(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                             InputIterator first,
-                             InputIterator last,
-                             OutputIterator result,
-                             const T &value);
+    template <typename DerivedPolicy, typename InputIterator, typename OutputIterator, typename T>
+    __host__ __device__ OutputIterator
+                        remove_copy(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    InputIterator                                               first,
+                                    InputIterator                                               last,
+                                    OutputIterator                                              result,
+                                    const T&                                                    value);
 
-
-/*! \p remove_copy copies elements that are not equal to \p value from the range
+    /*! \p remove_copy copies elements that are not equal to \p value from the range
  *  <tt>[first, last)</tt> to a range beginning at \p result. The return value is
  *  the end of the resulting range. This operation is stable, meaning that the
  *  relative order of the elements that are copied is the same as in
@@ -261,16 +247,11 @@ __host__ __device__
  *  \see remove_if
  *  \see remove_copy_if
  */
-template<typename InputIterator,
-         typename OutputIterator,
-         typename T>
-  OutputIterator remove_copy(InputIterator first,
-                             InputIterator last,
-                             OutputIterator result,
-                             const T &value);
+    template <typename InputIterator, typename OutputIterator, typename T>
+    OutputIterator
+        remove_copy(InputIterator first, InputIterator last, OutputIterator result, const T& value);
 
-
-/*! \p remove_if removes from the range <tt>[first, last)</tt> every element \p x
+    /*! \p remove_if removes from the range <tt>[first, last)</tt> every element \p x
  *  such that <tt>pred(x)</tt> is \c true. That is, \p remove_if returns an
  *  iterator \c new_last such that the range <tt>[first,new_last)</tt> contains
  *  no elements for which \p pred is \c true. The iterators in the range
@@ -339,17 +320,14 @@ template<typename InputIterator,
  *  \see remove_copy
  *  \see remove_copy_if
  */
-template<typename DerivedPolicy,
-         typename ForwardIterator,
-         typename Predicate>
-__host__ __device__
-  ForwardIterator remove_if(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                            ForwardIterator first,
-                            ForwardIterator last,
-                            Predicate pred);
+    template <typename DerivedPolicy, typename ForwardIterator, typename Predicate>
+    __host__ __device__ ForwardIterator
+                        remove_if(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                  ForwardIterator                                             first,
+                                  ForwardIterator                                             last,
+                                  Predicate                                                   pred);
 
-
-/*! \p remove_if removes from the range <tt>[first, last)</tt> every element \p x
+    /*! \p remove_if removes from the range <tt>[first, last)</tt> every element \p x
  *  such that <tt>pred(x)</tt> is \c true. That is, \p remove_if returns an
  *  iterator \c new_last such that the range <tt>[first,new_last)</tt> contains
  *  no elements for which \p pred is \c true. The iterators in the range
@@ -412,14 +390,10 @@ __host__ __device__
  *  \see remove_copy
  *  \see remove_copy_if
  */
-template<typename ForwardIterator,
-         typename Predicate>
-  ForwardIterator remove_if(ForwardIterator first,
-                            ForwardIterator last,
-                            Predicate pred);
+    template <typename ForwardIterator, typename Predicate>
+    ForwardIterator remove_if(ForwardIterator first, ForwardIterator last, Predicate pred);
 
-
-/*! \p remove_copy_if copies elements from the range <tt>[first,last)</tt> to a
+    /*! \p remove_copy_if copies elements from the range <tt>[first,last)</tt> to a
  *  range beginning at \p result, except that elements for which \p pred is
  *  \c true are not copied. The return value is the end of the resulting range.
  *  This operation is stable, meaning that the relative order of the elements that
@@ -476,19 +450,18 @@ template<typename ForwardIterator,
  *  \see remove_copy
  *  \see remove_if
  */
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator,
-         typename Predicate>
-__host__ __device__
-  OutputIterator remove_copy_if(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                InputIterator first,
-                                InputIterator last,
-                                OutputIterator result,
-                                Predicate pred);
+    template <typename DerivedPolicy,
+              typename InputIterator,
+              typename OutputIterator,
+              typename Predicate>
+    __host__ __device__ OutputIterator
+                        remove_copy_if(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                       InputIterator                                               first,
+                                       InputIterator                                               last,
+                                       OutputIterator                                              result,
+                                       Predicate                                                   pred);
 
-
-/*! \p remove_copy_if copies elements from the range <tt>[first,last)</tt> to a
+    /*! \p remove_copy_if copies elements from the range <tt>[first,last)</tt> to a
  *  range beginning at \p result, except that elements for which \p pred is
  *  \c true are not copied. The return value is the end of the resulting range.
  *  This operation is stable, meaning that the relative order of the elements that
@@ -539,16 +512,13 @@ __host__ __device__
  *  \see remove_copy
  *  \see remove_if
  */
-template<typename InputIterator,
-         typename OutputIterator,
-         typename Predicate>
-  OutputIterator remove_copy_if(InputIterator first,
-                                InputIterator last,
-                                OutputIterator result,
-                                Predicate pred);
+    template <typename InputIterator, typename OutputIterator, typename Predicate>
+    OutputIterator remove_copy_if(InputIterator  first,
+                                  InputIterator  last,
+                                  OutputIterator result,
+                                  Predicate      pred);
 
-
-/*! \p remove_if removes from the range <tt>[first, last)</tt> every element \p x
+    /*! \p remove_if removes from the range <tt>[first, last)</tt> every element \p x
  *  such that <tt>pred(x)</tt> is \c true. That is, \p remove_if returns an
  *  iterator \c new_last such that the range <tt>[first, new_last)</tt> contains
  *  no elements for which \p pred of the corresponding stencil value is \c true. 
@@ -602,19 +572,18 @@ template<typename InputIterator,
  *  \see remove_copy
  *  \see remove_copy_if
  */
-template<typename DerivedPolicy,
-         typename ForwardIterator,
-         typename InputIterator,
-         typename Predicate>
-__host__ __device__
-  ForwardIterator remove_if(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                            ForwardIterator first,
-                            ForwardIterator last,
-                            InputIterator stencil,
-                            Predicate pred);
+    template <typename DerivedPolicy,
+              typename ForwardIterator,
+              typename InputIterator,
+              typename Predicate>
+    __host__ __device__ ForwardIterator
+                        remove_if(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                  ForwardIterator                                             first,
+                                  ForwardIterator                                             last,
+                                  InputIterator                                               stencil,
+                                  Predicate                                                   pred);
 
-
-/*! \p remove_if removes from the range <tt>[first, last)</tt> every element \p x
+    /*! \p remove_if removes from the range <tt>[first, last)</tt> every element \p x
  *  such that <tt>pred(x)</tt> is \c true. That is, \p remove_if returns an
  *  iterator \c new_last such that the range <tt>[first, new_last)</tt> contains
  *  no elements for which \p pred of the corresponding stencil value is \c true. 
@@ -662,16 +631,13 @@ __host__ __device__
  *  \see remove_copy
  *  \see remove_copy_if
  */
-template<typename ForwardIterator,
-         typename InputIterator,
-         typename Predicate>
-  ForwardIterator remove_if(ForwardIterator first,
-                            ForwardIterator last,
-                            InputIterator stencil,
-                            Predicate pred);
+    template <typename ForwardIterator, typename InputIterator, typename Predicate>
+    ForwardIterator remove_if(ForwardIterator first,
+                              ForwardIterator last,
+                              InputIterator   stencil,
+                              Predicate       pred);
 
-
-/*! \p remove_copy_if copies elements from the range <tt>[first,last)</tt> to a
+    /*! \p remove_copy_if copies elements from the range <tt>[first,last)</tt> to a
  *  range beginning at \p result, except that elements for which \p pred of the 
  *  corresponding stencil value is \c true are not copied. The return value is 
  *  the end of the resulting range.  This operation is stable, meaning that the
@@ -724,21 +690,20 @@ template<typename ForwardIterator,
  *  \see remove_if
  *  \see copy_if
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename Predicate>
-__host__ __device__
-  OutputIterator remove_copy_if(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                InputIterator1 first,
-                                InputIterator1 last,
-                                InputIterator2 stencil,
-                                OutputIterator result,
-                                Predicate pred);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename Predicate>
+    __host__ __device__ OutputIterator
+                        remove_copy_if(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                       InputIterator1                                              first,
+                                       InputIterator1                                              last,
+                                       InputIterator2                                              stencil,
+                                       OutputIterator                                              result,
+                                       Predicate                                                   pred);
 
-
-/*! \p remove_copy_if copies elements from the range <tt>[first,last)</tt> to a
+    /*! \p remove_copy_if copies elements from the range <tt>[first,last)</tt> to a
  *  range beginning at \p result, except that elements for which \p pred of the 
  *  corresponding stencil value is \c true are not copied. The return value is 
  *  the end of the resulting range.  This operation is stable, meaning that the
@@ -785,22 +750,19 @@ __host__ __device__
  *  \see remove_if
  *  \see copy_if
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename Predicate>
-  OutputIterator remove_copy_if(InputIterator1 first,
-                                InputIterator1 last,
-                                InputIterator2 stencil,
-                                OutputIterator result,
-                                Predicate pred);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename Predicate>
+    OutputIterator remove_copy_if(InputIterator1 first,
+                                  InputIterator1 last,
+                                  InputIterator2 stencil,
+                                  OutputIterator result,
+                                  Predicate      pred);
 
-
-/*! \} // end stream_compaction
+    /*! \} // end stream_compaction
  */
-
 
 } // end thrust
 
 #include <thrust/detail/remove.inl>
-

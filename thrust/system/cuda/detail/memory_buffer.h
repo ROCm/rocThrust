@@ -39,39 +39,38 @@ BEGIN_NS_THRUST
 // XXX forward declare thrust::get/return_temporary_buffer
 // to avoid circular include dependency from thrust/memory.h
 //
-template<typename T, typename DerivedPolicy>
-__host__ __device__
-thrust::pair<thrust::pointer<T,DerivedPolicy>, typename thrust::pointer<T,DerivedPolicy>::difference_type>
-get_temporary_buffer(const thrust::detail::execution_policy_base<DerivedPolicy> &system, typename thrust::pointer<T,DerivedPolicy>::difference_type n);
+template <typename T, typename DerivedPolicy>
+__host__ __device__ thrust::pair<thrust::pointer<T, DerivedPolicy>,
+                                 typename thrust::pointer<T, DerivedPolicy>::difference_type>
+                    get_temporary_buffer(const thrust::detail::execution_policy_base<DerivedPolicy>& system,
+                                         typename thrust::pointer<T, DerivedPolicy>::difference_type n);
 
-template<typename DerivedPolicy, typename Pointer>
-__host__ __device__
-void return_temporary_buffer(const thrust::detail::execution_policy_base<DerivedPolicy> &system, Pointer p);
+template <typename DerivedPolicy, typename Pointer>
+__host__ __device__ void
+         return_temporary_buffer(const thrust::detail::execution_policy_base<DerivedPolicy>& system,
+                                 Pointer                                                     p);
 
-namespace cuda_cub {
-
-template <class Derived>
-__host__ __device__ void *
-get_memory_buffer(execution_policy<Derived> &policy, std::ptrdiff_t n)
+namespace cuda_cub
 {
-  return (void *)thrust::raw_pointer_cast(
-      thrust::get_temporary_buffer<char>(policy, n).first);
-}
 
-template <class Derived>
-void __host__ __device__
-return_memory_buffer(execution_policy<Derived> &policy, void* ptr)
-{
-  thrust::return_temporary_buffer(policy,ptr);
-}
+    template <class Derived>
+    __host__ __device__ void* get_memory_buffer(execution_policy<Derived>& policy, std::ptrdiff_t n)
+    {
+        return (void*)thrust::raw_pointer_cast(thrust::get_temporary_buffer<char>(policy, n).first);
+    }
 
-}    // namespace cuda_cub
+    template <class Derived>
+    void __host__ __device__ return_memory_buffer(execution_policy<Derived>& policy, void* ptr)
+    {
+        thrust::return_temporary_buffer(policy, ptr);
+    }
+
+} // namespace cuda_cub
 END_NS_THRUST
 
 // include thrust/memory.h  after
 // we define get/return_memory_buffer
-// 
+//
 //#include <thrust/memory.h>
 
 #endif
-

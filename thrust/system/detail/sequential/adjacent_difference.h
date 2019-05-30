@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file adjacent_difference.h
  *  \brief Sequential implementation of adjacent_difference.
  */
@@ -27,48 +26,44 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace sequential
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace sequential
+            {
 
+                __thrust_exec_check_disable__ template <typename DerivedPolicy,
+                                                        typename InputIterator,
+                                                        typename OutputIterator,
+                                                        typename BinaryFunction>
+                __host__ __device__ OutputIterator
+                                    adjacent_difference(sequential::execution_policy<DerivedPolicy>&,
+                                                        InputIterator  first,
+                                                        InputIterator  last,
+                                                        OutputIterator result,
+                                                        BinaryFunction binary_op)
+                {
+                    typedef typename thrust::iterator_traits<InputIterator>::value_type InputType;
 
-__thrust_exec_check_disable__
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator,
-         typename BinaryFunction>
-__host__ __device__
-OutputIterator adjacent_difference(sequential::execution_policy<DerivedPolicy> &,
-                                   InputIterator first,
-                                   InputIterator last,
-                                   OutputIterator result,
-                                   BinaryFunction binary_op)
-{
-  typedef typename thrust::iterator_traits<InputIterator>::value_type InputType;
+                    if(first == last)
+                        return result;
 
-  if(first == last)
-    return result;
+                    InputType curr = *first;
 
-  InputType curr = *first;
+                    *result = curr;
 
-  *result = curr;
+                    while(++first != last)
+                    {
+                        InputType next = *first;
+                        *(++result)    = binary_op(next, curr);
+                        curr           = next;
+                    }
 
-  while(++first != last)
-  {
-    InputType next = *first;
-    *(++result) = binary_op(next, curr);
-    curr = next;
-  }
+                    return ++result;
+                }
 
-  return ++result;
-}
-
-
-} // end namespace sequential
-} // end namespace detail
-} // end namespace system
+            } // end namespace sequential
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
-

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file set_operations.h
  *  \brief Set theoretic operations for sorted ranges
  */
@@ -28,14 +27,12 @@
 namespace thrust
 {
 
-
-/*! \addtogroup set_operations Set Operations
+    /*! \addtogroup set_operations Set Operations
  *  \ingroup algorithms
  *  \{
  */
 
-
-/*! \p set_difference constructs a sorted range that is the set difference of the sorted
+    /*! \p set_difference constructs a sorted range that is the set difference of the sorted
  *  ranges <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>. The return value is the
  *  end of the output range.
  *
@@ -101,20 +98,19 @@ namespace thrust
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator>
-__host__ __device__
-  OutputIterator set_difference(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                InputIterator1                                              first1,
-                                InputIterator1                                              last1,
-                                InputIterator2                                              first2,
-                                InputIterator2                                              last2,
-                                OutputIterator                                              result);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator>
+    __host__ __device__ OutputIterator
+                        set_difference(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                       InputIterator1                                              first1,
+                                       InputIterator1                                              last1,
+                                       InputIterator2                                              first2,
+                                       InputIterator2                                              last2,
+                                       OutputIterator                                              result);
 
-
-/*! \p set_difference constructs a sorted range that is the set difference of the sorted
+    /*! \p set_difference constructs a sorted range that is the set difference of the sorted
  *  ranges <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>. The return value is the
  *  end of the output range.
  *
@@ -174,17 +170,14 @@ __host__ __device__
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator>
-  OutputIterator set_difference(InputIterator1 first1,
-                                InputIterator1 last1,
-                                InputIterator2 first2,
-                                InputIterator2 last2,
-                                OutputIterator result);
+    template <typename InputIterator1, typename InputIterator2, typename OutputIterator>
+    OutputIterator set_difference(InputIterator1 first1,
+                                  InputIterator1 last1,
+                                  InputIterator2 first2,
+                                  InputIterator2 last2,
+                                  OutputIterator result);
 
-
-/*! \p set_difference constructs a sorted range that is the set difference of the sorted
+    /*! \p set_difference constructs a sorted range that is the set difference of the sorted
  *  ranges <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>. The return value is the
  *  end of the output range.
  *
@@ -249,22 +242,21 @@ template<typename InputIterator1,
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename StrictWeakCompare>
-__host__ __device__
-  OutputIterator set_difference(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                InputIterator1                                              first1,
-                                InputIterator1                                              last1,
-                                InputIterator2                                              first2,
-                                InputIterator2                                              last2,
-                                OutputIterator                                              result,
-                                StrictWeakCompare                                           comp);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename StrictWeakCompare>
+    __host__ __device__ OutputIterator
+                        set_difference(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                       InputIterator1                                              first1,
+                                       InputIterator1                                              last1,
+                                       InputIterator2                                              first2,
+                                       InputIterator2                                              last2,
+                                       OutputIterator                                              result,
+                                       StrictWeakCompare                                           comp);
 
-
-/*! \p set_difference constructs a sorted range that is the set difference of the sorted
+    /*! \p set_difference constructs a sorted range that is the set difference of the sorted
  *  ranges <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>. The return value is the
  *  end of the output range.
  *
@@ -323,19 +315,18 @@ __host__ __device__
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename StrictWeakCompare>
-  OutputIterator set_difference(InputIterator1 first1,
-                                InputIterator1 last1,
-                                InputIterator2 first2,
-                                InputIterator2 last2,
-                                OutputIterator result,
-                                StrictWeakCompare comp);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename StrictWeakCompare>
+    OutputIterator set_difference(InputIterator1    first1,
+                                  InputIterator1    last1,
+                                  InputIterator2    first2,
+                                  InputIterator2    last2,
+                                  OutputIterator    result,
+                                  StrictWeakCompare comp);
 
-
-/*! \p set_intersection constructs a sorted range that is the
+    /*! \p set_intersection constructs a sorted range that is the
  *  intersection of sorted ranges <tt>[first1, last1)</tt> and
  *  <tt>[first2, last2)</tt>. The return value is the end of the
  *  output range.
@@ -408,20 +399,19 @@ template<typename InputIterator1,
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator>
-__host__ __device__
-  OutputIterator set_intersection(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                  InputIterator1                                              first1,
-                                  InputIterator1                                              last1,
-                                  InputIterator2                                              first2,
-                                  InputIterator2                                              last2,
-                                  OutputIterator                                              result);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator>
+    __host__ __device__ OutputIterator
+                        set_intersection(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                         InputIterator1                                              first1,
+                                         InputIterator1                                              last1,
+                                         InputIterator2                                              first2,
+                                         InputIterator2                                              last2,
+                                         OutputIterator                                              result);
 
-
-/*! \p set_intersection constructs a sorted range that is the
+    /*! \p set_intersection constructs a sorted range that is the
  *  intersection of sorted ranges <tt>[first1, last1)</tt> and
  *  <tt>[first2, last2)</tt>. The return value is the end of the
  *  output range.
@@ -488,17 +478,14 @@ __host__ __device__
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator>
-  OutputIterator set_intersection(InputIterator1 first1,
-                                  InputIterator1 last1,
-                                  InputIterator2 first2,
-                                  InputIterator2 last2,
-                                  OutputIterator result);
+    template <typename InputIterator1, typename InputIterator2, typename OutputIterator>
+    OutputIterator set_intersection(InputIterator1 first1,
+                                    InputIterator1 last1,
+                                    InputIterator2 first2,
+                                    InputIterator2 last2,
+                                    OutputIterator result);
 
-
-/*! \p set_intersection constructs a sorted range that is the
+    /*! \p set_intersection constructs a sorted range that is the
  *  intersection of sorted ranges <tt>[first1, last1)</tt> and
  *  <tt>[first2, last2)</tt>. The return value is the end of the
  *  output range.
@@ -571,22 +558,21 @@ template<typename InputIterator1,
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename StrictWeakCompare>
-__host__ __device__
-  OutputIterator set_intersection(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                  InputIterator1                                              first1,
-                                  InputIterator1                                              last1,
-                                  InputIterator2                                              first2,
-                                  InputIterator2                                              last2,
-                                  OutputIterator                                              result,
-                                  StrictWeakCompare                                           comp);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename StrictWeakCompare>
+    __host__ __device__ OutputIterator
+                        set_intersection(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                         InputIterator1                                              first1,
+                                         InputIterator1                                              last1,
+                                         InputIterator2                                              first2,
+                                         InputIterator2                                              last2,
+                                         OutputIterator                                              result,
+                                         StrictWeakCompare                                           comp);
 
-
-/*! \p set_intersection constructs a sorted range that is the
+    /*! \p set_intersection constructs a sorted range that is the
  *  intersection of sorted ranges <tt>[first1, last1)</tt> and
  *  <tt>[first2, last2)</tt>. The return value is the end of the
  *  output range.
@@ -653,19 +639,18 @@ __host__ __device__
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename StrictWeakCompare>
-  OutputIterator set_intersection(InputIterator1 first1,
-                                  InputIterator1 last1,
-                                  InputIterator2 first2,
-                                  InputIterator2 last2,
-                                  OutputIterator result,
-                                  StrictWeakCompare comp);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename StrictWeakCompare>
+    OutputIterator set_intersection(InputIterator1    first1,
+                                    InputIterator1    last1,
+                                    InputIterator2    first2,
+                                    InputIterator2    last2,
+                                    OutputIterator    result,
+                                    StrictWeakCompare comp);
 
-
-/*! \p set_symmetric_difference constructs a sorted range that is the set symmetric
+    /*! \p set_symmetric_difference constructs a sorted range that is the set symmetric
  *  difference of the sorted ranges <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>.
  *  The return value is the end of the output range.
  *
@@ -735,20 +720,19 @@ template<typename InputIterator1,
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator>
-__host__ __device__
-  OutputIterator set_symmetric_difference(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                          InputIterator1                                              first1,
-                                          InputIterator1                                              last1,
-                                          InputIterator2                                              first2,
-                                          InputIterator2                                              last2,
-                                          OutputIterator                                              result);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator>
+    __host__ __device__ OutputIterator
+                        set_symmetric_difference(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                                 InputIterator1                                              first1,
+                                                 InputIterator1                                              last1,
+                                                 InputIterator2                                              first2,
+                                                 InputIterator2                                              last2,
+                                                 OutputIterator result);
 
-
-/*! \p set_symmetric_difference constructs a sorted range that is the set symmetric
+    /*! \p set_symmetric_difference constructs a sorted range that is the set symmetric
  *  difference of the sorted ranges <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>.
  *  The return value is the end of the output range.
  *
@@ -812,17 +796,14 @@ __host__ __device__
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator>
-  OutputIterator set_symmetric_difference(InputIterator1 first1,
-                                          InputIterator1 last1,
-                                          InputIterator2 first2,
-                                          InputIterator2 last2,
-                                          OutputIterator result);
+    template <typename InputIterator1, typename InputIterator2, typename OutputIterator>
+    OutputIterator set_symmetric_difference(InputIterator1 first1,
+                                            InputIterator1 last1,
+                                            InputIterator2 first2,
+                                            InputIterator2 last2,
+                                            OutputIterator result);
 
-
-/*! \p set_symmetric_difference constructs a sorted range that is the set symmetric
+    /*! \p set_symmetric_difference constructs a sorted range that is the set symmetric
  *  difference of the sorted ranges <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>.
  *  The return value is the end of the output range.
  *
@@ -893,22 +874,21 @@ template<typename InputIterator1,
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename StrictWeakCompare>
-__host__ __device__
-  OutputIterator set_symmetric_difference(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                          InputIterator1                                              first1,
-                                          InputIterator1                                              last1,
-                                          InputIterator2                                              first2,
-                                          InputIterator2                                              last2,
-                                          OutputIterator                                              result,
-                                          StrictWeakCompare                                           comp);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename StrictWeakCompare>
+    __host__ __device__ OutputIterator
+                        set_symmetric_difference(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                                 InputIterator1                                              first1,
+                                                 InputIterator1                                              last1,
+                                                 InputIterator2                                              first2,
+                                                 InputIterator2                                              last2,
+                                                 OutputIterator                                              result,
+                                                 StrictWeakCompare                                           comp);
 
-
-/*! \p set_symmetric_difference constructs a sorted range that is the set symmetric
+    /*! \p set_symmetric_difference constructs a sorted range that is the set symmetric
  *  difference of the sorted ranges <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>.
  *  The return value is the end of the output range.
  *
@@ -973,19 +953,18 @@ __host__ __device__
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename StrictWeakCompare>
-  OutputIterator set_symmetric_difference(InputIterator1 first1,
-                                          InputIterator1 last1,
-                                          InputIterator2 first2,
-                                          InputIterator2 last2,
-                                          OutputIterator result,
-                                          StrictWeakCompare comp);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename StrictWeakCompare>
+    OutputIterator set_symmetric_difference(InputIterator1    first1,
+                                            InputIterator1    last1,
+                                            InputIterator2    first2,
+                                            InputIterator2    last2,
+                                            OutputIterator    result,
+                                            StrictWeakCompare comp);
 
-
-/*! \p set_union constructs a sorted range that is the union of the sorted ranges
+    /*! \p set_union constructs a sorted range that is the union of the sorted ranges
  *  <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>. The return value is the
  *  end of the output range.
  *
@@ -1053,20 +1032,19 @@ template<typename InputIterator1,
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator>
-__host__ __device__
-  OutputIterator set_union(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                           InputIterator1                                              first1,
-                           InputIterator1                                              last1,
-                           InputIterator2                                              first2,
-                           InputIterator2                                              last2,
-                           OutputIterator                                              result);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator>
+    __host__ __device__ OutputIterator
+                        set_union(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                  InputIterator1                                              first1,
+                                  InputIterator1                                              last1,
+                                  InputIterator2                                              first2,
+                                  InputIterator2                                              last2,
+                                  OutputIterator                                              result);
 
-
-/*! \p set_union constructs a sorted range that is the union of the sorted ranges
+    /*! \p set_union constructs a sorted range that is the union of the sorted ranges
  *  <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>. The return value is the
  *  end of the output range.
  *
@@ -1128,17 +1106,14 @@ __host__ __device__
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator>
-  OutputIterator set_union(InputIterator1 first1,
-                           InputIterator1 last1,
-                           InputIterator2 first2,
-                           InputIterator2 last2,
-                           OutputIterator result);
+    template <typename InputIterator1, typename InputIterator2, typename OutputIterator>
+    OutputIterator set_union(InputIterator1 first1,
+                             InputIterator1 last1,
+                             InputIterator2 first2,
+                             InputIterator2 last2,
+                             OutputIterator result);
 
-
-/*! \p set_union constructs a sorted range that is the union of the sorted ranges
+    /*! \p set_union constructs a sorted range that is the union of the sorted ranges
  *  <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>. The return value is the
  *  end of the output range.
  *
@@ -1205,22 +1180,21 @@ template<typename InputIterator1,
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename StrictWeakCompare>
-__host__ __device__
-  OutputIterator set_union(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                           InputIterator1                                              first1,
-                           InputIterator1                                              last1,
-                           InputIterator2                                              first2,
-                           InputIterator2                                              last2,
-                           OutputIterator                                              result,
-                           StrictWeakCompare                                           comp);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename StrictWeakCompare>
+    __host__ __device__ OutputIterator
+                        set_union(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                  InputIterator1                                              first1,
+                                  InputIterator1                                              last1,
+                                  InputIterator2                                              first2,
+                                  InputIterator2                                              last2,
+                                  OutputIterator                                              result,
+                                  StrictWeakCompare                                           comp);
 
-
-/*! \p set_union constructs a sorted range that is the union of the sorted ranges
+    /*! \p set_union constructs a sorted range that is the union of the sorted ranges
  *  <tt>[first1, last1)</tt> and <tt>[first2, last2)</tt>. The return value is the
  *  end of the output range.
  *
@@ -1281,19 +1255,18 @@ __host__ __device__
  *  \see \p sort
  *  \see \p is_sorted
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename StrictWeakCompare>
-  OutputIterator set_union(InputIterator1 first1,
-                           InputIterator1 last1,
-                           InputIterator2 first2,
-                           InputIterator2 last2,
-                           OutputIterator result,
-                           StrictWeakCompare comp);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename StrictWeakCompare>
+    OutputIterator set_union(InputIterator1    first1,
+                             InputIterator1    last1,
+                             InputIterator2    first2,
+                             InputIterator2    last2,
+                             OutputIterator    result,
+                             StrictWeakCompare comp);
 
-
-/*! \p set_difference_by_key performs a key-value difference operation from set theory.
+    /*! \p set_difference_by_key performs a key-value difference operation from set theory.
  *  \p set_difference_by_key constructs a sorted range that is the difference of the sorted
  *  ranges <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt>. Associated
  *  with each element from the input and output key ranges is a value element. The associated input
@@ -1378,27 +1351,25 @@ template<typename InputIterator1,
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename InputIterator4,
-         typename OutputIterator1,
-         typename OutputIterator2>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-    set_difference_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                          InputIterator1                                              keys_first1,
-                          InputIterator1                                              keys_last1,
-                          InputIterator2                                              keys_first2,
-                          InputIterator2                                              keys_last2,
-                          InputIterator3                                              values_first1,
-                          InputIterator4                                              values_first2,
-                          OutputIterator1                                             keys_result,
-                          OutputIterator2                                             values_result);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename InputIterator4,
+              typename OutputIterator1,
+              typename OutputIterator2>
+    __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                        set_difference_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                              InputIterator1  keys_first1,
+                                              InputIterator1  keys_last1,
+                                              InputIterator2  keys_first2,
+                                              InputIterator2  keys_last2,
+                                              InputIterator3  values_first1,
+                                              InputIterator4  values_first2,
+                                              OutputIterator1 keys_result,
+                                              OutputIterator2 values_result);
 
-
-/*! \p set_difference_by_key performs a key-value difference operation from set theory.
+    /*! \p set_difference_by_key performs a key-value difference operation from set theory.
  *  \p set_difference_by_key constructs a sorted range that is the difference of the sorted
  *  ranges <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt>. Associated
  *  with each element from the input and output key ranges is a value element. The associated input
@@ -1477,24 +1448,23 @@ __host__ __device__
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename InputIterator4,
-         typename OutputIterator1,
-         typename OutputIterator2>
-  thrust::pair<OutputIterator1,OutputIterator2>
-    set_difference_by_key(InputIterator1                             keys_first1,
-                          InputIterator1                             keys_last1,
-                          InputIterator2                             keys_first2,
-                          InputIterator2                             keys_last2,
-                          InputIterator3                             values_first1,
-                          InputIterator4                             values_first2,
-                          OutputIterator1                            keys_result,
-                          OutputIterator2                            values_result);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename InputIterator4,
+              typename OutputIterator1,
+              typename OutputIterator2>
+    thrust::pair<OutputIterator1, OutputIterator2>
+        set_difference_by_key(InputIterator1  keys_first1,
+                              InputIterator1  keys_last1,
+                              InputIterator2  keys_first2,
+                              InputIterator2  keys_last2,
+                              InputIterator3  values_first1,
+                              InputIterator4  values_first2,
+                              OutputIterator1 keys_result,
+                              OutputIterator2 values_result);
 
-
-/*! \p set_difference_by_key performs a key-value difference operation from set theory.
+    /*! \p set_difference_by_key performs a key-value difference operation from set theory.
  *  \p set_difference_by_key constructs a sorted range that is the difference of the sorted
  *  ranges <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt>. Associated
  *  with each element from the input and output key ranges is a value element. The associated input
@@ -1582,29 +1552,27 @@ template<typename InputIterator1,
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename InputIterator4,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename StrictWeakCompare>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-    set_difference_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                          InputIterator1                                              keys_first1,
-                          InputIterator1                                              keys_last1,
-                          InputIterator2                                              keys_first2,
-                          InputIterator2                                              keys_last2,
-                          InputIterator3                                              values_first1,
-                          InputIterator4                                              values_first2,
-                          OutputIterator1                                             keys_result,
-                          OutputIterator2                                             values_result,
-                          StrictWeakCompare                                           comp);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename InputIterator4,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename StrictWeakCompare>
+    __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                        set_difference_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                              InputIterator1    keys_first1,
+                                              InputIterator1    keys_last1,
+                                              InputIterator2    keys_first2,
+                                              InputIterator2    keys_last2,
+                                              InputIterator3    values_first1,
+                                              InputIterator4    values_first2,
+                                              OutputIterator1   keys_result,
+                                              OutputIterator2   values_result,
+                                              StrictWeakCompare comp);
 
-
-/*! \p set_difference_by_key performs a key-value difference operation from set theory.
+    /*! \p set_difference_by_key performs a key-value difference operation from set theory.
  *  \p set_difference_by_key constructs a sorted range that is the difference of the sorted
  *  ranges <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt>. Associated
  *  with each element from the input and output key ranges is a value element. The associated input
@@ -1686,26 +1654,25 @@ __host__ __device__
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename InputIterator4,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename StrictWeakCompare>
-  thrust::pair<OutputIterator1,OutputIterator2>
-    set_difference_by_key(InputIterator1                             keys_first1,
-                          InputIterator1                             keys_last1,
-                          InputIterator2                             keys_first2,
-                          InputIterator2                             keys_last2,
-                          InputIterator3                             values_first1,
-                          InputIterator4                             values_first2,
-                          OutputIterator1                            keys_result,
-                          OutputIterator2                            values_result,
-                          StrictWeakCompare                          comp);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename InputIterator4,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename StrictWeakCompare>
+    thrust::pair<OutputIterator1, OutputIterator2>
+        set_difference_by_key(InputIterator1    keys_first1,
+                              InputIterator1    keys_last1,
+                              InputIterator2    keys_first2,
+                              InputIterator2    keys_last2,
+                              InputIterator3    values_first1,
+                              InputIterator4    values_first2,
+                              OutputIterator1   keys_result,
+                              OutputIterator2   values_result,
+                              StrictWeakCompare comp);
 
-
-/*! \p set_intersection_by_key performs a key-value intersection operation from set theory.
+    /*! \p set_intersection_by_key performs a key-value intersection operation from set theory.
  *  \p set_intersection_by_key constructs a sorted range that is the intersection of the sorted
  *  ranges <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt>. Associated
  *  with each element from the input and output key ranges is a value element. The associated input
@@ -1791,25 +1758,23 @@ template<typename InputIterator1,
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename OutputIterator1,
-         typename OutputIterator2>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-    set_intersection_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                            InputIterator1                                              keys_first1,
-                            InputIterator1                                              keys_last1,
-                            InputIterator2                                              keys_first2,
-                            InputIterator2                                              keys_last2,
-                            InputIterator3                                              values_first1,
-                            OutputIterator1                                             keys_result,
-                            OutputIterator2                                             values_result);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename OutputIterator1,
+              typename OutputIterator2>
+    __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                        set_intersection_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                                InputIterator1  keys_first1,
+                                                InputIterator1  keys_last1,
+                                                InputIterator2  keys_first2,
+                                                InputIterator2  keys_last2,
+                                                InputIterator3  values_first1,
+                                                OutputIterator1 keys_result,
+                                                OutputIterator2 values_result);
 
-
-/*! \p set_intersection_by_key performs a key-value intersection operation from set theory.
+    /*! \p set_intersection_by_key performs a key-value intersection operation from set theory.
  *  \p set_intersection_by_key constructs a sorted range that is the intersection of the sorted
  *  ranges <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt>. Associated
  *  with each element from the input and output key ranges is a value element. The associated input
@@ -1889,22 +1854,21 @@ __host__ __device__
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename OutputIterator1,
-         typename OutputIterator2>
-  thrust::pair<OutputIterator1,OutputIterator2>
-    set_intersection_by_key(InputIterator1                             keys_first1,
-                            InputIterator1                             keys_last1,
-                            InputIterator2                             keys_first2,
-                            InputIterator2                             keys_last2,
-                            InputIterator3                             values_first1,
-                            OutputIterator1                            keys_result,
-                            OutputIterator2                            values_result);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename OutputIterator1,
+              typename OutputIterator2>
+    thrust::pair<OutputIterator1, OutputIterator2>
+        set_intersection_by_key(InputIterator1  keys_first1,
+                                InputIterator1  keys_last1,
+                                InputIterator2  keys_first2,
+                                InputIterator2  keys_last2,
+                                InputIterator3  values_first1,
+                                OutputIterator1 keys_result,
+                                OutputIterator2 values_result);
 
-
-/*! \p set_intersection_by_key performs a key-value intersection operation from set theory.
+    /*! \p set_intersection_by_key performs a key-value intersection operation from set theory.
  *  \p set_intersection_by_key constructs a sorted range that is the intersection of the sorted
  *  ranges <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt>. Associated
  *  with each element from the input and output key ranges is a value element. The associated input
@@ -1993,27 +1957,25 @@ template<typename InputIterator1,
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename StrictWeakCompare>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-    set_intersection_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                            InputIterator1                                              keys_first1,
-                            InputIterator1                                              keys_last1,
-                            InputIterator2                                              keys_first2,
-                            InputIterator2                                              keys_last2,
-                            InputIterator3                                              values_first1,
-                            OutputIterator1                                             keys_result,
-                            OutputIterator2                                             values_result,
-                            StrictWeakCompare                                           comp);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename StrictWeakCompare>
+    __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                        set_intersection_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                                InputIterator1    keys_first1,
+                                                InputIterator1    keys_last1,
+                                                InputIterator2    keys_first2,
+                                                InputIterator2    keys_last2,
+                                                InputIterator3    values_first1,
+                                                OutputIterator1   keys_result,
+                                                OutputIterator2   values_result,
+                                                StrictWeakCompare comp);
 
-
-/*! \p set_intersection_by_key performs a key-value intersection operation from set theory.
+    /*! \p set_intersection_by_key performs a key-value intersection operation from set theory.
  *  \p set_intersection_by_key constructs a sorted range that is the intersection of the sorted
  *  ranges <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt>. Associated
  *  with each element from the input and output key ranges is a value element. The associated input
@@ -2096,24 +2058,23 @@ __host__ __device__
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename StrictWeakCompare>
-  thrust::pair<OutputIterator1,OutputIterator2>
-    set_intersection_by_key(InputIterator1                             keys_first1,
-                            InputIterator1                             keys_last1,
-                            InputIterator2                             keys_first2,
-                            InputIterator2                             keys_last2,
-                            InputIterator3                             values_first1,
-                            OutputIterator1                            keys_result,
-                            OutputIterator2                            values_result,
-                            StrictWeakCompare                          comp);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename StrictWeakCompare>
+    thrust::pair<OutputIterator1, OutputIterator2>
+        set_intersection_by_key(InputIterator1    keys_first1,
+                                InputIterator1    keys_last1,
+                                InputIterator2    keys_first2,
+                                InputIterator2    keys_last2,
+                                InputIterator3    values_first1,
+                                OutputIterator1   keys_result,
+                                OutputIterator2   values_result,
+                                StrictWeakCompare comp);
 
-
-/*! \p set_symmetric_difference_by_key performs a key-value symmetric difference operation from set theory.
+    /*! \p set_symmetric_difference_by_key performs a key-value symmetric difference operation from set theory.
  *  \p set_difference_by_key constructs a sorted range that is the symmetric difference of the sorted
  *  ranges <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt>. Associated
  *  with each element from the input and output key ranges is a value element. The associated input
@@ -2201,27 +2162,26 @@ template<typename InputIterator1,
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename InputIterator4,
-         typename OutputIterator1,
-         typename OutputIterator2>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-    set_symmetric_difference_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                    InputIterator1                                              keys_first1,
-                                    InputIterator1                                              keys_last1,
-                                    InputIterator2                                              keys_first2,
-                                    InputIterator2                                              keys_last2,
-                                    InputIterator3                                              values_first1,
-                                    InputIterator4                                              values_first2,
-                                    OutputIterator1                                             keys_result,
-                                    OutputIterator2                                             values_result);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename InputIterator4,
+              typename OutputIterator1,
+              typename OutputIterator2>
+    __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                        set_symmetric_difference_by_key(
+                            const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                            InputIterator1                                              keys_first1,
+                            InputIterator1                                              keys_last1,
+                            InputIterator2                                              keys_first2,
+                            InputIterator2                                              keys_last2,
+                            InputIterator3                                              values_first1,
+                            InputIterator4                                              values_first2,
+                            OutputIterator1                                             keys_result,
+                            OutputIterator2                                             values_result);
 
-
-/*! \p set_symmetric_difference_by_key performs a key-value symmetric difference operation from set theory.
+    /*! \p set_symmetric_difference_by_key performs a key-value symmetric difference operation from set theory.
  *  \p set_difference_by_key constructs a sorted range that is the symmetric difference of the sorted
  *  ranges <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt>. Associated
  *  with each element from the input and output key ranges is a value element. The associated input
@@ -2303,24 +2263,23 @@ __host__ __device__
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename InputIterator4,
-         typename OutputIterator1,
-         typename OutputIterator2>
-  thrust::pair<OutputIterator1,OutputIterator2>
-    set_symmetric_difference_by_key(InputIterator1                             keys_first1,
-                                    InputIterator1                             keys_last1,
-                                    InputIterator2                             keys_first2,
-                                    InputIterator2                             keys_last2,
-                                    InputIterator3                             values_first1,
-                                    InputIterator4                             values_first2,
-                                    OutputIterator1                            keys_result,
-                                    OutputIterator2                            values_result);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename InputIterator4,
+              typename OutputIterator1,
+              typename OutputIterator2>
+    thrust::pair<OutputIterator1, OutputIterator2>
+        set_symmetric_difference_by_key(InputIterator1  keys_first1,
+                                        InputIterator1  keys_last1,
+                                        InputIterator2  keys_first2,
+                                        InputIterator2  keys_last2,
+                                        InputIterator3  values_first1,
+                                        InputIterator4  values_first2,
+                                        OutputIterator1 keys_result,
+                                        OutputIterator2 values_result);
 
-
-/*! \p set_symmetric_difference_by_key performs a key-value symmetric difference operation from set theory.
+    /*! \p set_symmetric_difference_by_key performs a key-value symmetric difference operation from set theory.
  *  \p set_difference_by_key constructs a sorted range that is the symmetric difference of the sorted
  *  ranges <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt>. Associated
  *  with each element from the input and output key ranges is a value element. The associated input
@@ -2411,29 +2370,28 @@ template<typename InputIterator1,
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename InputIterator4,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename StrictWeakCompare>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-    set_symmetric_difference_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                    InputIterator1                                              keys_first1,
-                                    InputIterator1                                              keys_last1,
-                                    InputIterator2                                              keys_first2,
-                                    InputIterator2                                              keys_last2,
-                                    InputIterator3                                              values_first1,
-                                    InputIterator4                                              values_first2,
-                                    OutputIterator1                                             keys_result,
-                                    OutputIterator2                                             values_result,
-                                    StrictWeakCompare                                           comp);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename InputIterator4,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename StrictWeakCompare>
+    __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                        set_symmetric_difference_by_key(
+                            const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                            InputIterator1                                              keys_first1,
+                            InputIterator1                                              keys_last1,
+                            InputIterator2                                              keys_first2,
+                            InputIterator2                                              keys_last2,
+                            InputIterator3                                              values_first1,
+                            InputIterator4                                              values_first2,
+                            OutputIterator1                                             keys_result,
+                            OutputIterator2                                             values_result,
+                            StrictWeakCompare                                           comp);
 
-
-/*! \p set_symmetric_difference_by_key performs a key-value symmetric difference operation from set theory.
+    /*! \p set_symmetric_difference_by_key performs a key-value symmetric difference operation from set theory.
  *  \p set_difference_by_key constructs a sorted range that is the symmetric difference of the sorted
  *  ranges <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt>. Associated
  *  with each element from the input and output key ranges is a value element. The associated input
@@ -2518,26 +2476,25 @@ __host__ __device__
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename InputIterator4,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename StrictWeakCompare>
-  thrust::pair<OutputIterator1,OutputIterator2>
-    set_symmetric_difference_by_key(InputIterator1                             keys_first1,
-                                    InputIterator1                             keys_last1,
-                                    InputIterator2                             keys_first2,
-                                    InputIterator2                             keys_last2,
-                                    InputIterator3                             values_first1,
-                                    InputIterator4                             values_first2,
-                                    OutputIterator1                            keys_result,
-                                    OutputIterator2                            values_result,
-                                    StrictWeakCompare                          comp);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename InputIterator4,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename StrictWeakCompare>
+    thrust::pair<OutputIterator1, OutputIterator2>
+        set_symmetric_difference_by_key(InputIterator1    keys_first1,
+                                        InputIterator1    keys_last1,
+                                        InputIterator2    keys_first2,
+                                        InputIterator2    keys_last2,
+                                        InputIterator3    values_first1,
+                                        InputIterator4    values_first2,
+                                        OutputIterator1   keys_result,
+                                        OutputIterator2   values_result,
+                                        StrictWeakCompare comp);
 
-
-/*! \p set_union_by_key performs a key-value union operation from set theory.
+    /*! \p set_union_by_key performs a key-value union operation from set theory.
  *  \p set_union_by_key constructs a sorted range that is the union of the sorted
  *  ranges <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt>. Associated
  *  with each element from the input and output key ranges is a value element. The associated input
@@ -2623,27 +2580,25 @@ template<typename InputIterator1,
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename InputIterator4,
-         typename OutputIterator1,
-         typename OutputIterator2>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-    set_union_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                     InputIterator1                                              keys_first1,
-                     InputIterator1                                              keys_last1,
-                     InputIterator2                                              keys_first2,
-                     InputIterator2                                              keys_last2,
-                     InputIterator3                                              values_first1,
-                     InputIterator4                                              values_first2,
-                     OutputIterator1                                             keys_result,
-                     OutputIterator2                                             values_result);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename InputIterator4,
+              typename OutputIterator1,
+              typename OutputIterator2>
+    __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                        set_union_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                         InputIterator1                                              keys_first1,
+                                         InputIterator1                                              keys_last1,
+                                         InputIterator2                                              keys_first2,
+                                         InputIterator2                                              keys_last2,
+                                         InputIterator3                                              values_first1,
+                                         InputIterator4                                              values_first2,
+                                         OutputIterator1                                             keys_result,
+                                         OutputIterator2                                             values_result);
 
-
-/*! \p set_union_by_key performs a key-value union operation from set theory.
+    /*! \p set_union_by_key performs a key-value union operation from set theory.
  *  \p set_union_by_key constructs a sorted range that is the union of the sorted
  *  ranges <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt>. Associated
  *  with each element from the input and output key ranges is a value element. The associated input
@@ -2723,24 +2678,22 @@ __host__ __device__
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename InputIterator4,
-         typename OutputIterator1,
-         typename OutputIterator2>
-  thrust::pair<OutputIterator1,OutputIterator2>
-    set_union_by_key(InputIterator1                             keys_first1,
-                     InputIterator1                             keys_last1,
-                     InputIterator2                             keys_first2,
-                     InputIterator2                             keys_last2,
-                     InputIterator3                             values_first1,
-                     InputIterator4                             values_first2,
-                     OutputIterator1                            keys_result,
-                     OutputIterator2                            values_result);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename InputIterator4,
+              typename OutputIterator1,
+              typename OutputIterator2>
+    thrust::pair<OutputIterator1, OutputIterator2> set_union_by_key(InputIterator1  keys_first1,
+                                                                    InputIterator1  keys_last1,
+                                                                    InputIterator2  keys_first2,
+                                                                    InputIterator2  keys_last2,
+                                                                    InputIterator3  values_first1,
+                                                                    InputIterator4  values_first2,
+                                                                    OutputIterator1 keys_result,
+                                                                    OutputIterator2 values_result);
 
-
-/*! \p set_union_by_key performs a key-value union operation from set theory.
+    /*! \p set_union_by_key performs a key-value union operation from set theory.
  *  \p set_union_by_key constructs a sorted range that is the union of the sorted
  *  ranges <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt>. Associated
  *  with each element from the input and output key ranges is a value element. The associated input
@@ -2829,29 +2782,27 @@ template<typename InputIterator1,
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename InputIterator4,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename StrictWeakCompare>
-__host__ __device__
-  thrust::pair<OutputIterator1,OutputIterator2>
-    set_union_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                     InputIterator1                                              keys_first1,
-                     InputIterator1                                              keys_last1,
-                     InputIterator2                                              keys_first2,
-                     InputIterator2                                              keys_last2,
-                     InputIterator3                                              values_first1,
-                     InputIterator4                                              values_first2,
-                     OutputIterator1                                             keys_result,
-                     OutputIterator2                                             values_result,
-                     StrictWeakCompare                                           comp);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename InputIterator4,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename StrictWeakCompare>
+    __host__ __device__ thrust::pair<OutputIterator1, OutputIterator2>
+                        set_union_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                         InputIterator1                                              keys_first1,
+                                         InputIterator1                                              keys_last1,
+                                         InputIterator2                                              keys_first2,
+                                         InputIterator2                                              keys_last2,
+                                         InputIterator3                                              values_first1,
+                                         InputIterator4                                              values_first2,
+                                         OutputIterator1                                             keys_result,
+                                         OutputIterator2                                             values_result,
+                                         StrictWeakCompare                                           comp);
 
-
-/*! \p set_union_by_key performs a key-value union operation from set theory.
+    /*! \p set_union_by_key performs a key-value union operation from set theory.
  *  \p set_union_by_key constructs a sorted range that is the union of the sorted
  *  ranges <tt>[keys_first1, keys_last1)</tt> and <tt>[keys_first2, keys_last2)</tt>. Associated
  *  with each element from the input and output key ranges is a value element. The associated input
@@ -2934,30 +2885,26 @@ __host__ __device__
  *  \see \p sort_by_key
  *  \see \p is_sorted
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename InputIterator3,
-         typename InputIterator4,
-         typename OutputIterator1,
-         typename OutputIterator2,
-         typename StrictWeakCompare>
-  thrust::pair<OutputIterator1,OutputIterator2>
-    set_union_by_key(InputIterator1                             keys_first1,
-                     InputIterator1                             keys_last1,
-                     InputIterator2                             keys_first2,
-                     InputIterator2                             keys_last2,
-                     InputIterator3                             values_first1,
-                     InputIterator4                             values_first2,
-                     OutputIterator1                            keys_result,
-                     OutputIterator2                            values_result,
-                     StrictWeakCompare                          comp);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename InputIterator3,
+              typename InputIterator4,
+              typename OutputIterator1,
+              typename OutputIterator2,
+              typename StrictWeakCompare>
+    thrust::pair<OutputIterator1, OutputIterator2> set_union_by_key(InputIterator1    keys_first1,
+                                                                    InputIterator1    keys_last1,
+                                                                    InputIterator2    keys_first2,
+                                                                    InputIterator2    keys_last2,
+                                                                    InputIterator3    values_first1,
+                                                                    InputIterator4    values_first2,
+                                                                    OutputIterator1   keys_result,
+                                                                    OutputIterator2   values_result,
+                                                                    StrictWeakCompare comp);
 
-
-/*! \} // end set_operations
+    /*! \} // end set_operations
  */
-
 
 } // end thrust
 
 #include <thrust/detail/set_operations.inl>
-

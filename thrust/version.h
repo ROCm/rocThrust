@@ -28,7 +28,7 @@
 
 #pragma once
 
-//  This is the only Thrust header that is guaranteed to 
+//  This is the only Thrust header that is guaranteed to
 //  change with every Thrust release.
 //
 //  THRUST_VERSION % 100 is the sub-minor version
@@ -53,26 +53,25 @@
  *  \brief The preprocessor macro \p THRUST_MAJOR_VERSION encodes the
  *         major version number of the Thrust library.
  */
-#define THRUST_MAJOR_VERSION     (THRUST_VERSION / 100000)
+#define THRUST_MAJOR_VERSION (THRUST_VERSION / 100000)
 
 /*! \def THRUST_MINOR_VERSION
  *  \brief The preprocessor macro \p THRUST_MINOR_VERSION encodes the
  *         minor version number of the Thrust library.
  */
-#define THRUST_MINOR_VERSION     (THRUST_VERSION / 100 % 1000)
+#define THRUST_MINOR_VERSION (THRUST_VERSION / 100 % 1000)
 
 /*! \def THRUST_SUBMINOR_VERSION
  *  \brief The preprocessor macro \p THRUST_SUBMINOR_VERSION encodes the
  *         sub-minor version number of the Thrust library.
  */
-#define THRUST_SUBMINOR_VERSION  (THRUST_VERSION % 100)
+#define THRUST_SUBMINOR_VERSION (THRUST_VERSION % 100)
 
 /*! \def THRUST_PATCH_NUMBER
  *  \brief The preprocessor macro \p THRUST_PATCH_NUMBER encodes the
  *         patch number of the Thrust library.
  */
 #define THRUST_PATCH_NUMBER 0
-
 
 // Declare these namespaces here for the purpose of Doxygenating them
 
@@ -84,4 +83,3 @@ namespace thrust
 {
 
 }
-

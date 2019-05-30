@@ -15,33 +15,34 @@
  *  limitations under the License.
  */
 
-
 /*! \file functional.h
  *  \brief Function objects and tools for manipulating them
  */
 
 #pragma once
 
-#include <thrust/detail/config.h>
 #include <functional>
+#include <thrust/detail/config.h>
 #include <thrust/detail/functional/placeholder.h>
 
 namespace thrust
 {
 
-/*! \addtogroup function_objects Function Objects
+    /*! \addtogroup function_objects Function Objects
  */
 
-template<typename Operation> struct unary_traits;
+    template <typename Operation>
+    struct unary_traits;
 
-template<typename Operation> struct binary_traits;
+    template <typename Operation>
+    struct binary_traits;
 
-/*! \addtogroup function_object_adaptors Function Object Adaptors
+    /*! \addtogroup function_object_adaptors Function Object Adaptors
  *  \ingroup function_objects
  *  \{
  */
 
-/*! \p unary_function is an empty base class: it contains no member functions
+    /*! \p unary_function is an empty base class: it contains no member functions
  *  or member variables, but only type information. The only reason it exists
  *  is to make it more convenient to define types that are models of the
  *  concept Adaptable Unary Function. Specifically, any model of Adaptable
@@ -66,22 +67,21 @@ template<typename Operation> struct binary_traits;
  *  \see http://www.sgi.com/tech/stl/unary_function.html
  *  \see binary_function
  */
-template<typename Argument,
-         typename Result>
-struct unary_function
-{
-  /*! \typedef argument_type
+    template <typename Argument, typename Result>
+    struct unary_function
+    {
+        /*! \typedef argument_type
    *  \brief The type of the function object's argument.
    */
-  typedef Argument argument_type;
+        typedef Argument argument_type;
 
-  /*! \typedef result_type;
+        /*! \typedef result_type;
    *  \brief The type of the function object's result.
    */
-  typedef Result   result_type;
-}; // end unary_function
+        typedef Result result_type;
+    }; // end unary_function
 
-/*! \p binary_function is an empty base class: it contains no member functions
+    /*! \p binary_function is an empty base class: it contains no member functions
  *  or member variables, but only type information. The only reason it exists
  *  is to make it more convenient to define types that are models of the
  *  concept Adaptable Binary Function. Specifically, any model of Adaptable
@@ -106,41 +106,38 @@ struct unary_function
  *  \see http://www.sgi.com/tech/stl/binary_function.html
  *  \see unary_function
  */
-template<typename Argument1,
-         typename Argument2,
-         typename Result>
-struct binary_function
-{
-  /*! \typedef first_argument_type
+    template <typename Argument1, typename Argument2, typename Result>
+    struct binary_function
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef Argument1 first_argument_type;
+        typedef Argument1 first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef Argument2 second_argument_type;
+        typedef Argument2 second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef Result    result_type;
-}; // end binary_function
+        typedef Result result_type;
+    }; // end binary_function
 
-/*! \}
+    /*! \}
  */
 
-
-/*! \addtogroup predefined_function_objects Predefined Function Objects
+    /*! \addtogroup predefined_function_objects Predefined Function Objects
  *  \ingroup function_objects
  */
 
-/*! \addtogroup arithmetic_operations Arithmetic Operations
+    /*! \addtogroup arithmetic_operations Arithmetic Operations
  *  \ingroup predefined_function_objects
  *  \{
  */
 
-/*! \p plus is a function object. Specifically, it is an Adaptable Binary Function.
+    /*! \p plus is a function object. Specifically, it is an Adaptable Binary Function.
  *  If \c f is an object of class <tt>plus<T></tt>, and \c x and \c y are objects
  *  of class \c T, then <tt>f(x,y)</tt> returns <tt>x+y</tt>.
  *
@@ -173,30 +170,33 @@ struct binary_function
  *  \see http://www.sgi.com/tech/stl/plus.html
  *  \see binary_function
  */
-template<typename T>
-struct plus
-{
-  /*! \typedef first_argument_type
+    template <typename T>
+    struct plus
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T first_argument_type;
+        typedef T first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T second_argument_type;
+        typedef T second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef T result_type;
+        typedef T result_type;
 
-  /*! Function call operator. The return value is <tt>lhs + rhs</tt>.
+        /*! Function call operator. The return value is <tt>lhs + rhs</tt>.
    */
-  __host__ __device__ T operator()(const T &lhs, const T &rhs) const {return lhs + rhs;}
-}; // end plus
+        __host__ __device__ T operator()(const T& lhs, const T& rhs) const
+        {
+            return lhs + rhs;
+        }
+    }; // end plus
 
-/*! \p minus is a function object. Specifically, it is an Adaptable Binary Function.
+    /*! \p minus is a function object. Specifically, it is an Adaptable Binary Function.
  *  If \c f is an object of class <tt>minus<T></tt>, and \c x and \c y are objects
  *  of class \c T, then <tt>f(x,y)</tt> returns <tt>x-y</tt>.
  *
@@ -229,30 +229,33 @@ struct plus
  *  \see http://www.sgi.com/tech/stl/minus.html
  *  \see binary_function
  */
-template<typename T>
-struct minus
-{
-  /*! \typedef first_argument_type
+    template <typename T>
+    struct minus
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T first_argument_type;
+        typedef T first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T second_argument_type;
+        typedef T second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef T result_type;
+        typedef T result_type;
 
-  /*! Function call operator. The return value is <tt>lhs - rhs</tt>.
+        /*! Function call operator. The return value is <tt>lhs - rhs</tt>.
    */
-  __host__ __device__ T operator()(const T &lhs, const T &rhs) const {return lhs - rhs;}
-}; // end minus
+        __host__ __device__ T operator()(const T& lhs, const T& rhs) const
+        {
+            return lhs - rhs;
+        }
+    }; // end minus
 
-/*! \p multiplies is a function object. Specifically, it is an Adaptable Binary Function.
+    /*! \p multiplies is a function object. Specifically, it is an Adaptable Binary Function.
  *  If \c f is an object of class <tt>minus<T></tt>, and \c x and \c y are objects
  *  of class \c T, then <tt>f(x,y)</tt> returns <tt>x*y</tt>.
  *
@@ -285,30 +288,33 @@ struct minus
  *  \see http://www.sgi.com/tech/stl/multiplies.html
  *  \see binary_function
  */
-template<typename T>
-struct multiplies
-{
-  /*! \typedef first_argument_type
+    template <typename T>
+    struct multiplies
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T first_argument_type;
+        typedef T first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T second_argument_type;
+        typedef T second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef T result_type;
+        typedef T result_type;
 
-  /*! Function call operator. The return value is <tt>lhs * rhs</tt>.
+        /*! Function call operator. The return value is <tt>lhs * rhs</tt>.
    */
-  __host__ __device__ T operator()(const T &lhs, const T &rhs) const {return lhs * rhs;}
-}; // end multiplies
+        __host__ __device__ T operator()(const T& lhs, const T& rhs) const
+        {
+            return lhs * rhs;
+        }
+    }; // end multiplies
 
-/*! \p divides is a function object. Specifically, it is an Adaptable Binary Function.
+    /*! \p divides is a function object. Specifically, it is an Adaptable Binary Function.
  *  If \c f is an object of class <tt>divides<T></tt>, and \c x and \c y are objects
  *  of class \c T, then <tt>f(x,y)</tt> returns <tt>x/y</tt>.
  *
@@ -341,30 +347,33 @@ struct multiplies
  *  \see http://www.sgi.com/tech/stl/divides.html
  *  \see binary_function
  */
-template<typename T>
-struct divides
-{
-  /*! \typedef first_argument_type
+    template <typename T>
+    struct divides
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T first_argument_type;
+        typedef T first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T second_argument_type;
+        typedef T second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef T result_type;
+        typedef T result_type;
 
-  /*! Function call operator. The return value is <tt>lhs / rhs</tt>.
+        /*! Function call operator. The return value is <tt>lhs / rhs</tt>.
    */
-  __host__ __device__ T operator()(const T &lhs, const T &rhs) const {return lhs / rhs;}
-}; // end divides
+        __host__ __device__ T operator()(const T& lhs, const T& rhs) const
+        {
+            return lhs / rhs;
+        }
+    }; // end divides
 
-/*! \p modulus is a function object. Specifically, it is an Adaptable Binary Function.
+    /*! \p modulus is a function object. Specifically, it is an Adaptable Binary Function.
  *  If \c f is an object of class <tt>modulus<T></tt>, and \c x and \c y are objects
  *  of class \c T, then <tt>f(x,y)</tt> returns <tt>x \% y</tt>.
  *
@@ -397,30 +406,33 @@ struct divides
  *  \see http://www.sgi.com/tech/stl/modulus.html
  *  \see binary_function
  */
-template<typename T>
-struct modulus
-{
-  /*! \typedef first_argument_type
+    template <typename T>
+    struct modulus
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T first_argument_type;
+        typedef T first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T second_argument_type;
+        typedef T second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef T result_type;
+        typedef T result_type;
 
-  /*! Function call operator. The return value is <tt>lhs % rhs</tt>.
+        /*! Function call operator. The return value is <tt>lhs % rhs</tt>.
    */
-  __host__ __device__ T operator()(const T &lhs, const T &rhs) const {return lhs % rhs;}
-}; // end modulus
+        __host__ __device__ T operator()(const T& lhs, const T& rhs) const
+        {
+            return lhs % rhs;
+        }
+    }; // end modulus
 
-/*! \p negate is a function object. Specifically, it is an Adaptable Unary Function.
+    /*! \p negate is a function object. Specifically, it is an Adaptable Unary Function.
  *  If \c f is an object of class <tt>negate<T></tt>, and \c x is an object
  *  of class \c T, then <tt>f(x)</tt> returns <tt>-x</tt>.
  *
@@ -450,33 +462,36 @@ struct modulus
  *  \see http://www.sgi.com/tech/stl/negate.html
  *  \see unary_function
  */
-template<typename T>
-struct negate
-{
-  /*! \typedef argument_type
+    template <typename T>
+    struct negate
+    {
+        /*! \typedef argument_type
    *  \brief The type of the function object's argument.
    */
-  typedef T argument_type;
+        typedef T argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef T result_type;
+        typedef T result_type;
 
-  /*! Function call operator. The return value is <tt>-x</tt>.
+        /*! Function call operator. The return value is <tt>-x</tt>.
    */
-  __host__ __device__ T operator()(const T &x) const {return -x;}
-}; // end negate
+        __host__ __device__ T operator()(const T& x) const
+        {
+            return -x;
+        }
+    }; // end negate
 
-/*! \}
+    /*! \}
  */
 
-/*! \addtogroup comparison_operations Comparison Operations
+    /*! \addtogroup comparison_operations Comparison Operations
  *  \ingroup predefined_function_objects
  *  \{
  */
 
-/*! \p equal_to is a function object. Specifically, it is an Adaptable Binary
+    /*! \p equal_to is a function object. Specifically, it is an Adaptable Binary
  *  Predicate, which means it is a function object that tests the truth or falsehood
  *  of some condition. If \c f is an object of class <tt>equal_to<T></tt> and \c x
  *  and \c y are objects of class \c T, then <tt>f(x,y)</tt> returns \c true if
@@ -487,30 +502,33 @@ struct negate
  *  \see http://www.sgi.com/tech/stl/equal_to.html
  *  \see binary_function
  */
-template<typename T>
-struct equal_to
-{
-  /*! \typedef first_argument_type
+    template <typename T>
+    struct equal_to
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T first_argument_type;
+        typedef T first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T second_argument_type;
+        typedef T second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef bool result_type;
+        typedef bool result_type;
 
-  /*! Function call operator. The return value is <tt>lhs == rhs</tt>.
+        /*! Function call operator. The return value is <tt>lhs == rhs</tt>.
    */
-  __host__ __device__ bool operator()(const T &lhs, const T &rhs) const {return lhs == rhs;}
-}; // end equal_to
+        __host__ __device__ bool operator()(const T& lhs, const T& rhs) const
+        {
+            return lhs == rhs;
+        }
+    }; // end equal_to
 
-/*! \p not_equal_to is a function object. Specifically, it is an Adaptable Binary
+    /*! \p not_equal_to is a function object. Specifically, it is an Adaptable Binary
  *  Predicate, which means it is a function object that tests the truth or falsehood
  *  of some condition. If \c f is an object of class <tt>not_equal_to<T></tt> and \c x
  *  and \c y are objects of class \c T, then <tt>f(x,y)</tt> returns \c true if
@@ -521,30 +539,33 @@ struct equal_to
  *  \see http://www.sgi.com/tech/stl/not_equal_to.html
  *  \see binary_function
  */
-template<typename T>
-struct not_equal_to
-{
-  /*! \typedef first_argument_type
+    template <typename T>
+    struct not_equal_to
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T first_argument_type;
+        typedef T first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T second_argument_type;
+        typedef T second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef bool result_type;
+        typedef bool result_type;
 
-  /*! Function call operator. The return value is <tt>lhs != rhs</tt>.
+        /*! Function call operator. The return value is <tt>lhs != rhs</tt>.
    */
-  __host__ __device__ bool operator()(const T &lhs, const T &rhs) const {return lhs != rhs;}
-}; // end not_equal_to
+        __host__ __device__ bool operator()(const T& lhs, const T& rhs) const
+        {
+            return lhs != rhs;
+        }
+    }; // end not_equal_to
 
-/*! \p greater is a function object. Specifically, it is an Adaptable Binary
+    /*! \p greater is a function object. Specifically, it is an Adaptable Binary
  *  Predicate, which means it is a function object that tests the truth or falsehood
  *  of some condition. If \c f is an object of class <tt>greater<T></tt> and \c x
  *  and \c y are objects of class \c T, then <tt>f(x,y)</tt> returns \c true if
@@ -555,30 +576,33 @@ struct not_equal_to
  *  \see http://www.sgi.com/tech/stl/greater.html
  *  \see binary_function
  */
-template<typename T>
-struct greater
-{
-  /*! \typedef first_argument_type
+    template <typename T>
+    struct greater
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T first_argument_type;
+        typedef T first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T second_argument_type;
+        typedef T second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef bool result_type;
+        typedef bool result_type;
 
-  /*! Function call operator. The return value is <tt>lhs > rhs</tt>.
+        /*! Function call operator. The return value is <tt>lhs > rhs</tt>.
    */
-  __host__ __device__ bool operator()(const T &lhs, const T &rhs) const {return lhs > rhs;}
-}; // end greater
+        __host__ __device__ bool operator()(const T& lhs, const T& rhs) const
+        {
+            return lhs > rhs;
+        }
+    }; // end greater
 
-/*! \p less is a function object. Specifically, it is an Adaptable Binary
+    /*! \p less is a function object. Specifically, it is an Adaptable Binary
  *  Predicate, which means it is a function object that tests the truth or falsehood
  *  of some condition. If \c f is an object of class <tt>less<T></tt> and \c x
  *  and \c y are objects of class \c T, then <tt>f(x,y)</tt> returns \c true if
@@ -589,30 +613,33 @@ struct greater
  *  \see http://www.sgi.com/tech/stl/less.html
  *  \see binary_function
  */
-template<typename T>
-struct less
-{
-  /*! \typedef first_argument_type
+    template <typename T>
+    struct less
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T first_argument_type;
+        typedef T first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T second_argument_type;
+        typedef T second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef bool result_type;
+        typedef bool result_type;
 
-  /*! Function call operator. The return value is <tt>lhs < rhs</tt>.
+        /*! Function call operator. The return value is <tt>lhs < rhs</tt>.
    */
-  __host__ __device__ bool operator()(const T &lhs, const T &rhs) const {return lhs < rhs;}
-}; // end less
+        __host__ __device__ bool operator()(const T& lhs, const T& rhs) const
+        {
+            return lhs < rhs;
+        }
+    }; // end less
 
-/*! \p greater_equal is a function object. Specifically, it is an Adaptable Binary
+    /*! \p greater_equal is a function object. Specifically, it is an Adaptable Binary
  *  Predicate, which means it is a function object that tests the truth or falsehood
  *  of some condition. If \c f is an object of class <tt>greater_equal<T></tt> and \c x
  *  and \c y are objects of class \c T, then <tt>f(x,y)</tt> returns \c true if
@@ -623,30 +650,33 @@ struct less
  *  \see http://www.sgi.com/tech/stl/greater_equal.html
  *  \see binary_function
  */
-template<typename T>
-struct greater_equal
-{
-  /*! \typedef first_argument_type
+    template <typename T>
+    struct greater_equal
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T first_argument_type;
+        typedef T first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T second_argument_type;
+        typedef T second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef bool result_type;
+        typedef bool result_type;
 
-  /*! Function call operator. The return value is <tt>lhs >= rhs</tt>.
+        /*! Function call operator. The return value is <tt>lhs >= rhs</tt>.
    */
-  __host__ __device__ bool operator()(const T &lhs, const T &rhs) const {return lhs >= rhs;}
-}; // end greater_equal
+        __host__ __device__ bool operator()(const T& lhs, const T& rhs) const
+        {
+            return lhs >= rhs;
+        }
+    }; // end greater_equal
 
-/*! \p less_equal is a function object. Specifically, it is an Adaptable Binary
+    /*! \p less_equal is a function object. Specifically, it is an Adaptable Binary
  *  Predicate, which means it is a function object that tests the truth or falsehood
  *  of some condition. If \c f is an object of class <tt>less_equal<T></tt> and \c x
  *  and \c y are objects of class \c T, then <tt>f(x,y)</tt> returns \c true if
@@ -657,39 +687,41 @@ struct greater_equal
  *  \see http://www.sgi.com/tech/stl/less_equal.html
  *  \see binary_function
  */
-template<typename T>
-struct less_equal
-{
-  /*! \typedef first_argument_type
+    template <typename T>
+    struct less_equal
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T first_argument_type;
+        typedef T first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T second_argument_type;
+        typedef T second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef bool result_type;
+        typedef bool result_type;
 
-  /*! Function call operator. The return value is <tt>lhs <= rhs</tt>.
+        /*! Function call operator. The return value is <tt>lhs <= rhs</tt>.
    */
-  __host__ __device__ bool operator()(const T &lhs, const T &rhs) const {return lhs <= rhs;}
-}; // end less_equal
+        __host__ __device__ bool operator()(const T& lhs, const T& rhs) const
+        {
+            return lhs <= rhs;
+        }
+    }; // end less_equal
 
-/*! \}
+    /*! \}
  */
 
-
-/*! \addtogroup logical_operations Logical Operations
+    /*! \addtogroup logical_operations Logical Operations
  *  \ingroup predefined_function_objects
  *  \{
  */
 
-/*! \p logical_and is a function object. Specifically, it is an Adaptable Binary Predicate,
+    /*! \p logical_and is a function object. Specifically, it is an Adaptable Binary Predicate,
  *  which means it is a function object that tests the truth or falsehood of some condition.
  *  If \c f is an object of class <tt>logical_and<T></tt> and \c x and \c y are objects of
  *  class \c T (where \c T is convertible to \c bool) then <tt>f(x,y)</tt> returns \c true
@@ -700,30 +732,33 @@ struct less_equal
  *  \see http://www.sgi.com/tech/stl/logical_and.html
  *  \see binary_function
  */
-template<typename T>
-struct logical_and
-{
-  /*! \typedef first_argument_type
+    template <typename T>
+    struct logical_and
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T first_argument_type;
+        typedef T first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T second_argument_type;
+        typedef T second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef bool result_type;
+        typedef bool result_type;
 
-  /*! Function call operator. The return value is <tt>lhs && rhs</tt>.
+        /*! Function call operator. The return value is <tt>lhs && rhs</tt>.
    */
-  __host__ __device__ bool operator()(const T &lhs, const T &rhs) const {return lhs && rhs;}
-}; // end logical_and
+        __host__ __device__ bool operator()(const T& lhs, const T& rhs) const
+        {
+            return lhs && rhs;
+        }
+    }; // end logical_and
 
-/*! \p logical_or is a function object. Specifically, it is an Adaptable Binary Predicate,
+    /*! \p logical_or is a function object. Specifically, it is an Adaptable Binary Predicate,
  *  which means it is a function object that tests the truth or falsehood of some condition.
  *  If \c f is an object of class <tt>logical_or<T></tt> and \c x and \c y are objects of
  *  class \c T (where \c T is convertible to \c bool) then <tt>f(x,y)</tt> returns \c true
@@ -734,30 +769,33 @@ struct logical_and
  *  \see http://www.sgi.com/tech/stl/logical_or.html
  *  \see binary_function
  */
-template<typename T>
-struct logical_or
-{
-  /*! \typedef first_argument_type
+    template <typename T>
+    struct logical_or
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T first_argument_type;
+        typedef T first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T second_argument_type;
+        typedef T second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef bool result_type;
+        typedef bool result_type;
 
-  /*! Function call operator. The return value is <tt>lhs || rhs</tt>.
+        /*! Function call operator. The return value is <tt>lhs || rhs</tt>.
    */
-  __host__ __device__ bool operator()(const T &lhs, const T &rhs) const {return lhs || rhs;}
-}; // end logical_or
+        __host__ __device__ bool operator()(const T& lhs, const T& rhs) const
+        {
+            return lhs || rhs;
+        }
+    }; // end logical_or
 
-/*! \p logical_not is a function object. Specifically, it is an Adaptable Predicate,
+    /*! \p logical_not is a function object. Specifically, it is an Adaptable Predicate,
  *  which means it is a function object that tests the truth or falsehood of some condition.
  *  If \c f is an object of class <tt>logical_not<T></tt> and \c x is an object of
  *  class \c T (where \c T is convertible to \c bool) then <tt>f(x)</tt> returns \c true
@@ -782,38 +820,41 @@ struct logical_or
  *  \see http://www.sgi.com/tech/stl/logical_not.html
  *  \see unary_function
  */
-template<typename T>
-struct logical_not
-{
-  /*! \typedef first_argument_type
+    template <typename T>
+    struct logical_not
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T first_argument_type;
+        typedef T first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T second_argument_type;
+        typedef T second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef bool result_type;
+        typedef bool result_type;
 
-  /*! Function call operator. The return value is <tt>!x</tt>.
+        /*! Function call operator. The return value is <tt>!x</tt>.
    */
-  __host__ __device__ bool operator()(const T &x) const {return !x;}
-}; // end logical_not
+        __host__ __device__ bool operator()(const T& x) const
+        {
+            return !x;
+        }
+    }; // end logical_not
 
-/*! \}
+    /*! \}
  */
 
-/*! \addtogroup bitwise_operations Bitwise Operations
+    /*! \addtogroup bitwise_operations Bitwise Operations
  *  \ingroup predefined_function_objects
  *  \{
  */
 
-/*! \p bit_and is a function object. Specifically, it is an Adaptable Binary Function.
+    /*! \p bit_and is a function object. Specifically, it is an Adaptable Binary Function.
  *  If \c f is an object of class <tt>bit_and<T></tt>, and \c x and \c y are objects
  *  of class \c T, then <tt>f(x,y)</tt> returns <tt>x&y</tt>.
  *
@@ -845,30 +886,33 @@ struct logical_not
  *
  *  \see binary_function
  */
-template<typename T>
-struct bit_and
-{
-  /*! \typedef first_argument_type
+    template <typename T>
+    struct bit_and
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T first_argument_type;
+        typedef T first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T second_argument_type;
+        typedef T second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef T result_type;
+        typedef T result_type;
 
-  /*! Function call operator. The return value is <tt>lhs & rhs</tt>.
+        /*! Function call operator. The return value is <tt>lhs & rhs</tt>.
    */
-  __host__ __device__ T operator()(const T &lhs, const T &rhs) const {return lhs & rhs;}
-}; // end bit_and
+        __host__ __device__ T operator()(const T& lhs, const T& rhs) const
+        {
+            return lhs & rhs;
+        }
+    }; // end bit_and
 
-/*! \p bit_or is a function object. Specifically, it is an Adaptable Binary Function.
+    /*! \p bit_or is a function object. Specifically, it is an Adaptable Binary Function.
  *  If \c f is an object of class <tt>bit_and<T></tt>, and \c x and \c y are objects
  *  of class \c T, then <tt>f(x,y)</tt> returns <tt>x|y</tt>.
  *
@@ -900,30 +944,33 @@ struct bit_and
  *
  *  \see binary_function
  */
-template<typename T>
-struct bit_or
-{
-  /*! \typedef first_argument_type
+    template <typename T>
+    struct bit_or
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T first_argument_type;
+        typedef T first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T second_argument_type;
+        typedef T second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef T result_type;
+        typedef T result_type;
 
-  /*! Function call operator. The return value is <tt>lhs | rhs</tt>.
+        /*! Function call operator. The return value is <tt>lhs | rhs</tt>.
    */
-  __host__ __device__ T operator()(const T &lhs, const T &rhs) const {return lhs | rhs;}
-}; // end bit_or
+        __host__ __device__ T operator()(const T& lhs, const T& rhs) const
+        {
+            return lhs | rhs;
+        }
+    }; // end bit_or
 
-/*! \p bit_xor is a function object. Specifically, it is an Adaptable Binary Function.
+    /*! \p bit_xor is a function object. Specifically, it is an Adaptable Binary Function.
  *  If \c f is an object of class <tt>bit_and<T></tt>, and \c x and \c y are objects
  *  of class \c T, then <tt>f(x,y)</tt> returns <tt>x^y</tt>.
  *
@@ -955,38 +1002,41 @@ struct bit_or
  *
  *  \see binary_function
  */
-template<typename T>
-struct bit_xor
-{
-  /*! \typedef first_argument_type
+    template <typename T>
+    struct bit_xor
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T first_argument_type;
+        typedef T first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T second_argument_type;
+        typedef T second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef T result_type;
+        typedef T result_type;
 
-  /*! Function call operator. The return value is <tt>lhs ^ rhs</tt>.
+        /*! Function call operator. The return value is <tt>lhs ^ rhs</tt>.
    */
-  __host__ __device__ T operator()(const T &lhs, const T &rhs) const {return lhs ^ rhs;}
-}; // end bit_xor
+        __host__ __device__ T operator()(const T& lhs, const T& rhs) const
+        {
+            return lhs ^ rhs;
+        }
+    }; // end bit_xor
 
-/*! \}
+    /*! \}
  */
 
-/*! \addtogroup generalized_identity_operations Generalized Identity Operations
+    /*! \addtogroup generalized_identity_operations Generalized Identity Operations
  *  \ingroup predefined_function_objects
  *  \{
  */
 
-/*! \p identity is a Unary Function that represents the identity function: it takes
+    /*! \p identity is a Unary Function that represents the identity function: it takes
  *  a single argument \c x, and returns \c x.
  *
  *  \tparam T No requirements on \p T.
@@ -1006,25 +1056,28 @@ struct bit_xor
  *  \see http://www.sgi.com/tech/stl/identity.html
  *  \see unary_function
  */
-template<typename T>
-struct identity
-{
-  /*! \typedef argument_type
+    template <typename T>
+    struct identity
+    {
+        /*! \typedef argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T argument_type;
+        typedef T argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef T result_type;
+        typedef T result_type;
 
-  /*! Function call operator. The return value is <tt>x</tt>.
+        /*! Function call operator. The return value is <tt>x</tt>.
    */
-  __host__ __device__ const T &operator()(const T &x) const {return x;}
-}; // end identity
+        __host__ __device__ const T& operator()(const T& x) const
+        {
+            return x;
+        }
+    }; // end identity
 
-/*! \p maximum is a function object that takes two arguments and returns the greater
+    /*! \p maximum is a function object that takes two arguments and returns the greater
  *  of the two. Specifically, it is an Adaptable Binary Function. If \c f is an
  *  object of class <tt>maximum<T></tt> and \c x and \c y are objects of class \c T
  *  <tt>f(x,y)</tt> returns \c x if <tt>x > y</tt> and \c y, otherwise.
@@ -1048,30 +1101,33 @@ struct identity
  *  \see min
  *  \see binary_function
  */
-template<typename T>
-struct maximum
-{
-  /*! \typedef first_argument_type
+    template <typename T>
+    struct maximum
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T first_argument_type;
+        typedef T first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T second_argument_type;
+        typedef T second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef T result_type;
+        typedef T result_type;
 
-  /*! Function call operator. The return value is <tt>rhs < lhs ? lhs : rhs</tt>.
+        /*! Function call operator. The return value is <tt>rhs < lhs ? lhs : rhs</tt>.
    */
-  __host__ __device__ T operator()(const T &lhs, const T &rhs) const {return lhs < rhs ? rhs : lhs;}
-}; // end maximum
+        __host__ __device__ T operator()(const T& lhs, const T& rhs) const
+        {
+            return lhs < rhs ? rhs : lhs;
+        }
+    }; // end maximum
 
-/*! \p minimum is a function object that takes two arguments and returns the lesser
+    /*! \p minimum is a function object that takes two arguments and returns the lesser
  *  of the two. Specifically, it is an Adaptable Binary Function. If \c f is an
  *  object of class <tt>minimum<T></tt> and \c x and \c y are objects of class \c T
  *  <tt>f(x,y)</tt> returns \c x if <tt>x < y</tt> and \c y, otherwise.
@@ -1095,30 +1151,33 @@ struct maximum
  *  \see max
  *  \see binary_function
  */
-template<typename T>
-struct minimum
-{
-  /*! \typedef first_argument_type
+    template <typename T>
+    struct minimum
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T first_argument_type;
+        typedef T first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T second_argument_type;
+        typedef T second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef T result_type;
+        typedef T result_type;
 
-  /*! Function call operator. The return value is <tt>lhs < rhs ? lhs : rhs</tt>.
+        /*! Function call operator. The return value is <tt>lhs < rhs ? lhs : rhs</tt>.
    */
-  __host__ __device__ T operator()(const T &lhs, const T &rhs) const {return lhs < rhs ? lhs : rhs;}
-}; // end minimum
+        __host__ __device__ T operator()(const T& lhs, const T& rhs) const
+        {
+            return lhs < rhs ? lhs : rhs;
+        }
+    }; // end minimum
 
-/*! \p project1st is a function object that takes two arguments and returns
+    /*! \p project1st is a function object that takes two arguments and returns
  *  its first argument; the second argument is unused. It is essentially a
  *  generalization of identity to the case of a Binary Function.
  *
@@ -1136,30 +1195,33 @@ struct minimum
  *  \see project2nd
  *  \see binary_function
  */
-template<typename T1, typename T2>
-struct project1st
-{
-  /*! \typedef first_argument_type
+    template <typename T1, typename T2>
+    struct project1st
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T1 first_argument_type;
+        typedef T1 first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T2 second_argument_type;
+        typedef T2 second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef T1 result_type;
+        typedef T1 result_type;
 
-  /*! Function call operator. The return value is <tt>lhs</tt>.
+        /*! Function call operator. The return value is <tt>lhs</tt>.
    */
-  __host__ __device__ const T1 &operator()(const T1 &lhs, const T2 & /*rhs*/) const {return lhs;}
-}; // end project1st
+        __host__ __device__ const T1& operator()(const T1& lhs, const T2& /*rhs*/) const
+        {
+            return lhs;
+        }
+    }; // end project1st
 
-/*! \p project2nd is a function object that takes two arguments and returns
+    /*! \p project2nd is a function object that takes two arguments and returns
  *  its second argument; the first argument is unused. It is essentially a
  *  generalization of identity to the case of a Binary Function.
  *
@@ -1177,40 +1239,42 @@ struct project1st
  *  \see project1st
  *  \see binary_function
  */
-template<typename T1, typename T2>
-struct project2nd
-{
-  /*! \typedef first_argument_type
+    template <typename T1, typename T2>
+    struct project2nd
+    {
+        /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
    */
-  typedef T1 first_argument_type;
+        typedef T1 first_argument_type;
 
-  /*! \typedef second_argument_type
+        /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
    */
-  typedef T2 second_argument_type;
+        typedef T2 second_argument_type;
 
-  /*! \typedef result_type
+        /*! \typedef result_type
    *  \brief The type of the function object's result;
    */
-  typedef T2 result_type;
+        typedef T2 result_type;
 
-  /*! Function call operator. The return value is <tt>rhs</tt>.
+        /*! Function call operator. The return value is <tt>rhs</tt>.
    */
-  __host__ __device__ const T2 &operator()(const T1 &/*lhs*/, const T2 &rhs) const {return rhs;}
-}; // end project2nd
+        __host__ __device__ const T2& operator()(const T1& /*lhs*/, const T2& rhs) const
+        {
+            return rhs;
+        }
+    }; // end project2nd
 
-/*! \}
+    /*! \}
  */
 
+    // odds and ends
 
-// odds and ends
-
-/*! \addtogroup function_object_adaptors
+    /*! \addtogroup function_object_adaptors
  *  \{
  */
 
-/*! \p unary_negate is a function object adaptor: it is an Adaptable Predicate
+    /*! \p unary_negate is a function object adaptor: it is an Adaptable Predicate
  *  that represents the logical negation of some other Adaptable Predicate.
  *  That is: if \c f is an object of class <tt>unary_negate<AdaptablePredicate></tt>,
  *  then there exists an object \c pred of class \c AdaptablePredicate such
@@ -1221,29 +1285,32 @@ struct project2nd
  *  \see http://www.sgi.com/tech/stl/unary_negate.html
  *  \see not1
  */
-template<typename Predicate>
-struct unary_negate
-    : public thrust::unary_function<typename Predicate::argument_type, bool>
-{
-  /*! Constructor takes a \p Predicate object to negate.
+    template <typename Predicate>
+    struct unary_negate : public thrust::unary_function<typename Predicate::argument_type, bool>
+    {
+        /*! Constructor takes a \p Predicate object to negate.
    *  \param p The \p Predicate object to negate.
    */
-  __host__ __device__
-  explicit unary_negate(Predicate p) : pred(p){}
+        __host__ __device__ explicit unary_negate(Predicate p)
+            : pred(p)
+        {
+        }
 
-  /*! Function call operator. The return value is <tt>!pred(x)</tt>.
+        /*! Function call operator. The return value is <tt>!pred(x)</tt>.
    */
-  __host__ __device__
-  bool operator()(const typename Predicate::argument_type& x) { return !pred(x); }
+        __host__ __device__ bool operator()(const typename Predicate::argument_type& x)
+        {
+            return !pred(x);
+        }
 
-  /*! \cond
+        /*! \cond
    */
-  Predicate pred;
-  /*! \endcond
+        Predicate pred;
+        /*! \endcond
    */
-}; // end unary_negate
+    }; // end unary_negate
 
-/*! \p not1 is a helper function to simplify the creation of Adaptable Predicates:
+    /*! \p not1 is a helper function to simplify the creation of Adaptable Predicates:
  *  it takes an Adaptable Predicate \p pred as an argument and returns a new Adaptable
  *  Predicate that represents the negation of \p pred. That is: if \c pred is an object
  *  of a type which models Adaptable Predicate, then the the type of the result
@@ -1259,11 +1326,10 @@ struct unary_negate
  *  \see unary_negate
  *  \see not2
  */
-template<typename Predicate>
-  __host__ __device__
-  unary_negate<Predicate> not1(const Predicate &pred);
+    template <typename Predicate>
+    __host__ __device__ unary_negate<Predicate> not1(const Predicate& pred);
 
-/*! \p binary_negate is a function object adaptor: it is an Adaptable Binary
+    /*! \p binary_negate is a function object adaptor: it is an Adaptable Binary
  *  Predicate that represents the logical negation of some other Adaptable
  *  Binary Predicate. That is: if \c f is an object of class <tt>binary_negate<AdaptablePredicate></tt>,
  *  then there exists an object \c pred of class \c AdaptableBinaryPredicate
@@ -1273,34 +1339,35 @@ template<typename Predicate>
  *
  *  \see http://www.sgi.com/tech/stl/binary_negate.html
  */
-template<typename Predicate>
-struct binary_negate
-    : public thrust::binary_function<typename Predicate::first_argument_type,
-                                     typename Predicate::second_argument_type,
-                                     bool>
-{
-  /*! Constructor takes a \p Predicate object to negate.
+    template <typename Predicate>
+    struct binary_negate : public thrust::binary_function<typename Predicate::first_argument_type,
+                                                          typename Predicate::second_argument_type,
+                                                          bool>
+    {
+        /*! Constructor takes a \p Predicate object to negate.
    *  \param p The \p Predicate object to negate.
    */
-  __host__ __device__
-  explicit binary_negate(Predicate p) : pred(p){}
+        __host__ __device__ explicit binary_negate(Predicate p)
+            : pred(p)
+        {
+        }
 
-  /*! Function call operator. The return value is <tt>!pred(x,y)</tt>.
+        /*! Function call operator. The return value is <tt>!pred(x,y)</tt>.
    */
-  __host__ __device__
-  bool operator()(const typename Predicate::first_argument_type& x, const typename Predicate::second_argument_type& y)
-  {
-      return !pred(x,y);
-  }
+        __host__ __device__ bool operator()(const typename Predicate::first_argument_type&  x,
+                                            const typename Predicate::second_argument_type& y)
+        {
+            return !pred(x, y);
+        }
 
-  /*! \cond
+        /*! \cond
    */
-  Predicate pred;
-  /*! \endcond
+        Predicate pred;
+        /*! \endcond
    */
-}; // end binary_negate
+    }; // end binary_negate
 
-/*! \p not2 is a helper function to simplify the creation of Adaptable Binary Predicates:
+    /*! \p not2 is a helper function to simplify the creation of Adaptable Binary Predicates:
  *  it takes an Adaptable Binary Predicate \p pred as an argument and returns a new Adaptable
  *  Binary Predicate that represents the negation of \p pred. That is: if \c pred is an object
  *  of a type which models Adaptable Binary Predicate, then the the type of the result
@@ -1316,21 +1383,18 @@ struct binary_negate
  *  \see binary_negate
  *  \see not1
  */
-template<typename BinaryPredicate>
-  __host__ __device__
-  binary_negate<BinaryPredicate> not2(const BinaryPredicate &pred);
+    template <typename BinaryPredicate>
+    __host__ __device__ binary_negate<BinaryPredicate> not2(const BinaryPredicate& pred);
 
-/*! \}
+    /*! \}
  */
 
-
-/*! \addtogroup placeholder_objects Placeholder Objects
+    /*! \addtogroup placeholder_objects Placeholder Objects
  *  \ingroup function_objects
  *  \{
  */
 
-
-/*! \namespace placeholders
+    /*! \namespace placeholders
  *  \brief Facilities for constructing simple functions inline.
  *
  *  Objects in the \p thrust::placeholders namespace may be used to create simple arithmetic functions inline
@@ -1372,106 +1436,93 @@ template<typename BinaryPredicate>
  *  }
  *  \endcode
  */
-namespace placeholders
-{
-
+    namespace placeholders
+    {
 
 /*! \p thrust::placeholders::_1 is the placeholder for the first function parameter.
  */
 #if defined(__CUDA_ARCH__) || defined(__HIP_DEVICE_COMPILE__)
-static const __device__ thrust::detail::functional::placeholder<0>::type _1;
+        static const __device__ thrust::detail::functional::placeholder<0>::type _1;
 #else
-static const thrust::detail::functional::placeholder<0>::type _1;
+        static const thrust::detail::functional::placeholder<0>::type _1;
 #endif
-
 
 /*! \p thrust::placeholders::_2 is the placeholder for the second function parameter.
  */
 #if defined(__CUDA_ARCH__) || defined(__HIP_DEVICE_COMPILE__)
-static const __device__ thrust::detail::functional::placeholder<1>::type _2;
+        static const __device__ thrust::detail::functional::placeholder<1>::type _2;
 #else
-static const thrust::detail::functional::placeholder<1>::type _2;
+        static const thrust::detail::functional::placeholder<1>::type _2;
 #endif
-
 
 /*! \p thrust::placeholders::_3 is the placeholder for the third function parameter.
  */
 #if defined(__CUDA_ARCH__) || defined(__HIP_DEVICE_COMPILE__)
-static const __device__ thrust::detail::functional::placeholder<2>::type _3;
+        static const __device__ thrust::detail::functional::placeholder<2>::type _3;
 #else
-static const thrust::detail::functional::placeholder<2>::type _3;
+        static const thrust::detail::functional::placeholder<2>::type _3;
 #endif
-
 
 /*! \p thrust::placeholders::_4 is the placeholder for the fourth function parameter.
  */
 #if defined(__CUDA_ARCH__) || defined(__HIP_DEVICE_COMPILE__)
-static const __device__ thrust::detail::functional::placeholder<3>::type _4;
+        static const __device__ thrust::detail::functional::placeholder<3>::type _4;
 #else
-static const thrust::detail::functional::placeholder<3>::type _4;
+        static const thrust::detail::functional::placeholder<3>::type _4;
 #endif
-
 
 /*! \p thrust::placeholders::_5 is the placeholder for the fifth function parameter.
  */
 #if defined(__CUDA_ARCH__) || defined(__HIP_DEVICE_COMPILE__)
-static const __device__ thrust::detail::functional::placeholder<4>::type _5;
+        static const __device__ thrust::detail::functional::placeholder<4>::type _5;
 #else
-static const thrust::detail::functional::placeholder<4>::type _5;
+        static const thrust::detail::functional::placeholder<4>::type _5;
 #endif
-
 
 /*! \p thrust::placeholders::_6 is the placeholder for the sixth function parameter.
  */
 #if defined(__CUDA_ARCH__) || defined(__HIP_DEVICE_COMPILE__)
-static const __device__ thrust::detail::functional::placeholder<5>::type _6;
+        static const __device__ thrust::detail::functional::placeholder<5>::type _6;
 #else
-static const thrust::detail::functional::placeholder<5>::type _6;
+        static const thrust::detail::functional::placeholder<5>::type _6;
 #endif
-
 
 /*! \p thrust::placeholders::_7 is the placeholder for the seventh function parameter.
  */
 #if defined(__CUDA_ARCH__) || defined(__HIP_DEVICE_COMPILE__)
-static const __device__ thrust::detail::functional::placeholder<6>::type _7;
+        static const __device__ thrust::detail::functional::placeholder<6>::type _7;
 #else
-static const thrust::detail::functional::placeholder<6>::type _7;
+        static const thrust::detail::functional::placeholder<6>::type _7;
 #endif
-
 
 /*! \p thrust::placeholders::_8 is the placeholder for the eighth function parameter.
  */
 #if defined(__CUDA_ARCH__) || defined(__HIP_DEVICE_COMPILE__)
-static const __device__ thrust::detail::functional::placeholder<7>::type _8;
+        static const __device__ thrust::detail::functional::placeholder<7>::type _8;
 #else
-static const thrust::detail::functional::placeholder<7>::type _8;
+        static const thrust::detail::functional::placeholder<7>::type _8;
 #endif
-
 
 /*! \p thrust::placeholders::_9 is the placeholder for the ninth function parameter.
  */
 #if defined(__CUDA_ARCH__) || defined(__HIP_DEVICE_COMPILE__)
-static const __device__ thrust::detail::functional::placeholder<8>::type _9;
+        static const __device__ thrust::detail::functional::placeholder<8>::type _9;
 #else
-static const thrust::detail::functional::placeholder<8>::type _9;
+        static const thrust::detail::functional::placeholder<8>::type _9;
 #endif
-
 
 /*! \p thrust::placeholders::_10 is the placeholder for the tenth function parameter.
  */
 #if defined(__CUDA_ARCH__) || defined(__HIP_DEVICE_COMPILE__)
-static const __device__ thrust::detail::functional::placeholder<9>::type _10;
+        static const __device__ thrust::detail::functional::placeholder<9>::type _10;
 #else
-static const thrust::detail::functional::placeholder<9>::type _10;
+        static const thrust::detail::functional::placeholder<9>::type _10;
 #endif
 
+    } // end placeholders
 
-} // end placeholders
-
-
-/*! \} // placeholder_objects
+    /*! \} // placeholder_objects
  */
-
 
 } // end thrust
 

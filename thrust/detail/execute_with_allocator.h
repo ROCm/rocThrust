@@ -16,98 +16,86 @@
 
 #pragma once
 
+#include <thrust/detail/allocator/allocator_traits.h>
 #include <thrust/detail/config.h>
 #include <thrust/detail/raw_pointer_cast.h>
 #include <thrust/detail/type_traits/pointer_traits.h>
-#include <thrust/detail/allocator/allocator_traits.h>
 #include <thrust/detail/util/blocking.h>
 #include <thrust/pair.h>
 
 namespace thrust
 {
-namespace detail
-{
+    namespace detail
+    {
 
-template <typename ToPointer, typename FromPointer>
-__host__ __device__
-ToPointer reinterpret_pointer_cast(FromPointer ptr)
-{
-  typedef typename thrust::detail::pointer_element<ToPointer>::type to_element;
-  return ToPointer(reinterpret_cast<to_element*>(thrust::raw_pointer_cast(ptr)));
-}
+        template <typename ToPointer, typename FromPointer>
+        __host__ __device__ ToPointer reinterpret_pointer_cast(FromPointer ptr)
+        {
+            typedef typename thrust::detail::pointer_element<ToPointer>::type to_element;
+            return ToPointer(reinterpret_cast<to_element*>(thrust::raw_pointer_cast(ptr)));
+        }
 
-template <typename Allocator, template <typename> class BaseSystem>
-struct execute_with_allocator
-  : BaseSystem<execute_with_allocator<Allocator, BaseSystem> >
-{
-private:
-  typedef BaseSystem<execute_with_allocator<Allocator, BaseSystem> > super_t;
+        template <typename Allocator, template <typename> class BaseSystem>
+        struct execute_with_allocator : BaseSystem<execute_with_allocator<Allocator, BaseSystem>>
+        {
+        private:
+            typedef BaseSystem<execute_with_allocator<Allocator, BaseSystem>> super_t;
 
-  Allocator& alloc;
+            Allocator& alloc;
 
-public:
-  __host__ __device__
-  execute_with_allocator(super_t const& super, Allocator& alloc_)
-    : super_t(super), alloc(alloc_)
-  {}
+        public:
+            __host__ __device__ execute_with_allocator(super_t const& super, Allocator& alloc_)
+                : super_t(super)
+                , alloc(alloc_)
+            {
+            }
 
-  __host__ __device__
-  execute_with_allocator(Allocator& alloc_)
-    : alloc(alloc_)
-  {}
+            __host__ __device__ execute_with_allocator(Allocator& alloc_)
+                : alloc(alloc_)
+            {
+            }
 
-  Allocator& get_allocator() { return alloc; }
+            Allocator& get_allocator()
+            {
+                return alloc;
+            }
 
-  Allocator const& get_allocator() const { return alloc; }
-};
+            Allocator const& get_allocator() const
+            {
+                return alloc;
+            }
+        };
 
-template <
-    typename T
-  , typename Allocator
-  , template <typename> class BaseSystem
->
-__host__
-thrust::pair<T*, std::ptrdiff_t>
-get_temporary_buffer(
-    thrust::detail::execute_with_allocator<Allocator, BaseSystem>& system
-  , std::ptrdiff_t n
-    )
-{
-  typedef typename thrust::detail::allocator_traits<Allocator> alloc_traits;
-  typedef typename alloc_traits::void_pointer                  void_pointer;
-  typedef typename alloc_traits::size_type                     size_type;
-  typedef typename alloc_traits::value_type                    value_type;
+        template <typename T, typename Allocator, template <typename> class BaseSystem>
+        __host__ thrust::pair<T*, std::ptrdiff_t> get_temporary_buffer(
+            thrust::detail::execute_with_allocator<Allocator, BaseSystem>& system, std::ptrdiff_t n)
+        {
+            typedef typename thrust::detail::allocator_traits<Allocator> alloc_traits;
+            typedef typename alloc_traits::void_pointer                  void_pointer;
+            typedef typename alloc_traits::size_type                     size_type;
+            typedef typename alloc_traits::value_type                    value_type;
 
-  // How many elements of type value_type do we need to accommodate n elements
-  // of type T?
-  size_type num_elements =
-      thrust::detail::util::divide_ri(sizeof(T) * n, sizeof(value_type));
+            // How many elements of type value_type do we need to accommodate n elements
+            // of type T?
+            size_type num_elements
+                = thrust::detail::util::divide_ri(sizeof(T) * n, sizeof(value_type));
 
-  void_pointer ptr = alloc_traits::allocate(system.get_allocator(), num_elements);
+            void_pointer ptr = alloc_traits::allocate(system.get_allocator(), num_elements);
 
-  // Return the pointer and the number of elements of type T allocated.
-  return thrust::make_pair(thrust::detail::reinterpret_pointer_cast<T*>(ptr),n);
-}
+            // Return the pointer and the number of elements of type T allocated.
+            return thrust::make_pair(thrust::detail::reinterpret_pointer_cast<T*>(ptr), n);
+        }
 
-template <
-    typename Pointer
-  , typename Allocator
-  , template <typename> class BaseSystem
->
-__host__
-void
-return_temporary_buffer(
-    thrust::detail::execute_with_allocator<Allocator, BaseSystem>& system
-  , Pointer p
-    )
-{
-  typedef typename thrust::detail::allocator_traits<Allocator> alloc_traits;
-  typedef typename alloc_traits::pointer                       pointer;
+        template <typename Pointer, typename Allocator, template <typename> class BaseSystem>
+        __host__ void return_temporary_buffer(
+            thrust::detail::execute_with_allocator<Allocator, BaseSystem>& system, Pointer p)
+        {
+            typedef typename thrust::detail::allocator_traits<Allocator> alloc_traits;
+            typedef typename alloc_traits::pointer                       pointer;
 
-  pointer to_ptr = thrust::detail::reinterpret_pointer_cast<pointer>(p);
-  alloc_traits::deallocate(system.get_allocator(), to_ptr, 0);
-}
+            pointer to_ptr = thrust::detail::reinterpret_pointer_cast<pointer>(p);
+            alloc_traits::deallocate(system.get_allocator(), to_ptr, 0);
+        }
 
-} // end detail
+    } // end detail
 } // end thrust
-

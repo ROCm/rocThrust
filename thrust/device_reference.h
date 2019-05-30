@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file device_reference.h
  *  \brief A reference to a variable which resides in the "device" system's memory space
  */
@@ -22,19 +21,19 @@
 #pragma once
 
 #include <thrust/detail/config.h>
-#include <thrust/device_ptr.h>
-#include <thrust/detail/type_traits.h>
 #include <thrust/detail/reference.h>
+#include <thrust/detail/type_traits.h>
+#include <thrust/device_ptr.h>
 
 namespace thrust
 {
 
-/*! \addtogroup memory_management_classes Memory Management Classes
+    /*! \addtogroup memory_management_classes Memory Management Classes
  *  \ingroup memory_management
  *  \{
  */
 
-/*! \p device_reference acts as a reference-like object to an object stored in device memory.
+    /*! \p device_reference acts as a reference-like object to an object stored in device memory.
  *  \p device_reference is not intended to be used directly; rather, this type
  *  is the result of deferencing a \p device_ptr. Similarly, taking the address of
  *  a \p device_reference yields a \p device_ptr.
@@ -182,31 +181,23 @@ namespace thrust
  *  \see device_ptr
  *  \see device_vector
  */
-template<typename T>
-  class device_reference
-    : public thrust::reference<
-               T,
-               thrust::device_ptr<T>,
-               thrust::device_reference<T>
-             >
-{
-  private:
-    typedef thrust::reference<
-      T,
-      thrust::device_ptr<T>,
-      thrust::device_reference<T>
-    > super_t;
+    template <typename T>
+    class device_reference
+        : public thrust::reference<T, thrust::device_ptr<T>, thrust::device_reference<T>>
+    {
+    private:
+        typedef thrust::reference<T, thrust::device_ptr<T>, thrust::device_reference<T>> super_t;
 
-  public:
-    /*! The type of the value referenced by this type of \p device_reference.
+    public:
+        /*! The type of the value referenced by this type of \p device_reference.
      */
-    typedef typename super_t::value_type value_type;
+        typedef typename super_t::value_type value_type;
 
-    /*! The type of the expression <tt>&ref</tt>, where <tt>ref</tt> is a \p device_reference.
+        /*! The type of the expression <tt>&ref</tt>, where <tt>ref</tt> is a \p device_reference.
      */
-    typedef typename super_t::pointer    pointer;
+        typedef typename super_t::pointer pointer;
 
-    /*! This copy constructor accepts a const reference to another
+        /*! This copy constructor accepts a const reference to another
      *  \p device_reference. After this \p device_reference is constructed,
      *  it shall refer to the same object as \p other.
      *  
@@ -236,17 +227,16 @@ template<typename T>
      *  \note This constructor is templated primarily to allow initialization of 
      *  <tt>device_reference<const T></tt> from <tt>device_reference<T></tt>.
      */
-    template<typename OtherT>
-    __host__ __device__
-    device_reference(const device_reference<OtherT> &other,
-                     typename thrust::detail::enable_if_convertible<
-                       typename device_reference<OtherT>::pointer,
-                       pointer
-                     >::type * = 0)
-      : super_t(other)
-    {}
+        template <typename OtherT>
+        __host__ __device__ device_reference(const device_reference<OtherT>& other,
+                                             typename thrust::detail::enable_if_convertible<
+                                                 typename device_reference<OtherT>::pointer,
+                                                 pointer>::type* = 0)
+            : super_t(other)
+        {
+        }
 
-    /*! This copy constructor initializes this \p device_reference
+        /*! This copy constructor initializes this \p device_reference
      *  to refer to an object pointed to by the given \p device_ptr. After
      *  this \p device_reference is constructed, it shall refer to the
      *  object pointed to by \p ptr.
@@ -275,30 +265,28 @@ template<typename T>
      *  assert(ref == 13);
      *  \endcode
      */
-    __host__ __device__
-    explicit device_reference(const pointer &ptr)
-      : super_t(ptr)
-    {}
+        __host__ __device__ explicit device_reference(const pointer& ptr)
+            : super_t(ptr)
+        {
+        }
 
-    /*! This assignment operator assigns the value of the object referenced by
+        /*! This assignment operator assigns the value of the object referenced by
      *  the given \p device_reference to the object referenced by this
      *  \p device_reference.
      *
      *  \param other The \p device_reference to assign from.
      *  \return <tt>*this</tt>
      */
-    template<typename OtherT>
-    __host__ __device__
-    device_reference &operator=(const device_reference<OtherT> &other);
+        template <typename OtherT>
+        __host__ __device__ device_reference& operator=(const device_reference<OtherT>& other);
 
-    /*! Assignment operator assigns the value of the given value to the
+        /*! Assignment operator assigns the value of the given value to the
      *  value referenced by this \p device_reference.
      *  
      *  \param x The value to assign from.
      *  \return <tt>*this</tt>
      */
-    __host__ __device__
-    device_reference &operator=(const value_type &x);
+        __host__ __device__ device_reference& operator=(const value_type& x);
 
 // declare these members for the purpose of Doxygenating them
 // they actually exist in a derived-from class
@@ -950,15 +938,14 @@ template<typename T>
      */
     device_reference &operator^=(const T &rhs);
 #endif // end doxygen-only members
-}; // end device_reference
+    }; // end device_reference
 
-/*! swaps the value of one \p device_reference with another.
+    /*! swaps the value of one \p device_reference with another.
  *  \p x The first \p device_reference of interest.
  *  \p y The second \p device_reference of interest.
  */
-template<typename T>
-__host__ __device__
-void swap(device_reference<T> &x, device_reference<T> &y);
+    template <typename T>
+    __host__ __device__ void swap(device_reference<T>& x, device_reference<T>& y);
 
 // declare these methods for the purpose of Doxygenating them
 // they actually are defined for a derived-from class
@@ -974,10 +961,9 @@ std::basic_ostream<charT, traits> &
 operator<<(std::basic_ostream<charT, traits> &os, const device_reference<T> &y);
 #endif
 
-/*! \}
+    /*! \}
  */
 
 } // end thrust
 
 #include <thrust/detail/device_reference.inl>
-

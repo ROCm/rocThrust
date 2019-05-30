@@ -17,49 +17,46 @@
 
 #pragma once
 
-#include <thrust/detail/config.h>
-#include <thrust/system/detail/sequential/execution_policy.h>
 #include <cstdlib> // for malloc & free
+#include <thrust/detail/config.h>
 #include <thrust/detail/raw_pointer_cast.h>
+#include <thrust/system/detail/sequential/execution_policy.h>
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace sequential
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace sequential
+            {
 
-
-template<typename DerivedPolicy>
-inline __host__ __device__
-void *malloc(execution_policy<DerivedPolicy> &, std::size_t n)
-{
+                template <typename DerivedPolicy>
+                inline __host__ __device__ void* malloc(execution_policy<DerivedPolicy>&,
+                                                        std::size_t n)
+                {
 #if defined(__HIP_DEVICE_COMPILE__)
-  return ::malloc(n);
+                    return ::malloc(n);
 #elif !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 200)
-  return std::malloc(n);
+                    return std::malloc(n);
 #else
-  (void) n;
-  return 0;
+                    (void)n;
+                    return 0;
 #endif
-} // end mallc()
+                } // end mallc()
 
-
-template<typename DerivedPolicy, typename Pointer>
-inline __host__ __device__
-void free(sequential::execution_policy<DerivedPolicy> &, Pointer ptr)
-{
+                template <typename DerivedPolicy, typename Pointer>
+                inline __host__ __device__ void free(sequential::execution_policy<DerivedPolicy>&,
+                                                     Pointer ptr)
+                {
 #if defined(__HIP_DEVICE_COMPILE__)
-  ::free(thrust::raw_pointer_cast(ptr));
+                    ::free(thrust::raw_pointer_cast(ptr));
 #elif !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 200)
-  std::free(thrust::raw_pointer_cast(ptr));
+                    std::free(thrust::raw_pointer_cast(ptr));
 #endif
-} // end mallc()
+                } // end mallc()
 
-
-} // end sequential
-} // end detail
-} // end system
+            } // end sequential
+        } // end detail
+    } // end system
 } // end thrust

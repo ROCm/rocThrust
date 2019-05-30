@@ -25,48 +25,44 @@
 namespace thrust
 {
 
-// XXX WAR circular inclusion with this forward declaration
-template<typename,typename,typename> struct binary_function;
+    // XXX WAR circular inclusion with this forward declaration
+    template <typename, typename, typename>
+    struct binary_function;
 
-namespace detail
-{
-namespace functional
-{
+    namespace detail
+    {
+        namespace functional
+        {
 
-// XXX WAR circular inclusion with this forward declaration
-template<typename> struct as_actor;
+            // XXX WAR circular inclusion with this forward declaration
+            template <typename>
+            struct as_actor;
 
-// there's no standard assign functional, so roll an ad hoc one here
-template<typename T>
-  struct assign
-    : thrust::binary_function<T&,T,T&>
-{
-  __host__ __device__ T& operator()(T &lhs, const T &rhs) const { return lhs = rhs; }
-}; // end assign
+            // there's no standard assign functional, so roll an ad hoc one here
+            template <typename T>
+            struct assign : thrust::binary_function<T&, T, T&>
+            {
+                __host__ __device__ T& operator()(T& lhs, const T& rhs) const
+                {
+                    return lhs = rhs;
+                }
+            }; // end assign
 
-template<typename Eval, typename T>
-  struct assign_result
-{
-  typedef actor<
-    composite<
-      binary_operator<assign>,
-      actor<Eval>,
-      typename as_actor<T>::type
-    >
-  > type;
-}; // end assign_result
+            template <typename Eval, typename T>
+            struct assign_result
+            {
+                typedef actor<
+                    composite<binary_operator<assign>, actor<Eval>, typename as_actor<T>::type>>
+                    type;
+            }; // end assign_result
 
-template<typename Eval, typename T>
-  __host__ __device__
-    typename assign_result<Eval,T>::type
-      do_assign(const actor<Eval> &_1, const T &_2)
-{
-  return compose(binary_operator<assign>(),
-                 _1,
-                 as_actor<T>::convert(_2));
-} // end do_assign()
+            template <typename Eval, typename T>
+            __host__ __device__ typename assign_result<Eval, T>::type
+                     do_assign(const actor<Eval>& _1, const T& _2)
+            {
+                return compose(binary_operator<assign>(), _1, as_actor<T>::convert(_2));
+            } // end do_assign()
 
-} // end functional
-} // end detail
+        } // end functional
+    } // end detail
 } // end thrust
-

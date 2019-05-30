@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 #pragma once
 
 #include <thrust/detail/config.h>
@@ -22,36 +21,33 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
-template<typename DerivedPolicy,
-         typename ForwardIterator,
-         typename T>
-__host__ __device__
-  void uninitialized_fill(thrust::execution_policy<DerivedPolicy> &exec,
-                          ForwardIterator first,
-                          ForwardIterator last,
-                          const T &x);
+                template <typename DerivedPolicy, typename ForwardIterator, typename T>
+                __host__ __device__ void
+                         uninitialized_fill(thrust::execution_policy<DerivedPolicy>& exec,
+                                            ForwardIterator                          first,
+                                            ForwardIterator                          last,
+                                            const T&                                 x);
 
-template<typename DerivedPolicy,
-         typename ForwardIterator,
-         typename Size,
-         typename T>
-__host__ __device__
-  ForwardIterator uninitialized_fill_n(thrust::execution_policy<DerivedPolicy> &exec,
-                                       ForwardIterator first,
-                                       Size n,
-                                       const T &x);
+                template <typename DerivedPolicy,
+                          typename ForwardIterator,
+                          typename Size,
+                          typename T>
+                __host__ __device__ ForwardIterator
+                                    uninitialized_fill_n(thrust::execution_policy<DerivedPolicy>& exec,
+                                                         ForwardIterator                          first,
+                                                         Size                                     n,
+                                                         const T&                                 x);
 
-} // end namespace generic
-} // end namespace detail
-} // end namespace system
+            } // end namespace generic
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/detail/generic/uninitialized_fill.inl>
-

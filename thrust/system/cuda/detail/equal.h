@@ -26,47 +26,32 @@
  ******************************************************************************/
 #pragma once
 
-
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
 #include <thrust/system/cuda/config.h>
 
 #include <thrust/system/cuda/detail/mismatch.h>
 
 BEGIN_NS_THRUST
-namespace cuda_cub {
-
-template <class Derived,
-          class InputIt1,
-          class InputIt2,
-          class BinaryPred>
-bool __host__ __device__
-equal(execution_policy<Derived>& policy,
-      InputIt1                   first1,
-      InputIt1                   last1,
-      InputIt2                   first2,
-      BinaryPred                 binary_pred)
+namespace cuda_cub
 {
-  return cuda_cub::mismatch(policy, first1, last1, first2, binary_pred).first == last1;
-}
 
-template <class Derived,
-          class InputIt1,
-          class InputIt2>
-bool __host__ __device__
-equal(execution_policy<Derived>& policy,
-      InputIt1                   first1,
-      InputIt1                   last1,
-      InputIt2                   first2)
-{
-  typedef typename thrust::iterator_value<InputIt1>::type InputType1;
-  return cuda_cub::equal(policy,
-                         first1,
-                         last1,
-                         first2,
-                         equal_to<InputType1>());
-}
+    template <class Derived, class InputIt1, class InputIt2, class BinaryPred>
+    bool __host__ __device__ equal(execution_policy<Derived>& policy,
+                                   InputIt1                   first1,
+                                   InputIt1                   last1,
+                                   InputIt2                   first2,
+                                   BinaryPred                 binary_pred)
+    {
+        return cuda_cub::mismatch(policy, first1, last1, first2, binary_pred).first == last1;
+    }
 
-
+    template <class Derived, class InputIt1, class InputIt2>
+    bool __host__ __device__
+                  equal(execution_policy<Derived>& policy, InputIt1 first1, InputIt1 last1, InputIt2 first2)
+    {
+        typedef typename thrust::iterator_value<InputIt1>::type InputType1;
+        return cuda_cub::equal(policy, first1, last1, first2, equal_to<InputType1>());
+    }
 
 } // namespace cuda_cub
 END_NS_THRUST

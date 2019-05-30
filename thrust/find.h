@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file find.h
  *  \brief Locating values in (unsorted) ranges
  */
@@ -27,17 +26,15 @@
 namespace thrust
 {
 
-
-/*! \addtogroup algorithms
+    /*! \addtogroup algorithms
  */
 
-/*! \addtogroup searching
+    /*! \addtogroup searching
  *  \ingroup algorithms
  *  \{
  */
 
-
-/*! \p find returns the first iterator \c i in the range 
+    /*! \p find returns the first iterator \c i in the range 
  *  <tt>[first, last)</tt> such that <tt>*i == value</tt>
  *  or \c last if no such iterator exists.
  *
@@ -76,15 +73,14 @@ namespace thrust
  *  \see find_if
  *  \see mismatch
  */
-template<typename DerivedPolicy, typename InputIterator, typename T>
-__host__ __device__
-InputIterator find(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                   InputIterator first,
-                   InputIterator last,
-                   const T& value);
+    template <typename DerivedPolicy, typename InputIterator, typename T>
+    __host__ __device__ InputIterator
+                        find(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                             InputIterator                                               first,
+                             InputIterator                                               last,
+                             const T&                                                    value);
 
-
-/*! \p find returns the first iterator \c i in the range 
+    /*! \p find returns the first iterator \c i in the range 
  *  <tt>[first, last)</tt> such that <tt>*i == value</tt>
  *  or \c last if no such iterator exists.
  *
@@ -118,13 +114,10 @@ InputIterator find(const thrust::detail::execution_policy_base<DerivedPolicy> &e
  *  \see find_if
  *  \see mismatch
  */
-template <typename InputIterator, typename T>
-InputIterator find(InputIterator first,
-                   InputIterator last,
-                   const T& value);
+    template <typename InputIterator, typename T>
+    InputIterator find(InputIterator first, InputIterator last, const T& value);
 
-
-/*! \p find_if returns the first iterator \c i in the range 
+    /*! \p find_if returns the first iterator \c i in the range 
  *  <tt>[first, last)</tt> such that <tt>pred(*i)</tt> is \c true
  *  or \c last if no such iterator exists.
  *
@@ -183,15 +176,14 @@ InputIterator find(InputIterator first,
  *  \see find_if_not
  *  \see mismatch
  */
-template<typename DerivedPolicy, typename InputIterator, typename Predicate>
-__host__ __device__
-InputIterator find_if(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                      InputIterator first,
-                      InputIterator last,
-                      Predicate pred);
+    template <typename DerivedPolicy, typename InputIterator, typename Predicate>
+    __host__ __device__ InputIterator
+                        find_if(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                InputIterator                                               first,
+                                InputIterator                                               last,
+                                Predicate                                                   pred);
 
-
-/*! \p find_if returns the first iterator \c i in the range 
+    /*! \p find_if returns the first iterator \c i in the range 
  *  <tt>[first, last)</tt> such that <tt>pred(*i)</tt> is \c true
  *  or \c last if no such iterator exists.
  *
@@ -244,13 +236,10 @@ InputIterator find_if(const thrust::detail::execution_policy_base<DerivedPolicy>
  *  \see find_if_not
  *  \see mismatch
  */
-template <typename InputIterator, typename Predicate>
-InputIterator find_if(InputIterator first,
-                      InputIterator last,
-                      Predicate pred);
+    template <typename InputIterator, typename Predicate>
+    InputIterator find_if(InputIterator first, InputIterator last, Predicate pred);
 
-
-/*! \p find_if_not returns the first iterator \c i in the range 
+    /*! \p find_if_not returns the first iterator \c i in the range 
  *  <tt>[first, last)</tt> such that <tt>pred(*i)</tt> is \c false
  *  or \c last if no such iterator exists.
  *
@@ -309,15 +298,14 @@ InputIterator find_if(InputIterator first,
  *  \see find_if
  *  \see mismatch
  */
-template<typename DerivedPolicy, typename InputIterator, typename Predicate>
-__host__ __device__
-InputIterator find_if_not(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                          InputIterator first,
-                          InputIterator last,
-                          Predicate pred);
+    template <typename DerivedPolicy, typename InputIterator, typename Predicate>
+    __host__ __device__ InputIterator
+                        find_if_not(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    InputIterator                                               first,
+                                    InputIterator                                               last,
+                                    Predicate                                                   pred);
 
-
-/*! \p find_if_not returns the first iterator \c i in the range 
+    /*! \p find_if_not returns the first iterator \c i in the range 
  *  <tt>[first, last)</tt> such that <tt>pred(*i)</tt> is \c false
  *  or \c last if no such iterator exists.
  *
@@ -370,16 +358,12 @@ InputIterator find_if_not(const thrust::detail::execution_policy_base<DerivedPol
  *  \see find_if
  *  \see mismatch
  */
-template <typename InputIterator, typename Predicate>
-InputIterator find_if_not(InputIterator first,
-                          InputIterator last,
-                          Predicate pred);
+    template <typename InputIterator, typename Predicate>
+    InputIterator find_if_not(InputIterator first, InputIterator last, Predicate pred);
 
-/*! \} // end searching
+    /*! \} // end searching
  */
-
 
 } // end namespace thrust
 
 #include <thrust/detail/find.inl>
-

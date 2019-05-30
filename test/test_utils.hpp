@@ -29,10 +29,22 @@
 
 std::vector<size_t> get_sizes()
 {
-    std::vector<size_t> sizes = {
-        0, 1, 2, 12, 63, 64, 211, 256, 344,
-        1024, 2048, 5096, 34567, (1 << 17) - 1220, 1000000, (1 << 20) - 123
-    };
+    std::vector<size_t> sizes = {0,
+                                 1,
+                                 2,
+                                 12,
+                                 63,
+                                 64,
+                                 211,
+                                 256,
+                                 344,
+                                 1024,
+                                 2048,
+                                 5096,
+                                 34567,
+                                 (1 << 17) - 1220,
+                                 1000000,
+                                 (1 << 20) - 123};
     return sizes;
 }
 
@@ -150,14 +162,14 @@ struct FixedVector
 
     __host__ __device__ FixedVector()
     {
-        #pragma nounroll
+#pragma nounroll
         for(unsigned int i = 0; i < N; i++)
             data[i] = T();
     }
 
     __host__ __device__ FixedVector(T init)
     {
-        #pragma nounroll
+#pragma nounroll
         for(unsigned int i = 0; i < N; i++)
             data[i] = init;
     }
@@ -165,7 +177,7 @@ struct FixedVector
     __host__ __device__ FixedVector operator+(const FixedVector& bs) const
     {
         FixedVector output;
-        #pragma nounroll
+#pragma nounroll
         for(unsigned int i = 0; i < N; i++)
             output.data[i] = data[i] + bs.data[i];
         return output;
@@ -173,7 +185,7 @@ struct FixedVector
 
     __host__ __device__ bool operator<(const FixedVector& bs) const
     {
-        #pragma nounroll
+#pragma nounroll
         for(unsigned int i = 0; i < N; i++)
         {
             if(data[i] < bs.data[i])
@@ -186,7 +198,7 @@ struct FixedVector
 
     __host__ __device__ bool operator==(const FixedVector& bs) const
     {
-        #pragma nounroll
+#pragma nounroll
         for(unsigned int i = 0; i < N; i++)
         {
             if(!(data[i] == bs.data[i]))

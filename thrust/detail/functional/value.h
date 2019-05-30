@@ -30,51 +30,45 @@
 
 namespace thrust
 {
-namespace detail
-{
-namespace functional
-{
-
-
-template<typename Eval> struct actor;
-
-
-template<typename T>
-  class value
-{
-  public:
-
-    template<typename Env>
-      struct result
+    namespace detail
     {
-      typedef T type;
-    };
+        namespace functional
+        {
 
-    __host__ __device__
-    value(const T &arg)
-      : m_val(arg)
-    {}
+            template <typename Eval>
+            struct actor;
 
-    template<typename Env>
-    __host__ __device__
-      T eval(const Env &) const
-    {
-      return m_val;
-    }
+            template <typename T>
+            class value
+            {
+            public:
+                template <typename Env>
+                struct result
+                {
+                    typedef T type;
+                };
 
-  private:
-    T m_val;
-}; // end value
+                __host__ __device__ value(const T& arg)
+                    : m_val(arg)
+                {
+                }
 
-template<typename T>
-__host__ __device__
-actor<value<T> > val(const T &x)
-{
-  return value<T>(x);
-} // end val()
+                template <typename Env>
+                __host__ __device__ T eval(const Env&) const
+                {
+                    return m_val;
+                }
 
+            private:
+                T m_val;
+            }; // end value
 
-} // end functional
-} // end detail
+            template <typename T>
+            __host__ __device__ actor<value<T>> val(const T& x)
+            {
+                return value<T>(x);
+            } // end val()
+
+        } // end functional
+    } // end detail
 } // end thrust
-

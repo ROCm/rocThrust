@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file sequence.h
  *  \brief Fills a range with a sequence of numbers
  */
@@ -27,13 +26,11 @@
 namespace thrust
 {
 
-
-/*! \addtogroup transformations
+    /*! \addtogroup transformations
  *  \{
  */
 
-
-/*! \p sequence fills the range <tt>[first, last)</tt> with a sequence of numbers.
+    /*! \p sequence fills the range <tt>[first, last)</tt> with a sequence of numbers.
  *
  *  For each iterator \c i in the range <tt>[first, last)</tt>, this version of 
  *  \p sequence performs the assignment <tt>*i =  (i - first)</tt>.
@@ -68,14 +65,13 @@ namespace thrust
  *
  *  \see http://www.sgi.com/tech/stl/iota.html
  */
-template<typename DerivedPolicy, typename ForwardIterator>
-__host__ __device__
-  void sequence(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                ForwardIterator first,
-                ForwardIterator last);
+    template <typename DerivedPolicy, typename ForwardIterator>
+    __host__ __device__ void
+             sequence(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                      ForwardIterator                                             first,
+                      ForwardIterator                                             last);
 
-
-/*! \p sequence fills the range <tt>[first, last)</tt> with a sequence of numbers.
+    /*! \p sequence fills the range <tt>[first, last)</tt> with a sequence of numbers.
  *
  *  For each iterator \c i in the range <tt>[first, last)</tt>, this version of 
  *  \p sequence performs the assignment <tt>*i =  (i - first)</tt>.
@@ -105,12 +101,10 @@ __host__ __device__
  *
  *  \see http://www.sgi.com/tech/stl/iota.html
  */
-template<typename ForwardIterator>
-  void sequence(ForwardIterator first,
-                ForwardIterator last);
+    template <typename ForwardIterator>
+    void sequence(ForwardIterator first, ForwardIterator last);
 
-
-/*! \p sequence fills the range <tt>[first, last)</tt> with a sequence of numbers.
+    /*! \p sequence fills the range <tt>[first, last)</tt> with a sequence of numbers.
  *
  *  For each iterator \c i in the range <tt>[first, last)</tt>, this version of 
  *  \p sequence performs the assignment <tt>*i =  init + (i - first)</tt>.
@@ -149,15 +143,14 @@ template<typename ForwardIterator>
  *
  *  \see http://www.sgi.com/tech/stl/iota.html
  */
-template<typename DerivedPolicy, typename ForwardIterator, typename T>
-__host__ __device__
-  void sequence(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                ForwardIterator first,
-                ForwardIterator last,
-                T init);
+    template <typename DerivedPolicy, typename ForwardIterator, typename T>
+    __host__ __device__ void
+             sequence(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                      ForwardIterator                                             first,
+                      ForwardIterator                                             last,
+                      T                                                           init);
 
-
-/*! \p sequence fills the range <tt>[first, last)</tt> with a sequence of numbers.
+    /*! \p sequence fills the range <tt>[first, last)</tt> with a sequence of numbers.
  *
  *  For each iterator \c i in the range <tt>[first, last)</tt>, this version of 
  *  \p sequence performs the assignment <tt>*i =  init + (i - first)</tt>.
@@ -190,13 +183,10 @@ __host__ __device__
  *
  *  \see http://www.sgi.com/tech/stl/iota.html
  */
-template<typename ForwardIterator, typename T>
-  void sequence(ForwardIterator first,
-                ForwardIterator last,
-                T init);
+    template <typename ForwardIterator, typename T>
+    void sequence(ForwardIterator first, ForwardIterator last, T init);
 
-
-/*! \p sequence fills the range <tt>[first, last)</tt> with a sequence of numbers.
+    /*! \p sequence fills the range <tt>[first, last)</tt> with a sequence of numbers.
  *
  *  For each iterator \c i in the range <tt>[first, last)</tt>, this version of 
  *  \p sequence performs the assignment <tt>*i =  init + step * (i - first)</tt>.
@@ -236,16 +226,15 @@ template<typename ForwardIterator, typename T>
  *
  *  \see http://www.sgi.com/tech/stl/iota.html
  */
-template<typename DerivedPolicy, typename ForwardIterator, typename T>
-__host__ __device__
-  void sequence(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                ForwardIterator first,
-                ForwardIterator last,
-                T init,
-                T step);
+    template <typename DerivedPolicy, typename ForwardIterator, typename T>
+    __host__ __device__ void
+             sequence(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                      ForwardIterator                                             first,
+                      ForwardIterator                                             last,
+                      T                                                           init,
+                      T                                                           step);
 
-
-/*! \p sequence fills the range <tt>[first, last)</tt> with a sequence of numbers.
+    /*! \p sequence fills the range <tt>[first, last)</tt> with a sequence of numbers.
  *
  *  For each iterator \c i in the range <tt>[first, last)</tt>, this version of 
  *  \p sequence performs the assignment <tt>*i =  init + step * (i - first)</tt>.
@@ -279,18 +268,12 @@ __host__ __device__
  *
  *  \see http://www.sgi.com/tech/stl/iota.html
  */
-template<typename ForwardIterator, typename T>
-  void sequence(ForwardIterator first,
-                ForwardIterator last,
-                T init,
-                T step);
+    template <typename ForwardIterator, typename T>
+    void sequence(ForwardIterator first, ForwardIterator last, T init, T step);
 
-
-/*! \} // end transformations
+    /*! \} // end transformations
  */
-
 
 } // end namespace thrust
 
 #include <thrust/detail/sequence.inl>
-

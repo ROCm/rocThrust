@@ -26,140 +26,135 @@
  ******************************************************************************/
 #pragma once
 
-#include <thrust/detail/config.h>
 #include <thrust/detail/allocator/allocator_traits.h>
+#include <thrust/detail/config.h>
 #include <thrust/detail/execute_with_allocator.h>
 #include <thrust/system/cuda/detail/execution_policy.h>
 
 BEGIN_NS_THRUST
-namespace cuda_cub {
-
-__host__ __device__ inline cudaStream_t default_stream()
+namespace cuda_cub
 {
-  return cudaStreamLegacy;
-}
 
-template <class Derived>
-cudaStream_t __host__ __device__ 
-get_stream(execution_policy<Derived> &)
-{
-  return default_stream();
-}
+    __host__ __device__ inline cudaStream_t default_stream()
+    {
+        return cudaStreamLegacy;
+    }
 
-template <class Derived>
-cudaError_t THRUST_RUNTIME_FUNCTION
-synchronize_stream(execution_policy<Derived> &)
-{
-  cudaDeviceSynchronize();
-  return cudaGetLastError();
-}
+    template <class Derived>
+    cudaStream_t __host__ __device__ get_stream(execution_policy<Derived>&)
+    {
+        return default_stream();
+    }
 
+    template <class Derived>
+    cudaError_t THRUST_RUNTIME_FUNCTION synchronize_stream(execution_policy<Derived>&)
+    {
+        cudaDeviceSynchronize();
+        return cudaGetLastError();
+    }
 
-template <class Derived>
-struct execute_on_stream_base : execution_policy<Derived>
-{
-private:
-  cudaStream_t stream;
+    template <class Derived>
+    struct execute_on_stream_base : execution_policy<Derived>
+    {
+    private:
+        cudaStream_t stream;
 
-public:
-  __host__ __device__
-  execute_on_stream_base(cudaStream_t stream_ = default_stream())
-      : stream(stream_) {}
+    public:
+        __host__ __device__ execute_on_stream_base(cudaStream_t stream_ = default_stream())
+            : stream(stream_)
+        {
+        }
 
-  __host__ __device__
-      Derived
-      on(cudaStream_t const &s) const
-  {
-    Derived result = derived_cast(*this);
-    result.stream  = s;
-    return result;
-  }
+        __host__ __device__ Derived on(cudaStream_t const& s) const
+        {
+            Derived result = derived_cast(*this);
+            result.stream  = s;
+            return result;
+        }
 
-private:
-  friend cudaStream_t __host__ __device__
-  get_stream(execute_on_stream_base &exec)
-  {
-    return exec.stream;
-  }
+    private:
+        friend cudaStream_t __host__ __device__ get_stream(execute_on_stream_base& exec)
+        {
+            return exec.stream;
+        }
 
-  friend cudaError_t THRUST_RUNTIME_FUNCTION
-  synchronize_stream(execute_on_stream_base &exec)
-  {
+        friend cudaError_t THRUST_RUNTIME_FUNCTION synchronize_stream(execute_on_stream_base& exec)
+        {
 #ifdef __CUDA_ARCH__
 #ifdef __THRUST_HAS_CUDART__
-    THRUST_UNUSED_VAR(exec);
-    cudaDeviceSynchronize();
+            THRUST_UNUSED_VAR(exec);
+            cudaDeviceSynchronize();
 #endif
 #else
-    cudaStreamSynchronize(exec.stream);
+            cudaStreamSynchronize(exec.stream);
 #endif
-    return cudaGetLastError();
-  }
-};
+            return cudaGetLastError();
+        }
+    };
 
-struct execute_on_stream : execute_on_stream_base<execute_on_stream>
-{
-  typedef execute_on_stream_base<execute_on_stream> base_t;
+    struct execute_on_stream : execute_on_stream_base<execute_on_stream>
+    {
+        typedef execute_on_stream_base<execute_on_stream> base_t;
 
-  __host__ __device__
-  execute_on_stream() : base_t(){};
-  __host__ __device__
-  execute_on_stream(cudaStream_t stream) : base_t(stream){};
-};
+        __host__ __device__ execute_on_stream()
+            : base_t() {};
+        __host__ __device__ execute_on_stream(cudaStream_t stream)
+            : base_t(stream) {};
+    };
 
+    struct par_t : execution_policy<par_t>
+    {
+        typedef execution_policy<par_t> base_t;
 
-struct par_t : execution_policy<par_t>
-{
-  typedef execution_policy<par_t> base_t;
+        __device__ __host__ par_t()
+            : base_t()
+        {
+        }
 
-  __device__ __host__
-  par_t() : base_t() {}
+        template <class Allocator>
+        struct enable_alloc
+        {
+            typedef typename thrust::detail::enable_if<
+                thrust::detail::is_allocator<Allocator>::value,
+                thrust::detail::execute_with_allocator<Allocator, execute_on_stream_base>>::type
+                type;
+        };
 
-  template <class Allocator>
-  struct enable_alloc
-  {
-    typedef typename thrust::detail::enable_if<
-        thrust::detail::is_allocator<Allocator>::value,
-        thrust::detail::execute_with_allocator<Allocator,
-                                               execute_on_stream_base> >::type
-        type;
-  };
+        template <class Allocator>
+        __host__ __device__ typename enable_alloc<Allocator>::type
+                 operator()(Allocator& alloc) const
+        {
+            return thrust::detail::execute_with_allocator<Allocator, execute_on_stream_base>(alloc);
+        }
 
-  template <class Allocator>
-  __host__ __device__ typename enable_alloc<Allocator>::type
-  operator()(Allocator &alloc) const
-  {
-    return thrust::detail::execute_with_allocator<
-        Allocator,
-        execute_on_stream_base>(alloc);
-  }
-
-  execute_on_stream __device__ __host__
-  on(cudaStream_t const &stream) const
-  {
-    return execute_on_stream(stream);
-  }
-};
+        execute_on_stream __device__ __host__ on(cudaStream_t const& stream) const
+        {
+            return execute_on_stream(stream);
+        }
+    };
 
 #ifdef __CUDA_ARCH__
-static const __device__ par_t par;
+    static const __device__ par_t par;
 #else
-static const par_t par;
+    static const par_t par;
 #endif
-}    // namespace cuda_
+} // namespace cuda_
 
-namespace system {
-namespace cuda {
-  using thrust::cuda_cub::par;
-  namespace detail {
-    using thrust::cuda_cub::par_t;
-  }
-} // namesapce cuda
+namespace system
+{
+    namespace cuda
+    {
+        using thrust::cuda_cub::par;
+        namespace detail
+        {
+            using thrust::cuda_cub::par_t;
+        }
+    } // namesapce cuda
 } // namespace system
 
-namespace cuda {
-using thrust::cuda_cub::par;
+namespace cuda
+{
+    using thrust::cuda_cub::par;
 } // namespace cuda
 
 END_NS_THRUST
-

@@ -26,79 +26,61 @@
  ******************************************************************************/
 #pragma once
 
-
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
-#include <thrust/system/cuda/detail/transform.h>
 #include <thrust/iterator/permutation_iterator.h>
+#include <thrust/system/cuda/detail/transform.h>
 
 BEGIN_NS_THRUST
-namespace cuda_cub {
-
-template <class Derived,
-          class MapIt,
-          class ItemsIt,
-          class ResultIt>
-ResultIt __host__ __device__
-gather(execution_policy<Derived>& policy,
-    MapIt map_first,
-    MapIt map_last,
-    ItemsIt items,
-    ResultIt result)
+namespace cuda_cub
 {
-  return cuda_cub::transform(policy,
-                          thrust::make_permutation_iterator(items, map_first),
-                          thrust::make_permutation_iterator(items, map_last),
-                          result,
-                          identity());
-}
 
+    template <class Derived, class MapIt, class ItemsIt, class ResultIt>
+    ResultIt __host__ __device__ gather(execution_policy<Derived>& policy,
+                                        MapIt                      map_first,
+                                        MapIt                      map_last,
+                                        ItemsIt                    items,
+                                        ResultIt                   result)
+    {
+        return cuda_cub::transform(policy,
+                                   thrust::make_permutation_iterator(items, map_first),
+                                   thrust::make_permutation_iterator(items, map_last),
+                                   result,
+                                   identity());
+    }
 
-template <class Derived,
-          class MapIt,
-          class StencilIt,
-          class ItemsIt,
-          class ResultIt,
-          class Predicate>
-ResultIt __host__ __device__
-gather_if(execution_policy<Derived>& policy,
-          MapIt                      map_first,
-          MapIt                      map_last,
-          StencilIt                  stencil,
-          ItemsIt                    items,
-          ResultIt                   result,
-          Predicate                  predicate)
-{
-  return cuda_cub::transform_if(policy,
-                              thrust::make_permutation_iterator(items, map_first),
-                              thrust::make_permutation_iterator(items, map_last),
-                              stencil,
-                              result,
-                              identity(),
-                              predicate);
-}
+    template <class Derived,
+              class MapIt,
+              class StencilIt,
+              class ItemsIt,
+              class ResultIt,
+              class Predicate>
+    ResultIt __host__ __device__ gather_if(execution_policy<Derived>& policy,
+                                           MapIt                      map_first,
+                                           MapIt                      map_last,
+                                           StencilIt                  stencil,
+                                           ItemsIt                    items,
+                                           ResultIt                   result,
+                                           Predicate                  predicate)
+    {
+        return cuda_cub::transform_if(policy,
+                                      thrust::make_permutation_iterator(items, map_first),
+                                      thrust::make_permutation_iterator(items, map_last),
+                                      stencil,
+                                      result,
+                                      identity(),
+                                      predicate);
+    }
 
-template <class Derived,
-          class MapIt,
-          class StencilIt,
-          class ItemsIt,
-          class ResultIt>
-ResultIt __host__ __device__
-gather_if(execution_policy<Derived>& policy,
-          MapIt                      map_first,
-          MapIt                      map_last,
-          StencilIt                  stencil,
-          ItemsIt                    items,
-          ResultIt                   result)
-{
-  return cuda_cub::gather_if(policy,
-                          map_first,
-                          map_last,
-                          stencil,
-                          items,
-                          result,
-                          identity());
-}
-
+    template <class Derived, class MapIt, class StencilIt, class ItemsIt, class ResultIt>
+    ResultIt __host__ __device__ gather_if(execution_policy<Derived>& policy,
+                                           MapIt                      map_first,
+                                           MapIt                      map_last,
+                                           StencilIt                  stencil,
+                                           ItemsIt                    items,
+                                           ResultIt                   result)
+    {
+        return cuda_cub::gather_if(policy, map_first, map_last, stencil, items, result, identity());
+    }
 
 } // namespace cuda_cub
 END_NS_THRUST

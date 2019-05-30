@@ -22,193 +22,216 @@
 
 namespace thrust
 {
-namespace detail
-{
-namespace complex
-{
+    namespace detail
+    {
+        namespace complex
+        {
 
-// Define basic arithmetic functions so we can use them without explicit scope
-// keeping the code as close as possible to FreeBSDs for ease of maintenance.
-// It also provides an easy way to support compilers with missing C99 functions.
-// When possible, just use the names in the global scope.
-// Some platforms define these as macros, others as free functions.
-// Avoid using the std:: form of these as nvcc may treat std::foo() as __host__ functions.
+            // Define basic arithmetic functions so we can use them without explicit scope
+            // keeping the code as close as possible to FreeBSDs for ease of maintenance.
+            // It also provides an easy way to support compilers with missing C99 functions.
+            // When possible, just use the names in the global scope.
+            // Some platforms define these as macros, others as free functions.
+            // Avoid using the std:: form of these as nvcc may treat std::foo() as __host__ functions.
 
-using ::log;
-using ::acos;
-using ::asin;
-using ::sqrt;
-using ::sinh;
-using ::tan;
-using ::cos;
-using ::sin;
-using ::exp;
-using ::cosh;
-using ::atan;
+            using ::acos;
+            using ::asin;
+            using ::atan;
+            using ::cos;
+            using ::cosh;
+            using ::exp;
+            using ::log;
+            using ::sin;
+            using ::sinh;
+            using ::sqrt;
+            using ::tan;
 
-template <typename T>
-inline __host__ __device__ T infinity();
+            template <typename T>
+            inline __host__ __device__ T infinity();
 
-template <>
-inline __host__ __device__ float infinity<float>()
-{
-  float res;
-  set_float_word(res, 0x7f800000);
-  return res;
-}
+            template <>
+            inline __host__ __device__ float infinity<float>()
+            {
+                float res;
+                set_float_word(res, 0x7f800000);
+                return res;
+            }
 
-
-template <>
-inline __host__ __device__ double infinity<double>()
-{
-  double res;
-  insert_words(res, 0x7ff00000,0);
-  return res;
-}
+            template <>
+            inline __host__ __device__ double infinity<double>()
+            {
+                double res;
+                insert_words(res, 0x7ff00000, 0);
+                return res;
+            }
 
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HCC
 #ifdef __HIP_DEVICE_COMPILE__
-  using ::cos;
-  using ::log;
-  using ::exp;
-  using ::sin;
-  using ::sqrt;
-  using ::atan2;
+            using ::atan2;
+            using ::cos;
+            using ::exp;
+            using ::log;
+            using ::sin;
+            using ::sqrt;
 #else
-  using std::cos;
-  using std::log;
-  using std::exp;
-  using std::sin;
-  using std::sqrt;
-  using std::atan2;
+            using std::atan2;
+            using std::cos;
+            using std::exp;
+            using std::log;
+            using std::sin;
+            using std::sqrt;
 #endif
 #endif // HCC compiler
 
 #if defined _MSC_VER
-__host__ __device__ inline int isinf(float x){
-  return std::abs(x) == infinity<float>();
-}
+            __host__ __device__ inline int isinf(float x)
+            {
+                return std::abs(x) == infinity<float>();
+            }
 
-__host__ __device__ inline int isinf(double x){
-  return std::abs(x) == infinity<double>();
-}
+            __host__ __device__ inline int isinf(double x)
+            {
+                return std::abs(x) == infinity<double>();
+            }
 
-__host__ __device__ inline int isnan(float x){
-  return x != x;
-}
+            __host__ __device__ inline int isnan(float x)
+            {
+                return x != x;
+            }
 
-__host__ __device__ inline int isnan(double x){
-  return x != x;
-}
+            __host__ __device__ inline int isnan(double x)
+            {
+                return x != x;
+            }
 
-__host__ __device__ inline int signbit(float x){
-  return (*((uint32_t *)&x)) & 0x80000000;
-}
+            __host__ __device__ inline int signbit(float x)
+            {
+                return (*((uint32_t*)&x)) & 0x80000000;
+            }
 
-__host__ __device__ inline int signbit(double x){
-  return (*((uint32_t *)&x)) & 0x80000000;
-}
+            __host__ __device__ inline int signbit(double x)
+            {
+                return (*((uint32_t*)&x)) & 0x80000000;
+            }
 
-__host__ __device__ inline int isfinite(float x){
-  return !isnan(x) && !isinf(x);
-}
+            __host__ __device__ inline int isfinite(float x)
+            {
+                return !isnan(x) && !isinf(x);
+            }
 
-__host__ __device__ inline int isfinite(double x){
-  return !isnan(x) && !isinf(x);
-}
+            __host__ __device__ inline int isfinite(double x)
+            {
+                return !isnan(x) && !isinf(x);
+            }
 
 #else
 
-#  if defined(__CUDACC__) && !(defined(__CUDA__) && defined(__clang__))
+#if defined(__CUDACC__) && !(defined(__CUDA__) && defined(__clang__))
 
-// sometimes the CUDA toolkit provides these these names as macros,
-// sometimes functions in the global scope
+            // sometimes the CUDA toolkit provides these these names as macros,
+            // sometimes functions in the global scope
 
-#    if (CUDA_VERSION >= 6500)
-using ::isinf;
-using ::isnan;
-using ::signbit;
-using ::isfinite;
+#if(CUDA_VERSION >= 6500)
+            using ::isfinite;
+            using ::isinf;
+            using ::isnan;
+            using ::signbit;
 
-#    else
-// these names are macros, we don't need to define them
+#else
+            // these names are macros, we don't need to define them
 
-#    endif // CUDA_VERSION
+#endif // CUDA_VERSION
 
-#  else
-// Some compilers do not provide these in the global scope
-// they are in std:: instead
-// Since we're not compiling with nvcc, it's safe to use the functions in std::
-using std::isinf;
-using std::isnan;
-using std::signbit;
-using std::isfinite;
-#  endif // __CUDACC__
+#else
+            // Some compilers do not provide these in the global scope
+            // they are in std:: instead
+            // Since we're not compiling with nvcc, it's safe to use the functions in std::
+            using std::isfinite;
+            using std::isinf;
+            using std::isnan;
+            using std::signbit;
+#endif // __CUDACC__
 
-using ::atanh;
+            using ::atanh;
 #endif // _MSC_VER
 
 #if defined _MSC_VER
 
-__host__ __device__ inline double copysign(double x, double y){
-  uint32_t hx,hy;
-  get_high_word(hx,x);
-  get_high_word(hy,y);
-  set_high_word(x,(hx&0x7fffffff)|(hy&0x80000000));
-  return x;
-}
+            __host__ __device__ inline double copysign(double x, double y)
+            {
+                uint32_t hx, hy;
+                get_high_word(hx, x);
+                get_high_word(hy, y);
+                set_high_word(x, (hx & 0x7fffffff) | (hy & 0x80000000));
+                return x;
+            }
 
-__host__ __device__ inline float copysignf(float x, float y){
-  uint32_t ix,iy;
-  get_float_word(ix,x);
-  get_float_word(iy,y);
-  set_float_word(x,(ix&0x7fffffff)|(iy&0x80000000));
-  return x;
-}
-
-
+            __host__ __device__ inline float copysignf(float x, float y)
+            {
+                uint32_t ix, iy;
+                get_float_word(ix, x);
+                get_float_word(iy, y);
+                set_float_word(x, (ix & 0x7fffffff) | (iy & 0x80000000));
+                return x;
+            }
 
 #ifndef __CUDACC__
 
-// Simple approximation to log1p as Visual Studio is lacking one
-inline double log1p(double x){
-  double u = 1.0+x;
-  if(u == 1.0){
-    return x;
-  }else{
-    if(u > 2.0){
-      // Use normal log for large arguments
-      return log(u);
-    }else{
-      return log(u)*(x/(u-1.0));
-    }
-  }
-}
+            // Simple approximation to log1p as Visual Studio is lacking one
+            inline double log1p(double x)
+            {
+                double u = 1.0 + x;
+                if(u == 1.0)
+                {
+                    return x;
+                }
+                else
+                {
+                    if(u > 2.0)
+                    {
+                        // Use normal log for large arguments
+                        return log(u);
+                    }
+                    else
+                    {
+                        return log(u) * (x / (u - 1.0));
+                    }
+                }
+            }
 
-inline float log1pf(float x){
-  float u = 1.0f+x;
-  if(u == 1.0f){
-    return x;
-  }else{
-    if(u > 2.0f){
-      // Use normal log for large arguments
-      return logf(u);
-    }else{
-      return logf(u)*(x/(u-1.0f));
-    }
-  }
-}
+            inline float log1pf(float x)
+            {
+                float u = 1.0f + x;
+                if(u == 1.0f)
+                {
+                    return x;
+                }
+                else
+                {
+                    if(u > 2.0f)
+                    {
+                        // Use normal log for large arguments
+                        return logf(u);
+                    }
+                    else
+                    {
+                        return logf(u) * (x / (u - 1.0f));
+                    }
+                }
+            }
 
 #if _MSV_VER <= 1500
 #include <complex>
 
-inline float hypotf(float x, float y){
-	return abs(std::complex<float>(x,y));
-}
+            inline float hypotf(float x, float y)
+            {
+                return abs(std::complex<float>(x, y));
+            }
 
-inline double hypot(double x, double y){
-	return _hypot(x,y);
-}
+            inline double hypot(double x, double y)
+            {
+                return _hypot(x, y);
+            }
 
 #endif // _MSC_VER <= 1500
 
@@ -216,8 +239,8 @@ inline double hypot(double x, double y){
 
 #endif // _MSC_VER
 
-} // namespace complex
+        } // namespace complex
 
-} // namespace detail
+    } // namespace detail
 
 } // namespace thrust

@@ -62,11 +62,11 @@ namespace hip_rocprim
 
 namespace system
 {
-namespace hip
-{
-    using thrust::hip_rocprim::execution_policy;
-    using thrust::hip_rocprim::tag;
-} // namespace hip
+    namespace hip
+    {
+        using thrust::hip_rocprim::execution_policy;
+        using thrust::hip_rocprim::tag;
+    } // namespace hip
 } // namespace system
 
 namespace hip

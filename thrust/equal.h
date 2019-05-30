@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file equal.h
  *  \brief Equality between ranges
  */
@@ -27,16 +26,14 @@
 namespace thrust
 {
 
-
-/*! \addtogroup reductions
+    /*! \addtogroup reductions
  *  \{
  *  \addtogroup comparisons
  *  \ingroup reductions
  *  \{
  */
 
-
-/*! \p equal returns \c true if the two ranges <tt>[first1, last1)</tt>
+    /*! \p equal returns \c true if the two ranges <tt>[first1, last1)</tt>
  *  and <tt>[first2, first2 + (last1 - first1))</tt> are identical when
  *  compared element-by-element, and otherwise returns \c false.
  *
@@ -76,12 +73,13 @@ namespace thrust
  *
  *  \see http://www.sgi.com/tech/stl/equal.html
  */
-template<typename DerivedPolicy, typename InputIterator1, typename InputIterator2>
-__host__ __device__
-bool equal(const thrust::detail::execution_policy_base<DerivedPolicy> &exec, InputIterator1 first1, InputIterator1 last1, InputIterator2 first2);
+    template <typename DerivedPolicy, typename InputIterator1, typename InputIterator2>
+    __host__ __device__ bool equal(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                   InputIterator1 first1,
+                                   InputIterator1 last1,
+                                   InputIterator2 first2);
 
-
-/*! \p equal returns \c true if the two ranges <tt>[first1, last1)</tt>
+    /*! \p equal returns \c true if the two ranges <tt>[first1, last1)</tt>
  *  and <tt>[first2, first2 + (last1 - first1))</tt> are identical when
  *  compared element-by-element, and otherwise returns \c false.
  *
@@ -116,12 +114,10 @@ bool equal(const thrust::detail::execution_policy_base<DerivedPolicy> &exec, Inp
  *
  *  \see http://www.sgi.com/tech/stl/equal.html
  */
-template <typename InputIterator1, typename InputIterator2>
-bool equal(InputIterator1 first1, InputIterator1 last1,
-           InputIterator2 first2);
+    template <typename InputIterator1, typename InputIterator2>
+    bool equal(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2);
 
-
-/*! \p equal returns \c true if the two ranges <tt>[first1, last1)</tt>
+    /*! \p equal returns \c true if the two ranges <tt>[first1, last1)</tt>
  *  and <tt>[first2, first2 + (last1 - first1))</tt> are identical when
  *  compared element-by-element, and otherwise returns \c false.
  *
@@ -172,12 +168,17 @@ bool equal(InputIterator1 first1, InputIterator1 last1,
  *
  *  \see http://www.sgi.com/tech/stl/equal.html
  */
-template<typename DerivedPolicy, typename InputIterator1, typename InputIterator2, typename BinaryPredicate>
-__host__ __device__
-bool equal(const thrust::detail::execution_policy_base<DerivedPolicy> &exec, InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, BinaryPredicate binary_pred);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename BinaryPredicate>
+    __host__ __device__ bool equal(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                   InputIterator1  first1,
+                                   InputIterator1  last1,
+                                   InputIterator2  first2,
+                                   BinaryPredicate binary_pred);
 
-
-/*! \p equal returns \c true if the two ranges <tt>[first1, last1)</tt>
+    /*! \p equal returns \c true if the two ranges <tt>[first1, last1)</tt>
  *  and <tt>[first2, first2 + (last1 - first1))</tt> are identical when
  *  compared element-by-element, and otherwise returns \c false.
  *
@@ -222,17 +223,16 @@ bool equal(const thrust::detail::execution_policy_base<DerivedPolicy> &exec, Inp
  *
  *  \see http://www.sgi.com/tech/stl/equal.html
  */
-template <typename InputIterator1, typename InputIterator2, 
-          typename BinaryPredicate>
-bool equal(InputIterator1 first1, InputIterator1 last1,
-           InputIterator2 first2, BinaryPredicate binary_pred);
+    template <typename InputIterator1, typename InputIterator2, typename BinaryPredicate>
+    bool equal(InputIterator1  first1,
+               InputIterator1  last1,
+               InputIterator2  first2,
+               BinaryPredicate binary_pred);
 
-
-/*! \} // end comparisons
+    /*! \} // end comparisons
  *  \} // end reductions
  */
 
 } // end namespace thrust
 
 #include <thrust/detail/equal.inl>
-

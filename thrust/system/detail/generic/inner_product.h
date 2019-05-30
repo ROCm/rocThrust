@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 #pragma once
 
 #include <thrust/detail/config.h>
@@ -22,38 +21,42 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
+                template <typename DerivedPolicy,
+                          typename InputIterator1,
+                          typename InputIterator2,
+                          typename OutputType>
+                __host__ __device__ OutputType
+                                    inner_product(thrust::execution_policy<DerivedPolicy>& exec,
+                                                  InputIterator1                           first1,
+                                                  InputIterator1                           last1,
+                                                  InputIterator2                           first2,
+                                                  OutputType                               init);
 
-template<typename DerivedPolicy, typename InputIterator1, typename InputIterator2, typename OutputType>
-__host__ __device__
-  OutputType inner_product(thrust::execution_policy<DerivedPolicy> &exec,
-                           InputIterator1 first1,
-                           InputIterator1 last1,
-                           InputIterator2 first2,
-                           OutputType init);
+                template <typename DerivedPolicy,
+                          typename InputIterator1,
+                          typename InputIterator2,
+                          typename OutputType,
+                          typename BinaryFunction1,
+                          typename BinaryFunction2>
+                __host__ __device__ OutputType
+                                    inner_product(thrust::execution_policy<DerivedPolicy>& exec,
+                                                  InputIterator1                           first1,
+                                                  InputIterator1                           last1,
+                                                  InputIterator2                           first2,
+                                                  OutputType                               init,
+                                                  BinaryFunction1                          binary_op1,
+                                                  BinaryFunction2                          binary_op2);
 
-
-template<typename DerivedPolicy, typename InputIterator1, typename InputIterator2, typename OutputType, typename BinaryFunction1, typename BinaryFunction2>
-__host__ __device__
-OutputType inner_product(thrust::execution_policy<DerivedPolicy> &exec,
-                         InputIterator1 first1,
-                         InputIterator1 last1,
-                         InputIterator2 first2,
-                         OutputType init, 
-                         BinaryFunction1 binary_op1,
-                         BinaryFunction2 binary_op2);
-
-
-} // end namespace generic
-} // end namespace detail
-} // end namespace system
+            } // end namespace generic
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/detail/generic/inner_product.inl>
-

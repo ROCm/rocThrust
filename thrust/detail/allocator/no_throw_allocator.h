@@ -21,50 +21,55 @@
 
 namespace thrust
 {
-namespace detail
-{
-
-template<typename BaseAllocator>
-  struct no_throw_allocator : BaseAllocator
-{
-  private:
-    typedef BaseAllocator super_t;
-
-  public:
-    inline __host__ __device__
-    no_throw_allocator(const BaseAllocator &other = BaseAllocator())
-      : super_t(other)
-    {}
-
-    template<typename U>
-      struct rebind
+    namespace detail
     {
-      typedef no_throw_allocator<typename super_t::template rebind<U>::other> other;
-    }; // end rebind
 
-    __host__ __device__
-    void deallocate(typename super_t::pointer p, typename super_t::size_type n)
-    {
+        template <typename BaseAllocator>
+        struct no_throw_allocator : BaseAllocator
+        {
+        private:
+            typedef BaseAllocator super_t;
+
+        public:
+            inline __host__ __device__ no_throw_allocator(const BaseAllocator& other
+                                                          = BaseAllocator())
+                : super_t(other)
+            {
+            }
+
+            template <typename U>
+            struct rebind
+            {
+                typedef no_throw_allocator<typename super_t::template rebind<U>::other> other;
+            }; // end rebind
+
+            __host__ __device__ void deallocate(typename super_t::pointer   p,
+                                                typename super_t::size_type n)
+            {
 #if !defined(__CUDA_ARCH__) && !defined(__HIP_DEVICE_COMPILE__)
-      try
-      {
-        super_t::deallocate(p, n);
-      } // end try
-      catch(...)
-      {
-        // catch anything
-      } // end catch
+                try
+                {
+                    super_t::deallocate(p, n);
+                } // end try
+                catch(...)
+                {
+                    // catch anything
+                } // end catch
 #else
-      super_t::deallocate(p, n);
+                super_t::deallocate(p, n);
 #endif
-    } // end deallocate()
+            } // end deallocate()
 
-    inline __host__ __device__
-    bool operator==(no_throw_allocator const &other) { return super_t::operator==(other); }
+            inline __host__ __device__ bool operator==(no_throw_allocator const& other)
+            {
+                return super_t::operator==(other);
+            }
 
-    inline __host__ __device__
-    bool operator!=(no_throw_allocator const &other) { return super_t::operator!=(other); }
-}; // end no_throw_allocator
+            inline __host__ __device__ bool operator!=(no_throw_allocator const& other)
+            {
+                return super_t::operator!=(other);
+            }
+        }; // end no_throw_allocator
 
-} // end detail
+    } // end detail
 } // end thrust

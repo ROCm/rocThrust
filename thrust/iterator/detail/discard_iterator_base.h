@@ -16,50 +16,45 @@
 
 #pragma once
 
+#include <cstddef> // for std::ptrdiff_t
 #include <thrust/detail/config.h>
 #include <thrust/iterator/counting_iterator.h>
-#include <thrust/iterator/iterator_adaptor.h>
 #include <thrust/iterator/detail/any_assign.h>
-#include <cstddef> // for std::ptrdiff_t
+#include <thrust/iterator/iterator_adaptor.h>
 
 namespace thrust
 {
 
-// forward declaration of discard_iterator
-template<typename> class discard_iterator;
+    // forward declaration of discard_iterator
+    template <typename>
+    class discard_iterator;
 
-namespace detail
-{
+    namespace detail
+    {
 
+        template <typename System>
+        struct discard_iterator_base
+        {
+            // XXX value_type should actually be void
+            //     but this interferes with zip_iterator<discard_iterator>
+            typedef any_assign     value_type;
+            typedef any_assign&    reference;
+            typedef std::ptrdiff_t incrementable;
 
-template<typename System>
-  struct discard_iterator_base
-{
-  // XXX value_type should actually be void
-  //     but this interferes with zip_iterator<discard_iterator>
-  typedef any_assign         value_type;
-  typedef any_assign&        reference;
-  typedef std::ptrdiff_t     incrementable;
+            typedef typename thrust::
+                counting_iterator<incrementable, System, thrust::random_access_traversal_tag>
+                    base_iterator;
 
-  typedef typename thrust::counting_iterator<
-    incrementable,
-    System,
-    thrust::random_access_traversal_tag
-  > base_iterator;
+            typedef typename thrust::iterator_adaptor<
+                discard_iterator<System>,
+                base_iterator,
+                value_type,
+                typename thrust::iterator_system<base_iterator>::type,
+                typename thrust::iterator_traversal<base_iterator>::type,
+                reference>
+                type;
+        }; // end discard_iterator_base
 
-  typedef typename thrust::iterator_adaptor<
-    discard_iterator<System>,
-    base_iterator,
-    value_type,
-    typename thrust::iterator_system<base_iterator>::type,
-    typename thrust::iterator_traversal<base_iterator>::type,
-    reference
-  > type;
-}; // end discard_iterator_base
+    } // end detail
 
-
-} // end detail
-  
 } // end thrust
-
-

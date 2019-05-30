@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file adjacent_difference.h
  *  \brief Generic implementation of adjacent_difference.
  */
@@ -26,33 +25,34 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
+                template <typename DerivedPolicy, typename InputIterator, typename OutputIterator>
+                __host__ __device__ OutputIterator
+                                    adjacent_difference(thrust::execution_policy<DerivedPolicy>& exec,
+                                                        InputIterator                            first,
+                                                        InputIterator                            last,
+                                                        OutputIterator                           result);
 
-template<typename DerivedPolicy, typename InputIterator, typename OutputIterator>
-__host__ __device__
-OutputIterator adjacent_difference(thrust::execution_policy<DerivedPolicy> &exec,
-                                   InputIterator first, InputIterator last,
-                                   OutputIterator result);
+                template <typename DerivedPolicy,
+                          typename InputIterator,
+                          typename OutputIterator,
+                          typename BinaryFunction>
+                __host__ __device__ OutputIterator
+                                    adjacent_difference(thrust::execution_policy<DerivedPolicy>& exec,
+                                                        InputIterator                            first,
+                                                        InputIterator                            last,
+                                                        OutputIterator                           result,
+                                                        BinaryFunction                           binary_op);
 
-
-template<typename DerivedPolicy, typename InputIterator, typename OutputIterator, typename BinaryFunction>
-__host__ __device__
-OutputIterator adjacent_difference(thrust::execution_policy<DerivedPolicy> &exec,
-                                   InputIterator first, InputIterator last,
-                                   OutputIterator result,
-                                   BinaryFunction binary_op);
-
-
-} // end namespace generic
-} // end namespace detail
-} // end namespace system
+            } // end namespace generic
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/detail/generic/adjacent_difference.inl>
-

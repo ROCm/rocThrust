@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file replace.h
  *  \brief Functions for replacing elements in a range with a particular value
  */
@@ -27,15 +26,13 @@
 namespace thrust
 {
 
-
-/*! \addtogroup transformations
+    /*! \addtogroup transformations
  *  \addtogroup replacing
  *  \ingroup transformations
  *  \{
  */
 
-
-/*! \p replace replaces every element in the range [first, last) equal to \p old_value
+    /*! \p replace replaces every element in the range [first, last) equal to \p old_value
  *  with \p new_value. That is: for every iterator \c i, if <tt>*i == old_value</tt>
  *  then it performs the <tt>assignment *i = new_value</tt>.
  *
@@ -83,15 +80,15 @@ namespace thrust
  *  \see \c replace_copy
  *  \see \c replace_copy_if
  */
-template<typename DerivedPolicy, typename ForwardIterator, typename T>
-__host__ __device__
-  void replace(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-               ForwardIterator first, ForwardIterator last,
-               const T &old_value,
-               const T &new_value);
+    template <typename DerivedPolicy, typename ForwardIterator, typename T>
+    __host__ __device__ void
+             replace(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                     ForwardIterator                                             first,
+                     ForwardIterator                                             last,
+                     const T&                                                    old_value,
+                     const T&                                                    new_value);
 
-
-/*! \p replace replaces every element in the range [first, last) equal to \p old_value
+    /*! \p replace replaces every element in the range [first, last) equal to \p old_value
  *  with \p new_value. That is: for every iterator \c i, if <tt>*i == old_value</tt>
  *  then it performs the <tt>assignment *i = new_value</tt>.
  *
@@ -133,12 +130,13 @@ __host__ __device__
  *  \see \c replace_copy
  *  \see \c replace_copy_if
  */
-template<typename ForwardIterator, typename T>
-  void replace(ForwardIterator first, ForwardIterator last, const T &old_value,
-               const T &new_value);
+    template <typename ForwardIterator, typename T>
+    void replace(ForwardIterator first,
+                 ForwardIterator last,
+                 const T&        old_value,
+                 const T&        new_value);
 
-
-/*! \p replace_if replaces every element in the range <tt>[first, last)</tt> for which
+    /*! \p replace_if replaces every element in the range <tt>[first, last)</tt> for which
  *  \p pred returns \c true with \p new_value. That is: for every iterator \c i, if
  *  <tt>pred(*i)</tt> is \c true then it performs the assignment <tt>*i = new_value</tt>.
  *
@@ -197,15 +195,15 @@ template<typename ForwardIterator, typename T>
  *  \see \c replace_copy
  *  \see \c replace_copy_if
  */
-template<typename DerivedPolicy, typename ForwardIterator, typename Predicate, typename T>
-__host__ __device__
-  void replace_if(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                  ForwardIterator first, ForwardIterator last,
-                  Predicate pred,
-                  const T &new_value);
+    template <typename DerivedPolicy, typename ForwardIterator, typename Predicate, typename T>
+    __host__ __device__ void
+             replace_if(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                        ForwardIterator                                             first,
+                        ForwardIterator                                             last,
+                        Predicate                                                   pred,
+                        const T&                                                    new_value);
 
-
-/*! \p replace_if replaces every element in the range <tt>[first, last)</tt> for which
+    /*! \p replace_if replaces every element in the range <tt>[first, last)</tt> for which
  *  \p pred returns \c true with \p new_value. That is: for every iterator \c i, if
  *  <tt>pred(*i)</tt> is \c true then it performs the assignment <tt>*i = new_value</tt>.
  *
@@ -258,13 +256,11 @@ __host__ __device__
  *  \see \c replace_copy
  *  \see \c replace_copy_if
  */
-template<typename ForwardIterator, typename Predicate, typename T>
-  void replace_if(ForwardIterator first, ForwardIterator last,
-                  Predicate pred,
-                  const T &new_value);
+    template <typename ForwardIterator, typename Predicate, typename T>
+    void
+        replace_if(ForwardIterator first, ForwardIterator last, Predicate pred, const T& new_value);
 
-
-/*! \p replace_if replaces every element in the range <tt>[first, last)</tt> for which
+    /*! \p replace_if replaces every element in the range <tt>[first, last)</tt> for which
  *  <tt>pred(*s)</tt> returns \c true with \p new_value. That is: for every iterator
  *  \c i in the range <tt>[first, last)</tt>, and \c s in the range <tt>[stencil, stencil + (last - first))</tt>,
  *  if <tt>pred(*s)</tt> is \c true then it performs the assignment <tt>*i = new_value</tt>.
@@ -331,16 +327,20 @@ template<typename ForwardIterator, typename Predicate, typename T>
  *  \see \c replace_copy
  *  \see \c replace_copy_if
  */
-template<typename DerivedPolicy, typename ForwardIterator, typename InputIterator, typename Predicate, typename T>
-__host__ __device__
-  void replace_if(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                  ForwardIterator first, ForwardIterator last,
-                  InputIterator stencil,
-                  Predicate pred,
-                  const T &new_value);
+    template <typename DerivedPolicy,
+              typename ForwardIterator,
+              typename InputIterator,
+              typename Predicate,
+              typename T>
+    __host__ __device__ void
+             replace_if(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                        ForwardIterator                                             first,
+                        ForwardIterator                                             last,
+                        InputIterator                                               stencil,
+                        Predicate                                                   pred,
+                        const T&                                                    new_value);
 
-
-/*! \p replace_if replaces every element in the range <tt>[first, last)</tt> for which
+    /*! \p replace_if replaces every element in the range <tt>[first, last)</tt> for which
  *  <tt>pred(*s)</tt> returns \c true with \p new_value. That is: for every iterator
  *  \c i in the range <tt>[first, last)</tt>, and \c s in the range <tt>[stencil, stencil + (last - first))</tt>,
  *  if <tt>pred(*s)</tt> is \c true then it performs the assignment <tt>*i = new_value</tt>.
@@ -401,14 +401,14 @@ __host__ __device__
  *  \see \c replace_copy
  *  \see \c replace_copy_if
  */
-template<typename ForwardIterator, typename InputIterator, typename Predicate, typename T>
-  void replace_if(ForwardIterator first, ForwardIterator last,
-                  InputIterator stencil,
-                  Predicate pred,
-                  const T &new_value);
+    template <typename ForwardIterator, typename InputIterator, typename Predicate, typename T>
+    void replace_if(ForwardIterator first,
+                    ForwardIterator last,
+                    InputIterator   stencil,
+                    Predicate       pred,
+                    const T&        new_value);
 
-
-/*! \p replace_copy copies elements from the range <tt>[first, last)</tt> to the range
+    /*! \p replace_copy copies elements from the range <tt>[first, last)</tt> to the range
  *  <tt>[result, result + (last-first))</tt>, except that any element equal to \p old_value
  *  is not copied; \p new_value is copied instead.
  *
@@ -460,16 +460,16 @@ template<typename ForwardIterator, typename InputIterator, typename Predicate, t
  *  \see \c replace_if
  *  \see \c replace_copy_if
  */
-template<typename DerivedPolicy, typename InputIterator, typename OutputIterator, typename T>
-__host__ __device__
-  OutputIterator replace_copy(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                              InputIterator first, InputIterator last,
-                              OutputIterator result,
-                              const T &old_value,
-                              const T &new_value);
+    template <typename DerivedPolicy, typename InputIterator, typename OutputIterator, typename T>
+    __host__ __device__ OutputIterator
+                        replace_copy(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                     InputIterator                                               first,
+                                     InputIterator                                               last,
+                                     OutputIterator                                              result,
+                                     const T&                                                    old_value,
+                                     const T&                                                    new_value);
 
-
-/*! \p replace_copy copies elements from the range <tt>[first, last)</tt> to the range
+    /*! \p replace_copy copies elements from the range <tt>[first, last)</tt> to the range
  *  <tt>[result, result + (last-first))</tt>, except that any element equal to \p old_value
  *  is not copied; \p new_value is copied instead.
  *
@@ -516,13 +516,14 @@ __host__ __device__
  *  \see \c replace_if
  *  \see \c replace_copy_if
  */
-template<typename InputIterator, typename OutputIterator, typename T>
-  OutputIterator replace_copy(InputIterator first, InputIterator last,
-                              OutputIterator result, const T &old_value,
-                              const T &new_value);
+    template <typename InputIterator, typename OutputIterator, typename T>
+    OutputIterator replace_copy(InputIterator  first,
+                                InputIterator  last,
+                                OutputIterator result,
+                                const T&       old_value,
+                                const T&       new_value);
 
-
-/*! \p replace_copy_if copies elements from the range <tt>[first, last)</tt> to the range
+    /*! \p replace_copy_if copies elements from the range <tt>[first, last)</tt> to the range
  *  <tt>[result, result + (last-first))</tt>, except that any element for which \p pred
  *  is \c true is not copied; \p new_value is copied instead.
  *
@@ -585,16 +586,20 @@ template<typename InputIterator, typename OutputIterator, typename T>
  *  \see \c replace_if
  *  \see \c replace_copy
  */
-template<typename DerivedPolicy, typename InputIterator, typename OutputIterator, typename Predicate, typename T>
-__host__ __device__
-  OutputIterator replace_copy_if(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                 InputIterator first, InputIterator last,
-                                 OutputIterator result,
-                                 Predicate pred,
-                                 const T &new_value);
+    template <typename DerivedPolicy,
+              typename InputIterator,
+              typename OutputIterator,
+              typename Predicate,
+              typename T>
+    __host__ __device__ OutputIterator
+                        replace_copy_if(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                        InputIterator                                               first,
+                                        InputIterator                                               last,
+                                        OutputIterator                                              result,
+                                        Predicate                                                   pred,
+                                        const T&                                                    new_value);
 
-
-/*! \p replace_copy_if copies elements from the range <tt>[first, last)</tt> to the range
+    /*! \p replace_copy_if copies elements from the range <tt>[first, last)</tt> to the range
  *  <tt>[result, result + (last-first))</tt>, except that any element for which \p pred
  *  is \c true is not copied; \p new_value is copied instead.
  *
@@ -652,14 +657,14 @@ __host__ __device__
  *  \see \c replace_if
  *  \see \c replace_copy
  */
-template<typename InputIterator, typename OutputIterator, typename Predicate, typename T>
-  OutputIterator replace_copy_if(InputIterator first, InputIterator last,
-                                 OutputIterator result,
-                                 Predicate pred,
-                                 const T &new_value);
+    template <typename InputIterator, typename OutputIterator, typename Predicate, typename T>
+    OutputIterator replace_copy_if(InputIterator  first,
+                                   InputIterator  last,
+                                   OutputIterator result,
+                                   Predicate      pred,
+                                   const T&       new_value);
 
-
-/*! This version of \p replace_copy_if copies elements from the range <tt>[first, last)</tt> to the range
+    /*! This version of \p replace_copy_if copies elements from the range <tt>[first, last)</tt> to the range
  *  <tt>[result, result + (last-first))</tt>, except that any element whose corresponding stencil
  *  element causes \p pred to be \c true is not copied; \p new_value is copied instead.
  *
@@ -729,17 +734,22 @@ template<typename InputIterator, typename OutputIterator, typename Predicate, ty
  *  \see \c replace_copy
  *  \see \c replace_if
  */
-template<typename DerivedPolicy, typename InputIterator1, typename InputIterator2, typename OutputIterator, typename Predicate, typename T>
-__host__ __device__
-  OutputIterator replace_copy_if(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                 InputIterator1 first, InputIterator1 last,
-                                 InputIterator2 stencil,
-                                 OutputIterator result,
-                                 Predicate pred,
-                                 const T &new_value);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename Predicate,
+              typename T>
+    __host__ __device__ OutputIterator
+                        replace_copy_if(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                        InputIterator1                                              first,
+                                        InputIterator1                                              last,
+                                        InputIterator2                                              stencil,
+                                        OutputIterator                                              result,
+                                        Predicate                                                   pred,
+                                        const T&                                                    new_value);
 
-
-/*! This version of \p replace_copy_if copies elements from the range <tt>[first, last)</tt> to the range
+    /*! This version of \p replace_copy_if copies elements from the range <tt>[first, last)</tt> to the range
  *  <tt>[result, result + (last-first))</tt>, except that any element whose corresponding stencil
  *  element causes \p pred to be \c true is not copied; \p new_value is copied instead.
  *
@@ -804,20 +814,22 @@ __host__ __device__
  *  \see \c replace_copy
  *  \see \c replace_if
  */
-template<typename InputIterator1, typename InputIterator2, typename OutputIterator, typename Predicate, typename T>
-  OutputIterator replace_copy_if(InputIterator1 first, InputIterator1 last,
-                                 InputIterator2 stencil,
-                                 OutputIterator result,
-                                 Predicate pred,
-                                 const T &new_value);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename Predicate,
+              typename T>
+    OutputIterator replace_copy_if(InputIterator1 first,
+                                   InputIterator1 last,
+                                   InputIterator2 stencil,
+                                   OutputIterator result,
+                                   Predicate      pred,
+                                   const T&       new_value);
 
-
-/*! \} // end replacing
+    /*! \} // end replacing
  *  \} // transformations
  */
-
 
 } // end thrust
 
 #include <thrust/detail/replace.inl>
-

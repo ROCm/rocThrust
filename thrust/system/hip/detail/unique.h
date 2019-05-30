@@ -36,150 +36,144 @@ BEGIN_NS_THRUST
 
 template <typename DerivedPolicy, typename ForwardIterator, typename BinaryPredicate>
 ForwardIterator __host__ __device__
-unique(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
-       ForwardIterator                                             first,
-       ForwardIterator                                             last,
-       BinaryPredicate                                             binary_pred);
+                         unique(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                ForwardIterator                                             first,
+                                ForwardIterator                                             last,
+                                BinaryPredicate                                             binary_pred);
 
 template <typename DerivedPolicy,
           typename InputIterator,
           typename OutputIterator,
           typename BinaryPredicate>
 OutputIterator __host__ __device__
-unique_copy(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
-            InputIterator                                               first,
-            InputIterator                                               last,
-            OutputIterator                                              result,
-            BinaryPredicate                                             binary_pred);
+                        unique_copy(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                    InputIterator                                               first,
+                                    InputIterator                                               last,
+                                    OutputIterator                                              result,
+                                    BinaryPredicate                                             binary_pred);
 
 namespace hip_rocprim
 {
-namespace __unique
-{
-    template <class Policy, class ItemsInputIt, class ItemsOutputIt, class BinaryPred>
-    ItemsOutputIt THRUST_HIP_RUNTIME_FUNCTION
-    unique(Policy&       policy,
-           ItemsInputIt  items_first,
-           ItemsInputIt  items_last,
-           ItemsOutputIt items_result,
-           BinaryPred    binary_pred)
+    namespace __unique
     {
-        typedef size_t size_type;
+        template <class Policy, class ItemsInputIt, class ItemsOutputIt, class BinaryPred>
+        ItemsOutputIt THRUST_HIP_RUNTIME_FUNCTION unique(Policy&       policy,
+                                                         ItemsInputIt  items_first,
+                                                         ItemsInputIt  items_last,
+                                                         ItemsOutputIt items_result,
+                                                         BinaryPred    binary_pred)
+        {
+            typedef size_t size_type;
 
-        size_type num_items = static_cast<size_type>(thrust::distance(items_first, items_last));
-        void*     d_temp_storage       = NULL;
-        size_t    temp_storage_bytes   = 0;
-        hipStream_t stream             = hip_rocprim::stream(policy);
-        size_type*  d_num_selected_out = NULL;
-        bool        debug_sync         = THRUST_HIP_DEBUG_SYNC_FLAG;
+            size_type num_items = static_cast<size_type>(thrust::distance(items_first, items_last));
+            void*     d_temp_storage       = NULL;
+            size_t    temp_storage_bytes   = 0;
+            hipStream_t stream             = hip_rocprim::stream(policy);
+            size_type*  d_num_selected_out = NULL;
+            bool        debug_sync         = THRUST_HIP_DEBUG_SYNC_FLAG;
 
-        if(num_items == 0)
-            return items_result;
+            if(num_items == 0)
+                return items_result;
 
-        // Determine temporary device storage requirements.
-        hip_rocprim::throw_on_error(rocprim::unique(d_temp_storage,
-                                                    temp_storage_bytes,
-                                                    items_first,
-                                                    items_result,
-                                                    d_num_selected_out,
-                                                    num_items,
-                                                    binary_pred,
-                                                    stream,
-                                                    debug_sync),
-                                    "unique failed on 1st step");
+            // Determine temporary device storage requirements.
+            hip_rocprim::throw_on_error(rocprim::unique(d_temp_storage,
+                                                        temp_storage_bytes,
+                                                        items_first,
+                                                        items_result,
+                                                        d_num_selected_out,
+                                                        num_items,
+                                                        binary_pred,
+                                                        stream,
+                                                        debug_sync),
+                                        "unique failed on 1st step");
 
-        // Allocate temporary storage.
-        d_temp_storage
-            = hip_rocprim::get_memory_buffer(policy, temp_storage_bytes + sizeof(size_type));
-        hip_rocprim::throw_on_error(hipGetLastError(), "unique failed to get memory buffer");
+            // Allocate temporary storage.
+            d_temp_storage
+                = hip_rocprim::get_memory_buffer(policy, temp_storage_bytes + sizeof(size_type));
+            hip_rocprim::throw_on_error(hipGetLastError(), "unique failed to get memory buffer");
 
-        d_num_selected_out = reinterpret_cast<size_type*>(
-            reinterpret_cast<char*>(d_temp_storage) + temp_storage_bytes);
+            d_num_selected_out = reinterpret_cast<size_type*>(
+                reinterpret_cast<char*>(d_temp_storage) + temp_storage_bytes);
 
-        hip_rocprim::throw_on_error(rocprim::unique(d_temp_storage,
-                                                    temp_storage_bytes,
-                                                    items_first,
-                                                    items_result,
-                                                    d_num_selected_out,
-                                                    num_items,
-                                                    binary_pred,
-                                                    stream,
-                                                    debug_sync),
-                                    "unique failed on 2nd step");
+            hip_rocprim::throw_on_error(rocprim::unique(d_temp_storage,
+                                                        temp_storage_bytes,
+                                                        items_first,
+                                                        items_result,
+                                                        d_num_selected_out,
+                                                        num_items,
+                                                        binary_pred,
+                                                        stream,
+                                                        debug_sync),
+                                        "unique failed on 2nd step");
 
-        size_type num_selected = get_value(policy, d_num_selected_out);
+            size_type num_selected = get_value(policy, d_num_selected_out);
 
-        hip_rocprim::return_memory_buffer(policy, d_temp_storage);
-        hip_rocprim::throw_on_error(hipGetLastError(), "unique failed to return memory buffer");
+            hip_rocprim::return_memory_buffer(policy, d_temp_storage);
+            hip_rocprim::throw_on_error(hipGetLastError(), "unique failed to return memory buffer");
 
-        return items_result + num_selected;
+            return items_result + num_selected;
+        }
+    } // namespace __unique
+
+    //-------------------------
+    // Thrust API entry points
+    //-------------------------
+
+    __thrust_exec_check_disable__ template <class Derived,
+                                            class InputIt,
+                                            class OutputIt,
+                                            class BinaryPred>
+    OutputIt THRUST_HIP_FUNCTION unique_copy(execution_policy<Derived>& policy,
+                                             InputIt                    first,
+                                             InputIt                    last,
+                                             OutputIt                   result,
+                                             BinaryPred                 binary_pred)
+    {
+        OutputIt ret = result;
+        THRUST_HIP_PRESERVE_KERNELS_WORKAROUND(
+            (__unique::unique<execution_policy<Derived>, InputIt, OutputIt, BinaryPred>));
+#if __THRUST_HAS_HIPRT__
+        ret = __unique::unique(policy, first, last, result, binary_pred);
+#else
+        ret = thrust::unique_copy(
+            cvt_to_seq(derived_cast(policy)), first, last, result, binary_pred);
+#endif
+        return ret;
     }
-} // namespace __unique
 
-//-------------------------
-// Thrust API entry points
-//-------------------------
+    template <class Derived, class InputIt, class OutputIt>
+    OutputIt THRUST_HIP_FUNCTION
+             unique_copy(execution_policy<Derived>& policy, InputIt first, InputIt last, OutputIt result)
+    {
+        typedef typename iterator_traits<InputIt>::value_type input_type;
+        return hip_rocprim::unique_copy(policy, first, last, result, equal_to<input_type>());
+    }
 
-__thrust_exec_check_disable__ template <class Derived,
-                                        class InputIt,
-                                        class OutputIt,
-                                        class BinaryPred>
-OutputIt THRUST_HIP_FUNCTION
-unique_copy(execution_policy<Derived>& policy,
-            InputIt                    first,
-            InputIt                    last,
-            OutputIt                   result,
-            BinaryPred                 binary_pred)
-{
-    OutputIt ret = result;
-    THRUST_HIP_PRESERVE_KERNELS_WORKAROUND(
-        (__unique::unique<execution_policy<Derived>, InputIt, OutputIt, BinaryPred>)
-    );
+    __thrust_exec_check_disable__ template <class Derived, class InputIt, class BinaryPred>
+    InputIt THRUST_HIP_FUNCTION unique(execution_policy<Derived>& policy,
+                                       InputIt                    first,
+                                       InputIt                    last,
+                                       BinaryPred                 binary_pred)
+    {
+        InputIt ret = first;
+        THRUST_HIP_PRESERVE_KERNELS_WORKAROUND(
+            (unique_copy<Derived, InputIt, InputIt, BinaryPred>));
 #if __THRUST_HAS_HIPRT__
-    ret = __unique::unique(policy, first, last, result, binary_pred);
+        ret = hip_rocprim::unique_copy(policy, first, last, first, binary_pred);
 #else
-    ret = thrust::unique_copy(
-        cvt_to_seq(derived_cast(policy)), first, last, result, binary_pred
-    );
+        ret = thrust::unique(cvt_to_seq(derived_cast(policy)), first, last, binary_pred);
 #endif
-    return ret;
-}
+        return ret;
+    }
 
-template <class Derived, class InputIt, class OutputIt>
-OutputIt THRUST_HIP_FUNCTION
-unique_copy(execution_policy<Derived>& policy, InputIt first, InputIt last, OutputIt result)
-{
-    typedef typename iterator_traits<InputIt>::value_type input_type;
-    return hip_rocprim::unique_copy(policy, first, last, result, equal_to<input_type>());
-}
-
-__thrust_exec_check_disable__ template <class Derived, class InputIt, class BinaryPred>
-InputIt THRUST_HIP_FUNCTION
-unique(execution_policy<Derived>& policy,
-       InputIt                    first,
-       InputIt                    last,
-       BinaryPred                 binary_pred)
-{
-    InputIt ret = first;
-    THRUST_HIP_PRESERVE_KERNELS_WORKAROUND(
-        (unique_copy<Derived, InputIt, InputIt, BinaryPred>)
-    );
-#if __THRUST_HAS_HIPRT__
-    ret = hip_rocprim::unique_copy(policy, first, last, first, binary_pred);
-#else
-    ret = thrust::unique(cvt_to_seq(derived_cast(policy)), first, last, binary_pred);
-#endif
-    return ret;
-}
-
-template <class Derived, class InputIt>
-InputIt THRUST_HIP_FUNCTION unique(execution_policy<Derived>& policy,
-                                   InputIt                    first,
-                                   InputIt                    last)
-{
-    typedef typename iterator_traits<InputIt>::value_type input_type;
-    return hip_rocprim::unique(policy, first, last, equal_to<input_type>());
-}
+    template <class Derived, class InputIt>
+    InputIt THRUST_HIP_FUNCTION unique(execution_policy<Derived>& policy,
+                                       InputIt                    first,
+                                       InputIt                    last)
+    {
+        typedef typename iterator_traits<InputIt>::value_type input_type;
+        return hip_rocprim::unique(policy, first, last, equal_to<input_type>());
+    }
 
 } // namespace hip_rocprim
 END_NS_THRUST

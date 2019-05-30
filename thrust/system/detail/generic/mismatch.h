@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 #pragma once
 
 #include <thrust/detail/config.h>
@@ -22,37 +21,34 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
+                template <typename DerivedPolicy, typename InputIterator1, typename InputIterator2>
+                __host__ __device__ thrust::pair<InputIterator1, InputIterator2>
+                                    mismatch(thrust::execution_policy<DerivedPolicy>& exec,
+                                             InputIterator1                           first1,
+                                             InputIterator1                           last1,
+                                             InputIterator2                           first2);
 
-template<typename DerivedPolicy, typename InputIterator1, typename InputIterator2>
-__host__ __device__
-  thrust::pair<InputIterator1, InputIterator2>
-    mismatch(thrust::execution_policy<DerivedPolicy> &exec,
-             InputIterator1 first1,
-             InputIterator1 last1,
-             InputIterator2 first2);
+                template <typename DerivedPolicy,
+                          typename InputIterator1,
+                          typename InputIterator2,
+                          typename BinaryPredicate>
+                __host__ __device__ thrust::pair<InputIterator1, InputIterator2>
+                                    mismatch(thrust::execution_policy<DerivedPolicy>& exec,
+                                             InputIterator1                           first1,
+                                             InputIterator1                           last1,
+                                             InputIterator2                           first2,
+                                             BinaryPredicate                          pred);
 
-
-template<typename DerivedPolicy, typename InputIterator1, typename InputIterator2, typename BinaryPredicate>
-__host__ __device__
-  thrust::pair<InputIterator1, InputIterator2>
-    mismatch(thrust::execution_policy<DerivedPolicy> &exec,
-             InputIterator1 first1,
-             InputIterator1 last1,
-             InputIterator2 first2,
-             BinaryPredicate pred);
-
-
-} // end namespace generic
-} // end namespace detail
-} // end namespace system
+            } // end namespace generic
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/detail/generic/mismatch.inl>
-

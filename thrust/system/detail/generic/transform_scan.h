@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 #pragma once
 
 #include <thrust/detail/config.h>
@@ -22,47 +21,44 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
+                template <typename ExecutionPolicy,
+                          typename InputIterator,
+                          typename OutputIterator,
+                          typename UnaryFunction,
+                          typename BinaryFunction>
+                __host__ __device__ OutputIterator
+                                    transform_inclusive_scan(thrust::execution_policy<ExecutionPolicy>& exec,
+                                                             InputIterator                              first,
+                                                             InputIterator                              last,
+                                                             OutputIterator                             result,
+                                                             UnaryFunction                              unary_op,
+                                                             BinaryFunction                             binary_op);
 
-template<typename ExecutionPolicy,
-         typename InputIterator,
-         typename OutputIterator,
-         typename UnaryFunction,
-         typename BinaryFunction>
-__host__ __device__
-  OutputIterator transform_inclusive_scan(thrust::execution_policy<ExecutionPolicy> &exec,
-                                          InputIterator first,
-                                          InputIterator last,
-                                          OutputIterator result,
-                                          UnaryFunction unary_op,
-                                          BinaryFunction binary_op);
+                template <typename ExecutionPolicy,
+                          typename InputIterator,
+                          typename OutputIterator,
+                          typename UnaryFunction,
+                          typename T,
+                          typename AssociativeOperator>
+                __host__ __device__ OutputIterator
+                                    transform_exclusive_scan(thrust::execution_policy<ExecutionPolicy>& exec,
+                                                             InputIterator                              first,
+                                                             InputIterator                              last,
+                                                             OutputIterator                             result,
+                                                             UnaryFunction                              unary_op,
+                                                             T                                          init,
+                                                             AssociativeOperator                        binary_op);
 
-template<typename ExecutionPolicy,
-         typename InputIterator,
-         typename OutputIterator,
-         typename UnaryFunction,
-         typename T,
-         typename AssociativeOperator>
-__host__ __device__
-  OutputIterator transform_exclusive_scan(thrust::execution_policy<ExecutionPolicy> &exec,
-                                          InputIterator first,
-                                          InputIterator last,
-                                          OutputIterator result,
-                                          UnaryFunction unary_op,
-                                          T init,
-                                          AssociativeOperator binary_op);
-
-
-} // end namespace generic
-} // end namespace detail
-} // end namespace system
+            } // end namespace generic
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/detail/generic/transform_scan.inl>
-

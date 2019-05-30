@@ -21,44 +21,40 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
+                template <typename DerivedPolicy,
+                          typename InputIterator,
+                          typename OutputIterator,
+                          typename Predicate>
+                __host__ __device__ OutputIterator
+                                    copy_if(thrust::execution_policy<DerivedPolicy>& exec,
+                                            InputIterator                            first,
+                                            InputIterator                            last,
+                                            OutputIterator                           result,
+                                            Predicate                                pred);
 
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator,
-         typename Predicate>
-__host__ __device__
-  OutputIterator copy_if(thrust::execution_policy<DerivedPolicy> &exec,
-                         InputIterator first,
-                         InputIterator last,
-                         OutputIterator result,
-                         Predicate pred);
+                template <typename DerivedPolicy,
+                          typename InputIterator1,
+                          typename InputIterator2,
+                          typename OutputIterator,
+                          typename Predicate>
+                __host__ __device__ OutputIterator
+                                    copy_if(thrust::execution_policy<DerivedPolicy>& exec,
+                                            InputIterator1                           first,
+                                            InputIterator1                           last,
+                                            InputIterator2                           stencil,
+                                            OutputIterator                           result,
+                                            Predicate                                pred);
 
-
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename Predicate>
-__host__ __device__
-   OutputIterator copy_if(thrust::execution_policy<DerivedPolicy> &exec,
-                          InputIterator1 first,
-                          InputIterator1 last,
-                          InputIterator2 stencil,
-                          OutputIterator result,
-                          Predicate pred);
-
-
-} // end namespace generic
-} // end namespace detail
-} // end namespace system
+            } // end namespace generic
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/detail/generic/copy_if.inl>
-

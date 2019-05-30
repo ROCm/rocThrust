@@ -31,38 +31,46 @@
 #include <thrust/system/cuda/config.h>
 
 BEGIN_NS_THRUST
-namespace cuda_cub {
+namespace cuda_cub
+{
 
-  struct tag;
+    struct tag;
 
-  template <class>
-  struct execution_policy;
+    template <class>
+    struct execution_policy;
 
-  template <>
-  struct execution_policy<tag> : thrust::execution_policy<tag>
-  {};
+    template <>
+    struct execution_policy<tag> : thrust::execution_policy<tag>
+    {
+    };
 
-  struct tag : execution_policy<tag>
-  {};
+    struct tag : execution_policy<tag>
+    {
+    };
 
-  template <class Derived>
-  struct execution_policy : thrust::execution_policy<Derived>
-  {
-    inline operator tag() const { return tag(); }
-  };
-}    // namespace cuda_cub
+    template <class Derived>
+    struct execution_policy : thrust::execution_policy<Derived>
+    {
+        inline operator tag() const
+        {
+            return tag();
+        }
+    };
+} // namespace cuda_cub
 
-namespace system {
-namespace cuda {
-  using thrust::cuda_cub::tag;
-  using thrust::cuda_cub::execution_policy;
-} // namespace cuda
+namespace system
+{
+    namespace cuda
+    {
+        using thrust::cuda_cub::execution_policy;
+        using thrust::cuda_cub::tag;
+    } // namespace cuda
 } // namespace system
 
-namespace cuda {
-using thrust::cuda_cub::execution_policy;
-using thrust::cuda_cub::tag;
+namespace cuda
+{
+    using thrust::cuda_cub::execution_policy;
+    using thrust::cuda_cub::tag;
 } // namespace cuda
 
 END_NS_THRUST
-

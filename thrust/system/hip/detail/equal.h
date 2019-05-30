@@ -36,27 +36,23 @@ BEGIN_NS_THRUST
 namespace hip_rocprim
 {
 
-template <class Derived, class InputIt1, class InputIt2, class BinaryPred>
-bool THRUST_HIP_FUNCTION
-equal(execution_policy<Derived>& policy,
-      InputIt1                   first1,
-      InputIt1                   last1,
-      InputIt2                   first2,
-      BinaryPred                 binary_pred)
-{
-    return hip_rocprim::mismatch(policy, first1, last1, first2, binary_pred).first == last1;
-}
+    template <class Derived, class InputIt1, class InputIt2, class BinaryPred>
+    bool THRUST_HIP_FUNCTION equal(execution_policy<Derived>& policy,
+                                   InputIt1                   first1,
+                                   InputIt1                   last1,
+                                   InputIt2                   first2,
+                                   BinaryPred                 binary_pred)
+    {
+        return hip_rocprim::mismatch(policy, first1, last1, first2, binary_pred).first == last1;
+    }
 
-template <class Derived, class InputIt1, class InputIt2>
-bool THRUST_HIP_FUNCTION
-equal(execution_policy<Derived>& policy,
-      InputIt1                   first1,
-      InputIt1                   last1,
-      InputIt2                   first2)
-{
-    typedef typename thrust::iterator_value<InputIt1>::type InputType1;
-    return hip_rocprim::equal(policy, first1, last1, first2, equal_to<InputType1>());
-}
+    template <class Derived, class InputIt1, class InputIt2>
+    bool THRUST_HIP_FUNCTION
+         equal(execution_policy<Derived>& policy, InputIt1 first1, InputIt1 last1, InputIt2 first2)
+    {
+        typedef typename thrust::iterator_value<InputIt1>::type InputType1;
+        return hip_rocprim::equal(policy, first1, last1, first2, equal_to<InputType1>());
+    }
 
 } // namespace hip_rocprim
 END_NS_THRUST

@@ -19,48 +19,41 @@
 #include <thrust/detail/config.h>
 #include <thrust/detail/type_traits.h>
 #include <thrust/detail/type_traits/is_metafunction_defined.h>
-#include <thrust/iterator/iterator_traits.h>
 #include <thrust/iterator/detail/any_assign.h>
+#include <thrust/iterator/iterator_traits.h>
 
 namespace thrust
 {
 
-namespace detail
-{
+    namespace detail
+    {
 
+        template <typename T>
+        struct is_void_like
+            : thrust::detail::or_<thrust::detail::is_void<T>,
+                                  thrust::detail::is_same<T, thrust::detail::any_assign>>
+        {
+        }; // end is_void_like
 
-template<typename T>
-  struct is_void_like
-    : thrust::detail::or_<
-        thrust::detail::is_void<T>,
-        thrust::detail::is_same<T,thrust::detail::any_assign>
-      >
-{}; // end is_void_like
+        template <typename T>
+        struct lazy_is_void_like : is_void_like<typename T::type>
+        {
+        }; // end lazy_is_void_like
 
+        // XXX this meta function should first check that T is actually an iterator
+        //
+        //     if thrust::iterator_value<T> is defined and thrust::iterator_value<T>::type == void
+        //       return false
+        //     else
+        //       return true
+        template <typename T>
+        struct is_output_iterator
+            : eval_if<is_metafunction_defined<thrust::iterator_value<T>>::value,
+                      lazy_is_void_like<thrust::iterator_value<T>>,
+                      thrust::detail::true_type>::type
+        {
+        }; // end is_output_iterator
 
-template<typename T>
-  struct lazy_is_void_like
-    : is_void_like<typename T::type>
-{}; // end lazy_is_void_like
-
-
-// XXX this meta function should first check that T is actually an iterator
-//
-//     if thrust::iterator_value<T> is defined and thrust::iterator_value<T>::type == void
-//       return false
-//     else
-//       return true
-template<typename T>
-  struct is_output_iterator
-    : eval_if<
-        is_metafunction_defined<thrust::iterator_value<T> >::value,
-        lazy_is_void_like<thrust::iterator_value<T> >,
-        thrust::detail::true_type
-      >::type
-{
-}; // end is_output_iterator
-
-} // end detail
+    } // end detail
 
 } // end thrust
-

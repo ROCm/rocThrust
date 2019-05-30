@@ -23,23 +23,24 @@
 #pragma once
 
 #include <thrust/detail/config.h>
-#include <thrust/system/hip/memory.h>
 #include <thrust/detail/vector_base.h>
+#include <thrust/system/hip/memory.h>
 #include <vector>
 
 namespace thrust
 {
 
-// forward declaration of host_vector
-template<typename T, typename Allocator> class host_vector;
+    // forward declaration of host_vector
+    template <typename T, typename Allocator>
+    class host_vector;
 
-namespace hip_rocprim
-{
+    namespace hip_rocprim
+    {
 
-// XXX upon c++11
-// template<typename T, typename Allocator = allocator<T> > using vector = thrust::detail::vector_base<T,Allocator>;
+        // XXX upon c++11
+        // template<typename T, typename Allocator = allocator<T> > using vector = thrust::detail::vector_base<T,Allocator>;
 
-/*! \p hip_rocprim::vector is a container that supports random access to elements,
+        /*! \p hip_rocprim::vector is a container that supports random access to elements,
  *  constant time removal of elements at the end, and linear time insertion
  *  and removal of elements at the beginning or in the middle. The number of
  *  elements in a \p hip_rocprim::vector may vary dynamically; memory management is
@@ -54,91 +55,89 @@ namespace hip_rocprim
  *                   shared by \p hip_rocprim::vector
  *  \see device_vector
  */
-template<typename T, typename Allocator = allocator<T> >
-  class vector
-    : public thrust::detail::vector_base<T,Allocator>
-{
-  /*! \cond
+        template <typename T, typename Allocator = allocator<T>>
+        class vector : public thrust::detail::vector_base<T, Allocator>
+        {
+            /*! \cond
    */
-  private:
-    typedef thrust::detail::vector_base<T,Allocator> super_t;
-  /*! \endcond
-   */
-
-  public:
-
-  /*! \cond
-   */
-    typedef typename super_t::size_type  size_type;
-    typedef typename super_t::value_type value_type;
-  /*! \endcond
+        private:
+            typedef thrust::detail::vector_base<T, Allocator> super_t;
+            /*! \endcond
    */
 
-    /*! This constructor creates an empty \p hip_rocprim::vector.
+        public:
+            /*! \cond
+   */
+            typedef typename super_t::size_type  size_type;
+            typedef typename super_t::value_type value_type;
+            /*! \endcond
+   */
+
+            /*! This constructor creates an empty \p hip_rocprim::vector.
      */
-    vector();
+            vector();
 
-    /*! This constructor creates a \p hip_rocprim::vector with \p n default-constructed elements.
+            /*! This constructor creates a \p hip_rocprim::vector with \p n default-constructed elements.
      *  \param n The size of the \p hip_rocprim::vector to create.
      */
-    explicit vector(size_type n);
+            explicit vector(size_type n);
 
-    /*! This constructor creates a \p hip_rocprim::vector with \p n copies of \p value.
+            /*! This constructor creates a \p hip_rocprim::vector with \p n copies of \p value.
      *  \param n The size of the \p hip_rocprim::vector to create.
      *  \param value An element to copy.
      */
-    explicit vector(size_type n, const value_type &value);
+            explicit vector(size_type n, const value_type& value);
 
-    /*! Copy constructor copies from another \p hip_rocprim::vector.
+            /*! Copy constructor copies from another \p hip_rocprim::vector.
      *  \param x The other \p hip_rocprim::vector to copy.
      */
-    vector(const vector &x);
+            vector(const vector& x);
 
-    /*! This constructor copies from another Thrust vector-like object.
+            /*! This constructor copies from another Thrust vector-like object.
      *  \param x The other object to copy from.
      */
-    template<typename OtherT, typename OtherAllocator>
-    vector(const thrust::detail::vector_base<OtherT,OtherAllocator> &x);
+            template <typename OtherT, typename OtherAllocator>
+            vector(const thrust::detail::vector_base<OtherT, OtherAllocator>& x);
 
-    /*! This constructor copies from a \c std::vector.
+            /*! This constructor copies from a \c std::vector.
      *  \param x The \c std::vector to copy from.
      */
-    template<typename OtherT, typename OtherAllocator>
-    vector(const std::vector<OtherT,OtherAllocator> &x);
+            template <typename OtherT, typename OtherAllocator>
+            vector(const std::vector<OtherT, OtherAllocator>& x);
 
-    /*! This constructor creates a \p hip_rocprim::vector by copying from a range.
+            /*! This constructor creates a \p hip_rocprim::vector by copying from a range.
      *  \param first The beginning of the range.
      *  \param last The end of the range.
      */
-    template<typename InputIterator>
-    vector(InputIterator first, InputIterator last);
+            template <typename InputIterator>
+            vector(InputIterator first, InputIterator last);
 
-    // XXX vector_base should take a Derived type so we don't have to define these superfluous assigns
-    //
-    /*! Assignment operator assigns from a \c std::vector.
+            // XXX vector_base should take a Derived type so we don't have to define these superfluous assigns
+            //
+            /*! Assignment operator assigns from a \c std::vector.
      *  \param x The \c std::vector to assign from.
      *  \return <tt>*this</tt>
      */
-    template<typename OtherT, typename OtherAllocator>
-    vector &operator=(const std::vector<OtherT,OtherAllocator> &x);
+            template <typename OtherT, typename OtherAllocator>
+            vector& operator=(const std::vector<OtherT, OtherAllocator>& x);
 
-    /*! Assignment operator assigns from another Thrust vector-like object.
+            /*! Assignment operator assigns from another Thrust vector-like object.
      *  \param x The other object to assign from.
      *  \return <tt>*this</tt>
      */
-    template<typename OtherT, typename OtherAllocator>
-    vector &operator=(const thrust::detail::vector_base<OtherT,OtherAllocator> &x);
-}; // end vector
+            template <typename OtherT, typename OtherAllocator>
+            vector& operator=(const thrust::detail::vector_base<OtherT, OtherAllocator>& x);
+        }; // end vector
 
-} // end hip_rocprim
+    } // end hip_rocprim
 
-// alias system::hip_rocprim names at top-level
-namespace hip_rocprim
-{
+    // alias system::hip_rocprim names at top-level
+    namespace hip_rocprim
+    {
 
-using thrust::hip_rocprim::vector;
+        using thrust::hip_rocprim::vector;
 
-} // end hip_rocprim
+    } // end hip_rocprim
 
 } // end thrust
 

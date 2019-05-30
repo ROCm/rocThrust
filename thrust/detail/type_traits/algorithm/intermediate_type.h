@@ -24,38 +24,33 @@
 namespace thrust
 {
 
-namespace detail
-{
+    namespace detail
+    {
 
-// this trait reports what type should be used as a temporary in certain algorithms
-// which aggregate intermediate results from a function before writing to an output iterator
+        // this trait reports what type should be used as a temporary in certain algorithms
+        // which aggregate intermediate results from a function before writing to an output iterator
 
-// the pseudocode for deducing the type of the temporary used below:
-// 
-// if Function is an AdaptableFunction
-//   result = Function::result_type
-// else if OutputIterator2 is a "pure" output iterator
-//   result = InputIterator2::value_type
-// else
-//   result = OutputIterator2::value_type
-//
-// XXX upon c++0x, TemporaryType needs to be:
-// result_of_adaptable_function<BinaryFunction>::type
-template<typename InputIterator, typename OutputIterator, typename Function>
-  struct intermediate_type_from_function_and_iterators
-    : eval_if<
-        has_result_type<Function>::value,
-        result_type<Function>,
-        eval_if<
-          is_output_iterator<OutputIterator>::value,
-          thrust::iterator_value<InputIterator>,
-          thrust::iterator_value<OutputIterator>
-        >
-      >
-{
-}; // end intermediate_type_from_function_and_iterators
+        // the pseudocode for deducing the type of the temporary used below:
+        //
+        // if Function is an AdaptableFunction
+        //   result = Function::result_type
+        // else if OutputIterator2 is a "pure" output iterator
+        //   result = InputIterator2::value_type
+        // else
+        //   result = OutputIterator2::value_type
+        //
+        // XXX upon c++0x, TemporaryType needs to be:
+        // result_of_adaptable_function<BinaryFunction>::type
+        template <typename InputIterator, typename OutputIterator, typename Function>
+        struct intermediate_type_from_function_and_iterators
+            : eval_if<has_result_type<Function>::value,
+                      result_type<Function>,
+                      eval_if<is_output_iterator<OutputIterator>::value,
+                              thrust::iterator_value<InputIterator>,
+                              thrust::iterator_value<OutputIterator>>>
+        {
+        }; // end intermediate_type_from_function_and_iterators
 
-} // end detail
+    } // end detail
 
 } // end thrust
-

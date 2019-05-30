@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file transform_reduce.h
  *  \brief Fused transform / reduction
  */
@@ -27,16 +26,14 @@
 namespace thrust
 {
 
-
-/*! \addtogroup reductions
+    /*! \addtogroup reductions
  *  \{
  *  \addtogroup transformed_reductions Transformed Reductions
  *  \ingroup reductions
  *  \{
  */
 
-
-/*! \p transform_reduce fuses the \p transform and \p reduce operations.
+    /*! \p transform_reduce fuses the \p transform and \p reduce operations.
  *  \p transform_reduce is equivalent to performing a transformation defined by
  *  \p unary_op into a temporary sequence and then performing \p reduce on the
  *  transformed sequence. In most cases, fusing these two operations together is
@@ -102,21 +99,20 @@ namespace thrust
  *  \see \c transform
  *  \see \c reduce
  */
-template<typename DerivedPolicy,
-         typename InputIterator, 
-         typename UnaryFunction, 
-         typename OutputType,
-         typename BinaryFunction>
-__host__ __device__
-  OutputType transform_reduce(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                              InputIterator first,
-                              InputIterator last,
-                              UnaryFunction unary_op,
-                              OutputType init,
-                              BinaryFunction binary_op);
+    template <typename DerivedPolicy,
+              typename InputIterator,
+              typename UnaryFunction,
+              typename OutputType,
+              typename BinaryFunction>
+    __host__ __device__ OutputType
+                        transform_reduce(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                         InputIterator                                               first,
+                                         InputIterator                                               last,
+                                         UnaryFunction                                               unary_op,
+                                         OutputType                                                  init,
+                                         BinaryFunction                                              binary_op);
 
-
-/*! \p transform_reduce fuses the \p transform and \p reduce operations.
+    /*! \p transform_reduce fuses the \p transform and \p reduce operations.
  *  \p transform_reduce is equivalent to performing a transformation defined by
  *  \p unary_op into a temporary sequence and then performing \p reduce on the
  *  transformed sequence. In most cases, fusing these two operations together is
@@ -176,23 +172,20 @@ __host__ __device__
  *  \see \c transform
  *  \see \c reduce
  */
-template<typename InputIterator, 
-         typename UnaryFunction, 
-         typename OutputType,
-         typename BinaryFunction>
-  OutputType transform_reduce(InputIterator first,
-                              InputIterator last,
-                              UnaryFunction unary_op,
-                              OutputType init,
-                              BinaryFunction binary_op);
+    template <typename InputIterator,
+              typename UnaryFunction,
+              typename OutputType,
+              typename BinaryFunction>
+    OutputType transform_reduce(InputIterator  first,
+                                InputIterator  last,
+                                UnaryFunction  unary_op,
+                                OutputType     init,
+                                BinaryFunction binary_op);
 
-
-/*! \} // end transformed_reductions
+    /*! \} // end transformed_reductions
  *  \} // end reductions
  */
-
 
 } // end namespace thrust
 
 #include <thrust/detail/transform_reduce.inl>
-

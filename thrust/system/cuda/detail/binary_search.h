@@ -31,15 +31,15 @@
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
 #include <thrust/system/cuda/detail/util.h>
 
-#include <thrust/system/cuda/execution_policy.h>
+#include <thrust/binary_search.h>
+#include <thrust/distance.h>
 #include <thrust/system/cuda/detail/core/agent_launcher.h>
 #include <thrust/system/cuda/detail/core/util.h>
 #include <thrust/system/cuda/detail/par_to_seq.h>
-#include <thrust/binary_search.h>
-#include <thrust/distance.h>
+#include <thrust/system/cuda/execution_policy.h>
 
 #if 1
-#  define BS_SIMPLE
+#define BS_SIMPLE
 #endif
 
 BEGIN_NS_THRUST
@@ -158,7 +158,6 @@ namespace __binary_search {
 
     key_type key1 = keys_shared[keys1_beg];
     key_type key2 = keys_shared[keys2_beg];
-
 
 #pragma unroll
     for (int ITEM = 0; ITEM < ITEMS_PER_THREAD; ++ITEM)
@@ -427,7 +426,7 @@ namespace __binary_search {
         needle_type needles_loc[ITEMS_PER_THREAD];
         BlockLoadNeedles(storage.load_needles)
             .Load(needles_load_it + tile_base, needles_loc, num_remaining);
-       
+
 #ifdef BS_SIMPLE
 
         result_type results_loc[ITEMS_PER_THREAD];
@@ -438,7 +437,6 @@ namespace __binary_search {
                                         needles_loc[ITEM],
                                         compare_op);
         }
-
 
 #else
 

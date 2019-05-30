@@ -17,35 +17,35 @@
 #pragma once
 
 #include <thrust/detail/config.h>
-#include <thrust/system/detail/generic/tag.h>
-#include <thrust/pair.h>
 #include <thrust/detail/pointer.h>
+#include <thrust/pair.h>
+#include <thrust/system/detail/generic/tag.h>
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
+                template <typename T, typename DerivedPolicy>
+                __host__ __device__
+                         thrust::pair<thrust::pointer<T, DerivedPolicy>,
+                                 typename thrust::pointer<T, DerivedPolicy>::difference_type>
+                         get_temporary_buffer(
+                             thrust::execution_policy<DerivedPolicy>&                    exec,
+                             typename thrust::pointer<T, DerivedPolicy>::difference_type n);
 
-template<typename T, typename DerivedPolicy>
-__host__ __device__
-  thrust::pair<thrust::pointer<T,DerivedPolicy>, typename thrust::pointer<T,DerivedPolicy>::difference_type>
-    get_temporary_buffer(thrust::execution_policy<DerivedPolicy> &exec, typename thrust::pointer<T,DerivedPolicy>::difference_type n);
+                template <typename DerivedPolicy, typename Pointer>
+                __host__ __device__ void
+                         return_temporary_buffer(thrust::execution_policy<DerivedPolicy>& exec,
+                                                 Pointer                                  p);
 
-
-template<typename DerivedPolicy, typename Pointer>
-__host__ __device__
-  void return_temporary_buffer(thrust::execution_policy<DerivedPolicy> &exec, Pointer p);
-
-
-} // end generic
-} // end detail
-} // end system
+            } // end generic
+        } // end detail
+    } // end system
 } // end thrust
 
 #include <thrust/system/detail/generic/temporary_buffer.inl>
-

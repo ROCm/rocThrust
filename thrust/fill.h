@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file fill.h
  *  \brief Fills a range with a constant value
  */
@@ -27,15 +26,13 @@
 namespace thrust
 {
 
-
-/*! \addtogroup transformations
+    /*! \addtogroup transformations
  *  \addtogroup filling
  *  \ingroup transformations
  *  \{
  */
 
-
-/*! \p fill assigns the value \p value to every element in
+    /*! \p fill assigns the value \p value to every element in
  *  the range <tt>[first, last)</tt>. That is, for every
  *  iterator \c i in <tt>[first, last)</tt>, it performs
  *  the assignment <tt>*i = value</tt>.
@@ -71,15 +68,13 @@ namespace thrust
  *  \see \c fill_n
  *  \see \c uninitialized_fill
  */
-template<typename DerivedPolicy, typename ForwardIterator, typename T>
-__host__ __device__
-  void fill(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-            ForwardIterator first,
-            ForwardIterator last,
-            const T &value);
+    template <typename DerivedPolicy, typename ForwardIterator, typename T>
+    __host__ __device__ void fill(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                  ForwardIterator                                             first,
+                                  ForwardIterator                                             last,
+                                  const T& value);
 
-
-/*! \p fill assigns the value \p value to every element in
+    /*! \p fill assigns the value \p value to every element in
  *  the range <tt>[first, last)</tt>. That is, for every
  *  iterator \c i in <tt>[first, last)</tt>, it performs
  *  the assignment <tt>*i = value</tt>.
@@ -110,14 +105,10 @@ __host__ __device__
  *  \see \c fill_n
  *  \see \c uninitialized_fill
  */
-template<typename ForwardIterator, typename T>
-__host__ __device__
-  void fill(ForwardIterator first,
-            ForwardIterator last,
-            const T &value);
+    template <typename ForwardIterator, typename T>
+    __host__ __device__ void fill(ForwardIterator first, ForwardIterator last, const T& value);
 
-
-/*! \p fill_n assigns the value \p value to every element in
+    /*! \p fill_n assigns the value \p value to every element in
  *  the range <tt>[first, first+n)</tt>. That is, for every
  *  iterator \c i in <tt>[first, first+n)</tt>, it performs
  *  the assignment <tt>*i = value</tt>.
@@ -153,15 +144,14 @@ __host__ __device__
  *  \see \c fill
  *  \see \c uninitialized_fill_n
  */
-template<typename DerivedPolicy, typename OutputIterator, typename Size, typename T>
-__host__ __device__
-  OutputIterator fill_n(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                        OutputIterator first,
-                        Size n,
-                        const T &value);
+    template <typename DerivedPolicy, typename OutputIterator, typename Size, typename T>
+    __host__ __device__ OutputIterator
+                        fill_n(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                               OutputIterator                                              first,
+                               Size                                                        n,
+                               const T&                                                    value);
 
-
-/*! \p fill_n assigns the value \p value to every element in
+    /*! \p fill_n assigns the value \p value to every element in
  *  the range <tt>[first, first+n)</tt>. That is, for every
  *  iterator \c i in <tt>[first, first+n)</tt>, it performs
  *  the assignment <tt>*i = value</tt>.
@@ -192,18 +182,13 @@ __host__ __device__
  *  \see \c fill
  *  \see \c uninitialized_fill_n
  */
-template<typename OutputIterator, typename Size, typename T>
-__host__ __device__
-  OutputIterator fill_n(OutputIterator first,
-                        Size n,
-                        const T &value);
+    template <typename OutputIterator, typename Size, typename T>
+    __host__ __device__ OutputIterator fill_n(OutputIterator first, Size n, const T& value);
 
-
-/*! \} // end filling
+    /*! \} // end filling
  *  \} // transformations
  */
 
 } // end namespace thrust
 
 #include <thrust/detail/fill.inl>
-

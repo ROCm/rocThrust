@@ -18,76 +18,75 @@
 
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
 #include <thrust/detail/config.h>
-#include <thrust/system/cuda/config.h>
-#include <thrust/system/cuda/detail/execution_policy.h>
 #include <thrust/detail/raw_pointer_cast.h>
+#include <thrust/system/cuda/config.h>
 #include <thrust/system/cuda/detail/copy.h>
-
+#include <thrust/system/cuda/detail/execution_policy.h>
 
 BEGIN_NS_THRUST
-namespace cuda_cub {
-
-
-template<typename DerivedPolicy, typename Pointer1, typename Pointer2>
-inline __host__ __device__
-  void assign_value(thrust::cuda::execution_policy<DerivedPolicy> &exec, Pointer1 dst, Pointer2 src)
+namespace cuda_cub
 {
-  // XXX war nvbugs/881631
-  struct war_nvbugs_881631
-  {
-    __host__ inline static void host_path(thrust::cuda::execution_policy<DerivedPolicy> &exec, Pointer1 dst, Pointer2 src)
-    {
-      cuda_cub::copy(exec, src, src + 1, dst);
-    }
 
-    __device__ inline static void device_path(thrust::cuda::execution_policy<DerivedPolicy> &, Pointer1 dst, Pointer2 src)
+    template <typename DerivedPolicy, typename Pointer1, typename Pointer2>
+    inline __host__ __device__ void assign_value(
+        thrust::cuda::execution_policy<DerivedPolicy>& exec, Pointer1 dst, Pointer2 src)
     {
-      *thrust::raw_pointer_cast(dst) = *thrust::raw_pointer_cast(src);
-    }
-  };
+        // XXX war nvbugs/881631
+        struct war_nvbugs_881631
+        {
+            __host__ inline static void host_path(
+                thrust::cuda::execution_policy<DerivedPolicy>& exec, Pointer1 dst, Pointer2 src)
+            {
+                cuda_cub::copy(exec, src, src + 1, dst);
+            }
+
+            __device__ inline static void device_path(
+                thrust::cuda::execution_policy<DerivedPolicy>&, Pointer1 dst, Pointer2 src)
+            {
+                *thrust::raw_pointer_cast(dst) = *thrust::raw_pointer_cast(src);
+            }
+        };
 
 #ifndef __CUDA_ARCH__
-  war_nvbugs_881631::host_path(exec,dst,src);
+        war_nvbugs_881631::host_path(exec, dst, src);
 #else
-  war_nvbugs_881631::device_path(exec,dst,src);
+        war_nvbugs_881631::device_path(exec, dst, src);
 #endif // __CUDA_ARCH__
-} // end assign_value()
+    } // end assign_value()
 
-
-template<typename System1, typename System2, typename Pointer1, typename Pointer2>
-inline __host__ __device__
-  void assign_value(cross_system<System1,System2> &systems, Pointer1 dst, Pointer2 src)
-{
-  // XXX war nvbugs/881631
-  struct war_nvbugs_881631
-  {
-    __host__ inline static void host_path(cross_system<System1,System2> &systems, Pointer1 dst, Pointer2 src)
+    template <typename System1, typename System2, typename Pointer1, typename Pointer2>
+    inline __host__ __device__ void
+                    assign_value(cross_system<System1, System2>& systems, Pointer1 dst, Pointer2 src)
     {
-      // rotate the systems so that they are ordered the same as (src, dst)
-      // for the call to thrust::copy
-      cross_system<System2,System1> rotated_systems = systems.rotate();
-      cuda_cub::copy(rotated_systems, src, src + 1, dst);
-    }
+        // XXX war nvbugs/881631
+        struct war_nvbugs_881631
+        {
+            __host__ inline static void
+                host_path(cross_system<System1, System2>& systems, Pointer1 dst, Pointer2 src)
+            {
+                // rotate the systems so that they are ordered the same as (src, dst)
+                // for the call to thrust::copy
+                cross_system<System2, System1> rotated_systems = systems.rotate();
+                cuda_cub::copy(rotated_systems, src, src + 1, dst);
+            }
 
-    __device__ inline static void device_path(cross_system<System1,System2> &, Pointer1 dst, Pointer2 src)
-    {
-      // XXX forward the true cuda::execution_policy inside systems here
-      //     instead of materializing a tag
-      thrust::cuda::tag cuda_tag;
-      thrust::cuda_cub::assign_value(cuda_tag, dst, src);
-    }
-  };
+            __device__ inline static void
+                device_path(cross_system<System1, System2>&, Pointer1 dst, Pointer2 src)
+            {
+                // XXX forward the true cuda::execution_policy inside systems here
+                //     instead of materializing a tag
+                thrust::cuda::tag cuda_tag;
+                thrust::cuda_cub::assign_value(cuda_tag, dst, src);
+            }
+        };
 
 #if __CUDA_ARCH__
-  war_nvbugs_881631::device_path(systems,dst,src);
+        war_nvbugs_881631::device_path(systems, dst, src);
 #else
-  war_nvbugs_881631::host_path(systems,dst,src);
+        war_nvbugs_881631::host_path(systems, dst, src);
 #endif
-} // end assign_value()
+    } // end assign_value()
 
-
-
-  
 } // end cuda_cub
 END_NS_THRUST
 #endif

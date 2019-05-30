@@ -26,53 +26,37 @@
  ******************************************************************************/
 #pragma once
 
-
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
 #include <thrust/system/cuda/config.h>
 
-#include <thrust/system/cuda/detail/util.h>
-#include <thrust/system/cuda/detail/reduce.h>
 #include <thrust/distance.h>
+#include <thrust/system/cuda/detail/reduce.h>
+#include <thrust/system/cuda/detail/util.h>
 
 BEGIN_NS_THRUST
-namespace cuda_cub {
-
-template <class Derived,
-          class InputIt,
-          class UnaryPred>
-typename iterator_traits<InputIt>::difference_type __host__ __device__
-count_if(execution_policy<Derived> &policy,
-         InputIt                    first,
-         InputIt                    last,
-         UnaryPred                  unary_pred)
+namespace cuda_cub
 {
-  typedef typename iterator_traits<InputIt>::difference_type size_type;
-  typedef transform_input_iterator_t<size_type,
-                                     InputIt,
-                                     UnaryPred>
-      flag_iterator_t;
 
-  return cuda_cub::reduce_n(policy,
-                            flag_iterator_t(first, unary_pred),
-                            thrust::distance(first, last),
-                            size_type(0),
-                            plus<size_type>());
-}
+    template <class Derived, class InputIt, class UnaryPred>
+    typename iterator_traits<InputIt>::difference_type __host__ __device__ count_if(
+        execution_policy<Derived>& policy, InputIt first, InputIt last, UnaryPred unary_pred)
+    {
+        typedef typename iterator_traits<InputIt>::difference_type        size_type;
+        typedef transform_input_iterator_t<size_type, InputIt, UnaryPred> flag_iterator_t;
 
-template <class Derived,
-          class InputIt,
-          class Value>
-typename iterator_traits<InputIt>::difference_type __host__ __device__
-count(execution_policy<Derived> &policy,
-      InputIt                    first,
-      InputIt                    last,
-      Value const &              value)
-{
-  return cuda_cub::count_if(policy,
-                            first,
-                            last,
-                            detail::equal_to_value<Value>(value));
-}
+        return cuda_cub::reduce_n(policy,
+                                  flag_iterator_t(first, unary_pred),
+                                  thrust::distance(first, last),
+                                  size_type(0),
+                                  plus<size_type>());
+    }
+
+    template <class Derived, class InputIt, class Value>
+    typename iterator_traits<InputIt>::difference_type __host__ __device__
+                                                                count(execution_policy<Derived>& policy, InputIt first, InputIt last, Value const& value)
+    {
+        return cuda_cub::count_if(policy, first, last, detail::equal_to_value<Value>(value));
+    }
 
 } // namespace cuda_cub
 END_NS_THRUST

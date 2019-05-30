@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file thrust/iterator/discard_iterator.h
  *  \brief An iterator which "discards" (ignores) values assigned to it upon dereference
  */
@@ -30,16 +29,16 @@ __THRUST_DISABLE_MSVC_POSSIBLE_LOSS_OF_DATA_WARNING_BEGIN
 namespace thrust
 {
 
-/*! \addtogroup iterators
+    /*! \addtogroup iterators
  *  \{
  */
 
-/*! \addtogroup fancyiterator Fancy Iterators
+    /*! \addtogroup fancyiterator Fancy Iterators
  *  \ingroup iterators
  *  \{
  */
 
-/*! \p discard_iterator is an iterator which represents a special kind of pointer that
+    /*! \p discard_iterator is an iterator which represents a special kind of pointer that
  *  ignores values written to it upon dereference. This iterator is useful for ignoring
  *  the output of certain algorithms without wasting memory capacity or bandwidth.
  *  \p discard_iterator may also be used to count the size of an algorithm's output which
@@ -90,61 +89,60 @@ namespace thrust
  *
  *  \see make_discard_iterator
  */
-template<typename System = use_default>
-  class discard_iterator
-    : public detail::discard_iterator_base<System>::type
-{
-    /*! \cond
+    template <typename System = use_default>
+    class discard_iterator : public detail::discard_iterator_base<System>::type
+    {
+        /*! \cond
      */
-    friend class thrust::iterator_core_access;
-    typedef typename detail::discard_iterator_base<System>::type          super_t;
-    typedef typename detail::discard_iterator_base<System>::incrementable incrementable;
-    typedef typename detail::discard_iterator_base<System>::base_iterator base_iterator;
+        friend class thrust::iterator_core_access;
+        typedef typename detail::discard_iterator_base<System>::type          super_t;
+        typedef typename detail::discard_iterator_base<System>::incrementable incrementable;
+        typedef typename detail::discard_iterator_base<System>::base_iterator base_iterator;
 
-  public:
-    typedef typename super_t::reference  reference;
-    typedef typename super_t::value_type value_type;
+    public:
+        typedef typename super_t::reference  reference;
+        typedef typename super_t::value_type value_type;
 
-    /*! \endcond
+        /*! \endcond
      */
 
-    /*! Copy constructor copies from a source discard_iterator.
+        /*! Copy constructor copies from a source discard_iterator.
      *
      *  \p rhs The discard_iterator to copy.
      */
-    __host__ __device__
-    discard_iterator(discard_iterator const &rhs)
-      : super_t(rhs.base()) {}
+        __host__ __device__ discard_iterator(discard_iterator const& rhs)
+            : super_t(rhs.base())
+        {
+        }
 
-    /*! This constructor receives an optional index specifying the position of this
+        /*! This constructor receives an optional index specifying the position of this
      *  \p discard_iterator in a range.
      *  
      *  \p i The index of this \p discard_iterator in a range. Defaults to the
      *       value returned by \c Incrementable's null constructor. For example,
      *       when <tt>Incrementable == int</tt>, \c 0.
      */
-    __host__ __device__
-    discard_iterator(incrementable const &i = incrementable())
-      : super_t(base_iterator(i)) {}
+        __host__ __device__ discard_iterator(incrementable const& i = incrementable())
+            : super_t(base_iterator(i))
+        {
+        }
 
-    /*! \cond
+        /*! \cond
      */
-  
-  private: // Core iterator interface
-    __host__ __device__
-    reference dereference() const
-    {
-      return m_element;
-    }
 
-    mutable value_type m_element;
+    private: // Core iterator interface
+        __host__ __device__ reference dereference() const
+        {
+            return m_element;
+        }
 
-    /*! \endcond
+        mutable value_type m_element;
+
+        /*! \endcond
      */
-}; // end constant_iterator
+    }; // end constant_iterator
 
-
-/*! \p make_discard_iterator creates a \p discard_iterator from an optional index parameter.
+    /*! \p make_discard_iterator creates a \p discard_iterator from an optional index parameter.
  *
  *  \param i The index of the returned \p discard_iterator within a range.
  *           In the default case, the value of this parameter is \c 0.
@@ -153,19 +151,19 @@ template<typename System = use_default>
  *
  *  \see constant_iterator
  */
-inline __host__ __device__
-discard_iterator<> make_discard_iterator(discard_iterator<>::difference_type i = discard_iterator<>::difference_type(0))
-{
-  return discard_iterator<>(i);
-} // end make_discard_iterator()
+    inline __host__ __device__ discard_iterator<>
+                               make_discard_iterator(discard_iterator<>::difference_type i
+                                                     = discard_iterator<>::difference_type(0))
+    {
+        return discard_iterator<>(i);
+    } // end make_discard_iterator()
 
-/*! \} // end fancyiterators
+    /*! \} // end fancyiterators
  */
 
-/*! \} // end iterators
+    /*! \} // end iterators
  */
 
 } // end namespace thrust
-  
-__THRUST_DISABLE_MSVC_POSSIBLE_LOSS_OF_DATA_WARNING_END
 
+__THRUST_DISABLE_MSVC_POSSIBLE_LOSS_OF_DATA_WARNING_END

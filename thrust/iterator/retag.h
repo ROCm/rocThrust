@@ -26,8 +26,7 @@
 namespace thrust
 {
 
-
-/*! \ingroup iterator_tags
+    /*! \ingroup iterator_tags
  *  \{
  */
 
@@ -62,9 +61,7 @@ __host__ __device__
 unspecified_iterator_type retag(Iterator iter);
 #endif
 
-/*! \} // iterator_tags
+    /*! \} // iterator_tags
  */
 
-
 } // end thrust
-

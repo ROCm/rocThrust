@@ -6,28 +6,27 @@
 #include <cxxabi.h>
 #endif // __GNUC__
 
-#include <string>
 #include <cstdlib>
+#include <string>
 
 namespace unittest
 {
 
 #ifdef __GNUC__
-inline std::string demangle(const char* name)
-{
-  int status = 0;
-  char* realname = abi::__cxa_demangle(name, 0, 0, &status);
-  std::string result(realname);
-  std::free(realname);
+    inline std::string demangle(const char* name)
+    {
+        int         status   = 0;
+        char*       realname = abi::__cxa_demangle(name, 0, 0, &status);
+        std::string result(realname);
+        std::free(realname);
 
-  return result;
-}
+        return result;
+    }
 #else
-inline std::string demangle(const char* name)
-{
-  return name;
-}
+    inline std::string demangle(const char* name)
+    {
+        return name;
+    }
 #endif
 
 } // end unittest
-

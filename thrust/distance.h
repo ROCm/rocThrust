@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file distance.h
  *  \brief Computes the size of a range
  */
@@ -27,12 +26,11 @@
 namespace thrust
 {
 
-
-/*! \addtogroup iterators
+    /*! \addtogroup iterators
  *  \{
  */
 
-/*! \p distance finds the distance between \p first and \p last, i.e. the
+    /*! \p distance finds the distance between \p first and \p last, i.e. the
  *  number of times that \p first must be incremented until it is equal to
  *  \p last.
  *
@@ -63,15 +61,13 @@ namespace thrust
  *
  *  \see http://www.sgi.com/tech/stl/distance.html
  */
-template<typename InputIterator>
-inline __host__ __device__
-  typename thrust::iterator_traits<InputIterator>::difference_type
-    distance(InputIterator first, InputIterator last);
+    template <typename InputIterator>
+    inline __host__ __device__ typename thrust::iterator_traits<InputIterator>::difference_type
+                    distance(InputIterator first, InputIterator last);
 
-/*! \} // end iterators
+    /*! \} // end iterators
  */
 
 } // end thrust
 
 #include <thrust/detail/distance.inl>
-

@@ -36,4 +36,3 @@
 #endif // __HOST_DEFINES_H__
 
 #include <cuda_runtime_api.h>
-

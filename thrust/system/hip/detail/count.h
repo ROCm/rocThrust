@@ -38,34 +38,26 @@ BEGIN_NS_THRUST
 namespace hip_rocprim
 {
 
-template <class Derived, class InputIt, class UnaryPred>
-typename iterator_traits<InputIt>::difference_type THRUST_HIP_FUNCTION
-count_if(execution_policy<Derived>& policy,
-         InputIt                    first,
-         InputIt                    last,
-         UnaryPred                  unary_pred)
-{
-    typedef typename iterator_traits<InputIt>::difference_type        size_type;
-    typedef transform_input_iterator_t<size_type, InputIt, UnaryPred> flag_iterator_t;
+    template <class Derived, class InputIt, class UnaryPred>
+    typename iterator_traits<InputIt>::difference_type THRUST_HIP_FUNCTION count_if(
+        execution_policy<Derived>& policy, InputIt first, InputIt last, UnaryPred unary_pred)
+    {
+        typedef typename iterator_traits<InputIt>::difference_type        size_type;
+        typedef transform_input_iterator_t<size_type, InputIt, UnaryPred> flag_iterator_t;
 
-    return hip_rocprim::reduce_n(policy,
-                                 flag_iterator_t(first, unary_pred),
-                                 thrust::distance(first, last),
-                                 size_type(0),
-                                 plus<size_type>());
-}
+        return hip_rocprim::reduce_n(policy,
+                                     flag_iterator_t(first, unary_pred),
+                                     thrust::distance(first, last),
+                                     size_type(0),
+                                     plus<size_type>());
+    }
 
-template <class Derived, class InputIt, class Value>
-typename iterator_traits<InputIt>::difference_type THRUST_HIP_FUNCTION
-count(execution_policy<Derived>& policy,
-      InputIt                    first,
-      InputIt                    last,
-      Value const&               value)
-{
-    return hip_rocprim::count_if(
-        policy, first, last, detail::equal_to_value<Value>(value)
-    );
-}
+    template <class Derived, class InputIt, class Value>
+    typename iterator_traits<InputIt>::difference_type THRUST_HIP_FUNCTION
+                                                       count(execution_policy<Derived>& policy, InputIt first, InputIt last, Value const& value)
+    {
+        return hip_rocprim::count_if(policy, first, last, detail::equal_to_value<Value>(value));
+    }
 
 } // namespace hip_rocprim
 END_NS_THRUST

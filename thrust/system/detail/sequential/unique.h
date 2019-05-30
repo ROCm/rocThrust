@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file unique.h
  *  \brief Sequential implementations of unique algorithms.
  */
@@ -22,76 +21,71 @@
 #pragma once
 
 #include <thrust/detail/config.h>
-#include <thrust/system/detail/sequential/execution_policy.h>
 #include <thrust/iterator/iterator_traits.h>
 #include <thrust/pair.h>
+#include <thrust/system/detail/sequential/execution_policy.h>
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace sequential
-{
-
-
-__thrust_exec_check_disable__
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator,
-         typename BinaryPredicate>
-__host__ __device__
-  OutputIterator unique_copy(sequential::execution_policy<DerivedPolicy> &,
-                             InputIterator first,
-                             InputIterator last,
-                             OutputIterator output,
-                             BinaryPredicate binary_pred)
-{
-  typedef typename thrust::iterator_traits<InputIterator>::value_type T;
-
-  if(first != last)
-  {
-    T prev = *first;
-
-    for(++first; first != last; ++first)
+    namespace system
     {
-      T temp = *first;
+        namespace detail
+        {
+            namespace sequential
+            {
 
-      if (!binary_pred(prev, temp))
-      {
-        *output = prev;
+                __thrust_exec_check_disable__ template <typename DerivedPolicy,
+                                                        typename InputIterator,
+                                                        typename OutputIterator,
+                                                        typename BinaryPredicate>
+                __host__ __device__ OutputIterator
+                                    unique_copy(sequential::execution_policy<DerivedPolicy>&,
+                                                InputIterator   first,
+                                                InputIterator   last,
+                                                OutputIterator  output,
+                                                BinaryPredicate binary_pred)
+                {
+                    typedef typename thrust::iterator_traits<InputIterator>::value_type T;
 
-        ++output;
+                    if(first != last)
+                    {
+                        T prev = *first;
 
-        prev = temp;
-      }
-    }
+                        for(++first; first != last; ++first)
+                        {
+                            T temp = *first;
 
-    *output = prev;
-    ++output;
-  }
+                            if(!binary_pred(prev, temp))
+                            {
+                                *output = prev;
 
-  return output;
-} // end unique_copy()
+                                ++output;
 
+                                prev = temp;
+                            }
+                        }
 
-template<typename DerivedPolicy,
-         typename ForwardIterator,
-         typename BinaryPredicate>
-__host__ __device__
-  ForwardIterator unique(sequential::execution_policy<DerivedPolicy> &exec,
-                         ForwardIterator first,
-                         ForwardIterator last,
-                         BinaryPredicate binary_pred)
-{
-  // sequential unique_copy permits in-situ operation
-  return sequential::unique_copy(exec, first, last, first, binary_pred);
-} // end unique()
+                        *output = prev;
+                        ++output;
+                    }
 
+                    return output;
+                } // end unique_copy()
 
-} // end namespace sequential
-} // end namespace detail
-} // end namespace system
+                template <typename DerivedPolicy,
+                          typename ForwardIterator,
+                          typename BinaryPredicate>
+                __host__ __device__ ForwardIterator
+                                    unique(sequential::execution_policy<DerivedPolicy>& exec,
+                                           ForwardIterator                              first,
+                                           ForwardIterator                              last,
+                                           BinaryPredicate                              binary_pred)
+                {
+                    // sequential unique_copy permits in-situ operation
+                    return sequential::unique_copy(exec, first, last, first, binary_pred);
+                } // end unique()
+
+            } // end namespace sequential
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
-

@@ -22,39 +22,39 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
+                template <typename DerivedPolicy,
+                          typename OutputIterator,
+                          typename Size,
+                          typename T>
+                __host__ __device__ OutputIterator
+                                    fill_n(thrust::execution_policy<DerivedPolicy>& exec,
+                                           OutputIterator                           first,
+                                           Size                                     n,
+                                           const T&                                 value)
+                {
+                    // XXX consider using the placeholder expression _1 = value
+                    return thrust::generate_n(
+                        exec, first, n, thrust::detail::fill_functor<T>(value));
+                }
 
-template<typename DerivedPolicy, typename OutputIterator, typename Size, typename T>
-__host__ __device__
-  OutputIterator fill_n(thrust::execution_policy<DerivedPolicy> &exec,
-                        OutputIterator first,
-                        Size n,
-                        const T &value)
-{
-  // XXX consider using the placeholder expression _1 = value
-  return thrust::generate_n(exec, first, n, thrust::detail::fill_functor<T>(value));
-}
+                template <typename DerivedPolicy, typename ForwardIterator, typename T>
+                __host__ __device__ void fill(thrust::execution_policy<DerivedPolicy>& exec,
+                                              ForwardIterator                          first,
+                                              ForwardIterator                          last,
+                                              const T&                                 value)
+                {
+                    // XXX consider using the placeholder expression _1 = value
+                    thrust::generate(exec, first, last, thrust::detail::fill_functor<T>(value));
+                }
 
-template<typename DerivedPolicy, typename ForwardIterator, typename T>
-__host__ __device__
-  void fill(thrust::execution_policy<DerivedPolicy> &exec,
-            ForwardIterator first,
-            ForwardIterator last,
-            const T &value)
-{
-  // XXX consider using the placeholder expression _1 = value
-  thrust::generate(exec, first, last, thrust::detail::fill_functor<T>(value));
-}
-
-
-} // end namespace generic
-} // end namespace detail
-} // end namespace system
+            } // end namespace generic
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
-

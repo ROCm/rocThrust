@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file scan.h
  *  \brief Functions for computing prefix sums
  */
@@ -27,18 +26,15 @@
 namespace thrust
 {
 
-
-/*! \addtogroup algorithms
+    /*! \addtogroup algorithms
  */
 
-
-/*! \addtogroup prefixsums Prefix Sums
+    /*! \addtogroup prefixsums Prefix Sums
  *  \ingroup algorithms
  *  \{
  */
 
-
-/*! \p inclusive_scan computes an inclusive prefix sum operation. The
+    /*! \p inclusive_scan computes an inclusive prefix sum operation. The
  *  term 'inclusive' means that each result includes the corresponding
  *  input operand in the partial sum. More precisely, <tt>*first</tt> is 
  *  assigned to <tt>*result</tt> and the sum of <tt>*first</tt> and 
@@ -90,17 +86,14 @@ namespace thrust
  *  \see http://www.sgi.com/tech/stl/partial_sum.html
  *
  */
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator>
-__host__ __device__
-  OutputIterator inclusive_scan(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                InputIterator first,
-                                InputIterator last,
-                                OutputIterator result);
+    template <typename DerivedPolicy, typename InputIterator, typename OutputIterator>
+    __host__ __device__ OutputIterator
+                        inclusive_scan(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                       InputIterator                                               first,
+                                       InputIterator                                               last,
+                                       OutputIterator                                              result);
 
-
-/*! \p inclusive_scan computes an inclusive prefix sum operation. The
+    /*! \p inclusive_scan computes an inclusive prefix sum operation. The
  *  term 'inclusive' means that each result includes the corresponding
  *  input operand in the partial sum. More precisely, <tt>*first</tt> is 
  *  assigned to <tt>*result</tt> and the sum of <tt>*first</tt> and 
@@ -145,14 +138,10 @@ __host__ __device__
  *  \see http://www.sgi.com/tech/stl/partial_sum.html
  *
  */
-template<typename InputIterator,
-         typename OutputIterator>
-  OutputIterator inclusive_scan(InputIterator first,
-                                InputIterator last,
-                                OutputIterator result);
+    template <typename InputIterator, typename OutputIterator>
+    OutputIterator inclusive_scan(InputIterator first, InputIterator last, OutputIterator result);
 
-
-/*! \p inclusive_scan computes an inclusive prefix sum operation. The
+    /*! \p inclusive_scan computes an inclusive prefix sum operation. The
  *  term 'inclusive' means that each result includes the corresponding
  *  input operand in the partial sum.  When the input and output sequences 
  *  are the same, the scan is performed in-place.
@@ -200,19 +189,18 @@ template<typename InputIterator,
  *
  *  \see http://www.sgi.com/tech/stl/partial_sum.html
  */
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator,
-         typename AssociativeOperator>
-__host__ __device__
-  OutputIterator inclusive_scan(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                InputIterator first,
-                                InputIterator last,
-                                OutputIterator result,
-                                AssociativeOperator binary_op);
+    template <typename DerivedPolicy,
+              typename InputIterator,
+              typename OutputIterator,
+              typename AssociativeOperator>
+    __host__ __device__ OutputIterator
+                        inclusive_scan(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                       InputIterator                                               first,
+                                       InputIterator                                               last,
+                                       OutputIterator                                              result,
+                                       AssociativeOperator                                         binary_op);
 
-
-/*! \p inclusive_scan computes an inclusive prefix sum operation. The
+    /*! \p inclusive_scan computes an inclusive prefix sum operation. The
  *  term 'inclusive' means that each result includes the corresponding
  *  input operand in the partial sum.  When the input and output sequences 
  *  are the same, the scan is performed in-place.
@@ -255,16 +243,13 @@ __host__ __device__
  *
  *  \see http://www.sgi.com/tech/stl/partial_sum.html
  */
-template<typename InputIterator,
-         typename OutputIterator,
-         typename AssociativeOperator>
-  OutputIterator inclusive_scan(InputIterator first,
-                                InputIterator last,
-                                OutputIterator result,
-                                AssociativeOperator binary_op);
+    template <typename InputIterator, typename OutputIterator, typename AssociativeOperator>
+    OutputIterator inclusive_scan(InputIterator       first,
+                                  InputIterator       last,
+                                  OutputIterator      result,
+                                  AssociativeOperator binary_op);
 
-
-/*! \p exclusive_scan computes an exclusive prefix sum operation. The
+    /*! \p exclusive_scan computes an exclusive prefix sum operation. The
  *  term 'exclusive' means that each result does not include the 
  *  corresponding input operand in the partial sum.  More precisely,
  *  <tt>0</tt> is assigned to <tt>*result</tt> and the sum of 
@@ -310,17 +295,14 @@ template<typename InputIterator,
  *
  *  \see http://www.sgi.com/tech/stl/partial_sum.html
  */
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator>
-__host__ __device__
-  OutputIterator exclusive_scan(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                InputIterator first,
-                                InputIterator last,
-                                OutputIterator result);
+    template <typename DerivedPolicy, typename InputIterator, typename OutputIterator>
+    __host__ __device__ OutputIterator
+                        exclusive_scan(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                       InputIterator                                               first,
+                                       InputIterator                                               last,
+                                       OutputIterator                                              result);
 
-
-/*! \p exclusive_scan computes an exclusive prefix sum operation. The
+    /*! \p exclusive_scan computes an exclusive prefix sum operation. The
  *  term 'exclusive' means that each result does not include the 
  *  corresponding input operand in the partial sum.  More precisely,
  *  <tt>0</tt> is assigned to <tt>*result</tt> and the sum of 
@@ -359,14 +341,10 @@ __host__ __device__
  *
  *  \see http://www.sgi.com/tech/stl/partial_sum.html
  */
-template<typename InputIterator,
-         typename OutputIterator>
-  OutputIterator exclusive_scan(InputIterator first,
-                                InputIterator last,
-                                OutputIterator result);
+    template <typename InputIterator, typename OutputIterator>
+    OutputIterator exclusive_scan(InputIterator first, InputIterator last, OutputIterator result);
 
-
-/*! \p exclusive_scan computes an exclusive prefix sum operation. The
+    /*! \p exclusive_scan computes an exclusive prefix sum operation. The
  *  term 'exclusive' means that each result does not include the 
  *  corresponding input operand in the partial sum.  More precisely,
  *  \p init is assigned to <tt>*result</tt> and the sum of \p init and 
@@ -411,19 +389,15 @@ template<typename InputIterator,
  *
  *  \see http://www.sgi.com/tech/stl/partial_sum.html
  */
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator,
-         typename T>
-__host__ __device__
-  OutputIterator exclusive_scan(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                InputIterator first,
-                                InputIterator last,
-                                OutputIterator result,
-                                T init);
+    template <typename DerivedPolicy, typename InputIterator, typename OutputIterator, typename T>
+    __host__ __device__ OutputIterator
+                        exclusive_scan(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                       InputIterator                                               first,
+                                       InputIterator                                               last,
+                                       OutputIterator                                              result,
+                                       T                                                           init);
 
-
-/*! \p exclusive_scan computes an exclusive prefix sum operation. The
+    /*! \p exclusive_scan computes an exclusive prefix sum operation. The
  *  term 'exclusive' means that each result does not include the 
  *  corresponding input operand in the partial sum.  More precisely,
  *  \p init is assigned to <tt>*result</tt> and the sum of \p init and 
@@ -462,16 +436,11 @@ __host__ __device__
  *
  *  \see http://www.sgi.com/tech/stl/partial_sum.html
  */
-template<typename InputIterator,
-         typename OutputIterator,
-         typename T>
-  OutputIterator exclusive_scan(InputIterator first,
-                                InputIterator last,
-                                OutputIterator result,
-                                T init);
+    template <typename InputIterator, typename OutputIterator, typename T>
+    OutputIterator
+        exclusive_scan(InputIterator first, InputIterator last, OutputIterator result, T init);
 
-
-/*! \p exclusive_scan computes an exclusive prefix sum operation. The
+    /*! \p exclusive_scan computes an exclusive prefix sum operation. The
  *  term 'exclusive' means that each result does not include the 
  *  corresponding input operand in the partial sum.  More precisely,
  *  \p init is assigned to <tt>\*result</tt> and the value
@@ -525,21 +494,20 @@ template<typename InputIterator,
  *  
  *  \see http://www.sgi.com/tech/stl/partial_sum.html
  */
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator,
-         typename T,
-         typename AssociativeOperator>
-__host__ __device__
-  OutputIterator exclusive_scan(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                InputIterator first,
-                                InputIterator last,
-                                OutputIterator result,
-                                T init,
-                                AssociativeOperator binary_op);
+    template <typename DerivedPolicy,
+              typename InputIterator,
+              typename OutputIterator,
+              typename T,
+              typename AssociativeOperator>
+    __host__ __device__ OutputIterator
+                        exclusive_scan(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                       InputIterator                                               first,
+                                       InputIterator                                               last,
+                                       OutputIterator                                              result,
+                                       T                                                           init,
+                                       AssociativeOperator                                         binary_op);
 
-
-/*! \p exclusive_scan computes an exclusive prefix sum operation. The
+    /*! \p exclusive_scan computes an exclusive prefix sum operation. The
  *  term 'exclusive' means that each result does not include the 
  *  corresponding input operand in the partial sum.  More precisely,
  *  \p init is assigned to <tt>\*result</tt> and the value
@@ -586,24 +554,22 @@ __host__ __device__
  *  
  *  \see http://www.sgi.com/tech/stl/partial_sum.html
  */
-template<typename InputIterator,
-         typename OutputIterator,
-         typename T,
-         typename AssociativeOperator>
-  OutputIterator exclusive_scan(InputIterator first,
-                                InputIterator last,
-                                OutputIterator result,
-                                T init,
-                                AssociativeOperator binary_op);
+    template <typename InputIterator,
+              typename OutputIterator,
+              typename T,
+              typename AssociativeOperator>
+    OutputIterator exclusive_scan(InputIterator       first,
+                                  InputIterator       last,
+                                  OutputIterator      result,
+                                  T                   init,
+                                  AssociativeOperator binary_op);
 
-
-/*! \addtogroup segmentedprefixsums Segmented Prefix Sums
+    /*! \addtogroup segmentedprefixsums Segmented Prefix Sums
  *  \ingroup prefixsums
  *  \{
  */
 
-
-/*! \p inclusive_scan_by_key computes an inclusive key-value or 'segmented' prefix 
+    /*! \p inclusive_scan_by_key computes an inclusive key-value or 'segmented' prefix 
  *  sum operation. The term 'inclusive' means that each result includes 
  *  the corresponding input operand in the partial sum. The term 'segmented'
  *  means that the partial sums are broken into distinct segments.  In other
@@ -660,19 +626,18 @@ template<typename InputIterator,
  *  \see exclusive_scan_by_key
  *
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator>
-__host__ __device__
-  OutputIterator inclusive_scan_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                       InputIterator1 first1,
-                                       InputIterator1 last1,
-                                       InputIterator2 first2,
-                                       OutputIterator result);
- 
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator>
+    __host__ __device__ OutputIterator
+                        inclusive_scan_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                              InputIterator1                                              first1,
+                                              InputIterator1                                              last1,
+                                              InputIterator2                                              first2,
+                                              OutputIterator                                              result);
 
-/*! \p inclusive_scan_by_key computes an inclusive key-value or 'segmented' prefix 
+    /*! \p inclusive_scan_by_key computes an inclusive key-value or 'segmented' prefix 
  *  sum operation. The term 'inclusive' means that each result includes 
  *  the corresponding input operand in the partial sum. The term 'segmented'
  *  means that the partial sums are broken into distinct segments.  In other
@@ -722,16 +687,13 @@ __host__ __device__
  *  \see exclusive_scan_by_key
  *
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator>
-  OutputIterator inclusive_scan_by_key(InputIterator1 first1,
-                                       InputIterator1 last1,
-                                       InputIterator2 first2,
-                                       OutputIterator result);
+    template <typename InputIterator1, typename InputIterator2, typename OutputIterator>
+    OutputIterator inclusive_scan_by_key(InputIterator1 first1,
+                                         InputIterator1 last1,
+                                         InputIterator2 first2,
+                                         OutputIterator result);
 
-
-/*! \p inclusive_scan_by_key computes an inclusive key-value or 'segmented' prefix 
+    /*! \p inclusive_scan_by_key computes an inclusive key-value or 'segmented' prefix 
  *  sum operation. The term 'inclusive' means that each result includes 
  *  the corresponding input operand in the partial sum. The term 'segmented'
  *  means that the partial sums are broken into distinct segments.  In other
@@ -793,21 +755,20 @@ template<typename InputIterator1,
  *  \see exclusive_scan_by_key
  *
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename BinaryPredicate>
-__host__ __device__
-  OutputIterator inclusive_scan_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                       InputIterator1 first1,
-                                       InputIterator1 last1,
-                                       InputIterator2 first2,
-                                       OutputIterator result,
-                                       BinaryPredicate binary_pred);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename BinaryPredicate>
+    __host__ __device__ OutputIterator
+                        inclusive_scan_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                              InputIterator1                                              first1,
+                                              InputIterator1                                              last1,
+                                              InputIterator2                                              first2,
+                                              OutputIterator                                              result,
+                                              BinaryPredicate binary_pred);
 
-
-/*! \p inclusive_scan_by_key computes an inclusive key-value or 'segmented' prefix 
+    /*! \p inclusive_scan_by_key computes an inclusive key-value or 'segmented' prefix 
  *  sum operation. The term 'inclusive' means that each result includes 
  *  the corresponding input operand in the partial sum. The term 'segmented'
  *  means that the partial sums are broken into distinct segments.  In other
@@ -862,18 +823,17 @@ __host__ __device__
  *  \see exclusive_scan_by_key
  *
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename BinaryPredicate>
-  OutputIterator inclusive_scan_by_key(InputIterator1 first1,
-                                       InputIterator1 last1,
-                                       InputIterator2 first2,
-                                       OutputIterator result,
-                                       BinaryPredicate binary_pred);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename BinaryPredicate>
+    OutputIterator inclusive_scan_by_key(InputIterator1  first1,
+                                         InputIterator1  last1,
+                                         InputIterator2  first2,
+                                         OutputIterator  result,
+                                         BinaryPredicate binary_pred);
 
-
-/*! \p inclusive_scan_by_key computes an inclusive key-value or 'segmented' prefix 
+    /*! \p inclusive_scan_by_key computes an inclusive key-value or 'segmented' prefix 
  *  sum operation. The term 'inclusive' means that each result includes 
  *  the corresponding input operand in the partial sum. The term 'segmented'
  *  means that the partial sums are broken into distinct segments.  In other
@@ -940,23 +900,22 @@ template<typename InputIterator1,
  *  \see exclusive_scan_by_key
  *
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename BinaryPredicate,
-         typename AssociativeOperator>
-__host__ __device__
-  OutputIterator inclusive_scan_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                       InputIterator1 first1,
-                                       InputIterator1 last1,
-                                       InputIterator2 first2,
-                                       OutputIterator result,
-                                       BinaryPredicate binary_pred,
-                                       AssociativeOperator binary_op);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename BinaryPredicate,
+              typename AssociativeOperator>
+    __host__ __device__ OutputIterator
+                        inclusive_scan_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                              InputIterator1                                              first1,
+                                              InputIterator1                                              last1,
+                                              InputIterator2                                              first2,
+                                              OutputIterator                                              result,
+                                              BinaryPredicate     binary_pred,
+                                              AssociativeOperator binary_op);
 
-
-/*! \p inclusive_scan_by_key computes an inclusive key-value or 'segmented' prefix 
+    /*! \p inclusive_scan_by_key computes an inclusive key-value or 'segmented' prefix 
  *  sum operation. The term 'inclusive' means that each result includes 
  *  the corresponding input operand in the partial sum. The term 'segmented'
  *  means that the partial sums are broken into distinct segments.  In other
@@ -1016,20 +975,19 @@ __host__ __device__
  *  \see exclusive_scan_by_key
  *
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename BinaryPredicate,
-         typename AssociativeOperator>
-  OutputIterator inclusive_scan_by_key(InputIterator1 first1,
-                                       InputIterator1 last1,
-                                       InputIterator2 first2,
-                                       OutputIterator result,
-                                       BinaryPredicate binary_pred,
-                                       AssociativeOperator binary_op);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename BinaryPredicate,
+              typename AssociativeOperator>
+    OutputIterator inclusive_scan_by_key(InputIterator1      first1,
+                                         InputIterator1      last1,
+                                         InputIterator2      first2,
+                                         OutputIterator      result,
+                                         BinaryPredicate     binary_pred,
+                                         AssociativeOperator binary_op);
 
-
-/*! \p exclusive_scan_by_key computes an exclusive segmented prefix 
+    /*! \p exclusive_scan_by_key computes an exclusive segmented prefix 
  *
  *  This version of \p exclusive_scan_by_key uses the value \c 0 to
  *  initialize the exclusive scan operation.
@@ -1076,19 +1034,18 @@ template<typename InputIterator1,
  *  \see exclusive_scan
  *
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator>
-__host__ __device__
-  OutputIterator exclusive_scan_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                       InputIterator1 first1,
-                                       InputIterator1 last1,
-                                       InputIterator2 first2,
-                                       OutputIterator result);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator>
+    __host__ __device__ OutputIterator
+                        exclusive_scan_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                              InputIterator1                                              first1,
+                                              InputIterator1                                              last1,
+                                              InputIterator2                                              first2,
+                                              OutputIterator                                              result);
 
-
-/*! \p exclusive_scan_by_key computes an exclusive segmented prefix 
+    /*! \p exclusive_scan_by_key computes an exclusive segmented prefix 
  *
  *  This version of \p exclusive_scan_by_key uses the value \c 0 to
  *  initialize the exclusive scan operation.
@@ -1129,16 +1086,13 @@ __host__ __device__
  *  \see exclusive_scan
  *
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator>
-  OutputIterator exclusive_scan_by_key(InputIterator1 first1,
-                                       InputIterator1 last1,
-                                       InputIterator2 first2,
-                                       OutputIterator result);
+    template <typename InputIterator1, typename InputIterator2, typename OutputIterator>
+    OutputIterator exclusive_scan_by_key(InputIterator1 first1,
+                                         InputIterator1 last1,
+                                         InputIterator2 first2,
+                                         OutputIterator result);
 
-
-/*! \p exclusive_scan_by_key computes an exclusive key-value or 'segmented' prefix 
+    /*! \p exclusive_scan_by_key computes an exclusive key-value or 'segmented' prefix 
  *  sum operation. The term 'exclusive' means that each result does not include
  *  the corresponding input operand in the partial sum. The term 'segmented'
  *  means that the partial sums are broken into distinct segments.  In other
@@ -1184,21 +1138,20 @@ template<typename InputIterator1,
  *  \see inclusive_scan_by_key
  *
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename T>
-__host__ __device__
-  OutputIterator exclusive_scan_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                       InputIterator1 first1,
-                                       InputIterator1 last1,
-                                       InputIterator2 first2,
-                                       OutputIterator result,
-                                       T init);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename T>
+    __host__ __device__ OutputIterator
+                        exclusive_scan_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                              InputIterator1                                              first1,
+                                              InputIterator1                                              last1,
+                                              InputIterator2                                              first2,
+                                              OutputIterator                                              result,
+                                              T                                                           init);
 
-
-/*! \p exclusive_scan_by_key computes an exclusive key-value or 'segmented' prefix 
+    /*! \p exclusive_scan_by_key computes an exclusive key-value or 'segmented' prefix 
  *  sum operation. The term 'exclusive' means that each result does not include
  *  the corresponding input operand in the partial sum. The term 'segmented'
  *  means that the partial sums are broken into distinct segments.  In other
@@ -1238,18 +1191,14 @@ __host__ __device__
  *  \see inclusive_scan_by_key
  *
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename T>
-  OutputIterator exclusive_scan_by_key(InputIterator1 first1,
-                                       InputIterator1 last1,
-                                       InputIterator2 first2,
-                                       OutputIterator result,
-                                       T init);
+    template <typename InputIterator1, typename InputIterator2, typename OutputIterator, typename T>
+    OutputIterator exclusive_scan_by_key(InputIterator1 first1,
+                                         InputIterator1 last1,
+                                         InputIterator2 first2,
+                                         OutputIterator result,
+                                         T              init);
 
-
-/*! \p exclusive_scan_by_key computes an exclusive key-value or 'segmented' prefix 
+    /*! \p exclusive_scan_by_key computes an exclusive key-value or 'segmented' prefix 
  *  sum operation. The term 'exclusive' means that each result does not include
  *  the corresponding input operand in the partial sum. The term 'segmented'
  *  means that the partial sums are broken into distinct segments.  In other
@@ -1303,23 +1252,22 @@ template<typename InputIterator1,
  *  \see inclusive_scan_by_key
  *
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename T,
-         typename BinaryPredicate>
-__host__ __device__
-  OutputIterator exclusive_scan_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                       InputIterator1 first1,
-                                       InputIterator1 last1,
-                                       InputIterator2 first2,
-                                       OutputIterator result,
-                                       T init,
-                                       BinaryPredicate binary_pred);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename T,
+              typename BinaryPredicate>
+    __host__ __device__ OutputIterator
+                        exclusive_scan_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                              InputIterator1                                              first1,
+                                              InputIterator1                                              last1,
+                                              InputIterator2                                              first2,
+                                              OutputIterator                                              result,
+                                              T                                                           init,
+                                              BinaryPredicate binary_pred);
 
-
-/*! \p exclusive_scan_by_key computes an exclusive key-value or 'segmented' prefix 
+    /*! \p exclusive_scan_by_key computes an exclusive key-value or 'segmented' prefix 
  *  sum operation. The term 'exclusive' means that each result does not include
  *  the corresponding input operand in the partial sum. The term 'segmented'
  *  means that the partial sums are broken into distinct segments.  In other
@@ -1367,20 +1315,19 @@ __host__ __device__
  *  \see inclusive_scan_by_key
  *
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename T,
-         typename BinaryPredicate>
-  OutputIterator exclusive_scan_by_key(InputIterator1 first1,
-                                       InputIterator1 last1,
-                                       InputIterator2 first2,
-                                       OutputIterator result,
-                                       T init,
-                                       BinaryPredicate binary_pred);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename T,
+              typename BinaryPredicate>
+    OutputIterator exclusive_scan_by_key(InputIterator1  first1,
+                                         InputIterator1  last1,
+                                         InputIterator2  first2,
+                                         OutputIterator  result,
+                                         T               init,
+                                         BinaryPredicate binary_pred);
 
-
-/*! \p exclusive_scan_by_key computes an exclusive key-value or 'segmented' prefix 
+    /*! \p exclusive_scan_by_key computes an exclusive key-value or 'segmented' prefix 
  *  sum operation. The term 'exclusive' means that each result does not include
  *  the corresponding input operand in the partial sum. The term 'segmented'
  *  means that the partial sums are broken into distinct segments.  In other
@@ -1452,25 +1399,24 @@ template<typename InputIterator1,
  *  \see inclusive_scan_by_key
  *
  */
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename T,
-         typename BinaryPredicate,
-         typename AssociativeOperator>
-__host__ __device__
-  OutputIterator exclusive_scan_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                       InputIterator1 first1,
-                                       InputIterator1 last1,
-                                       InputIterator2 first2,
-                                       OutputIterator result,
-                                       T init,
-                                       BinaryPredicate binary_pred,
-                                       AssociativeOperator binary_op);
+    template <typename DerivedPolicy,
+              typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename T,
+              typename BinaryPredicate,
+              typename AssociativeOperator>
+    __host__ __device__ OutputIterator
+                        exclusive_scan_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                              InputIterator1                                              first1,
+                                              InputIterator1                                              last1,
+                                              InputIterator2                                              first2,
+                                              OutputIterator                                              result,
+                                              T                                                           init,
+                                              BinaryPredicate     binary_pred,
+                                              AssociativeOperator binary_op);
 
-
-/*! \p exclusive_scan_by_key computes an exclusive key-value or 'segmented' prefix 
+    /*! \p exclusive_scan_by_key computes an exclusive key-value or 'segmented' prefix 
  *  sum operation. The term 'exclusive' means that each result does not include
  *  the corresponding input operand in the partial sum. The term 'segmented'
  *  means that the partial sums are broken into distinct segments.  In other
@@ -1535,30 +1481,26 @@ __host__ __device__
  *  \see inclusive_scan_by_key
  *
  */
-template<typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename T,
-         typename BinaryPredicate,
-         typename AssociativeOperator>
-  OutputIterator exclusive_scan_by_key(InputIterator1 first1,
-                                       InputIterator1 last1,
-                                       InputIterator2 first2,
-                                       OutputIterator result,
-                                       T init,
-                                       BinaryPredicate binary_pred,
-                                       AssociativeOperator binary_op);
+    template <typename InputIterator1,
+              typename InputIterator2,
+              typename OutputIterator,
+              typename T,
+              typename BinaryPredicate,
+              typename AssociativeOperator>
+    OutputIterator exclusive_scan_by_key(InputIterator1      first1,
+                                         InputIterator1      last1,
+                                         InputIterator2      first2,
+                                         OutputIterator      result,
+                                         T                   init,
+                                         BinaryPredicate     binary_pred,
+                                         AssociativeOperator binary_op);
 
-
-/*! \} // end segmentedprefixsums
+    /*! \} // end segmentedprefixsums
  */
 
-
-/*! \} // end prefix sums
+    /*! \} // end prefix sums
  */
 
-	
 } // end namespace thrust
 
 #include <thrust/detail/scan.inl>
-

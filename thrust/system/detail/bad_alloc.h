@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 #pragma once
 
 #include <new>
@@ -22,36 +21,35 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-
-// define our own bad_alloc so we can set its .what()
-class bad_alloc
-  : public std::bad_alloc
-{
-  public:
-    inline bad_alloc(const std::string &w)
-      : std::bad_alloc(), m_what()
+    namespace system
     {
-      m_what = std::bad_alloc::what();
-      m_what += ": ";
-      m_what += w;
-    } // end bad_alloc()
+        namespace detail
+        {
 
-    inline virtual ~bad_alloc(void) throw () {};
+            // define our own bad_alloc so we can set its .what()
+            class bad_alloc : public std::bad_alloc
+            {
+            public:
+                inline bad_alloc(const std::string& w)
+                    : std::bad_alloc()
+                    , m_what()
+                {
+                    m_what = std::bad_alloc::what();
+                    m_what += ": ";
+                    m_what += w;
+                } // end bad_alloc()
 
-    inline virtual const char *what(void) const throw()
-    {
-      return m_what.c_str();
-    } // end what()
+                inline virtual ~bad_alloc(void) throw() {};
 
-  private:
-    std::string m_what;
-}; // end bad_alloc
-  
-} // end detail
-} // end system
+                inline virtual const char* what(void) const throw()
+                {
+                    return m_what.c_str();
+                } // end what()
+
+            private:
+                std::string m_what;
+            }; // end bad_alloc
+
+        } // end detail
+    } // end system
 } // end thrust
-

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file sort.h
  *  \brief Functions for reorganizing ranges into sorted order
  */
@@ -27,14 +26,12 @@
 namespace thrust
 {
 
-
-/*! \addtogroup sorting
+    /*! \addtogroup sorting
  *  \ingroup algorithms
  *  \{
  */
 
-
-/*! \p sort sorts the elements in <tt>[first, last)</tt> into
+    /*! \p sort sorts the elements in <tt>[first, last)</tt> into
  *  ascending order, meaning that if \c i and \c j are any two valid
  *  iterators in <tt>[first, last)</tt> such that \c i precedes \c j,
  *  then \c *j is not less than \c *i. Note: \c sort is not guaranteed
@@ -74,14 +71,12 @@ namespace thrust
  *  \see \p stable_sort
  *  \see \p sort_by_key
  */
-template<typename DerivedPolicy, typename RandomAccessIterator>
-__host__ __device__
-  void sort(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-            RandomAccessIterator first,
-            RandomAccessIterator last);
+    template <typename DerivedPolicy, typename RandomAccessIterator>
+    __host__ __device__ void sort(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                  RandomAccessIterator                                        first,
+                                  RandomAccessIterator                                        last);
 
-
-/*! \p sort sorts the elements in <tt>[first, last)</tt> into
+    /*! \p sort sorts the elements in <tt>[first, last)</tt> into
  *  ascending order, meaning that if \c i and \c j are any two valid
  *  iterators in <tt>[first, last)</tt> such that \c i precedes \c j,
  *  then \c *j is not less than \c *i. Note: \c sort is not guaranteed
@@ -116,12 +111,10 @@ __host__ __device__
  *  \see \p stable_sort
  *  \see \p sort_by_key
  */
-template<typename RandomAccessIterator>
-  void sort(RandomAccessIterator first,
-            RandomAccessIterator last);
+    template <typename RandomAccessIterator>
+    void sort(RandomAccessIterator first, RandomAccessIterator last);
 
-
-/*! \p sort sorts the elements in <tt>[first, last)</tt> into
+    /*! \p sort sorts the elements in <tt>[first, last)</tt> into
  *  ascending order, meaning that if \c i and \c j are any two valid
  *  iterators in <tt>[first, last)</tt> such that \c i precedes \c j,
  *  then \c *j is not less than \c *i. Note: \c sort is not guaranteed
@@ -164,17 +157,13 @@ template<typename RandomAccessIterator>
  *  \see \p stable_sort
  *  \see \p sort_by_key
  */
-template<typename DerivedPolicy,
-         typename RandomAccessIterator,
-         typename StrictWeakOrdering>
-__host__ __device__
-  void sort(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-            RandomAccessIterator first,
-            RandomAccessIterator last,
-            StrictWeakOrdering comp);
+    template <typename DerivedPolicy, typename RandomAccessIterator, typename StrictWeakOrdering>
+    __host__ __device__ void sort(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                  RandomAccessIterator                                        first,
+                                  RandomAccessIterator                                        last,
+                                  StrictWeakOrdering                                          comp);
 
-
-/*! \p sort sorts the elements in <tt>[first, last)</tt> into
+    /*! \p sort sorts the elements in <tt>[first, last)</tt> into
  *  ascending order, meaning that if \c i and \c j are any two valid
  *  iterators in <tt>[first, last)</tt> such that \c i precedes \c j,
  *  then \c *j is not less than \c *i. Note: \c sort is not guaranteed
@@ -212,15 +201,11 @@ __host__ __device__
  *  \see \p stable_sort
  *  \see \p sort_by_key
  */
-template<typename RandomAccessIterator,
-         typename StrictWeakOrdering>
-__host__ __device__
-  void sort(RandomAccessIterator first,
-            RandomAccessIterator last,
-            StrictWeakOrdering comp);
+    template <typename RandomAccessIterator, typename StrictWeakOrdering>
+    __host__ __device__ void
+             sort(RandomAccessIterator first, RandomAccessIterator last, StrictWeakOrdering comp);
 
-
-/*! \p stable_sort is much like \c sort: it sorts the elements in
+    /*! \p stable_sort is much like \c sort: it sorts the elements in
  *  <tt>[first, last)</tt> into ascending order, meaning that if \c i
  *  and \c j are any two valid iterators in <tt>[first, last)</tt> such
  *  that \c i precedes \c j, then \c *j is not less than \c *i.
@@ -264,14 +249,13 @@ __host__ __device__
  *  \see \p sort
  *  \see \p stable_sort_by_key
  */
-template<typename DerivedPolicy, typename RandomAccessIterator>
-__host__ __device__
-  void stable_sort(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                   RandomAccessIterator first,
-                   RandomAccessIterator last);
+    template <typename DerivedPolicy, typename RandomAccessIterator>
+    __host__ __device__ void
+             stable_sort(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                         RandomAccessIterator                                        first,
+                         RandomAccessIterator                                        last);
 
-
-/*! \p stable_sort is much like \c sort: it sorts the elements in
+    /*! \p stable_sort is much like \c sort: it sorts the elements in
  *  <tt>[first, last)</tt> into ascending order, meaning that if \c i
  *  and \c j are any two valid iterators in <tt>[first, last)</tt> such
  *  that \c i precedes \c j, then \c *j is not less than \c *i.
@@ -310,12 +294,10 @@ __host__ __device__
  *  \see \p sort
  *  \see \p stable_sort_by_key
  */
-template<typename RandomAccessIterator>
-  void stable_sort(RandomAccessIterator first,
-                   RandomAccessIterator last);
+    template <typename RandomAccessIterator>
+    void stable_sort(RandomAccessIterator first, RandomAccessIterator last);
 
-
-/*! \p stable_sort is much like \c sort: it sorts the elements in
+    /*! \p stable_sort is much like \c sort: it sorts the elements in
  *  <tt>[first, last)</tt> into ascending order, meaning that if \c i
  *  and \c j are any two valid iterators in <tt>[first, last)</tt> such
  *  that \c i precedes \c j, then \c *j is not less than \c *i.
@@ -362,17 +344,14 @@ template<typename RandomAccessIterator>
  *  \see \p sort
  *  \see \p stable_sort_by_key
  */
-template<typename DerivedPolicy,
-         typename RandomAccessIterator,
-         typename StrictWeakOrdering>
-__host__ __device__
-  void stable_sort(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                   RandomAccessIterator first,
-                   RandomAccessIterator last,
-                   StrictWeakOrdering comp);
+    template <typename DerivedPolicy, typename RandomAccessIterator, typename StrictWeakOrdering>
+    __host__ __device__ void
+             stable_sort(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                         RandomAccessIterator                                        first,
+                         RandomAccessIterator                                        last,
+                         StrictWeakOrdering                                          comp);
 
-
-/*! \p stable_sort is much like \c sort: it sorts the elements in
+    /*! \p stable_sort is much like \c sort: it sorts the elements in
  *  <tt>[first, last)</tt> into ascending order, meaning that if \c i
  *  and \c j are any two valid iterators in <tt>[first, last)</tt> such
  *  that \c i precedes \c j, then \c *j is not less than \c *i.
@@ -414,19 +393,15 @@ __host__ __device__
  *  \see \p sort
  *  \see \p stable_sort_by_key
  */
-template<typename RandomAccessIterator,
-         typename StrictWeakOrdering>
-  void stable_sort(RandomAccessIterator first,
-                   RandomAccessIterator last,
-                   StrictWeakOrdering comp);
+    template <typename RandomAccessIterator, typename StrictWeakOrdering>
+    void
+        stable_sort(RandomAccessIterator first, RandomAccessIterator last, StrictWeakOrdering comp);
 
+    ///////////////
+    // Key Value //
+    ///////////////
 
-///////////////
-// Key Value //
-///////////////
-
-
-/*! \p sort_by_key performs a key-value sort. That is, \p sort_by_key sorts the
+    /*! \p sort_by_key performs a key-value sort. That is, \p sort_by_key sorts the
  *  elements in <tt>[keys_first, keys_last)</tt> and <tt>[values_first,
  *  values_first + (keys_last - keys_first))</tt> into ascending key order,
  *  meaning that if \c i and \c j are any two valid iterators in <tt>[keys_first,
@@ -480,17 +455,16 @@ template<typename RandomAccessIterator,
  *  \see \p stable_sort_by_key
  *  \see \p sort
  */
-template<typename DerivedPolicy,
-         typename RandomAccessIterator1,
-         typename RandomAccessIterator2>
-__host__ __device__
-  void sort_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                   RandomAccessIterator1 keys_first,
-                   RandomAccessIterator1 keys_last,
-                   RandomAccessIterator2 values_first);
+    template <typename DerivedPolicy,
+              typename RandomAccessIterator1,
+              typename RandomAccessIterator2>
+    __host__ __device__ void
+             sort_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                         RandomAccessIterator1                                       keys_first,
+                         RandomAccessIterator1                                       keys_last,
+                         RandomAccessIterator2                                       values_first);
 
-
-/*! \p sort_by_key performs a key-value sort. That is, \p sort_by_key sorts the
+    /*! \p sort_by_key performs a key-value sort. That is, \p sort_by_key sorts the
  *  elements in <tt>[keys_first, keys_last)</tt> and <tt>[values_first,
  *  values_first + (keys_last - keys_first))</tt> into ascending key order,
  *  meaning that if \c i and \c j are any two valid iterators in <tt>[keys_first,
@@ -538,14 +512,12 @@ __host__ __device__
  *  \see \p stable_sort_by_key
  *  \see \p sort
  */
-template<typename RandomAccessIterator1,
-         typename RandomAccessIterator2>
-  void sort_by_key(RandomAccessIterator1 keys_first,
-                   RandomAccessIterator1 keys_last,
-                   RandomAccessIterator2 values_first);
+    template <typename RandomAccessIterator1, typename RandomAccessIterator2>
+    void sort_by_key(RandomAccessIterator1 keys_first,
+                     RandomAccessIterator1 keys_last,
+                     RandomAccessIterator2 values_first);
 
-
-/*! \p sort_by_key performs a key-value sort. That is, \p sort_by_key sorts the
+    /*! \p sort_by_key performs a key-value sort. That is, \p sort_by_key sorts the
  *  elements in <tt>[keys_first, keys_last)</tt> and <tt>[values_first,
  *  values_first + (keys_last - keys_first))</tt> into ascending key order,
  *  meaning that if \c i and \c j are any two valid iterators in <tt>[keys_first,
@@ -601,19 +573,18 @@ template<typename RandomAccessIterator1,
  *  \see \p stable_sort_by_key
  *  \see \p sort
  */
-template<typename DerivedPolicy,
-         typename RandomAccessIterator1,
-         typename RandomAccessIterator2,
-         typename StrictWeakOrdering>
-__host__ __device__
-  void sort_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                   RandomAccessIterator1 keys_first,
-                   RandomAccessIterator1 keys_last,
-                   RandomAccessIterator2 values_first,
-                   StrictWeakOrdering comp);
+    template <typename DerivedPolicy,
+              typename RandomAccessIterator1,
+              typename RandomAccessIterator2,
+              typename StrictWeakOrdering>
+    __host__ __device__ void
+             sort_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                         RandomAccessIterator1                                       keys_first,
+                         RandomAccessIterator1                                       keys_last,
+                         RandomAccessIterator2                                       values_first,
+                         StrictWeakOrdering                                          comp);
 
-
-/*! \p sort_by_key performs a key-value sort. That is, \p sort_by_key sorts the
+    /*! \p sort_by_key performs a key-value sort. That is, \p sort_by_key sorts the
  *  elements in <tt>[keys_first, keys_last)</tt> and <tt>[values_first,
  *  values_first + (keys_last - keys_first))</tt> into ascending key order,
  *  meaning that if \c i and \c j are any two valid iterators in <tt>[keys_first,
@@ -664,16 +635,15 @@ __host__ __device__
  *  \see \p stable_sort_by_key
  *  \see \p sort
  */
-template<typename RandomAccessIterator1,
-         typename RandomAccessIterator2,
-         typename StrictWeakOrdering>
-  void sort_by_key(RandomAccessIterator1 keys_first,
-                   RandomAccessIterator1 keys_last,
-                   RandomAccessIterator2 values_first,
-                   StrictWeakOrdering comp);
+    template <typename RandomAccessIterator1,
+              typename RandomAccessIterator2,
+              typename StrictWeakOrdering>
+    void sort_by_key(RandomAccessIterator1 keys_first,
+                     RandomAccessIterator1 keys_last,
+                     RandomAccessIterator2 values_first,
+                     StrictWeakOrdering    comp);
 
-
-/*! \p stable_sort_by_key performs a key-value sort. That is, \p stable_sort_by_key
+    /*! \p stable_sort_by_key performs a key-value sort. That is, \p stable_sort_by_key
  *  sorts the elements in <tt>[keys_first, keys_last)</tt> and <tt>[values_first,
  *  values_first + (keys_last - keys_first))</tt> into ascending key order,
  *  meaning that if \c i and \c j are any two valid iterators in <tt>[keys_first,
@@ -729,17 +699,16 @@ template<typename RandomAccessIterator1,
  *  \see \p sort_by_key
  *  \see \p stable_sort
  */
-template<typename DerivedPolicy,
-         typename RandomAccessIterator1,
-         typename RandomAccessIterator2>
-__host__ __device__
-  void stable_sort_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                          RandomAccessIterator1 keys_first,
-                          RandomAccessIterator1 keys_last,
-                          RandomAccessIterator2 values_first);
+    template <typename DerivedPolicy,
+              typename RandomAccessIterator1,
+              typename RandomAccessIterator2>
+    __host__ __device__ void
+             stable_sort_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                RandomAccessIterator1                                       keys_first,
+                                RandomAccessIterator1                                       keys_last,
+                                RandomAccessIterator2 values_first);
 
-
-/*! \p stable_sort_by_key performs a key-value sort. That is, \p stable_sort_by_key
+    /*! \p stable_sort_by_key performs a key-value sort. That is, \p stable_sort_by_key
  *  sorts the elements in <tt>[keys_first, keys_last)</tt> and <tt>[values_first,
  *  values_first + (keys_last - keys_first))</tt> into ascending key order,
  *  meaning that if \c i and \c j are any two valid iterators in <tt>[keys_first,
@@ -789,14 +758,12 @@ __host__ __device__
  *  \see \p sort_by_key
  *  \see \p stable_sort
  */
-template<typename RandomAccessIterator1,
-         typename RandomAccessIterator2>
-  void stable_sort_by_key(RandomAccessIterator1 keys_first,
-                          RandomAccessIterator1 keys_last,
-                          RandomAccessIterator2 values_first);
+    template <typename RandomAccessIterator1, typename RandomAccessIterator2>
+    void stable_sort_by_key(RandomAccessIterator1 keys_first,
+                            RandomAccessIterator1 keys_last,
+                            RandomAccessIterator2 values_first);
 
-
-/*! \p stable_sort_by_key performs a key-value sort. That is, \p stable_sort_by_key
+    /*! \p stable_sort_by_key performs a key-value sort. That is, \p stable_sort_by_key
  *  sorts the elements in <tt>[keys_first, keys_last)</tt> and <tt>[values_first,
  *  values_first + (keys_last - keys_first))</tt> into ascending key order,
  *  meaning that if \c i and \c j are any two valid iterators in <tt>[keys_first,
@@ -855,19 +822,18 @@ template<typename RandomAccessIterator1,
  *  \see \p sort_by_key
  *  \see \p stable_sort
  */
-template<typename DerivedPolicy,
-         typename RandomAccessIterator1,
-         typename RandomAccessIterator2,
-         typename StrictWeakOrdering>
-__host__ __device__
-  void stable_sort_by_key(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                          RandomAccessIterator1 keys_first,
-                          RandomAccessIterator1 keys_last,
-                          RandomAccessIterator2 values_first,
-                          StrictWeakOrdering comp);
+    template <typename DerivedPolicy,
+              typename RandomAccessIterator1,
+              typename RandomAccessIterator2,
+              typename StrictWeakOrdering>
+    __host__ __device__ void
+             stable_sort_by_key(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                RandomAccessIterator1                                       keys_first,
+                                RandomAccessIterator1                                       keys_last,
+                                RandomAccessIterator2                                       values_first,
+                                StrictWeakOrdering                                          comp);
 
-
-/*! \p stable_sort_by_key performs a key-value sort. That is, \p stable_sort_by_key
+    /*! \p stable_sort_by_key performs a key-value sort. That is, \p stable_sort_by_key
  *  sorts the elements in <tt>[keys_first, keys_last)</tt> and <tt>[values_first,
  *  values_first + (keys_last - keys_first))</tt> into ascending key order,
  *  meaning that if \c i and \c j are any two valid iterators in <tt>[keys_first,
@@ -921,27 +887,24 @@ __host__ __device__
  *  \see \p sort_by_key
  *  \see \p stable_sort
  */
-template<typename RandomAccessIterator1,
-         typename RandomAccessIterator2,
-         typename StrictWeakOrdering>
-  void stable_sort_by_key(RandomAccessIterator1 keys_first,
-                          RandomAccessIterator1 keys_last,
-                          RandomAccessIterator2 values_first,
-                          StrictWeakOrdering comp);
+    template <typename RandomAccessIterator1,
+              typename RandomAccessIterator2,
+              typename StrictWeakOrdering>
+    void stable_sort_by_key(RandomAccessIterator1 keys_first,
+                            RandomAccessIterator1 keys_last,
+                            RandomAccessIterator2 values_first,
+                            StrictWeakOrdering    comp);
 
-
-/*! \} // end sorting
+    /*! \} // end sorting
  */
 
-
-/*! \addtogroup reductions
+    /*! \addtogroup reductions
  *  \{
  *  \addtogroup predicates
  *  \{
  */
 
-
-/*! \p is_sorted returns \c true if the range <tt>[first, last)</tt> is
+    /*! \p is_sorted returns \c true if the range <tt>[first, last)</tt> is
  *  sorted in ascending order, and \c false otherwise.
  *
  *  Specifically, this version of \p is_sorted returns \c false if for
@@ -996,14 +959,13 @@ template<typename RandomAccessIterator1,
  *  \see \c stable_sort
  *  \see \c less<T>
  */
-template<typename DerivedPolicy, typename ForwardIterator>
-__host__ __device__
-  bool is_sorted(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                 ForwardIterator first,
-                 ForwardIterator last);
+    template <typename DerivedPolicy, typename ForwardIterator>
+    __host__ __device__ bool
+             is_sorted(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                       ForwardIterator                                             first,
+                       ForwardIterator                                             last);
 
-
-/*! \p is_sorted returns \c true if the range <tt>[first, last)</tt> is
+    /*! \p is_sorted returns \c true if the range <tt>[first, last)</tt> is
  *  sorted in ascending order, and \c false otherwise.
  *
  *  Specifically, this version of \p is_sorted returns \c false if for
@@ -1052,12 +1014,10 @@ __host__ __device__
  *  \see \c stable_sort
  *  \see \c less<T>
  */
-template<typename ForwardIterator>
-  bool is_sorted(ForwardIterator first,
-                 ForwardIterator last);
+    template <typename ForwardIterator>
+    bool is_sorted(ForwardIterator first, ForwardIterator last);
 
-
-/*! \p is_sorted returns \c true if the range <tt>[first, last)</tt> is sorted in ascending 
+    /*! \p is_sorted returns \c true if the range <tt>[first, last)</tt> is sorted in ascending 
  *  order accoring to a user-defined comparison operation, and \c false otherwise.
  *
  *  Specifically, this version of \p is_sorted returns \c false if for some iterator \c i in
@@ -1111,15 +1071,14 @@ template<typename ForwardIterator>
  *  \see \c stable_sort
  *  \see \c less<T>
  */
-template<typename DerivedPolicy, typename ForwardIterator, typename Compare>
-__host__ __device__
-  bool is_sorted(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                 ForwardIterator first,
-                 ForwardIterator last,
-                 Compare comp);
+    template <typename DerivedPolicy, typename ForwardIterator, typename Compare>
+    __host__ __device__ bool
+             is_sorted(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                       ForwardIterator                                             first,
+                       ForwardIterator                                             last,
+                       Compare                                                     comp);
 
-
-/*! \p is_sorted returns \c true if the range <tt>[first, last)</tt> is sorted in ascending 
+    /*! \p is_sorted returns \c true if the range <tt>[first, last)</tt> is sorted in ascending 
  *  order accoring to a user-defined comparison operation, and \c false otherwise.
  *
  *  Specifically, this version of \p is_sorted returns \c false if for some iterator \c i in
@@ -1167,13 +1126,10 @@ __host__ __device__
  *  \see \c stable_sort
  *  \see \c less<T>
  */
-template<typename ForwardIterator, typename Compare>
-  bool is_sorted(ForwardIterator first,
-                 ForwardIterator last,
-                 Compare comp);
+    template <typename ForwardIterator, typename Compare>
+    bool is_sorted(ForwardIterator first, ForwardIterator last, Compare comp);
 
-
-/*! This version of \p is_sorted_until returns the last iterator \c i in <tt>[first,last]</tt> for
+    /*! This version of \p is_sorted_until returns the last iterator \c i in <tt>[first,last]</tt> for
  *  which the range <tt>[first,last)</tt> is sorted using \c operator<. If <tt>distance(first,last) < 2</tt>,
  *  \p is_sorted_until simply returns \p last.
  *
@@ -1212,14 +1168,13 @@ template<typename ForwardIterator, typename Compare>
  *  \see \p stable_sort
  *  \see \p stable_sort_by_key
  */
-template<typename DerivedPolicy, typename ForwardIterator>
-__host__ __device__
-  ForwardIterator is_sorted_until(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                  ForwardIterator first,
-                                  ForwardIterator last);
+    template <typename DerivedPolicy, typename ForwardIterator>
+    __host__ __device__ ForwardIterator
+                        is_sorted_until(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                        ForwardIterator                                             first,
+                                        ForwardIterator                                             last);
 
-
-/*! This version of \p is_sorted_until returns the last iterator \c i in <tt>[first,last]</tt> for
+    /*! This version of \p is_sorted_until returns the last iterator \c i in <tt>[first,last]</tt> for
  *  which the range <tt>[first,last)</tt> is sorted using \c operator<. If <tt>distance(first,last) < 2</tt>,
  *  \p is_sorted_until simply returns \p last.
  *
@@ -1252,12 +1207,10 @@ __host__ __device__
  *  \see \p stable_sort
  *  \see \p stable_sort_by_key
  */
-template<typename ForwardIterator>
-  ForwardIterator is_sorted_until(ForwardIterator first,
-                                  ForwardIterator last);
+    template <typename ForwardIterator>
+    ForwardIterator is_sorted_until(ForwardIterator first, ForwardIterator last);
 
-
-/*! This version of \p is_sorted_until returns the last iterator \c i in <tt>[first,last]</tt> for
+    /*! This version of \p is_sorted_until returns the last iterator \c i in <tt>[first,last]</tt> for
  *  which the range <tt>[first,last)</tt> is sorted using the function object \c comp. If <tt>distance(first,last) < 2</tt>,
  *  \p is_sorted_until simply returns \p last.
  *
@@ -1300,15 +1253,14 @@ template<typename ForwardIterator>
  *  \see \p stable_sort
  *  \see \p stable_sort_by_key
  */
-template<typename DerivedPolicy, typename ForwardIterator, typename Compare>
-__host__ __device__
-  ForwardIterator is_sorted_until(const thrust::detail::execution_policy_base<DerivedPolicy> &exec,
-                                  ForwardIterator first,
-                                  ForwardIterator last,
-                                  Compare comp);
+    template <typename DerivedPolicy, typename ForwardIterator, typename Compare>
+    __host__ __device__ ForwardIterator
+                        is_sorted_until(const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+                                        ForwardIterator                                             first,
+                                        ForwardIterator                                             last,
+                                        Compare                                                     comp);
 
-
-/*! This version of \p is_sorted_until returns the last iterator \c i in <tt>[first,last]</tt> for
+    /*! This version of \p is_sorted_until returns the last iterator \c i in <tt>[first,last]</tt> for
  *  which the range <tt>[first,last)</tt> is sorted using the function object \c comp. If <tt>distance(first,last) < 2</tt>,
  *  \p is_sorted_until simply returns \p last.
  *
@@ -1345,18 +1297,13 @@ __host__ __device__
  *  \see \p stable_sort
  *  \see \p stable_sort_by_key
  */
-template<typename ForwardIterator, typename Compare>
-  ForwardIterator is_sorted_until(ForwardIterator first,
-                                  ForwardIterator last,
-                                  Compare comp);
+    template <typename ForwardIterator, typename Compare>
+    ForwardIterator is_sorted_until(ForwardIterator first, ForwardIterator last, Compare comp);
 
-
-/*! \} // end predicates
+    /*! \} // end predicates
  *  \} // end reductions
  */
-
 
 } // end namespace thrust
 
 #include <thrust/detail/sort.inl>
-

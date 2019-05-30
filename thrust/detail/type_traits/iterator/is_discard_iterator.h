@@ -22,19 +22,19 @@
 
 namespace thrust
 {
-namespace detail
-{
+    namespace detail
+    {
 
-template <typename Iterator>
-struct is_discard_iterator
-  : public thrust::detail::false_type
-{};
+        template <typename Iterator>
+        struct is_discard_iterator : public thrust::detail::false_type
+        {
+        };
 
-template <typename System>
-struct is_discard_iterator< thrust::discard_iterator<System> >
- : public thrust::detail::true_type
-{};
+        template <typename System>
+        struct is_discard_iterator<thrust::discard_iterator<System>>
+            : public thrust::detail::true_type
+        {
+        };
 
-} // end namespace detail
+    } // end namespace detail
 } // end namespace thrust
-

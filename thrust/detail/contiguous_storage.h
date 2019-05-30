@@ -16,141 +16,125 @@
 
 #pragma once
 
-#include <thrust/iterator/detail/normal_iterator.h>
-#include <thrust/detail/execution_policy.h>
 #include <thrust/detail/allocator/allocator_traits.h>
+#include <thrust/detail/execution_policy.h>
+#include <thrust/iterator/detail/normal_iterator.h>
 
 namespace thrust
 {
 
-namespace detail
-{
+    namespace detail
+    {
 
-// XXX parameter T is redundant with parameter Alloc
-template<typename T, typename Alloc>
-  class contiguous_storage
-{
-  private:
-    typedef thrust::detail::allocator_traits<Alloc> alloc_traits;
+        // XXX parameter T is redundant with parameter Alloc
+        template <typename T, typename Alloc>
+        class contiguous_storage
+        {
+        private:
+            typedef thrust::detail::allocator_traits<Alloc> alloc_traits;
 
-  public:
-    typedef Alloc                                      allocator_type;
-    typedef T                                          value_type;
-    typedef typename alloc_traits::pointer             pointer;
-    typedef typename alloc_traits::const_pointer       const_pointer;
-    typedef typename alloc_traits::size_type           size_type;
-    typedef typename alloc_traits::difference_type     difference_type;
+        public:
+            typedef Alloc                                  allocator_type;
+            typedef T                                      value_type;
+            typedef typename alloc_traits::pointer         pointer;
+            typedef typename alloc_traits::const_pointer   const_pointer;
+            typedef typename alloc_traits::size_type       size_type;
+            typedef typename alloc_traits::difference_type difference_type;
 
-    // XXX we should bring reference & const_reference into allocator_traits
-    //     at the moment, it's unclear how -- we have nothing analogous to
-    //     rebind_pointer for references
-    //     we either need to add reference_traits or extend the existing
-    //     pointer_traits to support wrapped references
-    typedef typename Alloc::reference                  reference;
-    typedef typename Alloc::const_reference            const_reference;
+            // XXX we should bring reference & const_reference into allocator_traits
+            //     at the moment, it's unclear how -- we have nothing analogous to
+            //     rebind_pointer for references
+            //     we either need to add reference_traits or extend the existing
+            //     pointer_traits to support wrapped references
+            typedef typename Alloc::reference       reference;
+            typedef typename Alloc::const_reference const_reference;
 
-    typedef thrust::detail::normal_iterator<pointer>       iterator;
-    typedef thrust::detail::normal_iterator<const_pointer> const_iterator;
+            typedef thrust::detail::normal_iterator<pointer>       iterator;
+            typedef thrust::detail::normal_iterator<const_pointer> const_iterator;
 
-    __thrust_exec_check_disable__
-    __host__ __device__
-    explicit contiguous_storage(const allocator_type &alloc = allocator_type());
+            __thrust_exec_check_disable__
+                __host__ __device__ explicit contiguous_storage(const allocator_type& alloc
+                                                                = allocator_type());
 
-    __thrust_exec_check_disable__
-    __host__ __device__
-    explicit contiguous_storage(size_type n, const allocator_type &alloc = allocator_type());
+            __thrust_exec_check_disable__ __host__ __device__ explicit contiguous_storage(
+                size_type n, const allocator_type& alloc = allocator_type());
 
-    __thrust_exec_check_disable__
-    __host__ __device__
-    ~contiguous_storage(void);
+            __thrust_exec_check_disable__ __host__ __device__ ~contiguous_storage(void);
 
-    __host__ __device__
-    size_type size(void) const;
+            __host__ __device__ size_type size(void) const;
 
-    __host__ __device__
-    size_type max_size(void) const;
+            __host__ __device__ size_type max_size(void) const;
 
-    __host__ __device__
-    iterator begin(void);
-    
-    __host__ __device__
-    const_iterator begin(void) const;
+            __host__ __device__ iterator begin(void);
 
-    __host__ __device__
-    iterator end(void);
+            __host__ __device__ const_iterator begin(void) const;
 
-    __host__ __device__
-    const_iterator end(void) const;
+            __host__ __device__ iterator end(void);
 
-    __host__ __device__
-    reference operator[](size_type n);
+            __host__ __device__ const_iterator end(void) const;
 
-    __host__ __device__
-    const_reference operator[](size_type n) const;
+            __host__ __device__ reference operator[](size_type n);
 
-    __host__ __device__
-    allocator_type get_allocator(void) const;
+            __host__ __device__ const_reference operator[](size_type n) const;
 
-    // note that allocate does *not* automatically call deallocate
-    __host__ __device__
-    void allocate(size_type n);
+            __host__ __device__ allocator_type get_allocator(void) const;
 
-    __host__ __device__
-    void deallocate(void);
+            // note that allocate does *not* automatically call deallocate
+            __host__ __device__ void allocate(size_type n);
 
-    __host__ __device__
-    void swap(contiguous_storage &x);
+            __host__ __device__ void deallocate(void);
 
-    __host__ __device__
-    void default_construct_n(iterator first, size_type n);
+            __host__ __device__ void swap(contiguous_storage& x);
 
-    __host__ __device__
-    void uninitialized_fill_n(iterator first, size_type n, const value_type &value);
+            __host__ __device__ void default_construct_n(iterator first, size_type n);
 
-    template<typename InputIterator>
-    __host__ __device__
-    iterator uninitialized_copy(InputIterator first, InputIterator last, iterator result);
+            __host__ __device__ void
+                     uninitialized_fill_n(iterator first, size_type n, const value_type& value);
 
-    template<typename System, typename InputIterator>
-    __host__ __device__
-    iterator uninitialized_copy(thrust::execution_policy<System> &from_system,
-                                InputIterator first,
-                                InputIterator last,
-                                iterator result);
+            template <typename InputIterator>
+            __host__ __device__ iterator uninitialized_copy(InputIterator first,
+                                                            InputIterator last,
+                                                            iterator      result);
 
-    template<typename InputIterator, typename Size>
-    __host__ __device__
-    iterator uninitialized_copy_n(InputIterator first, Size n, iterator result);
+            template <typename System, typename InputIterator>
+            __host__ __device__ iterator
+                                uninitialized_copy(thrust::execution_policy<System>& from_system,
+                                                   InputIterator                     first,
+                                                   InputIterator                     last,
+                                                   iterator                          result);
 
-    template<typename System, typename InputIterator, typename Size>
-    __host__ __device__
-    iterator uninitialized_copy_n(thrust::execution_policy<System> &from_system,
-                                  InputIterator first,
-                                  Size n,
-                                  iterator result);
+            template <typename InputIterator, typename Size>
+            __host__ __device__ iterator uninitialized_copy_n(InputIterator first,
+                                                              Size          n,
+                                                              iterator      result);
 
-    __host__ __device__
-    void destroy(iterator first, iterator last);
+            template <typename System, typename InputIterator, typename Size>
+            __host__ __device__ iterator
+                                uninitialized_copy_n(thrust::execution_policy<System>& from_system,
+                                                     InputIterator                     first,
+                                                     Size                              n,
+                                                     iterator                          result);
 
-  private:
-    // XXX we could inherit from this to take advantage of empty base class optimization
-    allocator_type m_allocator;
+            __host__ __device__ void destroy(iterator first, iterator last);
 
-    iterator m_begin;
-    
-    size_type m_size;
+        private:
+            // XXX we could inherit from this to take advantage of empty base class optimization
+            allocator_type m_allocator;
 
-    // disallow assignment
-    contiguous_storage &operator=(const contiguous_storage &x);
-}; // end contiguous_storage
+            iterator m_begin;
 
-} // end detail
+            size_type m_size;
 
-template<typename T, typename Alloc>
-__host__ __device__
-void swap(detail::contiguous_storage<T,Alloc> &lhs, detail::contiguous_storage<T,Alloc> &rhs);
+            // disallow assignment
+            contiguous_storage& operator=(const contiguous_storage& x);
+        }; // end contiguous_storage
+
+    } // end detail
+
+    template <typename T, typename Alloc>
+    __host__ __device__ void swap(detail::contiguous_storage<T, Alloc>& lhs,
+                                  detail::contiguous_storage<T, Alloc>& rhs);
 
 } // end thrust
 
 #include <thrust/detail/contiguous_storage.inl>
-

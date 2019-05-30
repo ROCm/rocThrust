@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file remove.h
  *  \brief Sequential implementations of remove functions.
  */
@@ -27,176 +26,154 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace sequential
-{
-
-
-__thrust_exec_check_disable__
-template<typename DerivedPolicy,
-         typename ForwardIterator,
-         typename Predicate>
-__host__ __device__
-  ForwardIterator remove_if(sequential::execution_policy<DerivedPolicy> &,
-                            ForwardIterator first,
-                            ForwardIterator last,
-                            Predicate pred)
-{
-  // wrap pred
-  thrust::detail::wrapped_function<
-    Predicate,
-    bool
-  > wrapped_pred(pred);
-
-  // advance iterators until wrapped_pred(*first) is true or we reach the end of input
-  while(first != last && !wrapped_pred(*first))
-    ++first;
-
-  if(first == last)
-    return first;
-
-  // result always trails first 
-  ForwardIterator result = first;
-
-  ++first;
-
-  while(first != last)
-  {
-    if(!wrapped_pred(*first))
+    namespace system
     {
-      *result = *first;
-      ++result;
-    }
-    ++first;
-  }
+        namespace detail
+        {
+            namespace sequential
+            {
 
-  return result;
-}
+                __thrust_exec_check_disable__ template <typename DerivedPolicy,
+                                                        typename ForwardIterator,
+                                                        typename Predicate>
+                __host__ __device__ ForwardIterator
+                                    remove_if(sequential::execution_policy<DerivedPolicy>&,
+                                              ForwardIterator first,
+                                              ForwardIterator last,
+                                              Predicate       pred)
+                {
+                    // wrap pred
+                    thrust::detail::wrapped_function<Predicate, bool> wrapped_pred(pred);
 
+                    // advance iterators until wrapped_pred(*first) is true or we reach the end of input
+                    while(first != last && !wrapped_pred(*first))
+                        ++first;
 
-__thrust_exec_check_disable__
-template<typename DerivedPolicy,
-         typename ForwardIterator,
-         typename InputIterator,
-         typename Predicate>
-__host__ __device__
-  ForwardIterator remove_if(sequential::execution_policy<DerivedPolicy> &,
-                            ForwardIterator first,
-                            ForwardIterator last,
-                            InputIterator stencil,
-                            Predicate pred)
-{
-  // wrap pred
-  thrust::detail::wrapped_function<
-    Predicate,
-    bool
-  > wrapped_pred(pred);
+                    if(first == last)
+                        return first;
 
-  // advance iterators until wrapped_pred(*stencil) is true or we reach the end of input
-  while(first != last && !wrapped_pred(*stencil))
-  {
-    ++first;
-    ++stencil;
-  }
+                    // result always trails first
+                    ForwardIterator result = first;
 
-  if(first == last)
-    return first;
+                    ++first;
 
-  // result always trails first 
-  ForwardIterator result = first;
+                    while(first != last)
+                    {
+                        if(!wrapped_pred(*first))
+                        {
+                            *result = *first;
+                            ++result;
+                        }
+                        ++first;
+                    }
 
-  ++first;
-  ++stencil;
+                    return result;
+                }
 
-  while(first != last)
-  {
-    if(!wrapped_pred(*stencil))
-    {
-      *result = *first;
-      ++result;
-    }
-    ++first;
-    ++stencil;
-  }
+                __thrust_exec_check_disable__ template <typename DerivedPolicy,
+                                                        typename ForwardIterator,
+                                                        typename InputIterator,
+                                                        typename Predicate>
+                __host__ __device__ ForwardIterator
+                                    remove_if(sequential::execution_policy<DerivedPolicy>&,
+                                              ForwardIterator first,
+                                              ForwardIterator last,
+                                              InputIterator   stencil,
+                                              Predicate       pred)
+                {
+                    // wrap pred
+                    thrust::detail::wrapped_function<Predicate, bool> wrapped_pred(pred);
 
-  return result;
-}
+                    // advance iterators until wrapped_pred(*stencil) is true or we reach the end of input
+                    while(first != last && !wrapped_pred(*stencil))
+                    {
+                        ++first;
+                        ++stencil;
+                    }
 
+                    if(first == last)
+                        return first;
 
-__thrust_exec_check_disable__
-template<typename DerivedPolicy,
-         typename InputIterator,
-         typename OutputIterator,
-         typename Predicate>
-__host__ __device__
-  OutputIterator remove_copy_if(sequential::execution_policy<DerivedPolicy> &,
-                                InputIterator first,
-                                InputIterator last,
-                                OutputIterator result,
-                                Predicate pred)
-{
-  // wrap pred
-  thrust::detail::wrapped_function<
-    Predicate,
-    bool
-  > wrapped_pred(pred);
+                    // result always trails first
+                    ForwardIterator result = first;
 
-  while (first != last)
-  {
-    if (!wrapped_pred(*first))
-    {
-      *result = *first;
-      ++result;
-    }
+                    ++first;
+                    ++stencil;
 
-    ++first;
-  }
+                    while(first != last)
+                    {
+                        if(!wrapped_pred(*stencil))
+                        {
+                            *result = *first;
+                            ++result;
+                        }
+                        ++first;
+                        ++stencil;
+                    }
 
-  return result;
-}
+                    return result;
+                }
 
+                __thrust_exec_check_disable__ template <typename DerivedPolicy,
+                                                        typename InputIterator,
+                                                        typename OutputIterator,
+                                                        typename Predicate>
+                __host__ __device__ OutputIterator
+                                    remove_copy_if(sequential::execution_policy<DerivedPolicy>&,
+                                                   InputIterator  first,
+                                                   InputIterator  last,
+                                                   OutputIterator result,
+                                                   Predicate      pred)
+                {
+                    // wrap pred
+                    thrust::detail::wrapped_function<Predicate, bool> wrapped_pred(pred);
 
-__thrust_exec_check_disable__
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename Predicate>
-__host__ __device__
-  OutputIterator remove_copy_if(sequential::execution_policy<DerivedPolicy> &,
-                                InputIterator1 first,
-                                InputIterator1 last,
-                                InputIterator2 stencil,
-                                OutputIterator result,
-                                Predicate pred)
-{
-  // wrap pred
-  thrust::detail::wrapped_function<
-    Predicate,
-    bool
-  > wrapped_pred(pred);
+                    while(first != last)
+                    {
+                        if(!wrapped_pred(*first))
+                        {
+                            *result = *first;
+                            ++result;
+                        }
 
-  while (first != last)
-  {
-    if (!wrapped_pred(*stencil))
-    {
-      *result = *first;
-      ++result;
-    }
+                        ++first;
+                    }
 
-    ++first;
-    ++stencil;
-  }
+                    return result;
+                }
 
-  return result;
-}
+                __thrust_exec_check_disable__ template <typename DerivedPolicy,
+                                                        typename InputIterator1,
+                                                        typename InputIterator2,
+                                                        typename OutputIterator,
+                                                        typename Predicate>
+                __host__ __device__ OutputIterator
+                                    remove_copy_if(sequential::execution_policy<DerivedPolicy>&,
+                                                   InputIterator1 first,
+                                                   InputIterator1 last,
+                                                   InputIterator2 stencil,
+                                                   OutputIterator result,
+                                                   Predicate      pred)
+                {
+                    // wrap pred
+                    thrust::detail::wrapped_function<Predicate, bool> wrapped_pred(pred);
 
+                    while(first != last)
+                    {
+                        if(!wrapped_pred(*stencil))
+                        {
+                            *result = *first;
+                            ++result;
+                        }
 
-} // end namespace sequential
-} // end namespace detail
-} // end namespace system
+                        ++first;
+                        ++stencil;
+                    }
+
+                    return result;
+                }
+
+            } // end namespace sequential
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
-

@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file scan_by_key.h
  *  \brief Sequential implementation of scan_by_key functions.
  */
@@ -22,129 +21,119 @@
 #pragma once
 
 #include <thrust/detail/config.h>
-#include <thrust/iterator/iterator_traits.h>
 #include <thrust/detail/function.h>
+#include <thrust/iterator/iterator_traits.h>
 #include <thrust/system/detail/sequential/execution_policy.h>
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace sequential
-{
-
-
-__thrust_exec_check_disable__
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename BinaryPredicate,
-         typename BinaryFunction>
-__host__ __device__
-  OutputIterator inclusive_scan_by_key(sequential::execution_policy<DerivedPolicy> &,
-                                       InputIterator1 first1,
-                                       InputIterator1 last1,
-                                       InputIterator2 first2,
-                                       OutputIterator result,
-                                       BinaryPredicate binary_pred,
-                                       BinaryFunction binary_op)
-{
-  typedef typename thrust::iterator_traits<InputIterator1>::value_type KeyType;
-  typedef typename thrust::iterator_traits<OutputIterator>::value_type ValueType;
-
-  // wrap binary_op
-  thrust::detail::wrapped_function<
-    BinaryFunction,
-    ValueType
-  > wrapped_binary_op(binary_op);
-
-  if(first1 != last1)
-  {
-    KeyType   prev_key   = *first1;
-    ValueType prev_value = *first2;
-
-    *result = prev_value;
-
-    for(++first1, ++first2, ++result;
-        first1 != last1;
-        ++first1, ++first2, ++result)
+    namespace system
     {
-      KeyType key = *first1;
+        namespace detail
+        {
+            namespace sequential
+            {
 
-      if(binary_pred(prev_key, key))
-        *result = prev_value = wrapped_binary_op(prev_value,*first2);
-      else
-        *result = prev_value = *first2;
+                __thrust_exec_check_disable__ template <typename DerivedPolicy,
+                                                        typename InputIterator1,
+                                                        typename InputIterator2,
+                                                        typename OutputIterator,
+                                                        typename BinaryPredicate,
+                                                        typename BinaryFunction>
+                __host__ __device__ OutputIterator
+                                    inclusive_scan_by_key(sequential::execution_policy<DerivedPolicy>&,
+                                                          InputIterator1  first1,
+                                                          InputIterator1  last1,
+                                                          InputIterator2  first2,
+                                                          OutputIterator  result,
+                                                          BinaryPredicate binary_pred,
+                                                          BinaryFunction  binary_op)
+                {
+                    typedef typename thrust::iterator_traits<InputIterator1>::value_type KeyType;
+                    typedef typename thrust::iterator_traits<OutputIterator>::value_type ValueType;
 
-      prev_key = key;
-    }
-  }
+                    // wrap binary_op
+                    thrust::detail::wrapped_function<BinaryFunction, ValueType> wrapped_binary_op(
+                        binary_op);
 
-  return result;
-}
+                    if(first1 != last1)
+                    {
+                        KeyType   prev_key   = *first1;
+                        ValueType prev_value = *first2;
 
+                        *result = prev_value;
 
-__thrust_exec_check_disable__
-template<typename DerivedPolicy,
-         typename InputIterator1,
-         typename InputIterator2,
-         typename OutputIterator,
-         typename T,
-         typename BinaryPredicate,
-         typename BinaryFunction>
-__host__ __device__
-  OutputIterator exclusive_scan_by_key(sequential::execution_policy<DerivedPolicy> &,
-                                       InputIterator1 first1,
-                                       InputIterator1 last1,
-                                       InputIterator2 first2,
-                                       OutputIterator result,
-                                       T init,
-                                       BinaryPredicate binary_pred,
-                                       BinaryFunction binary_op)
-{
-  typedef typename thrust::iterator_traits<InputIterator1>::value_type KeyType;
-  typedef typename thrust::iterator_traits<OutputIterator>::value_type ValueType;
+                        for(++first1, ++first2, ++result; first1 != last1;
+                            ++first1, ++first2, ++result)
+                        {
+                            KeyType key = *first1;
 
-  if(first1 != last1)
-  {
-    KeyType   temp_key   = *first1;
-    ValueType temp_value = *first2;
+                            if(binary_pred(prev_key, key))
+                                *result = prev_value = wrapped_binary_op(prev_value, *first2);
+                            else
+                                *result = prev_value = *first2;
 
-    ValueType next = init;
+                            prev_key = key;
+                        }
+                    }
 
-    // first one is init
-    *result = next;
+                    return result;
+                }
 
-    next = binary_op(next, temp_value);
+                __thrust_exec_check_disable__ template <typename DerivedPolicy,
+                                                        typename InputIterator1,
+                                                        typename InputIterator2,
+                                                        typename OutputIterator,
+                                                        typename T,
+                                                        typename BinaryPredicate,
+                                                        typename BinaryFunction>
+                __host__ __device__ OutputIterator
+                                    exclusive_scan_by_key(sequential::execution_policy<DerivedPolicy>&,
+                                                          InputIterator1  first1,
+                                                          InputIterator1  last1,
+                                                          InputIterator2  first2,
+                                                          OutputIterator  result,
+                                                          T               init,
+                                                          BinaryPredicate binary_pred,
+                                                          BinaryFunction  binary_op)
+                {
+                    typedef typename thrust::iterator_traits<InputIterator1>::value_type KeyType;
+                    typedef typename thrust::iterator_traits<OutputIterator>::value_type ValueType;
 
-    for(++first1, ++first2, ++result;
-        first1 != last1;
-        ++first1, ++first2, ++result)
-    {
-      KeyType key = *first1;
+                    if(first1 != last1)
+                    {
+                        KeyType   temp_key   = *first1;
+                        ValueType temp_value = *first2;
 
-      // use temp to permit in-place scans
-      temp_value = *first2;
+                        ValueType next = init;
 
-      if (!binary_pred(temp_key, key))
-        next = init;  // reset sum
+                        // first one is init
+                        *result = next;
 
-      *result = next;  
-      next = binary_op(next, temp_value);
+                        next = binary_op(next, temp_value);
 
-      temp_key = key;
-    }
-  }
+                        for(++first1, ++first2, ++result; first1 != last1;
+                            ++first1, ++first2, ++result)
+                        {
+                            KeyType key = *first1;
 
-  return result;
-}
+                            // use temp to permit in-place scans
+                            temp_value = *first2;
 
+                            if(!binary_pred(temp_key, key))
+                                next = init; // reset sum
 
-} // end namespace sequential
-} // end namespace detail
-} // end namespace system
+                            *result = next;
+                            next    = binary_op(next, temp_value);
+
+                            temp_key = key;
+                        }
+                    }
+
+                    return result;
+                }
+
+            } // end namespace sequential
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
-

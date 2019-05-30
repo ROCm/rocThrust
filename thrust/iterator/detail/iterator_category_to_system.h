@@ -17,64 +17,56 @@
 #pragma once
 
 #include <thrust/detail/config.h>
-#include <thrust/iterator/iterator_categories.h>
-#include <thrust/iterator/detail/iterator_traversal_tags.h>
-#include <thrust/iterator/detail/host_system_tag.h>
-#include <thrust/iterator/detail/device_system_tag.h>
-#include <thrust/iterator/detail/any_system_tag.h>
 #include <thrust/detail/type_traits.h>
+#include <thrust/iterator/detail/any_system_tag.h>
+#include <thrust/iterator/detail/device_system_tag.h>
+#include <thrust/iterator/detail/host_system_tag.h>
+#include <thrust/iterator/detail/iterator_traversal_tags.h>
+#include <thrust/iterator/iterator_categories.h>
 
 namespace thrust
 {
 
-namespace detail
-{
+    namespace detail
+    {
 
-// forward declaration
-template <typename> struct is_iterator_system;
+        // forward declaration
+        template <typename>
+        struct is_iterator_system;
 
-template <typename> struct device_iterator_category_to_backend_system;
+        template <typename>
+        struct device_iterator_category_to_backend_system;
 
-// XXX this should work entirely differently
-// we should just specialize this metafunction for iterator_category_with_system_and_traversal
-template<typename Category>
-  struct iterator_category_to_system
-    // convertible to host iterator?
-    : eval_if<
-        or_<
-          is_convertible<Category, thrust::input_host_iterator_tag>,
-          is_convertible<Category, thrust::output_host_iterator_tag>
-        >::value,
+        // XXX this should work entirely differently
+        // we should just specialize this metafunction for iterator_category_with_system_and_traversal
+        template <typename Category>
+        struct iterator_category_to_system
+            // convertible to host iterator?
+            : eval_if<
+                  or_<is_convertible<Category, thrust::input_host_iterator_tag>,
+                      is_convertible<Category, thrust::output_host_iterator_tag>>::value,
 
-        detail::identity_<thrust::host_system_tag>,
-        
-        // convertible to device iterator?
-        eval_if<
-          or_<
-            is_convertible<Category, thrust::input_device_iterator_tag>,
-            is_convertible<Category, thrust::output_device_iterator_tag>
-          >::value,
+                  detail::identity_<thrust::host_system_tag>,
 
-          detail::identity_<thrust::device_system_tag>,
+                  // convertible to device iterator?
+                  eval_if<or_<is_convertible<Category, thrust::input_device_iterator_tag>,
+                              is_convertible<Category, thrust::output_device_iterator_tag>>::value,
 
-          // unknown system
-          detail::identity_<void>
-        > // if device
-      > // if host
-{
-}; // end iterator_category_to_system
+                          detail::identity_<thrust::device_system_tag>,
 
+                          // unknown system
+                          detail::identity_<void>> // if device
+                  > // if host
+        {
+        }; // end iterator_category_to_system
 
-template<typename CategoryOrTraversal>
-  struct iterator_category_or_traversal_to_system
-    : eval_if<
-        is_iterator_system<CategoryOrTraversal>::value,
-        detail::identity_<CategoryOrTraversal>,
-        iterator_category_to_system<CategoryOrTraversal>
-      >
-{
-}; // end iterator_category_or_traversal_to_system
+        template <typename CategoryOrTraversal>
+        struct iterator_category_or_traversal_to_system
+            : eval_if<is_iterator_system<CategoryOrTraversal>::value,
+                      detail::identity_<CategoryOrTraversal>,
+                      iterator_category_to_system<CategoryOrTraversal>>
+        {
+        }; // end iterator_category_or_traversal_to_system
 
-} // end detail
+    } // end detail
 } // end thrust
-

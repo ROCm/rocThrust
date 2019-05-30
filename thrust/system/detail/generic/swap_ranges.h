@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 #pragma once
 
 #include <thrust/detail/config.h>
@@ -22,26 +21,25 @@
 
 namespace thrust
 {
-namespace system
-{
-namespace detail
-{
-namespace generic
-{
+    namespace system
+    {
+        namespace detail
+        {
+            namespace generic
+            {
 
-template<typename DerivedPolicy,
-         typename ForwardIterator1,
-         typename ForwardIterator2>
-__host__ __device__
-  ForwardIterator2 swap_ranges(thrust::execution_policy<DerivedPolicy> &exec,
-                               ForwardIterator1 first1,
-                               ForwardIterator1 last1,
-                               ForwardIterator2 first2);
+                template <typename DerivedPolicy,
+                          typename ForwardIterator1,
+                          typename ForwardIterator2>
+                __host__ __device__ ForwardIterator2
+                                    swap_ranges(thrust::execution_policy<DerivedPolicy>& exec,
+                                                ForwardIterator1                         first1,
+                                                ForwardIterator1                         last1,
+                                                ForwardIterator2                         first2);
 
-} // end namespace generic
-} // end namespace detail
-} // end namespace system
+            } // end namespace generic
+        } // end namespace detail
+    } // end namespace system
 } // end namespace thrust
 
 #include <thrust/system/detail/generic/swap_ranges.inl>
-

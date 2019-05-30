@@ -14,7 +14,6 @@
  *  limitations under the License.
  */
 
-
 /*! \file device_delete.h
  *  \brief Deletes variables in device memory
  */
@@ -27,12 +26,12 @@
 namespace thrust
 {
 
-/*! \addtogroup deallocation_functions Deallocation Functions
+    /*! \addtogroup deallocation_functions Deallocation Functions
  *  \ingroup memory_management_functions
  *  \{
  */
 
-/*! \p device_delete deletes a \p device_ptr allocated with
+    /*! \p device_delete deletes a \p device_ptr allocated with
  *  \p device_new.
  *
  *  \param ptr The \p device_ptr to delete, assumed to have
@@ -43,14 +42,12 @@ namespace thrust
  *  \see device_ptr
  *  \see device_new
  */
-template<typename T>
-  inline void device_delete(thrust::device_ptr<T> ptr,
-                            const size_t n = 1);
+    template <typename T>
+    inline void device_delete(thrust::device_ptr<T> ptr, const size_t n = 1);
 
-/*! \}
+    /*! \}
  */
 
 } // end thrust
 
 #include <thrust/detail/device_delete.inl>
-

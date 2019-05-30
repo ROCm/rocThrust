@@ -22,18 +22,17 @@
 
 namespace thrust
 {
-namespace detail
-{
-namespace functional
-{
+    namespace detail
+    {
+        namespace functional
+        {
 
-template<unsigned int i>
-  struct placeholder
-{
-  typedef actor<argument<i> > type;
-};
+            template <unsigned int i>
+            struct placeholder
+            {
+                typedef actor<argument<i>> type;
+            };
 
-} // end functional
-} // end detail
+        } // end functional
+    } // end detail
 } // end thrust
-

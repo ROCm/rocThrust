@@ -17,70 +17,71 @@
 #pragma once
 
 #include <thrust/detail/config.h>
-#include <thrust/system/cpp/detail/execution_policy.h>
-#include <thrust/iterator/detail/any_system_tag.h>
 #include <thrust/detail/type_traits.h>
+#include <thrust/iterator/detail/any_system_tag.h>
+#include <thrust/system/cpp/detail/execution_policy.h>
 
 namespace thrust
 {
-namespace system
-{
-// put the canonical tag in the same ns as the backend's entry points
-namespace tbb
-{
-namespace detail
-{
+    namespace system
+    {
+        // put the canonical tag in the same ns as the backend's entry points
+        namespace tbb
+        {
+            namespace detail
+            {
 
-// this awkward sequence of definitions arise
-// from the desire both for tag to derive
-// from execution_policy and for execution_policy
-// to convert to tag (when execution_policy is not
-// an ancestor of tag)
+                // this awkward sequence of definitions arise
+                // from the desire both for tag to derive
+                // from execution_policy and for execution_policy
+                // to convert to tag (when execution_policy is not
+                // an ancestor of tag)
 
-// forward declaration of tag
-struct tag;
+                // forward declaration of tag
+                struct tag;
 
-// forward declaration of execution_policy
-template<typename> struct execution_policy;
+                // forward declaration of execution_policy
+                template <typename>
+                struct execution_policy;
 
-// specialize execution_policy for tag
-template<>
-  struct execution_policy<tag>
-    : thrust::system::cpp::detail::execution_policy<tag>
-{};
+                // specialize execution_policy for tag
+                template <>
+                struct execution_policy<tag> : thrust::system::cpp::detail::execution_policy<tag>
+                {
+                };
 
-// tag's definition comes before the
-// generic definition of execution_policy
-struct tag : execution_policy<tag> {};
+                // tag's definition comes before the
+                // generic definition of execution_policy
+                struct tag : execution_policy<tag>
+                {
+                };
 
-// allow conversion to tag when it is not a successor
-template<typename Derived>
-  struct execution_policy
-    : thrust::system::cpp::detail::execution_policy<Derived>
-{
-  // allow conversion to tag
-  inline operator tag () const
-  {
-    return tag();
-  }
-};
+                // allow conversion to tag when it is not a successor
+                template <typename Derived>
+                struct execution_policy : thrust::system::cpp::detail::execution_policy<Derived>
+                {
+                    // allow conversion to tag
+                    inline operator tag() const
+                    {
+                        return tag();
+                    }
+                };
 
-} // end detail
+            } // end detail
 
-// alias execution_policy and tag here
-using thrust::system::tbb::detail::execution_policy;
-using thrust::system::tbb::detail::tag;
+            // alias execution_policy and tag here
+            using thrust::system::tbb::detail::execution_policy;
+            using thrust::system::tbb::detail::tag;
 
-} // end tbb
-} // end system
+        } // end tbb
+    } // end system
 
-// alias items at top-level
-namespace tbb
-{
+    // alias items at top-level
+    namespace tbb
+    {
 
-using thrust::system::tbb::execution_policy;
-using thrust::system::tbb::tag;
+        using thrust::system::tbb::execution_policy;
+        using thrust::system::tbb::tag;
 
-} // end tbb
+    } // end tbb
 } // end thrust
-

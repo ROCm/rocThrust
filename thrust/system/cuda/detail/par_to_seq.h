@@ -30,25 +30,29 @@
 #include <thrust/system/cuda/detail/par.h>
 
 BEGIN_NS_THRUST
-namespace cuda_cub {
-
-template <int PAR>
-struct has_par : thrust::detail::true_type {};
-
-template <>
-struct has_par<0> : thrust::detail::false_type {};
-
-template<class Policy>
-struct cvt_to_seq_impl
+namespace cuda_cub
 {
-  typedef thrust::detail::seq_t seq_t;
 
-  static seq_t __host__ __device__
-  doit(Policy&)
-  {
-    return seq_t();
-  }
-};    // cvt_to_seq_impl
+    template <int PAR>
+    struct has_par : thrust::detail::true_type
+    {
+    };
+
+    template <>
+    struct has_par<0> : thrust::detail::false_type
+    {
+    };
+
+    template <class Policy>
+    struct cvt_to_seq_impl
+    {
+        typedef thrust::detail::seq_t seq_t;
+
+        static seq_t __host__ __device__ doit(Policy&)
+        {
+            return seq_t();
+        }
+    }; // cvt_to_seq_impl
 
 #if 0
 template <class Allocator>
@@ -73,12 +77,11 @@ struct cvt_to_seq_impl<
 };    // specialization of struct cvt_to_seq_impl
 #endif
 
-template <class Policy>
-typename cvt_to_seq_impl<Policy>::seq_t __host__ __device__
-cvt_to_seq(Policy& policy)
-{
-  return cvt_to_seq_impl<Policy>::doit(policy);
-}
+    template <class Policy>
+    typename cvt_to_seq_impl<Policy>::seq_t __host__ __device__ cvt_to_seq(Policy& policy)
+    {
+        return cvt_to_seq_impl<Policy>::doit(policy);
+    }
 
 #if __THRUST_HAS_CUDART__
 #define THRUST_CUDART_DISPATCH par

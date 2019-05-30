@@ -27,19 +27,15 @@ TESTS_DEFINE(BinarySearchTestsInKernel, NumericalTestsParams);
 
 struct custom_less
 {
-    template<class T>
-    __device__ inline
-    bool operator()(T a, T b)
+    template <class T>
+    __device__ inline bool operator()(T a, T b)
     {
         return a < b;
     }
 };
 
-template<class T>
-__global__
-void lower_bound_kernel(size_t n,
-                        T* input,
-                        ptrdiff_t* output)
+template <class T>
+__global__ void lower_bound_kernel(size_t n, T* input, ptrdiff_t* output)
 {
     output[0] = thrust::lower_bound(thrust::device, input, input + n, T(0), custom_less()) - input;
     output[1] = thrust::lower_bound(thrust::device, input, input + n, T(1)) - input;
@@ -66,13 +62,14 @@ TYPED_TEST(BinarySearchTestsInKernel, TestLowerBound)
 
     thrust::device_vector<ptrdiff_t> d_output(10);
 
-    hipLaunchKernelGGL(
-        HIP_KERNEL_NAME(lower_bound_kernel),
-        dim3(1), dim3(1), 0, 0,
-        size_t(d_input.size()),
-        thrust::raw_pointer_cast(d_input.data()),
-        thrust::raw_pointer_cast(d_output.data())
-    );
+    hipLaunchKernelGGL(HIP_KERNEL_NAME(lower_bound_kernel),
+                       dim3(1),
+                       dim3(1),
+                       0,
+                       0,
+                       size_t(d_input.size()),
+                       thrust::raw_pointer_cast(d_input.data()),
+                       thrust::raw_pointer_cast(d_output.data()));
 
     thrust::host_vector<ptrdiff_t> output = d_output;
     ASSERT_EQ(output[0], 0);
@@ -87,11 +84,8 @@ TYPED_TEST(BinarySearchTestsInKernel, TestLowerBound)
     ASSERT_EQ(output[9], 5);
 }
 
-template<class T>
-__global__
-void upper_bound_kernel(size_t n,
-                        T* input,
-                        ptrdiff_t* output)
+template <class T>
+__global__ void upper_bound_kernel(size_t n, T* input, ptrdiff_t* output)
 {
     output[0] = thrust::upper_bound(thrust::device, input, input + n, T(0)) - input;
     output[1] = thrust::upper_bound(thrust::device, input, input + n, T(1)) - input;
@@ -118,13 +112,14 @@ TYPED_TEST(BinarySearchTestsInKernel, TestUpperBound)
 
     thrust::device_vector<ptrdiff_t> d_output(10);
 
-    hipLaunchKernelGGL(
-        HIP_KERNEL_NAME(upper_bound_kernel),
-        dim3(1), dim3(1), 0, 0,
-        size_t(d_input.size()),
-        thrust::raw_pointer_cast(d_input.data()),
-        thrust::raw_pointer_cast(d_output.data())
-    );
+    hipLaunchKernelGGL(HIP_KERNEL_NAME(upper_bound_kernel),
+                       dim3(1),
+                       dim3(1),
+                       0,
+                       0,
+                       size_t(d_input.size()),
+                       thrust::raw_pointer_cast(d_input.data()),
+                       thrust::raw_pointer_cast(d_output.data()));
 
     thrust::host_vector<ptrdiff_t> output = d_output;
     ASSERT_EQ(output[0], 1);
@@ -139,11 +134,8 @@ TYPED_TEST(BinarySearchTestsInKernel, TestUpperBound)
     ASSERT_EQ(output[9], 5);
 }
 
-template<class T>
-__global__
-void binary_search_kernel(size_t n,
-                          T* input,
-                          bool* output)
+template <class T>
+__global__ void binary_search_kernel(size_t n, T* input, bool* output)
 {
     output[0] = thrust::binary_search(thrust::device, input, input + n, T(0));
     output[1] = thrust::binary_search(thrust::device, input, input + n, T(1));
@@ -170,13 +162,14 @@ TYPED_TEST(BinarySearchTestsInKernel, TestBinarySearch)
 
     thrust::device_vector<bool> d_output(10);
 
-    hipLaunchKernelGGL(
-        HIP_KERNEL_NAME(binary_search_kernel),
-        dim3(1), dim3(1), 0, 0,
-        size_t(d_input.size()),
-        thrust::raw_pointer_cast(d_input.data()),
-        thrust::raw_pointer_cast(d_output.data())
-    );
+    hipLaunchKernelGGL(HIP_KERNEL_NAME(binary_search_kernel),
+                       dim3(1),
+                       dim3(1),
+                       0,
+                       0,
+                       size_t(d_input.size()),
+                       thrust::raw_pointer_cast(d_input.data()),
+                       thrust::raw_pointer_cast(d_output.data()));
 
     thrust::host_vector<bool> output = d_output;
     ASSERT_EQ(output[0], true);

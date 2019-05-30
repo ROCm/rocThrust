@@ -36,23 +36,21 @@ BEGIN_NS_THRUST
 namespace hip_rocprim
 {
 
-template <class Derived, class InputIt, class TransformOp, class T, class ReduceOp>
-T THRUST_HIP_FUNCTION
-transform_reduce(execution_policy<Derived>& policy,
-                 InputIt                    first,
-                 InputIt                    last,
-                 TransformOp                transform_op,
-                 T                          init,
-                 ReduceOp                   reduce_op)
-{
-    typedef typename iterator_traits<InputIt>::difference_type size_type;
-    size_type num_items = static_cast<size_type>(thrust::distance(first, last));
-    typedef transform_input_iterator_t<T, InputIt, TransformOp> transformed_iterator_t;
+    template <class Derived, class InputIt, class TransformOp, class T, class ReduceOp>
+    T THRUST_HIP_FUNCTION transform_reduce(execution_policy<Derived>& policy,
+                                           InputIt                    first,
+                                           InputIt                    last,
+                                           TransformOp                transform_op,
+                                           T                          init,
+                                           ReduceOp                   reduce_op)
+    {
+        typedef typename iterator_traits<InputIt>::difference_type size_type;
+        size_type num_items = static_cast<size_type>(thrust::distance(first, last));
+        typedef transform_input_iterator_t<T, InputIt, TransformOp> transformed_iterator_t;
 
-    return hip_rocprim::reduce_n(
-        policy, transformed_iterator_t(first, transform_op), num_items, init, reduce_op
-    );
-}
+        return hip_rocprim::reduce_n(
+            policy, transformed_iterator_t(first, transform_op), num_items, init, reduce_op);
+    }
 
 } // namespace hip_rocprim
 END_NS_THRUST

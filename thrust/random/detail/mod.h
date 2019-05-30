@@ -19,79 +19,74 @@
 namespace thrust
 {
 
-namespace random
-{
-
-namespace detail
-{
-
-template<typename T, T a, T c, T m, bool = (m == 0)>
-  struct static_mod
-{
-  static const T q = m / a;
-  static const T r = m % a;
-
-  __host__ __device__
-  T operator()(T x) const
-  {
-    if(a == 1)
+    namespace random
     {
-      x %= m;
-    }
-    else
-    {
-      T t1 = a * (x % q);
-      T t2 = r * (x / q);
-      if(t1 >= t2)
-      {
-        x = t1 - t2;
-      }
-      else
-      {
-        x = m - t2 + t1;
-      }
-    }
 
-    if(c != 0)
-    {
-      const T d = m - x;
-      if(d > c)
-      {
-        x += c;
-      }
-      else
-      {
-        x = c - d;
-      }
-    }
+        namespace detail
+        {
 
-    return x;
-  }
-}; // end static_mod
+            template <typename T, T a, T c, T m, bool = (m == 0)>
+            struct static_mod
+            {
+                static const T q = m / a;
+                static const T r = m % a;
 
+                __host__ __device__ T operator()(T x) const
+                {
+                    if(a == 1)
+                    {
+                        x %= m;
+                    }
+                    else
+                    {
+                        T t1 = a * (x % q);
+                        T t2 = r * (x / q);
+                        if(t1 >= t2)
+                        {
+                            x = t1 - t2;
+                        }
+                        else
+                        {
+                            x = m - t2 + t1;
+                        }
+                    }
 
-// Rely on machine overflow handling
-template<typename T, T a, T c, T m>
-  struct static_mod<T,a,c,m,true>
-{
-  __host__ __device__
-  T operator()(T x) const
-  {
-    return a * x + c;
-  }
-}; // end static_mod
+                    if(c != 0)
+                    {
+                        const T d = m - x;
+                        if(d > c)
+                        {
+                            x += c;
+                        }
+                        else
+                        {
+                            x = c - d;
+                        }
+                    }
 
-template<typename T, T a, T c, T m>
-__host__ __device__
-  T mod(T x)
-{
-  static_mod<T,a,c,m> f;
-  return f(x);
-} // end static_mod
+                    return x;
+                }
+            }; // end static_mod
 
-} // end detail
+            // Rely on machine overflow handling
+            template <typename T, T a, T c, T m>
+            struct static_mod<T, a, c, m, true>
+            {
+                __host__ __device__ T operator()(T x) const
+                {
+                    return a * x + c;
+                }
+            }; // end static_mod
 
-} // end random
+            template <typename T, T a, T c, T m>
+            __host__ __device__ T mod(T x)
+            {
+                static_mod<T, a, c, m> f;
+                return f(x);
+            } // end static_mod
+
+        } // end detail
+
+    } // end random
 
 } // end thrust
-

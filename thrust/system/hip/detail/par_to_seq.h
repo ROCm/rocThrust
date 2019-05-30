@@ -84,9 +84,9 @@ struct cvt_to_seq_impl<
     }
 
 #if __THRUST_HAS_HIPRT__
-    #define THRUST_HIPRT_DISPATCH par
+#define THRUST_HIPRT_DISPATCH par
 #else
-    #define THRUST_HIPRT_DISPATCH seq
+#define THRUST_HIPRT_DISPATCH seq
 #endif
 
 } // namespace hip_rocprim
