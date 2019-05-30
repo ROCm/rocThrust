@@ -8,7 +8,7 @@ fi
 
 #sed -e 's/ROCFFT_EXPORT //g' ../src/nccl.h.in > nccl.h
 cd ../
-doxygen Doxyfile
+doxygen docs/Doxyfile
 #Doxyfile
 #rm nccl.h
 
