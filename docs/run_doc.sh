@@ -4,4 +4,4 @@ if [ -d docBin ]; then
     rm -rf docBin
 fi
 
-doxygen thrust.dox
+doxygen Doxyfile
