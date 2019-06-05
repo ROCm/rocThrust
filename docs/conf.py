@@ -27,7 +27,7 @@ import subprocess
 read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
 
 if read_the_docs_build:
-    subprocess.call('cd ..; ./run_doc.sh; cd source', shell=True)
+    subprocess.call('./run_doc.sh;', shell=True)
 
 # -- General configuration ------------------------------------------------
 
