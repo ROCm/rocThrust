@@ -5,6 +5,3 @@ if [ -d docBin ]; then
 fi
 
 doxygen thrust.dox
-
-make clean
-make html
