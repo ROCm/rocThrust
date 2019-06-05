@@ -194,8 +194,9 @@ exhale_args = {
     "createTreeView":        True,
     # TIP: if using the sphinx-bootstrap-theme, you need
     # "treeViewIsBootstrap": True,
-    "exhaleExecutesDoxygen": True
-#    "exhaleDoxygenStdin":    "INPUT = ../../thrust"
+    "exhaleExecutesDoxygen": True,
+    "exhaleUseDoxyfile": True
+    #    "exhaleDoxygenStdin":    "INPUT = ../../thrust"
 }
 
 # Tell sphinx what the primary language being documented is.
