@@ -13,7 +13,8 @@ Welcome to RCCL's documentation!
    library 
    api
    allapi
-
+   api/library_root
+   
 Indices and tables
 ==================
 
