@@ -56,8 +56,8 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'rocThrust'
-copyright = u'2015-2018, NVIDIA CORPORATION; Modifications Copyright 2019 Advanced Mirco Devices'
-author = u'Advanced Mirco Devices'
+copyright = u'2008-2013, NVIDIA CORPORATION; Modifications Copyright 2019 Advanced Mirco Devices'
+author = u'Advanceyd Mirco Devices'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
