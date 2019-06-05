@@ -39,7 +39,7 @@ if read_the_docs_build:
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = ['sphinx.ext.mathjax', 'breathe', 'exhale']
-breathe_projects = { "rocThrust": "../docBin/xml" }
+breathe_projects = { "rocThrust": "./docBin/xml" }
 breathe_default_project = "rocThrust"
 
 # Add any paths that contain templates here, relative to this directory.
