@@ -31,7 +31,7 @@ https://github.com/RadeonOpenCompute/ROCm/blob/master/README.md#supported-cpus
 
 ## Build And Install
 
-```
+```sh
 git clone https://github.com/ROCmSoftwarePlatform/rocThrust
 
 # Go to rocThrust directory, create and go to the build directory.
@@ -79,7 +79,7 @@ target_link_libraries(<your_target> rocthrust)
 
 ## Running Unit Tests
 
-```
+```sh
 # Go to rocThrust build directory
 cd rocThrust; cd build
 
@@ -91,6 +91,7 @@ ctest
 ```
 
 ## Documentation
+
 Documentation is available [here](https://rocthrust.readthedocs.io/en/latest/).
 
 ## Support
