@@ -72,7 +72,7 @@ rocThrustCI:
 
         def command
         
-        if(platform.jenkinsLabel.contains('centos')
+        if(platform.jenkinsLabel.contains('centos'))
         {
             command = """
                     set -x
