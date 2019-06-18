@@ -31,10 +31,10 @@ rocThrustCI:
 
     def rocthrust = new rocProject('rocthrust')
     // customize for project
-    rocthrust.paths.build_command = 'cmake -D CMAKE_CXX_COMPILER="/opt/rocm/hcc/bin/hcc" CMakeLists.txt -Bbuild && cd build'
+    rocthrust.paths.build_command = 'cmake3 -D CMAKE_CXX_COMPILER="/opt/rocm/hcc/bin/hcc" CMakeLists.txt -Bbuild && cd build'
 
     // Define test architectures, optional rocm version argument is available
-    def nodes = new dockerNodes(['gfx900', 'gfx906'], rocthrust)
+    def nodes = new dockerNodes(['gfx900 && centos7', 'gfx906'], rocthrust)
 
     boolean formatCheck = false
 
@@ -60,7 +60,7 @@ rocThrustCI:
                 set -x
                 cd ${project.paths.project_build_prefix}/build
                 make -j4
-                ctest --output-on-failure
+                sudo ctest --output-on-failure
             """
 
         platform.runCommand(this, command)
@@ -70,17 +70,36 @@ rocThrustCI:
     {
         platform, project->
 
-        def command = """
-                      set -x
-                      cd ${project.paths.project_build_prefix}/build
-                      make package
-                      rm -rf package && mkdir -p package
-                      mv *.deb package/
-                      dpkg -c package/*.deb
-                      """
-
-        platform.runCommand(this, command)
-        platform.archiveArtifacts(this, """${project.paths.project_build_prefix}/build/package/*.deb""")
+        def command
+        
+        if(platform.jenkinsLabel.contains('centos')
+        {
+            command = """
+                    set -x
+                    cd ${project.paths.project_build_prefix}/build
+                    make package
+                    rm -rf package && mkdir -p package
+                    mv *.rpm package/
+                    rpm -qlp package/*.rpm
+                  """
+            
+            platform.runCommand(this, command)
+            platform.archiveArtifacts(this, """${project.paths.project_build_prefix}/build/package/*.rpm""")
+        }
+        else
+        {
+            command = """
+                    set -x
+                    cd ${project.paths.project_build_prefix}/build
+                    make package
+                    rm -rf package && mkdir -p package
+                    mv *.deb package/
+                    dpkg -c package/*.deb
+                  """        
+            
+            platform.runCommand(this, command)
+            platform.archiveArtifacts(this, """${project.paths.project_build_prefix}/build/package/*.deb""")
+        }
     }
 
     buildProject(rocthrust, formatCheck, nodes.dockerArray, compileCommand, testCommand, packageCommand)
