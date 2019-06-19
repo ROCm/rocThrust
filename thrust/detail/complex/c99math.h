@@ -135,7 +135,7 @@ using ::isfinite;
 
 #    endif // CUDA_VERSION
 
-#    else
+#  else
 
 #    ifdef __HIP_DEVICE_COMPILE__
 
@@ -154,9 +154,9 @@ using std::isinf;
 using std::isnan;
 using std::signbit;
 using std::isfinite;
-#endif // __HIP_COMPILER__
+#    endif // __HIP_COMPILER__
 
-#endif // __CUDACC__
+#  endif // __CUDACC__
 
 using ::atanh;
 #endif // _MSC_VER
