@@ -124,7 +124,7 @@ __host__ __device__ inline int isfinite(double x){
 // sometimes the CUDA toolkit provides these these names as macros,
 // sometimes functions in the global scope
 
-#    if (CUDA_VERSION >= 6500)
+#    if (CUDA_VERSION >= 6500 )
 using ::isinf;
 using ::isnan;
 using ::signbit;
@@ -136,6 +136,14 @@ using ::isfinite;
 #    endif // CUDA_VERSION
 
 #  else
+
+# ifdef __HIP_DEVICE_COMPILE__
+ using ::isinf;
+ using ::isnan;
+ using ::signbit;
+ using ::isfinite;
+# else
+
 // Some compilers do not provide these in the global scope
 // they are in std:: instead
 // Since we're not compiling with nvcc, it's safe to use the functions in std::
@@ -143,7 +151,9 @@ using std::isinf;
 using std::isnan;
 using std::signbit;
 using std::isfinite;
-#  endif // __CUDACC__
+#endif // __HIP_COMPILER__
+
+#endif // __CUDACC__
 
 using ::atanh;
 #endif // _MSC_VER
