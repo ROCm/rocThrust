@@ -100,8 +100,23 @@ fi
 # before 'cmake' or setting cmake option 'CMAKE_CXX_COMPILER' to path to the HCC compiler.
 #
 
+# try various methods to detect distro
+# store result in variable '$distro'
+if [ -e /etc/redhat-release ] ; then
+   distro='centos'
+else
+   distro='ubuntu'
+fi
 
-CXX=$rocm_path/hcc cmake -DBUILD_BENCHMARK=ON ../../. # or cmake-gui ../.
+# now do different things depending on distro
+case "$distro" in
+    centos)
+            CXX=$rocm_path/hcc cmake3 -DBUILD_BENCHMARK=ON ../../.
+        ;;
+    ubuntu)
+            CXX=$rocm_path/hcc cmake -DBUILD_BENCHMARK=ON ../../. # or cmake-gui ../.
+        ;;
+esac
 
 # Build
 make -j$(nproc)

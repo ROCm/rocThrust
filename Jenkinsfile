@@ -31,7 +31,7 @@ rocThrustCI:
 
     def rocthrust = new rocProject('rocthrust')
     // customize for project
-    rocthrust.paths.build_command = 'cmake3 -D CMAKE_CXX_COMPILER="/opt/rocm/hcc/bin/hcc" CMakeLists.txt -Bbuild && cd build'
+    rocthrust.paths.build_command = './install -c'
 
     // Define test architectures, optional rocm version argument is available
     def nodes = new dockerNodes(['gfx900 && centos7', 'gfx906'], rocthrust)
