@@ -135,14 +135,17 @@ using ::isfinite;
 
 #    endif // CUDA_VERSION
 
-#  else
+#    else
 
-# ifdef __HIP_DEVICE_COMPILE__
- using ::isinf;
- using ::isnan;
- using ::signbit;
- using ::isfinite;
-# else
+#    ifdef __HIP_DEVICE_COMPILE__
+
+// hip_runtime.h provides these functions in the global scope
+using ::isinf;
+using ::isnan;
+using ::signbit;
+using ::isfinite;
+
+#    else
 
 // Some compilers do not provide these in the global scope
 // they are in std:: instead
