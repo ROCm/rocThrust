@@ -60,7 +60,7 @@ rocThrustCI:
                 set -x
                 cd ${project.paths.project_build_prefix}/build/release
                 make -j4
-                sudo ctest --output-on-failure
+                ctest --output-on-failure
             """
 
         platform.runCommand(this, command)
