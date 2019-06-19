@@ -58,7 +58,7 @@ rocThrustCI:
 
         def command = """#!/usr/bin/env bash
                 set -x
-                cd ${project.paths.project_build_prefix}/build
+                cd ${project.paths.project_build_prefix}/build/release
                 make -j4
                 sudo ctest --output-on-failure
             """
@@ -76,7 +76,7 @@ rocThrustCI:
         {
             command = """
                     set -x
-                    cd ${project.paths.project_build_prefix}/build
+                    cd ${project.paths.project_build_prefix}/build/release
                     make package
                     rm -rf package && mkdir -p package
                     mv *.rpm package/
@@ -84,13 +84,13 @@ rocThrustCI:
                   """
             
             platform.runCommand(this, command)
-            platform.archiveArtifacts(this, """${project.paths.project_build_prefix}/build/package/*.rpm""")
+            platform.archiveArtifacts(this, """${project.paths.project_build_prefix}/build/release/package/*.rpm""")
         }
         else
         {
             command = """
                     set -x
-                    cd ${project.paths.project_build_prefix}/build
+                    cd ${project.paths.project_build_prefix}/build/release
                     make package
                     rm -rf package && mkdir -p package
                     mv *.deb package/
@@ -98,7 +98,7 @@ rocThrustCI:
                   """        
             
             platform.runCommand(this, command)
-            platform.archiveArtifacts(this, """${project.paths.project_build_prefix}/build/package/*.deb""")
+            platform.archiveArtifacts(this, """${project.paths.project_build_prefix}/build/release/package/*.deb""")
         }
     }
 
