@@ -124,7 +124,7 @@ __host__ __device__ inline int isfinite(double x){
 // sometimes the CUDA toolkit provides these these names as macros,
 // sometimes functions in the global scope
 
-#    if (CUDA_VERSION >= 6500 )
+#    if (CUDA_VERSION >= 6500)
 using ::isinf;
 using ::isnan;
 using ::signbit;
