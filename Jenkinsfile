@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 // This shared library is available at https://github.com/ROCmSoftwarePlatform/rocJENKINS/
-@Library('rocJenkins') _
+@Library('rocJenkins@hip-clang') _
 
 // This is file for internal AMD use.
 // If you are interested in running your own Jenkins, please raise a github issue for assistance.
@@ -31,10 +31,10 @@ rocThrustCI:
 
     def rocthrust = new rocProject('rocthrust')
     // customize for project
-    rocthrust.paths.build_command = './install -c'
+    rocthrust.paths.build_command = './install'
 
     // Define test architectures, optional rocm version argument is available
-    def nodes = new dockerNodes(['gfx900 && centos7', 'gfx906'], rocthrust)
+    def nodes = new dockerNodes(['gfx900', 'gfx906', 'gfx900 && hip-clang', 'gfx906 && hip-clang', 'gfx906 && centos7'], rocthrust)
 
     boolean formatCheck = false
 
@@ -43,12 +43,26 @@ rocThrustCI:
         platform, project->
 
         project.paths.construct_build_prefix()
-        def command = """#!/usr/bin/env bash
-                  set -x
-                  cd ${project.paths.project_build_prefix}
-                  LD_LIBRARY_PATH=/opt/rocm/hcc/lib CXX=${project.compiler.compiler_path} ${project.paths.build_command}
-                """
+        
+        def command 
 
+        if(platform.jenkinsLabel.contains('hip-clang'))
+        { 
+            command = """#!/usr/bin/env bash
+                    set -x
+                    cd ${project.paths.project_build_prefix}
+                    LD_LIBRARY_PATH=/opt/rocm/hip/lib CXX=${project.compiler.compiler_path} --hip-clang  ${project.paths.build_command}
+                """
+        }
+        else
+        {
+            command = """#!/usr/bin/env bash
+                    set -x
+                    cd ${project.paths.project_build_prefix}
+                    LD_LIBRARY_PATH=/opt/rocm/hcc/lib CXX=${project.compiler.compiler_path} -c ${project.paths.build_command}
+                """
+ 
+        }
         platform.runCommand(this, command)
     }
 
@@ -99,6 +113,10 @@ rocThrustCI:
             
             platform.runCommand(this, command)
             platform.archiveArtifacts(this, """${project.paths.project_build_prefix}/build/release/package/*.rpm""")
+        }
+        else if(platform.jenkinsLabel.contains('hip-clang'))
+        {
+            platform.runCommand(this, null)
         }
         else
         {
