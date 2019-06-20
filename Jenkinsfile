@@ -51,7 +51,7 @@ rocThrustCI:
             command = """#!/usr/bin/env bash
                     set -x
                     cd ${project.paths.project_build_prefix}
-                    LD_LIBRARY_PATH=/opt/rocm/hip/lib CXX=${project.compiler.compiler_path} --hip-clang  ${project.paths.build_command}
+                    LD_LIBRARY_PATH=/opt/rocm/hip/lib CXX=${project.compiler.compiler_path}  ${project.paths.build_command} --hip-clang
                 """
         }
         else
@@ -59,7 +59,7 @@ rocThrustCI:
             command = """#!/usr/bin/env bash
                     set -x
                     cd ${project.paths.project_build_prefix}
-                    LD_LIBRARY_PATH=/opt/rocm/hcc/lib CXX=${project.compiler.compiler_path} -c ${project.paths.build_command}
+                    LD_LIBRARY_PATH=/opt/rocm/hcc/lib CXX=${project.compiler.compiler_path} ${project.paths.build_command} -c
                 """
  
         }
