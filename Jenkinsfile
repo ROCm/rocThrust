@@ -34,7 +34,7 @@ rocThrustCI:
     rocthrust.paths.build_command = './install'
 
     // Define test architectures, optional rocm version argument is available
-    def nodes = new dockerNodes(['gfx900 && ubuntu', 'gfx906 && ubuntu', 'gfx900 && hip-clang', 'gfx906 && hip-clang', 'gfx906 && centos7'], rocthrust)
+    def nodes = new dockerNodes(['gfx900 && hip-clang', 'gfx906 && hip-clang'], rocthrust)
 
     boolean formatCheck = false
 
@@ -51,7 +51,7 @@ rocThrustCI:
             command = """#!/usr/bin/env bash
                     set -x
                     cd ${project.paths.project_build_prefix}
-                    LD_LIBRARY_PATH=/opt/rocm/hcc/lib CXX=/opt/rocm/bin/hipcc ${project.paths.build_command} --hip-clang
+                    LD_LIBRARY_PATH=/opt/rocm/lib CXX=/opt/rocm/bin/hipcc ${project.paths.build_command} --hip-clang
                 """
         }
         else
