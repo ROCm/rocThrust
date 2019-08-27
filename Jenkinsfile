@@ -14,7 +14,7 @@ rocThrustCI:
 
     def rocthrust = new rocProject('rocThrust')
     // customize for project
-    rocthrust.paths.build_command = './install'
+    rocthrust.paths.build_command = './install -c'
 
     // Define test architectures, optional rocm version argument is available
     def nodes = new dockerNodes(['gfx900 && hip-clang', 'gfx906 && hip-clang'], rocthrust)
@@ -42,7 +42,7 @@ rocThrustCI:
             command = """#!/usr/bin/env bash
                     set -x
                     cd ${project.paths.project_build_prefix}
-                    LD_LIBRARY_PATH=/opt/rocm/hcc/lib CXX=/opt/rocm/bin/hcc ${project.paths.build_command} -c
+                    LD_LIBRARY_PATH=/opt/rocm/hcc/lib CXX=/opt/rocm/bin/hcc ${project.paths.build_command}
                 """
  
         }
