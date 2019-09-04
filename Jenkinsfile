@@ -17,7 +17,7 @@ rocThrustCI:
     rocthrust.paths.build_command = './install -c'
 
     // Define test architectures, optional rocm version argument is available
-    def nodes = new dockerNodes(['gfx900 && hip-clang', 'gfx906 && hip-clang'], rocthrust)
+    def nodes = new dockerNodes(['gfx900 && ubuntu && hip-clang', 'gfx906 && centos7 && hip-clang'], rocthrust)
 
     boolean formatCheck = false
 
