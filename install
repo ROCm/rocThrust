@@ -114,7 +114,7 @@ fi
 # Detect Linux distribution and store result in variable '$distro'
 if [ -e /etc/redhat-release ] ; then
     distro='redhat'
-elif
+else
     distro='other'
 fi
 
