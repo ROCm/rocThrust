@@ -17,7 +17,7 @@ rocThrustCI:
     rocthrust.paths.build_command = './install -c'
 
     // Define test architectures, optional rocm version argument is available
-    def nodes = new dockerNodes(['gfx900 && ubuntu && hip-clang', 'gfx906 && centos7 && hip-clang'], rocthrust)
+    def nodes = new dockerNodes(['gfx803 && ubuntu && hip-clang', 'gfx900 && ubuntu && hip-clang', 'gfx906 && centos7 && hip-clang'], rocthrust)
 
     boolean formatCheck = false
 
@@ -27,25 +27,12 @@ rocThrustCI:
 
         project.paths.construct_build_prefix()
         
-        def command 
-
-        if(platform.jenkinsLabel.contains('hip-clang'))
-        { 
-            command = """#!/usr/bin/env bash
+        def command = """#!/usr/bin/env bash
                     set -x
                     cd ${project.paths.project_build_prefix}
                     LD_LIBRARY_PATH=/opt/rocm/lib CXX=/opt/rocm/bin/hipcc ${project.paths.build_command} --hip-clang
                 """
-        }
-        else
-        {
-            command = """#!/usr/bin/env bash
-                    set -x
-                    cd ${project.paths.project_build_prefix}
-                    LD_LIBRARY_PATH=/opt/rocm/hcc/lib CXX=/opt/rocm/bin/hcc ${project.paths.build_command}
-                """
- 
-        }
+        
         platform.runCommand(this, command)
     }
 
@@ -63,45 +50,7 @@ rocThrustCI:
         platform.runCommand(this, command)
     }
 
-    def packageCommand =
-    {
-        platform, project->
-
-        def command
-        
-        if(platform.jenkinsLabel.contains('centos'))
-        {
-            command = """
-                    set -x
-                    cd ${project.paths.project_build_prefix}/build/release
-                    make package
-                    rm -rf package && mkdir -p package
-                    mv *.rpm package/
-                    rpm -qlp package/*.rpm
-                  """
-            
-            platform.runCommand(this, command)
-            platform.archiveArtifacts(this, """${project.paths.project_build_prefix}/build/release/package/*.rpm""")
-        }
-        else if(platform.jenkinsLabel.contains('hip-clang'))
-        {
-            packageCommand = null
-        }
-        else
-        {
-            command = """
-                    set -x
-                    cd ${project.paths.project_build_prefix}/build/release
-                    make package
-                    rm -rf package && mkdir -p package
-                    mv *.deb package/
-                    dpkg -c package/*.deb
-                  """        
-            
-            platform.runCommand(this, command)
-            platform.archiveArtifacts(this, """${project.paths.project_build_prefix}/build/release/package/*.deb""")
-        }
-    }
+    def packageCommand = null
 
     buildProject(rocthrust, formatCheck, nodes.dockerArray, compileCommand, testCommand, packageCommand)
 
