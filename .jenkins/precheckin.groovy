@@ -27,7 +27,7 @@ def runCI =
         platform, project->
 
         commonGroovy = load "${project.paths.project_src_prefix}/.jenkins/common.groovy"
-        commonGroovy.runCompileCommand(platform, project)
+        commonGroovy.runCompileCommand(platform, projec, jobName)
     }
 
     def testCommand =
@@ -41,7 +41,7 @@ def runCI =
     {
         platform, project->
         
-        commonGroovy.runPackageCommand(platform, project)
+        commonGroovy.runPackageCommand(platform, project, jobName)
     }
 
     buildProject(prj, formatCheck, nodes.dockerArray, compileCommand, testCommand, packageCommand)
