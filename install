@@ -141,7 +141,7 @@ fi
 
 
 if [[ "${build_clients}" == true ]]; then
-    CXX="${CXX} DBUILD_TEST=ON"
+    CXX="${CXX} -DBUILD_TEST=ON"
 fi
 
 # Build
