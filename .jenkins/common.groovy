@@ -7,7 +7,7 @@ def runCompileCommand(platform, project, jobName)
         
     def command 
 
-    String compiler = platform.jenkinsLabel.contains('hipclang') ? 'hipcc' : 'hcc'
+    String compiler = jobName.contains('hipclang') ? 'hipcc' : 'hcc'
     String hipClangArgs = jobName.contains('hipclang') ? '--hip-clang' : ''
 
     command = """#!/usr/bin/env bash
