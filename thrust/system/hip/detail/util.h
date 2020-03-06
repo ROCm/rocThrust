@@ -67,7 +67,7 @@ trivial_copy_from_device(Type* dst, Type const* src, size_t count, hipStream_t s
 
     // hipMemcpyWithStream is only supported on rocm 3.1 and above
     #if HIP_VERSION_MAJOR >= 3
-    #if HIP_VERSION_MINOR >= 1
+    #if HIP_VERSION_MINOR >= 1 || HIP_VERSION_MAJOR >= 4
     status = ::hipMemcpyWithStream(dst, src, sizeof(Type) * count, hipMemcpyDeviceToHost, stream);
     #else
     status = ::hipMemcpyAsync(dst, src, sizeof(Type) * count, hipMemcpyDeviceToHost, stream);
@@ -89,7 +89,7 @@ trivial_copy_to_device(Type* dst, Type const* src, size_t count, hipStream_t str
 
     // hipMemcpyWithStream is only supported on rocm 3.1 and above
     #if HIP_VERSION_MAJOR >= 3
-    #if HIP_VERSION_MINOR >= 1
+    #if HIP_VERSION_MINOR >= 1 || HIP_VERSION_MAJOR >= 4
     status = ::hipMemcpyWithStream(dst, src, sizeof(Type) * count, hipMemcpyHostToDevice, stream);
     #else
     status = ::hipMemcpyAsync(dst, src, sizeof(Type) * count, hipMemcpyHostToDevice, stream);
