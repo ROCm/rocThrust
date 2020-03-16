@@ -37,10 +37,10 @@
 
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HCC
     #ifdef __HIP_DEVICE_COMPILE__
-        #define __THRUST_HAS_HIPRT__ 0
-        #define THRUST_HIP_RUNTIME_FUNCTION __host__ __forceinline__
-    #else
         #define __THRUST_HAS_HIPRT__ 1
+        #define THRUST_HIP_RUNTIME_FUNCTION __host__ __device__ __forceinline__
+    #else
+        #define __THRUST_HAS_HIPRT__ 0
         #define THRUST_HIP_RUNTIME_FUNCTION __host__ __forceinline__
     #endif
 #else
