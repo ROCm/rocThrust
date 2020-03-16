@@ -67,12 +67,12 @@
 // Implicit instantiation of function template
 // that will be used in #if __THRUST_HAS_HIPRT__ block.
 #define THRUST_HIP_PRESERVE_KERNELS_WORKAROUND
-  /*(function) do				\
+  (function) do				\
     { \
         auto ptr = function; \
         (void) ptr; \
     } while (0)
-  */
+
 #define THRUST_ROCPRIM_NS_PREFIX namespace thrust {   namespace hip_rocprim {
 #define THRUST_ROCPRIM_NS_POSTFIX }  }
 
