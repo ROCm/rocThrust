@@ -379,9 +379,9 @@ stable_sort(execution_policy<Derived>& policy,
             ItemsIt                    last,
             CompareOp                  compare_op)
 {
-    THRUST_HIP_PRESERVE_KERNELS_WORKAROUND(
-        (__smart_sort::smart_sort<detail::false_type, Derived, ItemsIt, ItemsIt, CompareOp>)
-    );
+  //    THRUST_HIP_PRESERVE_KERNELS_WORKAROUND(
+  //      (__smart_sort::smart_sort<detail::false_type, Derived, ItemsIt, ItemsIt, CompareOp>)
+  //  );
 #if __THRUST_HAS_HIPRT__
     typedef typename thrust::iterator_value<ItemsIt>::type item_type;
     __smart_sort::smart_sort<detail::false_type>(
