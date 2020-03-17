@@ -355,7 +355,7 @@ namespace __smart_sort
 
     template <class SORT_ITEMS, class Derived, class KeysIt, class ItemsIt, class CompareOp>
     typename enable_if_primitive_sort<KeysIt, CompareOp>::type
-    THRUST_HIP_RUNTIME_FUNCTION
+    __host__ __device__ __forceinline__
     smart_sort(execution_policy<Derived>& policy,
                KeysIt                     keys_first,
                KeysIt                     keys_last,
