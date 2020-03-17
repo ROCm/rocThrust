@@ -413,9 +413,9 @@ stable_sort_by_key(execution_policy<Derived>& policy,
                    ValuesIt                   values,
                    CompareOp                  compare_op)
 {
-    THRUST_HIP_PRESERVE_KERNELS_WORKAROUND(
-        (__smart_sort::smart_sort<detail::true_type, Derived, KeysIt, ValuesIt, CompareOp>)
-    );
+  //    THRUST_HIP_PRESERVE_KERNELS_WORKAROUND(
+  //      (__smart_sort::smart_sort<detail::true_type, Derived, KeysIt, ValuesIt, CompareOp>)
+  //  );
 #if __THRUST_HAS_HIPRT__
     __smart_sort::smart_sort<detail::true_type>(
         policy, keys_first, keys_last, values, compare_op
