@@ -155,7 +155,7 @@ namespace __partition
               class SelectedOutIt,
               class RejectedOutIt,
               class Predicate>
-    pair<SelectedOutIt, RejectedOutIt> THRUST_HIP_RUNTIME_FUNCTION
+    pair<SelectedOutIt, RejectedOutIt> THRUST_HIP_HOST_FUNCTION
     partition(execution_policy<Derived>& policy,
               InputIt                    first,
               InputIt                    last,
@@ -237,7 +237,7 @@ namespace __partition
               class SelectedOutIt,
               class RejectedOutIt,
               class Predicate>
-    pair<SelectedOutIt, RejectedOutIt> THRUST_HIP_RUNTIME_FUNCTION
+    pair<SelectedOutIt, RejectedOutIt> THRUST_HIP_HOST_FUNCTION
     partition(execution_policy<Derived>& policy,
               InputIt                    first,
               InputIt                    last,
@@ -321,7 +321,7 @@ namespace __partition
     }
 
     template <class Derived, class Iterator, class Predicate>
-    Iterator THRUST_HIP_RUNTIME_FUNCTION partition_inplace(execution_policy<Derived>& policy,
+    Iterator THRUST_HIP_HOST_FUNCTION partition_inplace(execution_policy<Derived>& policy,
                                                            Iterator                   first,
                                                            Iterator                   last,
                                                            Predicate                  predicate)
@@ -348,7 +348,7 @@ namespace __partition
     }
 
     template <class Derived, class Iterator, class StencilIt, class Predicate>
-    Iterator THRUST_HIP_RUNTIME_FUNCTION
+    Iterator THRUST_HIP_HOST_FUNCTION
     partition_inplace(execution_policy<Derived>& policy,
                       Iterator                   first,
                       Iterator                   last,

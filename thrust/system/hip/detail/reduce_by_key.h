@@ -77,7 +77,7 @@ namespace __reduce_by_key
               class ValuesOutputIt,
               class EqualityOp,
               class ReductionOp>
-    pair<KeysOutputIt, ValuesOutputIt> THRUST_HIP_RUNTIME_FUNCTION
+    pair<KeysOutputIt, ValuesOutputIt> THRUST_HIP_HOST_FUNCTION
     reduce_by_key(execution_policy<Derived>& policy,
                   KeysInputIt                keys_first,
                   KeysInputIt                keys_last,

@@ -70,7 +70,7 @@ namespace __merge
     }; // struct predicate_wrapper
 
     template <class Derived, class KeysIt1, class KeysIt2, class ResultIt, class CompareOp>
-    ResultIt THRUST_HIP_RUNTIME_FUNCTION
+    ResultIt THRUST_HIP_HOST_FUNCTION
     merge(execution_policy<Derived>& policy,
           KeysIt1                    keys1_first,
           KeysIt1                    keys1_last,
@@ -136,7 +136,7 @@ namespace __merge
               class KeysOutputIt,
               class ItemsOutputIt,
               class CompareOp>
-    pair<KeysOutputIt, ItemsOutputIt> THRUST_HIP_RUNTIME_FUNCTION
+    pair<KeysOutputIt, ItemsOutputIt> THRUST_HIP_HOST_FUNCTION
     merge(Policy&       policy,
           KeysIt1       keys1_first,
           KeysIt1       keys1_last,

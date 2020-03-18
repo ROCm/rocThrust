@@ -48,7 +48,7 @@ namespace hip_rocprim
     }
 
     template <class Derived>
-    hipError_t THRUST_HIP_RUNTIME_FUNCTION synchronize_stream(execution_policy<Derived>&)
+    hipError_t THRUST_HIP_HOST_FUNCTION synchronize_stream(execution_policy<Derived>&)
     {
         hipDeviceSynchronize();
         return hipGetLastError();
@@ -79,7 +79,7 @@ namespace hip_rocprim
             return exec.stream;
         }
 
-        friend hipError_t THRUST_HIP_RUNTIME_FUNCTION
+        friend hipError_t THRUST_HIP_HOST_FUNCTION
                           synchronize_stream(execute_on_stream_base& exec)
         {
 #ifdef __HIP_DEVICE_COMPILE__

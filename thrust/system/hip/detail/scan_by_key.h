@@ -53,7 +53,7 @@ namespace __scan_by_key
                   typename std::iterator_traits<KeysInputIterator>::value_type>,
               class BinaryFunction
               = ::rocprim::plus<typename std::iterator_traits<ValuesInputIterator>::value_type>>
-    ValuesOutputIterator THRUST_HIP_RUNTIME_FUNCTION
+    ValuesOutputIterator THRUST_HIP_HOST_FUNCTION
     inclusive_scan_by_key(Policy&              policy,
                           KeysInputIterator    key_first,
                           KeysInputIterator    key_last,
@@ -118,7 +118,7 @@ namespace __scan_by_key
                   typename std::iterator_traits<KeysInputIterator>::value_type>,
               class BinaryFunction
               = ::rocprim::plus<typename std::iterator_traits<ValuesInputIterator>::value_type>>
-    ValuesOutputIterator THRUST_HIP_RUNTIME_FUNCTION
+    ValuesOutputIterator THRUST_HIP_HOST_FUNCTION
     exclusive_scan_by_key(Policy&              policy,
                           KeysInputIterator    key_first,
                           KeysInputIterator    key_last,

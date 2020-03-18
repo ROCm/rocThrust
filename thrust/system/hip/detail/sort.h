@@ -101,7 +101,7 @@ namespace __merge_sort
     };
 
     template <class SORT_ITEMS, class Policy, class KeysIt, class ItemsIt, class CompareOp>
-    void THRUST_HIP_RUNTIME_FUNCTION
+    void THRUST_HIP_HOST_FUNCTION
     merge_sort(Policy&   policy,
                KeysIt    keys_first,
                KeysIt    keys_last,
@@ -264,7 +264,7 @@ namespace __radix_sort
     }; // struct dispatch -- sort pairs in descending order;
 
     template <class SORT_ITEMS, class Policy, class KeysIt, class ItemsIt, class CompareOp>
-    void THRUST_HIP_RUNTIME_FUNCTION
+    void THRUST_HIP_HOST_FUNCTION
     radix_sort(Policy&   policy,
                KeysIt    keys_first,
                KeysIt    keys_last,

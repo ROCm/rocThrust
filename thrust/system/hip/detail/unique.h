@@ -68,7 +68,7 @@ namespace hip_rocprim
 namespace __unique
 {
     template <class Policy, class ItemsInputIt, class ItemsOutputIt, class BinaryPred>
-    ItemsOutputIt THRUST_HIP_RUNTIME_FUNCTION
+    ItemsOutputIt THRUST_HIP_HOST_FUNCTION
     unique(Policy&       policy,
            ItemsInputIt  items_first,
            ItemsInputIt  items_last,

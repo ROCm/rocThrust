@@ -154,7 +154,7 @@ namespace __extrema
     }; // struct arg_minmax_f
 
     template <class Derived, class InputIt, class Size, class BinaryOp, class T>
-    T THRUST_HIP_RUNTIME_FUNCTION
+    T THRUST_HIP_HOST_FUNCTION
     extrema(execution_policy<Derived>& policy,
             InputIt                    first,
             Size                       num_items,

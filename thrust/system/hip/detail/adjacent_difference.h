@@ -248,7 +248,7 @@ namespace __adjacent_difference
     }
 
     template <class InputIt, class OutputIt, class BinaryOp>
-    hipError_t THRUST_HIP_RUNTIME_FUNCTION
+    hipError_t THRUST_HIP_HOST_FUNCTION
     doit_step(void*       temporary_storage,
               size_t&     storage_size,
               InputIt     first,

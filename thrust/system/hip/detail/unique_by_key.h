@@ -97,7 +97,7 @@ namespace __unique_by_key
               class ValOutputIt,
               class BinaryPred>
     pair<KeyOutputIt, ValOutputIt>
-        THRUST_HIP_RUNTIME_FUNCTION unique_by_key(Policy&     policy,
+        THRUST_HIP_HOST_FUNCTION unique_by_key(Policy&     policy,
                                                   KeyInputIt  keys_first,
                                                   KeyInputIt  keys_last,
                                                   ValInputIt  values_first,

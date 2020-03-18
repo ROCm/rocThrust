@@ -41,7 +41,7 @@ namespace hip_rocprim
 namespace __binary_search
 {
     template <class Policy, class HaystackIt, class NeedlesIt, class OutputIt, class CompareOp>
-    OutputIt THRUST_HIP_RUNTIME_FUNCTION
+    OutputIt THRUST_HIP_HOST_FUNCTION
     lower_bound(Policy&    policy,
                 HaystackIt haystack_begin,
                 HaystackIt haystack_end,
@@ -101,7 +101,7 @@ namespace __binary_search
     }
 
     template <class Policy, class HaystackIt, class NeedlesIt, class OutputIt, class CompareOp>
-    OutputIt THRUST_HIP_RUNTIME_FUNCTION
+    OutputIt THRUST_HIP_HOST_FUNCTION
     upper_bound(Policy&    policy,
                 HaystackIt haystack_begin,
                 HaystackIt haystack_end,
@@ -161,7 +161,7 @@ namespace __binary_search
     }
 
     template <class Policy, class HaystackIt, class NeedlesIt, class OutputIt, class CompareOp>
-    OutputIt THRUST_HIP_RUNTIME_FUNCTION
+    OutputIt THRUST_HIP_HOST_FUNCTION
     binary_search(Policy&    policy,
                   HaystackIt haystack_begin,
                   HaystackIt haystack_end,

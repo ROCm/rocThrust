@@ -63,7 +63,7 @@ namespace hip_rocprim
 namespace __reduce
 {
     template <class Policy, class InputIt, class Size, class T, class BinaryOp>
-    T THRUST_HIP_RUNTIME_FUNCTION
+    T THRUST_HIP_HOST_FUNCTION
     reduce(Policy& policy, InputIt first, Size num_items, T init, BinaryOp binary_op)
     {
         if(num_items == 0)

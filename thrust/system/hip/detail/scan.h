@@ -76,7 +76,7 @@ namespace hip_rocprim
 namespace __scan
 {
     template <class Policy, class InputIt, class OutputIt, class Size, class ScanOp>
-    OutputIt THRUST_HIP_RUNTIME_FUNCTION
+    OutputIt THRUST_HIP_HOST_FUNCTION
     inclusive_scan(Policy&  policy,
                    InputIt  input_it,
                    OutputIt output_it,
@@ -124,7 +124,7 @@ namespace __scan
     }
 
     template <class Policy, class InputIt, class OutputIt, class Size, class T, class ScanOp>
-    OutputIt THRUST_HIP_RUNTIME_FUNCTION
+    OutputIt THRUST_HIP_HOST_FUNCTION
     exclusive_scan(Policy&  policy,
                    InputIt  input_it,
                    OutputIt output_it,

@@ -72,7 +72,7 @@ namespace hip_rocprim
 namespace __copy_if
 {
     template <class Policy, class InputIt, class OutputIt, class Predicate>
-    OutputIt THRUST_HIP_RUNTIME_FUNCTION
+    OutputIt THRUST_HIP_HOST_FUNCTION
     copy_if(Policy& policy, InputIt first, InputIt last, OutputIt output, Predicate predicate)
     {
         typedef typename iterator_traits<InputIt>::difference_type size_type;
@@ -128,7 +128,7 @@ namespace __copy_if
     }
 
     template <class Policy, class InputIt, class StencilIt, class OutputIt, class Predicate>
-    OutputIt THRUST_HIP_RUNTIME_FUNCTION
+    OutputIt THRUST_HIP_HOST_FUNCTION
     copy_if(Policy&   policy,
             InputIt   first,
             InputIt   last,

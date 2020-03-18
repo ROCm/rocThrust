@@ -876,7 +876,7 @@ namespace __set_operations
               class ValuesOutputIt,
               class CompareOp,
               class SetOp>
-    hipError_t THRUST_HIP_RUNTIME_FUNCTION
+    hipError_t THRUST_HIP_HOST_FUNCTION
     doit_step(void*          temporary_storage,
               size_t&        storage_size,
               KeysIt1        keys1,
@@ -1008,7 +1008,7 @@ namespace __set_operations
               class ValuesOutputIt,
               class CompareOp,
               class SetOp>
-    pair<KeysOutputIt, ValuesOutputIt> THRUST_HIP_RUNTIME_FUNCTION
+    pair<KeysOutputIt, ValuesOutputIt> THRUST_HIP_HOST_FUNCTION
     set_operations(execution_policy<Derived>& policy,
                    KeysIt1                    keys1_first,
                    KeysIt1                    keys1_last,
