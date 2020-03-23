@@ -41,7 +41,7 @@
         #define THRUST_HIP_RUNTIME_FUNCTION __host__ __forceinline__
     #else
         #define __THRUST_HAS_HIPRT__ 1
-        #define THRUST_HIP_RUNTIME_FUNCTION __host__ __forceinline__
+        #define THRUST_HIP_RUNTIME_FUNCTION __host__ __device__  __forceinline__
     #endif
 #else
     #define __THRUST_HAS_HIPRT__ 0
