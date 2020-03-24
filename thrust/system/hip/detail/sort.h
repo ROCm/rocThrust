@@ -381,37 +381,36 @@ stable_sort(execution_policy<Derived>& policy,
 {
     struct workaround
     {
-              __host__
-	      static void par(execution_policy<Derived>& policy,
-			      ItemsIt                    first,
-			      ItemsIt                    last,
-			      CompareOp                  compare_op)
-      {
-#if __HCC__ && __HIP_DEVICE_COMPILE__
-	THRUST_HIP_PRESERVE_KERNELS_WORKAROUND(
-        (__smart_sort::smart_sort<detail::false_type, Derived, ItemsIt, ItemsIt, CompareOp>)
-    );
-#else
-	typedef typename thrust::iterator_value<ItemsIt>::type item_type;
-	__smart_sort::smart_sort<detail::false_type>(
-						     policy, first, last, (item_type*)NULL, compare_op
-						     );
-#endif	
-      }
+        __host__
+        static void par(execution_policy<Derived>& policy,
+                        ItemsIt                    first,
+                        ItemsIt                    last,
+                        CompareOp                  compare_op)
+        {
+        #if __HCC__ && __HIP_DEVICE_COMPILE__
+        THRUST_HIP_PRESERVE_KERNELS_WORKAROUND(
+            (__smart_sort::smart_sort<detail::false_type, Derived, ItemsIt, ItemsIt, CompareOp>)
+        );
+        #else
+        typedef typename thrust::iterator_value<ItemsIt>::type item_type;
+        __smart_sort::smart_sort<detail::false_type>(
+                                 policy, first, last, (item_type*)NULL, compare_op
+                                 );
+        #endif
+        }
         __device__
-	static void seq(execution_policy<Derived>& policy,
-			ItemsIt                    first,
-			ItemsIt                    last,
-			CompareOp                  compare_op)
-      {
-	thrust::stable_sort(cvt_to_seq(derived_cast(policy)), first, last, compare_op);
-	
-      }
+        static void seq(execution_policy<Derived>& policy,
+                ItemsIt                    first,
+                ItemsIt                    last,
+                CompareOp                  compare_op)
+        {
+            thrust::stable_sort(cvt_to_seq(derived_cast(policy)), first, last, compare_op);
+        }
     };
-     #if __THRUST_HAS_HIPRT__
-      workaround::par(policy, first, last, compare_op);
+    #if __THRUST_HAS_HIPRT__
+        workaround::par(policy, first, last, compare_op);
     #else
-      workaround::seq(policy, first, last, compare_op);
+        workaround::seq(policy, first, last, compare_op);
     #endif
 }
 
@@ -438,34 +437,33 @@ stable_sort_by_key(execution_policy<Derived>& policy,
 {
     struct workaround
     {
-      __host__
-      static void par(execution_policy<Derived>& policy,
-		      KeysIt                     keys_first,
-		      KeysIt                     keys_last,
-		      ValuesIt                   values,
-		      CompareOp                  compare_op)
-	
-      {
-#if __HCC__ && __HIP_DEVICE_COMPILE__
- THRUST_HIP_PRESERVE_KERNELS_WORKAROUND(
-       (__smart_sort::smart_sort<detail::true_type, Derived, KeysIt, ValuesIt, CompareOp>)
-   );
- #else
-	__smart_sort::smart_sort<detail::true_type>(
-						    policy, keys_first, keys_last, values, compare_op);
-#endif
-      }
+        __host__
+        static void par(execution_policy<Derived>& policy,
+                        KeysIt                     keys_first,
+                        KeysIt                     keys_last,
+                        ValuesIt                   values,
+                        CompareOp                  compare_op)
+        {
+            #if __HCC__ && __HIP_DEVICE_COMPILE__
+             THRUST_HIP_PRESERVE_KERNELS_WORKAROUND(
+                   (__smart_sort::smart_sort<detail::true_type, Derived, KeysIt, ValuesIt, CompareOp>)
+               );
+             #else
+            __smart_sort::smart_sort<detail::true_type>(
+                            policy, keys_first, keys_last, values, compare_op);
+            #endif
+        }
+
         __device__
-	static void seq(execution_policy<Derived>& policy,
-			KeysIt                     keys_first,
-			KeysIt                     keys_last,
-			ValuesIt                   values,
-			CompareOp                  compare_op)
-	  
-      {
-	thrust::stable_sort_by_key(
-				   cvt_to_seq(derived_cast(policy)), keys_first, keys_last, values, compare_op);
-      }
+        static void seq(execution_policy<Derived>& policy,
+            KeysIt                     keys_first,
+            KeysIt                     keys_last,
+            ValuesIt                   values,
+            CompareOp                  compare_op)
+        {
+        thrust::stable_sort_by_key(
+                   cvt_to_seq(derived_cast(policy)), keys_first, keys_last, values, compare_op);
+        }
     };
 
     #if __THRUST_HAS_HIPRT__
@@ -473,7 +471,6 @@ stable_sort_by_key(execution_policy<Derived>& policy,
     #else
     workaround::seq(policy, keys_first, keys_last, values, compare_op);
     #endif
-  
 }
 
 __thrust_exec_check_disable__ template <class Derived,
