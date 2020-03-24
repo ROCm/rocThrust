@@ -522,7 +522,7 @@ sort_by_key(execution_policy<Derived>& policy,
 }
 
 template <class Derived, class KeysIt, class ValuesIt>
-void THRUST_HIP_HOST_FUNCTION
+void THRUST_HIP_FUNCTION
 stable_sort_by_key(execution_policy<Derived>& policy,
                    KeysIt                     keys_first,
                    KeysIt                     keys_last,
