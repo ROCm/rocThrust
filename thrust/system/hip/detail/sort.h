@@ -379,6 +379,8 @@ stable_sort(execution_policy<Derived>& policy,
             ItemsIt                    last,
             CompareOp                  compare_op)
 {
+    // struct workaround is required for HIP-clang
+    // THRUST_HIP_PRESERVE_KERNELS_WORKAROUND is required for HCC
     struct workaround
     {
         __host__
@@ -408,9 +410,9 @@ stable_sort(execution_policy<Derived>& policy,
         }
     };
     #if __THRUST_HAS_HIPRT__
-        workaround::par(policy, first, last, compare_op);
+    workaround::par(policy, first, last, compare_op);
     #else
-        workaround::seq(policy, first, last, compare_op);
+    workaround::seq(policy, first, last, compare_op);
     #endif
 }
 
@@ -435,6 +437,8 @@ stable_sort_by_key(execution_policy<Derived>& policy,
                    ValuesIt                   values,
                    CompareOp                  compare_op)
 {
+    // struct workaround is required for HIP-clang
+    // THRUST_HIP_PRESERVE_KERNELS_WORKAROUND is required for HCC
     struct workaround
     {
         __host__
