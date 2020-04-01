@@ -75,9 +75,9 @@ while true; do
 	-c|--clients)
 	    build_clients=true
 	    shift ;;
-        -r|--relocatable)
-            build_relocatable=true
-            shift ;;
+	-r|--relocatable)
+	    build_relocatable=true
+	    shift ;;
 	-g|--debug)
 	    build_release=false
 	    shift ;;
