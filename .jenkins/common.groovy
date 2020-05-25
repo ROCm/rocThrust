@@ -7,7 +7,7 @@ def runCompileCommand(platform, project, jobName)
 
     String compiler = jobName.contains('hipclang') ? 'hipcc' : 'hcc'
     String hipClangArgs = jobName.contains('hipclang') ? '--hip-clang' : ''
-    def getRocPRIM = auxiliary.getLibrary('rocPRIM', platform.jenkinsLabel,'develop')
+    def getRocPRIM = auxiliary.getLibrary('rocPRIM', platform.jenkinsLabel)
 
     command = """#!/usr/bin/env bash
                 set -x
