@@ -5,7 +5,7 @@
 # Find HIP package
 find_package(HIP REQUIRED)
 
-if(HIP_PLATFORM STREQUAL "hcc")
+if(HIP_PLATFORM STREQUAL "hcc" OR HIP_PLATFORM STREQUAL "amd")
   if(NOT (CMAKE_CXX_COMPILER MATCHES ".*/hcc$" OR CMAKE_CXX_COMPILER MATCHES ".*/hipcc$"))
     message(FATAL_ERROR "On ROCm platform 'hcc' or 'clang' must be used as C++ compiler.")
   else()
@@ -37,5 +37,5 @@ if(HIP_PLATFORM STREQUAL "hcc")
     find_package(hip REQUIRED CONFIG PATHS /opt/rocm)
   endif()
 else()
-  message(FATAL_ERROR "HIP_PLATFORM must be 'hcc' (AMD ROCm platform)")
+	message(FATAL_ERROR "HIP_PLATFORM must be 'hcc' OR 'amd' (AMD ROCm platform)")
 endif()
