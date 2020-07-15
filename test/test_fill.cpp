@@ -394,6 +394,10 @@ struct TypeWithNonTrivialAssigment
     {
     }
 
+    /*! Explicit copy constructor required if custom assignment operator is defined to avoid deprecation warning.
+     */
+    __host__ __device__ TypeWithNonTrivialAssigment(TypeWithNonTrivialAssigment const&) = default;
+
     __host__ __device__ TypeWithNonTrivialAssigment& operator=(const TypeWithNonTrivialAssigment& t)
     {
         x = t.x;
@@ -500,4 +504,4 @@ TEST(FillTests, TestFillNDispatchImplicit)
     thrust::fill_n(thrust::retag<my_tag>(vec.begin()), vec.size(), 0);
 
     ASSERT_EQ(13, vec.front());
-} 
+}

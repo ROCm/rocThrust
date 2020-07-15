@@ -69,6 +69,11 @@ template<typename Element, typename Pointer, typename Derived>
                 pointer
               >::type * = 0);
 
+    /*! Explicit copy constructor required if custom assignment operator is defined to avoid deprecation warning.
+     */
+    __host__ __device__
+    reference(reference const&) = default;
+
     __host__ __device__
     derived_type &operator=(const reference &other);
 
