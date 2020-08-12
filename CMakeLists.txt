@@ -45,6 +45,7 @@ option(BUILD_TEST "Build tests" OFF)
 option(BUILD_EXAMPLES "Build examples" OFF)
 option(BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(DOWNLOAD_ROCPRIM "Download rocPRIM and do not search for rocPRIM package" OFF)
+option(LARGE_TEST "Run tests close to VRAM capacity" OFF)
 set(RNG_SEED_COUNT 0 CACHE STRING "Number of true random sequences to test each input size for")
 set(PRNG_SEEDS 1 CACHE STRING "Seeds of pseudo random sequences to test each input size for")
 
