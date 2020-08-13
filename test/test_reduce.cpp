@@ -15,6 +15,8 @@
  *  limitations under the License.
  */
 
+#define THRUST_HOST_SYSTEM 3
+
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/iterator/retag.h>
 #include <thrust/reduce.h>
@@ -96,7 +98,7 @@ TYPED_TEST(ReducePrimitiveTests, TestReduce)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(1))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -105,7 +107,7 @@ TYPED_TEST(ReducePrimitiveTests, TestReduce)
             SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
             thrust::host_vector<T> h_data = get_random_data<T>(
-                size, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+                size, (T)0, (T)1, seed);
             thrust::device_vector<T> d_data = h_data;
 
             T init = T(13);
@@ -155,7 +157,7 @@ TYPED_TEST(ReduceIntegerTests, TestReduceWithOperator)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(1))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -230,8 +232,7 @@ TYPED_TEST(ReducePrimitiveTests, TestReduceCountingIterator)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    const std::vector<size_t> sizes = get_sizes();
-    for(auto size : sizes)
+    for(auto size : get_sizes<T>(1))
     {
         size_t n = thrust::min<size_t>(size, std::numeric_limits<T>::max());
 

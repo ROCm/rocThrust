@@ -39,12 +39,16 @@ function(add_rocthrust_test TEST)
         PUBLIC
             ${GTEST_INCLUDE_DIRS}
             ${CMAKE_CURRENT_BINARY_DIR}
+            ${CMAKE_CURRENT_SOURCE_DIR}
     )
     target_link_libraries(${TEST_TARGET}
         PRIVATE
             rocthrust
             roc::rocprim_hip
             ${GTEST_BOTH_LIBRARIES}
+            tbb
+            tbbmalloc
+            tbbmalloc_proxy
     )
     foreach(amdgpu_target ${AMDGPU_TARGETS})
         target_link_libraries(${TEST_TARGET}

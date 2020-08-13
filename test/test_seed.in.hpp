@@ -18,10 +18,10 @@
 #ifndef TEST_SEED_HPP_
 #define TEST_SEED_HPP_
 
-#include <random>
+#include "MWC64X.hpp"
 #include <initializer_list>
 
-using random_engine = std::minstd_rand;
+using random_engine = prng::mwc64x_32;
 using seed_type = random_engine::result_type;
 
 static constexpr size_t rng_seed_count = ${RNG_SEED_COUNT};
