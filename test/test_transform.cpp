@@ -37,7 +37,7 @@ struct unary_transform
 {
     __device__ __host__ inline constexpr T operator()(const T& a) const
     {
-        return a + 5;
+        return a + (T)5;
     }
 };
 
@@ -46,7 +46,7 @@ struct binary_transform
 {
     __device__ __host__ inline constexpr T operator()(const T& a, const T& b) const
     {
-        return a * 2 + b * 5;
+        return a * (T)2 + b * (T)5;
     }
 };
 
