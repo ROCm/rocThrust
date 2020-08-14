@@ -614,7 +614,7 @@ TYPED_TEST(TransformTests, TestTransformUnaryToDiscardIterator)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>())
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -661,7 +661,7 @@ TYPED_TEST(TransformTests, TestTransformUnaryToDiscardIteratorZipped)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(2))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -695,6 +695,8 @@ TYPED_TEST(TransformTests, TestTransformUnaryToDiscardIteratorZipped)
             ZipIterator2 d_result
                 = thrust::transform(d_input.begin(), d_input.end(), z2, repeat2());
 
+            h_input.clear();
+
             thrust::discard_iterator<> reference(size);
 
             ASSERT_EQ(h_output, d_output);
@@ -721,7 +723,7 @@ TYPED_TEST(TransformTests, TestTransformIfUnaryNoStencil)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(2))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -754,6 +756,8 @@ TYPED_TEST(TransformTests, TestTransformIfUnaryNoStencil)
                                  thrust::negate<T>(),
                                  is_positive());
 
+            h_input.clear();
+
             ASSERT_EQ(h_output, d_output);
         }
     }
@@ -766,7 +770,7 @@ TYPED_TEST(TransformTests, TestTransformIfUnary)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(3))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -808,6 +812,9 @@ TYPED_TEST(TransformTests, TestTransformIfUnary)
                                  thrust::negate<T>(),
                                  is_positive());
 
+            h_input.clear();
+            h_stencil.clear();
+
             ASSERT_EQ(h_output, d_output);
         }
     }
@@ -819,7 +826,7 @@ TYPED_TEST(TransformTests, TestTransformIfUnaryToDiscardIterator)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(2))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -869,7 +876,7 @@ TYPED_TEST(TransformTests, TestTransformBinary)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(3))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -927,7 +934,7 @@ TYPED_TEST(TransformTests, TestTransformBinaryToDiscardIterator)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(2))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -972,7 +979,7 @@ TYPED_TEST(TransformTests, TestTransformIfBinary)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(4))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -1060,7 +1067,7 @@ TYPED_TEST(TransformTests, TestTransformIfBinaryToDiscardIterator)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(3))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -1125,7 +1132,7 @@ TYPED_TEST(TransformTests, TestTransformUnaryCountingIterator)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>())
     {
         size = thrust::min<size_t>(size, std::numeric_limits<T>::max());
 
@@ -1151,7 +1158,7 @@ TYPED_TEST(TransformTests, TestTransformBinaryCountingIterators)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>())
     {
         size = thrust::min<size_t>(size, std::numeric_limits<T>::max());
 
