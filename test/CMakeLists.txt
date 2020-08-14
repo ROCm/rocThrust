@@ -50,7 +50,7 @@ function(add_rocthrust_test TEST)
             tbbmalloc
             tbbmalloc_proxy
     )
-    target_compile_definitions(testing_common
+    target_compile_definitions(${TEST_TARGET}
         INTERFACE
             THRUST_HOST_SYSTEM=3 # THRUST_HOST_SYSTEM_TBB
     )
