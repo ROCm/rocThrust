@@ -49,7 +49,7 @@ struct binary_transform
         return a * (T)2 + b * (T)5;
     }
 };
-
+/*
 TYPED_TEST(TransformTests, UnaryTransform)
 {
     using T = typename TestFixture::input_type;
@@ -83,7 +83,7 @@ TYPED_TEST(TransformTests, UnaryTransform)
         }
     }
 }
-
+*/
 TYPED_TEST(TransformTests, BinaryTransform)
 {
     using T = typename TestFixture::input_type;
