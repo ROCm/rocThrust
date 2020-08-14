@@ -136,7 +136,7 @@ void test_event_wait(Event&& e)
 }
 
 template <typename T>
-std::vector<size_t> get_sizes(size_t count)
+std::vector<size_t> get_sizes(size_t count = 1)
 {
     std::vector<size_t> sizes = {
         0, 1, 2, 12, 63, 64, 211, 256, 344,
@@ -154,12 +154,14 @@ std::vector<size_t> get_sizes(size_t count)
                     "hipMemGetInfo: hipErrorInvalidValue")
                 };
 
-        constexpr double capacity = 0.95;
+        constexpr double capacity = 0.92;
         sizes.push_back(size_t(free * capacity / (sizeof(T) * count)));
     }
 
     return sizes;
 }
+
+bool is_large(size_t size) { return size > (1 << 20) - 123; }
 
 std::vector<seed_type> get_seeds()
 {

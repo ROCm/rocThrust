@@ -32,7 +32,7 @@ struct plus_mod_10
 {
     __host__ __device__ T operator()(T rhs, T lhs) const
     {
-        return ((lhs % 10) + (rhs % 10)) % 10;
+        return ((lhs % (T)10) + (rhs % (T)10)) % (T)10;
     }
 };
 
@@ -98,7 +98,7 @@ TYPED_TEST(ReducePrimitiveTests, TestReduce)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes<T>(1))
+    for(auto size : get_sizes<T>())
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -106,16 +106,28 @@ TYPED_TEST(ReducePrimitiveTests, TestReduce)
         {
             SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
-            thrust::host_vector<T> h_data = get_random_data<T>(
-                size, (T)0, (T)1, seed);
-            thrust::device_vector<T> d_data = h_data;
+            // With 16-bit built-in types, there's no way to test 8 billion additions without UB.
+            if(sizeof(T) < 4 && is_large(size)) continue;
 
-            T init = T(13);
+            T min = std::is_unsigned<T>::value ? (T)0 : (T)-1,
+              max = (T)1,
+              init = (T)13;
+
+            thrust::host_vector<T> h_data = get_random_data<T>(
+                size, min, max, seed);
+            thrust::device_vector<T> d_data = h_data;
 
             T h_result = thrust::reduce(h_data.begin(), h_data.end(), init);
             T d_result = thrust::reduce(d_data.begin(), d_data.end(), init);
 
-            ASSERT_EQ(h_result, d_result);
+            if(std::is_floating_point<T>::value)
+            {
+                ASSERT_NEAR(h_result, d_result, std::abs(h_result * 0.01));
+            }
+            else
+            {
+                ASSERT_EQ(h_result, d_result);
+            }
         }
     }
 }
@@ -157,7 +169,7 @@ TYPED_TEST(ReduceIntegerTests, TestReduceWithOperator)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes<T>(1))
+    for(auto size : get_sizes<T>())
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -170,7 +182,7 @@ TYPED_TEST(ReduceIntegerTests, TestReduceWithOperator)
 
             thrust::device_vector<T> d_data = h_data;
 
-            T init = T(3);
+            T init = (T)13;
 
             T cpu_result = thrust::reduce(h_data.begin(), h_data.end(), init, plus_mod_10<T>());
             T gpu_result = thrust::reduce(d_data.begin(), d_data.end(), init, plus_mod_10<T>());
@@ -232,8 +244,11 @@ TYPED_TEST(ReducePrimitiveTests, TestReduceCountingIterator)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes<T>(1))
+    for(auto size : get_sizes<T>())
     {
+        // 32-bit float lacks precision to participate in counting test meaningfully.
+        if (std::is_same<T, float>::value && is_large(size)) continue;
+
         size_t n = thrust::min<size_t>(size, std::numeric_limits<T>::max());
 
         thrust::counting_iterator<T, thrust::host_system_tag> h_first
