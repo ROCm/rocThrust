@@ -50,6 +50,10 @@ function(add_rocthrust_test TEST)
             tbbmalloc
             tbbmalloc_proxy
     )
+    target_compile_definitions(testing_common
+        INTERFACE
+            THRUST_HOST_SYSTEM=3 # THRUST_HOST_SYSTEM_TBB
+    )
     foreach(amdgpu_target ${AMDGPU_TARGETS})
         target_link_libraries(${TEST_TARGET}
             PRIVATE

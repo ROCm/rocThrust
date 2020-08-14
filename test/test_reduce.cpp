@@ -15,8 +15,6 @@
  *  limitations under the License.
  */
 
-#define THRUST_HOST_SYSTEM 3
-
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/iterator/retag.h>
 #include <thrust/reduce.h>
