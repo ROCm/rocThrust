@@ -91,7 +91,7 @@ TYPED_TEST(TransformTests, BinaryTransform)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(3))
     {
         SCOPED_TRACE(testing::Message() << "with size = " << size);
 
@@ -120,6 +120,8 @@ TYPED_TEST(TransformTests, BinaryTransform)
                           d_output.begin(),
                           binary_transform<U>());
 
+        h_input1.clear();
+        h_input2.clear();
         thrust::host_vector<U> h_output = d_output;
         for(size_t i = 0; i < size; i++)
         {
@@ -579,7 +581,7 @@ TYPED_TEST(TransformTests, TestTransformUnary)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(2))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -590,15 +592,16 @@ TYPED_TEST(TransformTests, TestTransformUnary)
             thrust::host_vector<T> h_input = get_random_data<T>(
                 size, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
 
-            thrust::device_vector<T> d_input = h_input;
-
             thrust::host_vector<U>   h_output(size);
-            thrust::device_vector<U> d_output(size);
-
             thrust::transform(
                 h_input.begin(), h_input.end(), h_output.begin(), thrust::negate<T>());
+
+            thrust::device_vector<T> d_input = h_input;
+            thrust::device_vector<U> d_output(size);
             thrust::transform(
                 d_input.begin(), d_input.end(), d_output.begin(), thrust::negate<T>());
+
+            h_input.clear();
 
             ASSERT_EQ(h_output, d_output);
         }
