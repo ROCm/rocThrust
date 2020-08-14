@@ -57,7 +57,7 @@ TYPED_TEST(TransformTests, UnaryTransform)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(2))
     {
         SCOPED_TRACE(testing::Message() << "with size = " << size);
 
@@ -75,6 +75,7 @@ TYPED_TEST(TransformTests, UnaryTransform)
         thrust::device_vector<U> d_output(size);
         thrust::transform(d_input.begin(), d_input.end(), d_output.begin(), unary_transform<U>());
 
+        h_input.clear();
         thrust::host_vector<U> h_output = d_output;
         for(size_t i = 0; i < size; i++)
         {
