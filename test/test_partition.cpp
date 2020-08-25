@@ -336,7 +336,7 @@ TYPED_TEST(PartitionIntegerTests, TestPartition)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(3))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -371,7 +371,7 @@ TYPED_TEST(PartitionIntegerTests, TestPartitionStencil)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(4))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -412,7 +412,7 @@ TYPED_TEST(PartitionIntegerTests, TestPartitionCopy)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(3))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -473,7 +473,7 @@ TYPED_TEST(PartitionIntegerTests, TestPartitionCopyStencil)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(4))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -543,7 +543,7 @@ TYPED_TEST(PartitionIntegerTests, TestStablePartitionCopyStencil)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(4))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -613,7 +613,7 @@ TYPED_TEST(PartitionIntegerTests, TestPartitionCopyToDiscardIterator)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(3))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -720,7 +720,7 @@ TYPED_TEST(PartitionIntegerTests, TestPartitionCopyStencilToDiscardIterator)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(4))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -841,7 +841,7 @@ TYPED_TEST(PartitionIntegerTests, TestStablePartition)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(3))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -871,7 +871,7 @@ TYPED_TEST(PartitionIntegerTests, TestStablePartitionStencil)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(4))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -908,7 +908,7 @@ TYPED_TEST(PartitionIntegerTests, TestStablePartitionCopy)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(3))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -965,7 +965,7 @@ TYPED_TEST(PartitionIntegerTests, TestStablePartitionCopyToDiscardIterator)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(3))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -1072,7 +1072,7 @@ TYPED_TEST(PartitionIntegerTests, TestStablePartitionCopyStencilToDiscardIterato
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(4))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
