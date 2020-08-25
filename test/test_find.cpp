@@ -270,7 +270,7 @@ TYPED_TEST(FindTests, TestFind)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>())
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -310,7 +310,7 @@ TYPED_TEST(FindTests, TestFindIf)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>())
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -352,7 +352,7 @@ TYPED_TEST(FindTests, TestFindIfNot)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>())
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
