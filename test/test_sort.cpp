@@ -60,7 +60,7 @@ TYPED_TEST(SortTests, Sort)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<key_type>(2))
     {
         SCOPED_TRACE(testing::Message() << "with size = " << size);
 
@@ -111,7 +111,7 @@ TYPED_TEST(SortTests, SortByKey)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<thrust::tuple<key_type, value_type>>(2))
     {
         SCOPED_TRACE(testing::Message() << "with size = " << size);
 
@@ -156,7 +156,7 @@ TYPED_TEST(SortTests, StableSort)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<key_type>(2))
     {
         SCOPED_TRACE(testing::Message() << "with size = " << size);
 
@@ -207,7 +207,7 @@ TYPED_TEST(SortTests, StableSortByKey)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<thrust::tuple<key_type, value_type>>(2))
     {
         SCOPED_TRACE(testing::Message() << "with size = " << size);
 
@@ -342,7 +342,7 @@ TYPED_TEST(SortVectorPrimitives, TestSortAscendingKey)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>())
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
