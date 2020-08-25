@@ -372,7 +372,7 @@ TYPED_TEST(ScanVariablesTests, TestScanWithOperator)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(4))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -408,7 +408,7 @@ TYPED_TEST(ScanVariablesTests, TestScanWithOperatorToDiscardIterator)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(4))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -455,7 +455,7 @@ TYPED_TEST(ScanVariablesTests, TestScan)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(4))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
@@ -510,7 +510,7 @@ TYPED_TEST(ScanVariablesTests, TestScanToDiscardIterator)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    for(auto size : get_sizes())
+    for(auto size : get_sizes<T>(4))
     {
         SCOPED_TRACE(testing::Message() << "with size= " << size);
 
