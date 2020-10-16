@@ -103,6 +103,78 @@ TYPED_TEST(SortTests, Sort)
     }
 }
 
+TYPED_TEST(SortTests, SortPyTorchBug)
+{
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
+
+    thrust::host_vector<int64_t> h_input_flat(10);
+    h_input_flat[0] = 0;
+    h_input_flat[1] = 5;
+    h_input_flat[2] = 1;
+    h_input_flat[3] = 6;
+    h_input_flat[4] = 2;
+    h_input_flat[5] = 7;
+    h_input_flat[6] = 3;
+    h_input_flat[7] = 8;
+    h_input_flat[8] = 4;
+    h_input_flat[9] = 9;
+
+    int64_t n = 2;
+    int64_t num_inp = 5;
+    thrust::host_vector<int64_t> h_indices(num_inp);
+    std::iota(h_indices.begin(), h_indices.end(), 0);
+
+    thrust::device_vector<int64_t> d_indices(h_indices);
+    thrust::device_vector<int64_t> d_input_flat(h_input_flat);
+
+    int64_t *h_input_flat_ptr = thrust::raw_pointer_cast(h_input_flat.data());
+    int64_t *d_input_flat_ptr = thrust::raw_pointer_cast(d_input_flat.data());
+
+    // Calculate expected results on host
+    thrust::sort(h_indices.begin(), h_indices.end(),
+        [=] (int64_t a, int64_t b) -> bool {
+            for (int64_t i = 0; i < n; ++i) {
+                int64_t lhs = h_input_flat_ptr[i + a * n];
+                int64_t rhs = h_input_flat_ptr[i + b * n];
+                if (lhs < rhs) {
+                    return true;
+                } else if (lhs > rhs) {
+                    return false;
+                }
+            }
+            return false;
+        }
+    );
+
+    // Calculate results on device
+    thrust::sort(d_indices.begin(), d_indices.end(),
+        [=] __device__ (int64_t a, int64_t b) -> bool {
+            for (int64_t i = 0; i < n; ++i) {
+                int64_t lhs = d_input_flat_ptr[i + a * n];
+                int64_t rhs = d_input_flat_ptr[i + b * n];
+                if (lhs < rhs) {
+                    return true;
+                } else if (lhs > rhs) {
+                    return false;
+                }
+            }
+            return false;
+        }
+    );
+
+    thrust::host_vector<int64_t> h_d_indices(d_indices);
+	thrust::host_vector<int64_t> h_d_input_flat(d_input_flat);
+
+	for(size_t i = 0; i < h_d_indices.size(); i++)
+	{
+		ASSERT_EQ(h_d_indices[i], h_indices[i]) << "where index = " << i;
+	}
+	for(size_t i = 0; i < h_d_input_flat.size(); i++)
+	{
+		ASSERT_EQ(h_d_input_flat[i], h_input_flat[i]) << "where index = " << i;
+	}
+}
+
 TYPED_TEST(SortTests, SortByKey)
 {
     using key_type         = typename TestFixture::key_type;
