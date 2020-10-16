@@ -163,16 +163,16 @@ TYPED_TEST(SortTests, SortPyTorchBug)
     );
 
     thrust::host_vector<int64_t> h_d_indices(d_indices);
-	thrust::host_vector<int64_t> h_d_input_flat(d_input_flat);
+    thrust::host_vector<int64_t> h_d_input_flat(d_input_flat);
 
-	for(size_t i = 0; i < h_d_indices.size(); i++)
-	{
-		ASSERT_EQ(h_d_indices[i], h_indices[i]) << "where index = " << i;
-	}
-	for(size_t i = 0; i < h_d_input_flat.size(); i++)
-	{
-		ASSERT_EQ(h_d_input_flat[i], h_input_flat[i]) << "where index = " << i;
-	}
+    for(size_t i = 0; i < h_d_indices.size(); i++)
+    {
+        ASSERT_EQ(h_d_indices[i], h_indices[i]) << "where index = " << i;
+    }
+    for(size_t i = 0; i < h_d_input_flat.size(); i++)
+    {
+        ASSERT_EQ(h_d_input_flat[i], h_input_flat[i]) << "where index = " << i;
+    }
 }
 
 TYPED_TEST(SortTests, SortByKey)
