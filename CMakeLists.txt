@@ -33,7 +33,7 @@ endif()
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE CACHE BOOL "Add paths to linker search and installed rpath")
 
 # AMD targets
-set(AMDGPU_TARGETS gfx900;gfx906;gfx908;gfx1030 CACHE STRING "List of specific machine types for library to target")
+set(AMDGPU_TARGETS gfx900:xnack-;gfx906:xnack-;gfx908:xnack-;gfx1030:xnack- CACHE STRING "List of specific machine types for library to target")
 
 # Verify that hcc or hipcc compiler is used on ROCM platform
 include(cmake/VerifyCompiler.cmake)
@@ -66,12 +66,12 @@ endif ()
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-set(XNACK_FLAGS "-mno-xnack -Xarch_gfx900 -mno-sram-ecc -Xarch_gfx906 -msram-ecc -Xarch_gfx908 -msram-ecc")
+
 
 if(DISABLE_WERROR)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-function ${XNACK_FLAGS}")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-function")
 else()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-function -Werror ${XNACK_FLAGS}")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-function -Werror")
 endif()
 
 # Get dependencies
