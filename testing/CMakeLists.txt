@@ -2,13 +2,32 @@
 # Copyright 2019 - 2020 Advanced Micro Devices, Inc.
 # ########################################################################
 
-add_library(testing_common INTERFACE)
-target_include_directories(testing_common
-    SYSTEM
-    BEFORE
-    INTERFACE
-        ${GTEST_INCLUDE_DIRS}
-        .
+# Update flags to reflect RDC options. See note in ThrustCudaConfig.cmake --
+# these flag variables behave unintuitively:
+if (THRUST_ENABLE_TESTS_WITH_RDC)
+  set(CMAKE_CUDA_FLAGS "${THRUST_CUDA_FLAGS_BASE} ${THRUST_CUDA_FLAGS_RDC}")
+else()
+  set(CMAKE_CUDA_FLAGS "${THRUST_CUDA_FLAGS_BASE} ${THRUST_CUDA_FLAGS_NO_RDC}")
+endif()
+
+# Generate testing framework libraries:
+add_subdirectory(unittest)
+
+# List of tests that aren't implemented for all backends, but are implemented for CUDA.
+set(partially_implemented_CUDA
+  async_copy
+  async_for_each
+  async_reduce
+  async_reduce_into
+  async_sort
+  async_transform
+  event
+  future
+
+  # This test is incompatible with TBB and OMP, since it requires special per-device
+  # handling to process exceptions in a device function, which is only implemented
+  # for CUDA.
+  unittest_static_assert
 )
 target_link_libraries(testing_common
     INTERFACE
@@ -41,44 +60,94 @@ target_link_libraries(testframework
         testing_common
 )
 
-function(add_thrust_test TEST)
-    set(TEST_SOURCE "${TEST}.cu")
-    set(TEST_TARGET "test_thrust_${TEST}")
-    # Unless this property isn't set, CMake silently discards .cu files when
-    # CUDA language has not been enabled. If enabled, it will do the regular compiler
-    # detection and search for a fully functioning CUDA compiler, which hipcc isn't (yet).
-    # Note that removing this property builds will continue to pass, running the tests
-    # will also succeed, however the tests will be empty and be near empty main functions.
-    # This code path used to add "-x c++" to the compiler flags too, but that was
-    # superfluous as "-x hip" was already present on the command-line due to linking to
-    # hip::device transitively from roc::rocprim_hip.
-    set_source_files_properties(${TEST_SOURCE}
-        PROPERTIES
-            LANGUAGE CXX
-    )
-    if(NOT CMAKE_VERSION VERSION_LESS 3.13)
-        add_executable(${TEST_TARGET} ${TEST_SOURCE} $<TARGET_OBJECTS:testframework>)
-        target_link_libraries(${TEST_TARGET}
-            PRIVATE
-                testing_common
-        )
-    else() # Workaround
-        add_executable(${TEST_TARGET} ${TEST_SOURCE} unittest/testframework.cu)
-        target_link_libraries(${TEST_TARGET}
-            PRIVATE
-                testing_common
-                testframework
-        )
-    endif()
-    set_target_properties(${TEST_TARGET}
-        PROPERTIES
-            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/testing/"
-    )
-    add_test(${TEST} ${TEST_TARGET})
-    set_tests_properties(${TEST}
-        PROPERTIES
-            LABELS upstream
-    )
+# List of tests that aren't implemented for all backends, but are implemented for OMP.
+set(partially_implemented_OMP
+)
+
+# List of all partially implemented tests.
+set(partially_implemented
+  ${partially_implemented_CUDA}
+  ${partially_implemented_CPP}
+  ${partially_implemented_TBB}
+  ${partially_implemented_OMP}
+)
+list(REMOVE_DUPLICATES partially_implemented)
+
+## thrust_add_test
+#
+# Add a test executable and register it with ctest.
+#
+# target_name_var: Variable name to overwrite with the name of the test
+#   target. Useful for post-processing target information per-backend.
+# test_name: The name of the test minus "<config_prefix>.test." For example,
+#   testing/vector.cu will be "vector", and testing/cuda/copy.cu will be
+#   "cuda.copy".
+# test_src: The source file that implements the test.
+# thrust_target: The reference thrust target with configuration information.
+#
+function(thrust_add_test target_name_var test_name test_src thrust_target)
+  thrust_get_target_property(config_host ${thrust_target} HOST)
+  thrust_get_target_property(config_device ${thrust_target} DEVICE)
+  thrust_get_target_property(config_prefix ${thrust_target} PREFIX)
+
+  # Wrap the .cu file in .cpp for non-CUDA backends
+  if ("CUDA" STREQUAL "${config_device}")
+    set(real_test_src "${test_src}")
+  else()
+    thrust_wrap_cu_in_cpp(real_test_src "${test_src}" ${thrust_target})
+  endif()
+
+  # The actual name of the test's target:
+  set(test_target ${config_prefix}.test.${test_name})
+  set(${target_name_var} ${test_target} PARENT_SCOPE)
+
+  # Related target names:
+  set(config_framework_target ${config_prefix}.test.framework)
+  set(config_meta_target ${config_prefix}.tests)
+  set(test_meta_target thrust.all.test.${test_name})
+
+  add_executable(${test_target} "${real_test_src}")
+  target_link_libraries(${test_target} ${config_framework_target})
+  target_include_directories(${test_target} PRIVATE "${Thrust_SOURCE_DIR}/testing")
+  thrust_clone_target_properties(${test_target} ${thrust_target})
+
+  # Add to the active configuration's meta target
+  add_dependencies(${config_meta_target} ${test_target})
+
+  # Meta target that builds tests with this name for all configurations:
+  if (NOT TARGET ${test_meta_target})
+    add_custom_target(${test_meta_target})
+  endif()
+  add_dependencies(${test_meta_target} ${test_target})
+
+  add_test(NAME ${test_target}
+    COMMAND "${CMAKE_COMMAND}"
+    "-DTHRUST_BINARY=$<TARGET_FILE:${test_target}>"
+    "-DTHRUST_SOURCE=${Thrust_SOURCE_DIR}"
+    -P "${Thrust_SOURCE_DIR}/cmake/ThrustRunTest.cmake"
+  )
+
+  # Run OMP/TBB tests in serial. Multiple OMP processes will massively
+  # oversubscribe the machine with GCC's OMP, and we want to test these with
+  # the full CPU available to each unit test.
+  set(config_systems ${config_host} ${config_device})
+  if (("OMP" IN_LIST config_systems) OR ("TBB" IN_LIST config_systems))
+    set_tests_properties(${test_target} PROPERTIES RUN_SERIAL ON)
+  endif()
+
+  # Check for per-test script. Script will be included in the current scope
+  # to allow custom property modifications.
+  get_filename_component(test_cmake_script "${test_src}" NAME_WLE)
+  set(test_cmake_script "${CMAKE_CURRENT_LIST_DIR}/${test_cmake_script}.cmake")
+  # Use a glob so we can detect if this changes:
+  file(GLOB test_cmake_script
+    RELATIVE "${CMAKE_CURRENT_LIST_DIR}"
+    CONFIGURE_DEPENDS
+    "${test_cmake_script}"
+  )
+  if (test_cmake_script) # Will be non-empty only if the script exists
+    include("${test_cmake_script}")
+  endif()
 endfunction()
 
 # ****************************************************************************
