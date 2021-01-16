@@ -2,9 +2,12 @@
 
 Full documentation for rocThrust is available at [https://rocthrust.readthedocs.io/en/latest/](https://rocthrust.readthedocs.io/en/latest/)
 
-## [Unreleased rocThrust-2.10.7 for ROCm 4.0.0]
+## [Unreleased rocThrust-2.10.8 for ROCm 4.1.0]
 ### Added
 - Updated to upstream Thrust 1.10.0
+
+## [rocThrust-2.10.7 for ROCm 4.0.0]
+### Added
 - Implemented runtime error for unsupported algorithms and disabled respective tests.
 - Updated CMake to use downloaded rocPRIM.
 

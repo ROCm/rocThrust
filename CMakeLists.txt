@@ -84,7 +84,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 include(cmake/Dependencies.cmake)
 
 # Setup VERSION
-rocm_setup_version(VERSION "2.10.7")
+rocm_setup_version(VERSION "2.10.8")
 
 # Print configuration summary
 include(cmake/Summary.cmake)
