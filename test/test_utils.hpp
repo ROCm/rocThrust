@@ -135,7 +135,7 @@ void test_event_wait(Event&& e)
   ASSERT_EQ(true, e.ready());
 }
 
-template <typename T>
+template <typename T = size_t>
 std::vector<size_t> get_sizes(size_t count = 1)
 {
     std::vector<size_t> sizes = {
@@ -652,4 +652,3 @@ struct precision_threshold<rocprim::half>
 {
     static constexpr float percentage = 0.075f;
 };
-
