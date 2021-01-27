@@ -33,11 +33,6 @@
 #include <type_traits>
 #include <vector>
 #include <iterator>
-#include <thread>
-#include <future>
-
-#include <hip/hip_runtime.h>
-#include <hip/hip_runtime_api.h>
 
 #define TEST_EVENT_WAIT(e) test_event_wait(e)
 
@@ -135,6 +130,8 @@ void test_event_wait(Event&& e)
   ASSERT_EQ(true, e.ready());
 }
 
+bool is_large(size_t size) { return size > (1 << 20) - 123; }
+
 template <typename T = size_t>
 std::vector<size_t> get_sizes(size_t count = 1)
 {
@@ -161,8 +158,6 @@ std::vector<size_t> get_sizes(size_t count = 1)
     return sizes;
 }
 
-bool is_large(size_t size) { return size > (1 << 20) - 123; }
-
 std::vector<seed_type> get_seeds()
 {
     std::vector<seed_type> seeds;
@@ -172,60 +167,17 @@ std::vector<seed_type> get_seeds()
     return seeds;
 }
 
-template <typename T, typename Dist>
-thrust::host_vector<T> get_random_data_impl(size_t size, seed_type seed, Dist dist)
-{
-    const unsigned int N = std::thread::hardware_concurrency();
-
-    std::vector<random_engine> engines(N);
-    {
-        random_engine state{seed};
-        std::generate(
-            engines.begin(),
-            engines.end(),
-            [&]()
-            {
-                // 32-bit random engines need be sampled multiple times to
-                // obtain enough entropy to generate 64-bit random numbers.
-                constexpr size_t multiplier =
-                    sizeof(T) > sizeof(random_engine::result_type) ?
-                    sizeof(T) / sizeof(random_engine::result_type) :
-                    1;
-                state.discard(size * multiplier / N);
-                return state;
-            }
-        );
-    }
-
-    std::vector<std::future<void>> tasks(N);
-    thrust::host_vector<T> data(size);
-
-    using IT = typename thrust::host_vector<T>::iterator;
-
-    for (size_t i = 0 ; i < N ; ++i)
-        tasks.at(i) = std::async(
-            std::launch::async,
-            [=](random_engine engine, IT first, IT last)
-            {
-                std::generate(first, last, [dist, &engine]() mutable
-                {
-                    return dist(engine);
-                });
-            },
-            engines.at(i),
-            data.begin() + (i + 0) * (size / N),
-            data.begin() + (i + 1) * (size / N)
-        );
-    for (std::future<void>& task : tasks) task.wait();
-
-    return data;
-}
-
 template <class T>
 inline auto get_random_data(size_t size, T, T, int seed) ->
     typename std::enable_if<std::is_same<T, bool>::value, thrust::host_vector<T>>::type
 {
-    return get_random_data_impl<bool>(size, static_cast<seed_type>(seed), std::bernoulli_distribution{ 0.5 });
+    std::random_device          rd;
+    std::default_random_engine  gen(rd());
+    gen.seed(seed);
+    std::bernoulli_distribution distribution(0.5);
+    thrust::host_vector<T>      data(size);
+    std::generate(data.begin(), data.end(), [&]() { return distribution(gen); });
+    return data;
 }
 
 template <class T>
@@ -233,14 +185,30 @@ inline auto get_random_data(size_t size, T min, T max, int seed) ->
     typename std::enable_if<rocprim::is_integral<T>::value && !std::is_same<T, bool>::value,
                             thrust::host_vector<T>>::type
 {
-    return get_random_data_impl<T>(size, static_cast<seed_type>(seed), std::uniform_int_distribution<T>{ min, max });
+    rocrand_generator rand_gen;
+    rocrand_create_generator(&rand_gen,ROCRAND_RNG_PSEUDO_DEFAULT);
+    rocrand_set_seed(rand_gen,seed);
+
+    thrust::host_vector<T>           data(size);
+    thrust::device_vector<T>           d_data(size);
+
+    auto num_bytes = (data.end() - data.begin())*sizeof(T);
+    rocrand_generate_char(rand_gen,(uchar *)d_data.data().get(),num_bytes);
+    data = d_data;
+    return data;
 }
 
 template <class T>
 inline auto get_random_data(size_t size, T min, T max, int seed) ->
     typename std::enable_if<rocprim::is_floating_point<T>::value, thrust::host_vector<T>>::type
 {
-    return get_random_data_impl<T>(size, static_cast<seed_type>(seed), std::uniform_real_distribution<T>{ min, max });
+    std::random_device                rd;
+    std::default_random_engine        gen(rd());
+    gen.seed(seed);
+    std::uniform_real_distribution<T> distribution(min, max);
+    thrust::host_vector<T>            data(size);
+    std::generate(data.begin(), data.end(), [&]() { return distribution(gen); });
+    return data;
 }
 
 template <class T>
