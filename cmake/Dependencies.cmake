@@ -11,8 +11,7 @@
 
 # For downloading, building, and installing required dependencies
 include(cmake/DownloadProject.cmake)
-include(ExternalProject)
-set(ROCRAND_URL "https://github.com/ROCmSoftwarePlatform/rocRAND.git" CACHE STRING "URL of git repository from which rocThrust will downloaded")
+
 # GIT
 find_package(Git REQUIRED)
 if (NOT Git_FOUND)
@@ -38,7 +37,7 @@ if(NOT rocprim_FOUND)
     BUILD_PROJECT       TRUE
     UPDATE_DISCONNECTED TRUE # Never update automatically from the remote repository
   )
-  find_package(rocprim REQUIRED CONFIG PATHS ${CMAKE_CURRENT_BINARY_DIR}/deps/rocprim NO_DEFAULT_PATH)
+  find_package(rocprim REQUIRED PATHS ${CMAKE_CURRENT_BINARY_DIR}/deps/rocprim NO_DEFAULT_PATH)
 endif()
 
 # Test dependencies
@@ -60,10 +59,13 @@ if(BUILD_TEST)
     UPDATE_DISCONNECTED TRUE
   )
   find_package(GTest REQUIRED)
+endif()
+
+# rocRAND (https://github.com/ROCmSoftwarePlatform/rocRAND)
+if(LARGE_TEST)
   find_package(rocrand QUIET)
   if(NOT rocrand_FOUND)
-    message(STATUS " Downloading rocrand")
-    message(STATUS "Downloading and building rocprim.")
+    message(STATUS "Downloading and building rocrand.")
     download_project(
       PROJ                rocrand
       GIT_REPOSITORY      https://github.com/ROCmSoftwarePlatform/rocRAND.git
@@ -77,7 +79,6 @@ if(BUILD_TEST)
       BUILD_PROJECT       TRUE
       UPDATE_DISCONNECTED TRUE # Never update automatically from the remote repository
     )
-    find_package(rocrand REQUIRED CONFIG PATHS ${CMAKE_CURRENT_BINARY_DIR}/deps/rocrand NO_DEFAULT_PATH)
+    find_package(rocrand REQUIRED PATHS ${CMAKE_CURRENT_BINARY_DIR}/deps/rocrand NO_DEFAULT_PATH)
   endif()
-
 endif()
