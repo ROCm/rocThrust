@@ -46,10 +46,7 @@ function(add_rocthrust_test TEST)
             rocthrust
             roc::rocprim_hip
             ${GTEST_BOTH_LIBRARIES}
-            tbb
             roc::rocrand
-            tbbmalloc
-            tbbmalloc_proxy
     )
     target_compile_definitions(${TEST_TARGET}
         INTERFACE
