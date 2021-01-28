@@ -63,22 +63,21 @@ if(BUILD_TEST)
   find_package(rocrand QUIET)
   if(NOT rocrand_FOUND)
     message(STATUS " Downloading rocrand")
-    ExternalProject_Add(rocrand
-      PREFIX ${PROJECT_BINARY_DIR}
-      GIT_REPOSITORY ${ROCRAND_URL}
-      UPDATE_DISCONNECTED ${DISCONNECT}
-      ${UPDATE_COMMAND_ARG}
-      LIST_SEPARATOR |
-      CMAKE_ARGS
-        "-Wno-dev"
-        "-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}"
-        "-DCMAKE_PREFIX_PATH=${PROJECT_BINARY_DIR}|${CMAKE_PREFIX_PATH_ALT_SEP}"
-        "-DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>"
-        "-DBUILD_TEST=OFF"
-        "-DAMDGPU_TARGETS=${AMDGPU_TARGETS_ALT_SEP}"
-    BUILD_ALWAYS ON
+    message(STATUS "Downloading and building rocprim.")
+    download_project(
+      PROJ                rocrand
+      GIT_REPOSITORY      https://github.com/ROCmSoftwarePlatform/rocRAND.git
+      GIT_TAG             develop
+      INSTALL_DIR         ${CMAKE_CURRENT_BINARY_DIR}/deps/rocrand
+      CMAKE_ARGS          -DBUILD_TEST=OFF -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=/opt/rocm
+      LOG_DOWNLOAD        TRUE
+      LOG_CONFIGURE       TRUE
+      LOG_BUILD           TRUE
+      LOG_INSTALL         TRUE
+      BUILD_PROJECT       TRUE
+      UPDATE_DISCONNECTED TRUE # Never update automatically from the remote repository
     )
-    find_package(rocrand REQUIRED)
+    find_package(rocrand REQUIRED CONFIG PATHS ${CMAKE_CURRENT_BINARY_DIR}/deps/rocrand NO_DEFAULT_PATH)
   endif()
 
 endif()
