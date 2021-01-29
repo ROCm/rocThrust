@@ -74,7 +74,13 @@ TYPED_TEST(ZipIteratorScanVariablesTests, TestZipIteratorScan)
                 thrust::make_zip_iterator(thrust::make_tuple(d_data0.end(), d_data1.end())),
                 d_result.begin(),
                 TuplePlus<Tuple>());
-            ASSERT_EQ_QUIET(h_result, d_result);
+            thrust::host_vector<Tuple> h_result_d(d_result);
+            for(size_t index = 0; index < h_result.size(); index++)
+            {
+              Tuple host_tuple = h_result[index];
+              Tuple device_tuple = h_result_d[index];
+              ASSERT_NEAR(thrust::get<0>(host_tuple),thrust::get<0>(device_tuple),std::abs(thrust::get<0>(host_tuple)*0.001));
+            }
 
             // exclusive_scan (tuple output)
             thrust::exclusive_scan(
@@ -89,7 +95,14 @@ TYPED_TEST(ZipIteratorScanVariablesTests, TestZipIteratorScan)
                 d_result.begin(),
                 thrust::make_tuple<T, T>(0, 0),
                 TuplePlus<Tuple>());
-            ASSERT_EQ_QUIET(h_result, d_result);
+
+            h_result_d = d_result;
+            for(size_t index = 0; index < h_result.size(); index++)
+            {
+              Tuple host_tuple = h_result[index];
+              Tuple device_tuple = h_result_d[index];
+              ASSERT_NEAR(thrust::get<0>(host_tuple),thrust::get<0>(device_tuple),std::abs(thrust::get<0>(host_tuple)*0.001));
+            }
 
             thrust::host_vector<T>   h_result0(size);
             thrust::host_vector<T>   h_result1(size);
@@ -107,8 +120,21 @@ TYPED_TEST(ZipIteratorScanVariablesTests, TestZipIteratorScan)
                 thrust::make_zip_iterator(thrust::make_tuple(d_data0.end(), d_data1.end())),
                 thrust::make_zip_iterator(thrust::make_tuple(d_result0.begin(), d_result1.begin())),
                 TuplePlus<Tuple>());
-            ASSERT_EQ_QUIET(h_result0, d_result0);
-            ASSERT_EQ_QUIET(h_result1, d_result1);
+            h_result_d = d_result0;
+            for(size_t index = 0; index < h_result.size(); index++)
+            {
+              Tuple host_tuple = h_result0[index];
+              Tuple device_tuple = h_result_d[index];
+              ASSERT_NEAR(thrust::get<0>(host_tuple),thrust::get<0>(device_tuple),std::abs(thrust::get<0>(host_tuple)*0.001));
+            }
+
+            h_result_d = d_result1;
+            for(size_t index = 0; index < h_result.size(); index++)
+            {
+              Tuple host_tuple = h_result1[index];
+              Tuple device_tuple = h_result_d[index];
+              ASSERT_NEAR(thrust::get<0>(host_tuple),thrust::get<0>(device_tuple),std::abs(thrust::get<0>(host_tuple)*0.001));
+            }
 
             // exclusive_scan (zip_iterator output)
             thrust::exclusive_scan(
@@ -123,8 +149,22 @@ TYPED_TEST(ZipIteratorScanVariablesTests, TestZipIteratorScan)
                 thrust::make_zip_iterator(thrust::make_tuple(d_result0.begin(), d_result1.begin())),
                 thrust::make_tuple<T, T>(0, 0),
                 TuplePlus<Tuple>());
-            ASSERT_EQ_QUIET(h_result0, d_result0);
-            ASSERT_EQ_QUIET(h_result1, d_result1);
+
+            h_result_d = d_result0;
+            for(size_t index = 0; index < h_result.size(); index++)
+            {
+              Tuple host_tuple = h_result0[index];
+              Tuple device_tuple = h_result_d[index];
+              ASSERT_NEAR(thrust::get<0>(host_tuple),thrust::get<0>(device_tuple),std::abs(thrust::get<0>(host_tuple)*0.001));
+            }
+
+            h_result_d = d_result1;
+            for(size_t index = 0; index < h_result.size(); index++)
+            {
+              Tuple host_tuple = h_result1[index];
+              Tuple device_tuple = h_result_d[index];
+              ASSERT_NEAR(thrust::get<0>(host_tuple),thrust::get<0>(device_tuple),std::abs(thrust::get<0>(host_tuple)*0.001));
+            }
         }
     }
 }

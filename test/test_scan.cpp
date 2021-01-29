@@ -476,17 +476,26 @@ TYPED_TEST(ScanVariablesTests, TestScan)
             thrust::inclusive_scan(d_input.begin(), d_input.end(), d_output.begin());
 
             thrust::host_vector<T> h_output_d(d_output);
-            ASSERT_EQ(h_output_d, h_output);
+            for(size_t index = 0; index < h_output.size(); index++)
+            {
+              ASSERT_NEAR(h_output[index],h_output_d[index],std::abs(h_output[index]*0.001));
+            }
 
             thrust::exclusive_scan(h_input.begin(), h_input.end(), h_output.begin());
             thrust::exclusive_scan(d_input.begin(), d_input.end(), d_output.begin());
             h_output_d = d_output;
-            ASSERT_EQ(h_output_d, h_output);
+            for(size_t index = 0; index < h_output.size(); index++)
+            {
+              ASSERT_NEAR(h_output[index],h_output_d[index],std::abs(h_output[index]*0.001));
+            }
 
             thrust::exclusive_scan(h_input.begin(), h_input.end(), h_output.begin(), (T)11);
             thrust::exclusive_scan(d_input.begin(), d_input.end(), d_output.begin(), (T)11);
             h_output_d = d_output;
-            ASSERT_EQ(h_output_d, h_output);
+            for(size_t index = 0; index < h_output.size(); index++)
+            {
+              ASSERT_NEAR(h_output[index],h_output_d[index],std::abs(h_output[index]*0.001));
+            }
 
             // in-place scans
             h_output = h_input;
@@ -494,14 +503,19 @@ TYPED_TEST(ScanVariablesTests, TestScan)
             thrust::inclusive_scan(h_output.begin(), h_output.end(), h_output.begin());
             thrust::inclusive_scan(d_output.begin(), d_output.end(), d_output.begin());
             h_output_d = d_output;
-            ASSERT_EQ(h_output_d, h_output);
-
+            for(size_t index = 0; index < h_output.size(); index++)
+            {
+              ASSERT_NEAR(h_output[index],h_output_d[index],std::abs(h_output[index]*0.001));
+            }
             h_output = h_input;
             d_output = d_input;
             thrust::exclusive_scan(h_output.begin(), h_output.end(), h_output.begin());
             thrust::exclusive_scan(d_output.begin(), d_output.end(), d_output.begin());
             h_output_d = d_output;
-            ASSERT_EQ(h_output_d, h_output);
+            for(size_t index = 0; index < h_output.size(); index++)
+            {
+              ASSERT_NEAR(h_output[index],h_output_d[index],std::abs(h_output[index]*0.001));
+            }
         }
     }
 }

@@ -110,6 +110,7 @@ build:cmake-latest:
     - $BUILD_LATEST_DIR/test/*
     - $BUILD_LATEST_DIR/testing/*
     - $BUILD_LATEST_DIR/gtest/*
+    - $BUILD_LATEST_DIR/deps/*
     - $BUILD_LATEST_DIR/CMakeCache.txt
     - $BUILD_LATEST_DIR/CTestTestfile.cmake
     exclude:
