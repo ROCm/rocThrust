@@ -85,7 +85,9 @@ TYPED_TEST(PairReduceTests, TestPairReduce)
             // reduce on the device
             P d_result = thrust::reduce(d_pairs.begin(), d_pairs.end(), init, add_pairs());
 
-            ASSERT_EQ_QUIET(h_result, d_result);
+            ASSERT_NEAR(h_result.first, d_result.first,std::abs(h_result.first*0.001));
+            ASSERT_NEAR(h_result.second, d_result.second,std::abs(h_result.first*0.001));
+
         }
     }
 }

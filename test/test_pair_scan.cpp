@@ -88,13 +88,20 @@ TYPED_TEST(PairScanVariablesTests, TestPairScan)
             thrust::device_vector<T> d_p2    = h_p2;
             thrust::device_vector<P> d_pairs = h_pairs;
             thrust::device_vector<P> d_output(size);
+            thrust::host_vector<P> h_d_output(size);
+
 
             P init = thrust::make_pair(13, 13);
 
             // scan with plus
             thrust::inclusive_scan(h_pairs.begin(), h_pairs.end(), h_output.begin(), add_pairs());
             thrust::inclusive_scan(d_pairs.begin(), d_pairs.end(), d_output.begin(), add_pairs());
-            ASSERT_EQ_QUIET(h_output, d_output);
+            h_d_output = d_output;
+            for(size_t index = 0; index < h_output.size(); index++)
+            {
+              ASSERT_NEAR(h_output[index].first,h_d_output[index].first,std::abs(h_output[index].first*0.001));
+              ASSERT_NEAR(h_output[index].second,h_d_output[index].second,std::abs(h_output[index].second*0.001));
+            }
 
             // scan with maximum
             // TODO: Workaround
@@ -106,14 +113,27 @@ TYPED_TEST(PairScanVariablesTests, TestPairScan)
                                    d_pairs.end(),
                                    d_output.begin(),
                                    maximum_pairs() /*thrust::maximum<P>()*/);
-            ASSERT_EQ_QUIET(h_output, d_output);
+            h_d_output = d_output;
+            for(size_t index = 0; index < h_output.size(); index++)
+            {
+              ASSERT_NEAR(h_output[index].first,h_d_output[index].first,std::abs(h_output[index].first*0.001));
+              ASSERT_NEAR(h_output[index].second,h_d_output[index].second,std::abs(h_output[index].second*0.001));
+            }
 
             // scan with plus
             thrust::exclusive_scan(
                 h_pairs.begin(), h_pairs.end(), h_output.begin(), init, add_pairs());
             thrust::exclusive_scan(
                 d_pairs.begin(), d_pairs.end(), d_output.begin(), init, add_pairs());
-            ASSERT_EQ_QUIET(h_output, d_output);
+
+            h_d_output = d_output;
+            for(size_t index = 0; index < h_output.size(); index++)
+            {
+              ASSERT_NEAR(h_output[index].first,h_d_output[index].first,std::abs(h_output[index].first*0.001));
+              ASSERT_NEAR(h_output[index].second,h_d_output[index].second,std::abs(h_output[index].second*0.001));
+            }
+
+            // ASSERT_EQ_QUIET(h_output, d_output);
 
             // scan with maximum
             // TODO: Workaround
@@ -127,7 +147,13 @@ TYPED_TEST(PairScanVariablesTests, TestPairScan)
                                    d_output.begin(),
                                    init,
                                    maximum_pairs() /*thrust::maximum<P>()*/);
-            ASSERT_EQ_QUIET(h_output, d_output);
+             h_d_output = d_output;
+             for(size_t index = 0; index < h_output.size(); index++)
+             {
+               ASSERT_NEAR(h_output[index].first,h_d_output[index].first,std::abs(h_output[index].first*0.001));
+               ASSERT_NEAR(h_output[index].second,h_d_output[index].second,std::abs(h_output[index].second*0.001));
+             }
+            // ASSERT_EQ_QUIET(h_output, d_output);
         }
     }
 }
