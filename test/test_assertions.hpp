@@ -86,8 +86,8 @@ testing::AssertionResult ComplexCompare(const char*             expr1,
 
     const thrust::complex<double> diff(real_diff, imag_diff);
     const thrust::complex<double> tol_diff(
-        0.1 * (fabs(val1.real() + val2.real()) + abs_error.real()),
-        0.1 * (fabs(val1.imag() + val2.imag()) + abs_error.imag()));
+        0.1 * (fabs(val1.real() + val2.real()) + 100*abs_error.real()),
+        0.1 * (fabs(val1.imag() + val2.imag()) + 100*abs_error.imag()));
 
     if((diff.real() != 0 && diff.real() > tol_diff.real())
        || (diff.imag() != 0 && diff.imag() > tol_diff.imag()))
