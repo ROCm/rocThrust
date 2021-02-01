@@ -245,6 +245,8 @@ TYPED_TEST(TransformScanVariablesTests, TestTransformScan)
 
             thrust::host_vector<T>   h_output(size);
             thrust::device_vector<T> d_output(size);
+            thrust::host_vector<T>   h_d_output(size);
+
 
             thrust::transform_inclusive_scan(h_input.begin(),
                                              h_input.end(),
@@ -256,7 +258,11 @@ TYPED_TEST(TransformScanVariablesTests, TestTransformScan)
                                              d_output.begin(),
                                              thrust::negate<T>(),
                                              thrust::plus<T>());
-            ASSERT_EQ(d_output, h_output);
+            h_d_output = d_output;
+            for(size_t index = 0; index < h_output.size(); index++)
+            {
+              ASSERT_NEAR(h_d_output[index], h_output[index],std::abs((double)h_output[index])*0.001);
+            }
 
             thrust::transform_exclusive_scan(h_input.begin(),
                                              h_input.end(),
@@ -270,7 +276,11 @@ TYPED_TEST(TransformScanVariablesTests, TestTransformScan)
                                              thrust::negate<T>(),
                                              (T)11,
                                              thrust::plus<T>());
-            ASSERT_EQ(d_output, h_output);
+            h_d_output = d_output;
+            for(size_t index = 0; index < h_output.size(); index++)
+            {
+              ASSERT_NEAR(h_d_output[index], h_output[index],std::abs((double)h_output[index])*0.001);
+            }
 
             // in-place scans
             h_output = h_input;
@@ -285,7 +295,11 @@ TYPED_TEST(TransformScanVariablesTests, TestTransformScan)
                                              d_output.begin(),
                                              thrust::negate<T>(),
                                              thrust::plus<T>());
-            ASSERT_EQ(d_output, h_output);
+            h_d_output = d_output;
+            for(size_t index = 0; index < h_output.size(); index++)
+            {
+              ASSERT_NEAR(h_d_output[index], h_output[index],std::abs((double)h_output[index])*0.001);
+            }
 
             h_output = h_input;
             d_output = d_input;
@@ -301,7 +315,11 @@ TYPED_TEST(TransformScanVariablesTests, TestTransformScan)
                                              thrust::negate<T>(),
                                              (T)11,
                                              thrust::plus<T>());
-            ASSERT_EQ(d_output, h_output);
+            h_d_output = d_output;
+            for(size_t index = 0; index < h_output.size(); index++)
+            {
+              ASSERT_NEAR(h_d_output[index], h_output[index],std::abs((double)h_output[index])*0.001);
+            }
         }
     }
 };
