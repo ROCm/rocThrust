@@ -1,5 +1,5 @@
 # ########################################################################
-# Copyright 2019-2020 Advanced Micro Devices, Inc.
+# Copyright 2019-2021 Advanced Micro Devices, Inc.
 # ########################################################################
 
 cmake_minimum_required(VERSION 3.5.1 FATAL_ERROR)
@@ -71,7 +71,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 include(cmake/Dependencies.cmake)
 
 # Setup VERSION
-rocm_setup_version(VERSION "2.10.7")
+rocm_setup_version(VERSION "2.10.8")
 
 # Print configuration summary
 include(cmake/Summary.cmake)
