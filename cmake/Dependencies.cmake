@@ -28,7 +28,7 @@ if(NOT rocprim_FOUND)
     PROJ                rocprim
     GIT_REPOSITORY      https://github.com/ROCmSoftwarePlatform/rocPRIM.git
     GIT_TAG             develop
-    INSTALL_DIR         ${CMAKE_BINARY_DIR}/deps/rocprim
+    INSTALL_DIR         ${CMAKE_CURRENT_BINARY_DIR}/deps/rocprim
     CMAKE_ARGS          -DBUILD_TEST=OFF -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=/opt/rocm
     LOG_DOWNLOAD        TRUE
     LOG_CONFIGURE       TRUE
@@ -37,14 +37,14 @@ if(NOT rocprim_FOUND)
     BUILD_PROJECT       TRUE
     UPDATE_DISCONNECTED TRUE # Never update automatically from the remote repository
   )
-  find_package(rocprim REQUIRED PATHS ${CMAKE_BINARY_DIR}/deps/rocprim NO_DEFAULT_PATH)
+  find_package(rocprim REQUIRED CONFIG PATHS ${CMAKE_CURRENT_BINARY_DIR}/deps/rocprim NO_DEFAULT_PATH)
 endif()
 
 # Test dependencies
 if(BUILD_TEST)
   # Google Test (https://github.com/google/googletest)
   message(STATUS "Downloading and building GTest.")
-  set(GTEST_ROOT ${CMAKE_BINARY_DIR}/gtest CACHE PATH "")
+  set(GTEST_ROOT ${CMAKE_CURRENT_BINARY_DIR}/gtest CACHE PATH "")
   download_project(
     PROJ                googletest
     GIT_REPOSITORY      https://github.com/google/googletest.git
@@ -62,7 +62,7 @@ if(BUILD_TEST)
 endif()
 
 # rocRAND (https://github.com/ROCmSoftwarePlatform/rocRAND)
-# if(LARGE_TEST)
+if(LARGE_TEST)
   find_package(rocrand QUIET)
   if(NOT rocrand_FOUND)
     message(STATUS "Downloading and building rocrand.")
@@ -70,7 +70,7 @@ endif()
       PROJ                rocrand
       GIT_REPOSITORY      https://github.com/ROCmSoftwarePlatform/rocRAND.git
       GIT_TAG             develop
-      INSTALL_DIR         ${CMAKE_BINARY_DIR}/deps/rocrand
+      INSTALL_DIR         ${CMAKE_CURRENT_BINARY_DIR}/deps/rocrand
       CMAKE_ARGS          -DBUILD_TEST=OFF -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=/opt/rocm
       LOG_DOWNLOAD        TRUE
       LOG_CONFIGURE       TRUE
@@ -79,13 +79,6 @@ endif()
       BUILD_PROJECT       TRUE
       UPDATE_DISCONNECTED TRUE # Never update automatically from the remote repository
     )
-    if(${CMAKE_VERSION} VERSION_LESS "3.8.0")
-        message(${CMAKE_BINARY_DIR})
-        list( INSERT CMAKE_PREFIX_PATH 0 ${CMAKE_BINARY_DIR}/deps/rocrand)
-        find_package(rocrand REQUIRED)
-    else()
-        find_package(rocrand REQUIRED PATHS ${CMAKE_BINARY_DIR}/deps/rocrand NO_DEFAULT_PATH)
-    endif()
-
+    find_package(rocrand REQUIRED CONFIG PATHS ${CMAKE_CURRENT_BINARY_DIR}/deps/rocrand NO_DEFAULT_PATH)
   endif()
-# endif()
+endif()
