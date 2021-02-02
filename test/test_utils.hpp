@@ -133,13 +133,13 @@ void test_event_wait(Event&& e)
 bool is_large(size_t size) { return size > (1 << 20) - 123; }
 
 template <typename T = size_t>
-std::vector<size_t> get_sizes(size_t count = 1)
+std::vector<size_t> get_sizes(size_t count = 0)
 {
     std::vector<size_t> sizes = {
         0, 1, 2, 12, 63, 64, 211, 256, 344,
         1024, 2048, 5096, 34567, (1 << 17) - 1220, 1000000, (1 << 20) - 123
     };
-    if(large_tests)
+    if(large_tests && count>0)
     {
         size_t free, total;
         hipError_t err = hipMemGetInfo(&free, &total);
@@ -151,7 +151,7 @@ std::vector<size_t> get_sizes(size_t count = 1)
                     "hipMemGetInfo: hipErrorInvalidValue")
                 };
 
-        constexpr double capacity = 0.92;
+        constexpr double capacity = 0.51;
         sizes.push_back(size_t(free * capacity / (sizeof(T) * count)));
     }
 

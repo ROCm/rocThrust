@@ -21,7 +21,7 @@ else() # Workaround for not having string(JOIN) and list(JOIN)
   message(${PRNG_SEEDS_INITIALIZER})
 endif()
 
-if(LARGE_TESTS)
+if(LARGE_TEST)
   set(LARGE_TESTS_BOOLEAN true)
 else()
   set(LARGE_TESTS_BOOLEAN false)

@@ -124,7 +124,6 @@ print_configuration_summary()
 
 # Thrust (with HIP backend)
 add_subdirectory(thrust)
-
 # Tests
 if(BUILD_TEST)
   # We still want the testing to be compiled to catch some errors
