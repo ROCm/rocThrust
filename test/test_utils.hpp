@@ -245,6 +245,61 @@ inline auto get_random_data(size_t size, T min, T max, int seed) ->
     return data;
 }
 
+template<class T>
+struct precision_threshold
+{
+    static constexpr float percentage = 0.01f;
+};
+
+template<>
+struct precision_threshold<float>
+{
+    static constexpr float percentage = 0.01f;
+};
+
+template<>
+struct precision_threshold<rocprim::half>
+{
+    static constexpr float percentage = 0.075f;
+};
+
+template<>
+struct precision_threshold<int>
+{
+    static constexpr float percentage = 0;
+};
+
+template<>
+struct precision_threshold<unsigned int>
+{
+    static constexpr float percentage = 0;
+};
+
+template<>
+struct precision_threshold<long>
+{
+    static constexpr float percentage = 0;
+};
+
+template<>
+struct precision_threshold<unsigned long>
+{
+    static constexpr float percentage = 0;
+};
+
+template<>
+struct precision_threshold<short>
+{
+    static constexpr float percentage = 0;
+};
+
+template<>
+struct precision_threshold<unsigned short>
+{
+    static constexpr float percentage = 0;
+};
+
+
 template <class T>
 struct custom_compare_less
 {
@@ -642,15 +697,3 @@ void test_future_value_retrieval(Future&& f, decltype(f.extract()) &return_value
 
   return_value = r2;
 }
-
-template<class T>
-struct precision_threshold
-{
-    static constexpr float percentage = 0.01f;
-};
-
-template<>
-struct precision_threshold<rocprim::half>
-{
-    static constexpr float percentage = 0.075f;
-};

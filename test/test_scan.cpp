@@ -478,7 +478,7 @@ TYPED_TEST(ScanVariablesTests, TestScan)
             thrust::host_vector<T> h_output_d(d_output);
             for(size_t index = 0; index < h_output.size(); index++)
             {
-              ASSERT_NEAR(h_output[index],h_output_d[index],std::abs(h_output[index]*0.001));
+              ASSERT_NEAR(h_output[index],h_output_d[index],std::abs(h_output[index]*precision_threshold<T>::percentage));
             }
 
             thrust::exclusive_scan(h_input.begin(), h_input.end(), h_output.begin());
@@ -486,7 +486,7 @@ TYPED_TEST(ScanVariablesTests, TestScan)
             h_output_d = d_output;
             for(size_t index = 0; index < h_output.size(); index++)
             {
-              ASSERT_NEAR(h_output[index],h_output_d[index],std::abs(h_output[index]*0.001));
+              ASSERT_NEAR(h_output[index],h_output_d[index],std::abs(h_output[index]*precision_threshold<T>::percentage));
             }
 
             thrust::exclusive_scan(h_input.begin(), h_input.end(), h_output.begin(), (T)11);
@@ -494,7 +494,7 @@ TYPED_TEST(ScanVariablesTests, TestScan)
             h_output_d = d_output;
             for(size_t index = 0; index < h_output.size(); index++)
             {
-              ASSERT_NEAR(h_output[index],h_output_d[index],std::abs(h_output[index]*0.001));
+              ASSERT_NEAR(h_output[index],h_output_d[index],std::abs(h_output[index]*precision_threshold<T>::percentage));
             }
 
             // in-place scans
@@ -505,7 +505,7 @@ TYPED_TEST(ScanVariablesTests, TestScan)
             h_output_d = d_output;
             for(size_t index = 0; index < h_output.size(); index++)
             {
-              ASSERT_NEAR(h_output[index],h_output_d[index],std::abs(h_output[index]*0.001));
+              ASSERT_NEAR(h_output[index],h_output_d[index],std::abs(h_output[index]*precision_threshold<T>::percentage));
             }
             h_output = h_input;
             d_output = d_input;
@@ -514,7 +514,7 @@ TYPED_TEST(ScanVariablesTests, TestScan)
             h_output_d = d_output;
             for(size_t index = 0; index < h_output.size(); index++)
             {
-              ASSERT_NEAR(h_output[index],h_output_d[index],std::abs(h_output[index]*0.001));
+              ASSERT_NEAR(h_output[index],h_output_d[index],std::abs(h_output[index]*precision_threshold<T>::percentage));
             }
         }
     }

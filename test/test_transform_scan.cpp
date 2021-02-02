@@ -261,7 +261,7 @@ TYPED_TEST(TransformScanVariablesTests, TestTransformScan)
             h_d_output = d_output;
             for(size_t index = 0; index < h_output.size(); index++)
             {
-              ASSERT_NEAR(h_d_output[index], h_output[index],std::abs((double)h_output[index])*0.001);
+              ASSERT_NEAR(h_d_output[index], h_output[index],std::abs((double)h_output[index])*precision_threshold<T>::percentage);
             }
 
             thrust::transform_exclusive_scan(h_input.begin(),
@@ -279,7 +279,7 @@ TYPED_TEST(TransformScanVariablesTests, TestTransformScan)
             h_d_output = d_output;
             for(size_t index = 0; index < h_output.size(); index++)
             {
-              ASSERT_NEAR(h_d_output[index], h_output[index],std::abs((double)h_output[index])*0.001);
+              ASSERT_NEAR(h_d_output[index], h_output[index],std::abs((double)h_output[index])*precision_threshold<T>::percentage);
             }
 
             // in-place scans

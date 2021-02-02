@@ -79,7 +79,7 @@ TYPED_TEST(ZipIteratorScanVariablesTests, TestZipIteratorScan)
             {
               Tuple host_tuple = h_result[index];
               Tuple device_tuple = h_result_d[index];
-              ASSERT_NEAR(thrust::get<0>(host_tuple),thrust::get<0>(device_tuple),std::abs(thrust::get<0>(host_tuple)*0.001));
+              ASSERT_NEAR(thrust::get<0>(host_tuple),thrust::get<0>(device_tuple),std::abs(thrust::get<0>(host_tuple)*precision_threshold<T>::percentage));
             }
 
             // exclusive_scan (tuple output)
@@ -101,7 +101,7 @@ TYPED_TEST(ZipIteratorScanVariablesTests, TestZipIteratorScan)
             {
               Tuple host_tuple = h_result[index];
               Tuple device_tuple = h_result_d[index];
-              ASSERT_NEAR(thrust::get<0>(host_tuple),thrust::get<0>(device_tuple),std::abs(thrust::get<0>(host_tuple)*0.001));
+              ASSERT_NEAR(thrust::get<0>(host_tuple),thrust::get<0>(device_tuple),std::abs(thrust::get<0>(host_tuple)*precision_threshold<T>::percentage));
             }
 
             thrust::host_vector<T>   h_result0(size);
@@ -125,7 +125,7 @@ TYPED_TEST(ZipIteratorScanVariablesTests, TestZipIteratorScan)
             {
               Tuple host_tuple = h_result0[index];
               Tuple device_tuple = h_result_d[index];
-              ASSERT_NEAR(thrust::get<0>(host_tuple),thrust::get<0>(device_tuple),std::abs(thrust::get<0>(host_tuple)*0.001));
+              ASSERT_NEAR(thrust::get<0>(host_tuple),thrust::get<0>(device_tuple),std::abs(thrust::get<0>(host_tuple)*precision_threshold<T>::percentage));
             }
 
             h_result_d = d_result1;
@@ -133,7 +133,7 @@ TYPED_TEST(ZipIteratorScanVariablesTests, TestZipIteratorScan)
             {
               Tuple host_tuple = h_result1[index];
               Tuple device_tuple = h_result_d[index];
-              ASSERT_NEAR(thrust::get<0>(host_tuple),thrust::get<0>(device_tuple),std::abs(thrust::get<0>(host_tuple)*0.001));
+              ASSERT_NEAR(thrust::get<0>(host_tuple),thrust::get<0>(device_tuple),std::abs(thrust::get<0>(host_tuple)*precision_threshold<T>::percentage));
             }
 
             // exclusive_scan (zip_iterator output)
@@ -155,7 +155,7 @@ TYPED_TEST(ZipIteratorScanVariablesTests, TestZipIteratorScan)
             {
               Tuple host_tuple = h_result0[index];
               Tuple device_tuple = h_result_d[index];
-              ASSERT_NEAR(thrust::get<0>(host_tuple),thrust::get<0>(device_tuple),std::abs(thrust::get<0>(host_tuple)*0.001));
+              ASSERT_NEAR(thrust::get<0>(host_tuple),thrust::get<0>(device_tuple),std::abs(thrust::get<0>(host_tuple)*precision_threshold<T>::percentage));
             }
 
             h_result_d = d_result1;
@@ -163,7 +163,7 @@ TYPED_TEST(ZipIteratorScanVariablesTests, TestZipIteratorScan)
             {
               Tuple host_tuple = h_result1[index];
               Tuple device_tuple = h_result_d[index];
-              ASSERT_NEAR(thrust::get<0>(host_tuple),thrust::get<0>(device_tuple),std::abs(thrust::get<0>(host_tuple)*0.001));
+              ASSERT_NEAR(thrust::get<0>(host_tuple),thrust::get<0>(device_tuple),std::abs(thrust::get<0>(host_tuple)*precision_threshold<T>::percentage));
             }
         }
     }

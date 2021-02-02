@@ -99,8 +99,8 @@ TYPED_TEST(PairScanVariablesTests, TestPairScan)
             h_d_output = d_output;
             for(size_t index = 0; index < h_output.size(); index++)
             {
-              ASSERT_NEAR(h_output[index].first,h_d_output[index].first,std::abs(h_output[index].first*0.001));
-              ASSERT_NEAR(h_output[index].second,h_d_output[index].second,std::abs(h_output[index].second*0.001));
+              ASSERT_NEAR(h_output[index].first,h_d_output[index].first,std::abs(h_output[index].first*precision_threshold<T>::percentage));
+              ASSERT_NEAR(h_output[index].second,h_d_output[index].second,std::abs(h_output[index].second*precision_threshold<T>::percentage));
             }
 
             // scan with maximum
@@ -116,8 +116,8 @@ TYPED_TEST(PairScanVariablesTests, TestPairScan)
             h_d_output = d_output;
             for(size_t index = 0; index < h_output.size(); index++)
             {
-              ASSERT_NEAR(h_output[index].first,h_d_output[index].first,std::abs(h_output[index].first*0.001));
-              ASSERT_NEAR(h_output[index].second,h_d_output[index].second,std::abs(h_output[index].second*0.001));
+              ASSERT_NEAR(h_output[index].first,h_d_output[index].first,std::abs(h_output[index].first*precision_threshold<T>::percentage));
+              ASSERT_NEAR(h_output[index].second,h_d_output[index].second,std::abs(h_output[index].second*precision_threshold<T>::percentage));
             }
 
             // scan with plus
@@ -129,8 +129,8 @@ TYPED_TEST(PairScanVariablesTests, TestPairScan)
             h_d_output = d_output;
             for(size_t index = 0; index < h_output.size(); index++)
             {
-              ASSERT_NEAR(h_output[index].first,h_d_output[index].first,std::abs(h_output[index].first*0.001));
-              ASSERT_NEAR(h_output[index].second,h_d_output[index].second,std::abs(h_output[index].second*0.001));
+              ASSERT_NEAR(h_output[index].first,h_d_output[index].first,std::abs(h_output[index].first*precision_threshold<T>::percentage));
+              ASSERT_NEAR(h_output[index].second,h_d_output[index].second,std::abs(h_output[index].second*precision_threshold<T>::percentage));
             }
 
             // ASSERT_EQ_QUIET(h_output, d_output);
@@ -150,8 +150,8 @@ TYPED_TEST(PairScanVariablesTests, TestPairScan)
              h_d_output = d_output;
              for(size_t index = 0; index < h_output.size(); index++)
              {
-               ASSERT_NEAR(h_output[index].first,h_d_output[index].first,std::abs(h_output[index].first*0.001));
-               ASSERT_NEAR(h_output[index].second,h_d_output[index].second,std::abs(h_output[index].second*0.001));
+               ASSERT_NEAR(h_output[index].first,h_d_output[index].first,std::abs(h_output[index].first*precision_threshold<T>::percentage));
+               ASSERT_NEAR(h_output[index].second,h_d_output[index].second,std::abs(h_output[index].second*precision_threshold<T>::percentage));
              }
             // ASSERT_EQ_QUIET(h_output, d_output);
         }
