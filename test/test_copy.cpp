@@ -62,34 +62,62 @@ TEST(HipThrustCopy, DeviceToDevice)
 {
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    const size_t              size = 256;
-    thrust::device_system_tag dev_tag;
-
-    // Malloc on device
-    auto d_ptr1 = thrust::malloc<int>(dev_tag, sizeof(int) * size);
-    auto d_ptr2 = thrust::malloc<int>(dev_tag, sizeof(int) * size);
-
-    // Zero d_ptr1 memory
-    HIP_CHECK(hipMemset(thrust::raw_pointer_cast(d_ptr1), 0, sizeof(int) * size));
-    HIP_CHECK(hipMemset(thrust::raw_pointer_cast(d_ptr2), 0xdead, sizeof(int) * size));
-
-    // Copy device->device
-    thrust::copy(d_ptr1, d_ptr1 + 256, d_ptr2);
-
-    std::vector<int> output(size);
-    HIP_CHECK(hipMemcpy(output.data(),
-                        thrust::raw_pointer_cast(d_ptr2),
-                        size * sizeof(int),
-                        hipMemcpyDeviceToHost));
-
-    for(size_t i = 0; i < size; i++)
+    for(auto &size : get_sizes<int>())
     {
-        ASSERT_EQ(output[i], int(0)) << "where index = " << i;
-    }
+      thrust::device_system_tag dev_tag;
 
-    // Free
-    thrust::free(dev_tag, d_ptr1);
-    thrust::free(dev_tag, d_ptr2);
+      // Malloc on device
+      auto d_ptr1 = thrust::malloc<int>(dev_tag, sizeof(int) * size);
+      auto d_ptr2 = thrust::malloc<int>(dev_tag, sizeof(int) * size);
+
+      // Zero d_ptr1 memory
+      HIP_CHECK(hipMemset(thrust::raw_pointer_cast(d_ptr1), 0, sizeof(int) * size));
+      HIP_CHECK(hipMemset(thrust::raw_pointer_cast(d_ptr2), 0xdead, sizeof(int) * size));
+
+      // Copy device->device
+      thrust::copy(d_ptr1, d_ptr1 + size, d_ptr2);
+
+      std::vector<int> output(size);
+      HIP_CHECK(hipMemcpy(output.data(),
+                          thrust::raw_pointer_cast(d_ptr2),
+                          size * sizeof(int),
+                          hipMemcpyDeviceToHost));
+
+      for(size_t i = 0; i < size; i++)
+      {
+          ASSERT_EQ(output[i], int(0)) << "where index = " << i;
+      }
+
+      // Free
+      thrust::free(dev_tag, d_ptr1);
+      thrust::free(dev_tag, d_ptr2);
+    }
+}
+
+TYPED_TEST(CopyTests, VectorDeviceToDevice)
+{
+  using Vector = typename TestFixture::input_type;
+  using T      = typename Vector::value_type;
+
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
+
+    for(auto &size : get_sizes<T>(2))
+    {
+
+      thrust::host_vector<T> h_data = get_random_data<T>(
+          size, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), 1);
+      // Malloc on device
+      thrust::device_vector<T> d_input(size);
+      thrust::device_vector<T> d_output(size);
+
+      d_input = h_data;
+
+      // Copy device->device
+      thrust::copy(d_input.begin(), d_input.end(), d_output.begin());
+
+
+      ASSERT_EQ(d_output,h_data);
+    }
 }
 
 TEST(CopyTests, TestCopyFromConstIterator)
