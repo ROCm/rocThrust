@@ -133,7 +133,7 @@ void test_event_wait(Event&& e)
 std::vector<size_t> get_sizes()
 {
     std::vector<size_t> sizes = {
-        0, 1, 2, 12, 63, 64, 211, 256, 344,
+        1, 2, 12, 63, 64, 211, 256, 344,
         1024, 2048, 5096, 34567, (1 << 17) - 1220, 1000000, (1 << 20) - 123
     };
     return sizes;
