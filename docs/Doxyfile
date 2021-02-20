@@ -2037,7 +2037,7 @@ MACRO_EXPANSION        = YES
 # The default value is: NO.
 # This tag requires that the tag ENABLE_PREPROCESSING is set to YES.
 
-EXPAND_ONLY_PREDEF     = YES
+EXPAND_ONLY_PREDEF     = NO
 
 # If the SEARCH_INCLUDES tag is set to YES, the include files in the
 # INCLUDE_PATH will be searched if a #include is found.
@@ -2070,6 +2070,7 @@ INCLUDE_FILE_PATTERNS  =
 # This tag requires that the tag ENABLE_PREPROCESSING is set to YES.
 
 PREDEFINED             = THRUST_NOEXCEPT=noexcept \
+                         "THRUST_INLINE_CONSTANT=inline constexpr" \
                          "THRUST_DEFAULT={}" \
                          "THRUST_NODISCARD=[[nodiscard]]" \
                          "THRUST_MR_DEFAULT_ALIGNMENT=alignof(max_align_t)" \
@@ -2077,7 +2078,9 @@ PREDEFINED             = THRUST_NOEXCEPT=noexcept \
                          "THRUST_OVERRIDE=" \
                          "THRUST_BEGIN_NS=namespace thrust {" \
                          "THRUST_END_NS=}" \
-                         "cuda_cub=system::cuda"
+                         "cuda_cub=system::cuda" \
+                         THRUST_PREVENT_MACRO_SUBSTITUTION= \
+                         __thrust_exec_check_disable__=
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this
 # tag can be used to specify a list of macro names that should be expanded. The
@@ -2096,7 +2099,7 @@ EXPAND_AS_DEFINED      =
 # The default value is: YES.
 # This tag requires that the tag ENABLE_PREPROCESSING is set to YES.
 
-SKIP_FUNCTION_MACROS   = YES
+SKIP_FUNCTION_MACROS   = NO
 
 #---------------------------------------------------------------------------
 # Configuration options related to external references
