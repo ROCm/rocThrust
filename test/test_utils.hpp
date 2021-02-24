@@ -151,7 +151,7 @@ std::vector<size_t> get_sizes(size_t count = 0)
                     "hipMemGetInfo: hipErrorInvalidValue")
                 };
 
-        constexpr double capacity = 0.51;
+        constexpr double capacity = 0.49;
         sizes.push_back(size_t(free * capacity / (sizeof(T) * count)));
     }
 
