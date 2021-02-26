@@ -43,6 +43,7 @@ function(add_rocthrust_test TEST)
     )
     target_link_libraries(${TEST_TARGET}
         PRIVATE
+            hip::device
             rocthrust
             roc::rocprim_hip
             ${GTEST_BOTH_LIBRARIES}
@@ -53,12 +54,6 @@ function(add_rocthrust_test TEST)
         INTERFACE
             THRUST_HOST_SYSTEM=3 # THRUST_HOST_SYSTEM_TBB
     )
-    foreach(amdgpu_target ${AMDGPU_TARGETS})
-        target_link_libraries(${TEST_TARGET}
-            PRIVATE
-                --amdgpu-target=${amdgpu_target}
-        )
-    endforeach()
     set_target_properties(${TEST_TARGET}
         PROPERTIES
             RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/test/"
