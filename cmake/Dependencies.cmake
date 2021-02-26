@@ -43,21 +43,27 @@ endif()
 # Test dependencies
 if(BUILD_TEST)
   # Google Test (https://github.com/google/googletest)
-  message(STATUS "Downloading and building GTest.")
-  set(GTEST_ROOT ${CMAKE_CURRENT_BINARY_DIR}/gtest CACHE PATH "")
-  download_project(
-    PROJ                googletest
-    GIT_REPOSITORY      https://github.com/google/googletest.git
-    GIT_TAG             release-1.8.1
-    INSTALL_DIR         ${GTEST_ROOT}
-    CMAKE_ARGS          -DBUILD_GTEST=ON -DINSTALL_GTEST=ON -Dgtest_force_shared_crt=ON -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
-    LOG_DOWNLOAD        TRUE
-    LOG_CONFIGURE       TRUE
-    LOG_BUILD           TRUE
-    LOG_INSTALL         TRUE
-    BUILD_PROJECT       TRUE
-    UPDATE_DISCONNECTED TRUE
-  )
+  if(NOT DEPENDENCIES_FORCE_DOWNLOAD)
+    find_package(GTest QUIET)
+  endif()
+
+  if(NOT GTEST_FOUND)
+    message(STATUS "GTest not found or force download GTest on. Downloading and building GTest.")
+    set(GTEST_ROOT ${CMAKE_CURRENT_BINARY_DIR}/gtest CACHE PATH "")
+    download_project(
+      PROJ                googletest
+      GIT_REPOSITORY      https://github.com/google/googletest.git
+      GIT_TAG             release-1.8.1
+      INSTALL_DIR         ${GTEST_ROOT}
+      CMAKE_ARGS          -DBUILD_GTEST=ON -DINSTALL_GTEST=ON -Dgtest_force_shared_crt=ON -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+      LOG_DOWNLOAD        TRUE
+      LOG_CONFIGURE       TRUE
+      LOG_BUILD           TRUE
+      LOG_INSTALL         TRUE
+      BUILD_PROJECT       TRUE
+      UPDATE_DISCONNECTED TRUE
+    )
+  endif()
   find_package(GTest REQUIRED)
 endif()
 
