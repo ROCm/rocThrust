@@ -68,13 +68,15 @@ if(BUILD_TEST)
   find_package(GTest REQUIRED CONFIG PATHS ${GTEST_ROOT})
 
   if(LARGE_TEST)
-    # rocRAND (https://github.com/ROCmSoftwarePlatform/rocRAND)
     if(NOT DEPENDENCIES_FORCE_DOWNLOAD)
+      # rocRAND (https://github.com/ROCmSoftwarePlatform/rocRAND)
       find_package(rocrand QUIET)
+      # TBB (https://github.com/oneapi-src/oneTBB)
+      find_package(TBB QUIET)
     endif()
 
     if(NOT rocrand_FOUND)
-      message(STATUS "rocRAND not found or force download rocRAND on. Downloading and building rocrand.")
+      message(STATUS "rocRAND not found or force download rocRAND on. Downloading and building rocRAND.")
       set(ROCRAND_ROOT ${CMAKE_CURRENT_BINARY_DIR}/deps/rocrand CACHE PATH "")
       download_project(
         PROJ                rocrand
@@ -91,5 +93,24 @@ if(BUILD_TEST)
       )
     endif()
     find_package(rocrand REQUIRED CONFIG PATHS ${ROCRAND_ROOT} NO_DEFAULT_PATH)
+
+    if(NOT TBB_FOUND)
+      message(STATUS "TBB not found or force download TBB on. Downloading and building TBB.")
+      set(TBB_ROOT ${CMAKE_CURRENT_BINARY_DIR}/deps/tbb CACHE PATH "")
+      download_project(
+        PROJ                tbb
+        GIT_REPOSITORY      https://github.com/oneapi-src/oneTBB.git
+        GIT_TAG             v2021.1.1
+        INSTALL_DIR         ${TBB_ROOT}
+        CMAKE_ARGS          -DTBB_TEST=OFF -DTBB_STRICT=OFF -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR>
+        LOG_DOWNLOAD        TRUE
+        LOG_CONFIGURE       TRUE
+        LOG_BUILD           TRUE
+        LOG_INSTALL         TRUE
+        BUILD_PROJECT       TRUE
+        UPDATE_DISCONNECTED TRUE # Never update automatically from the remote repository
+      )
+    endif()
+    find_package(TBB REQUIRED CONFIG PATHS ${ROCRAND_ROOT} NO_DEFAULT_PATH)
   endif()
 endif()
