@@ -19,7 +19,7 @@ if (NOT Git_FOUND)
 endif()
 
 # rocPRIM (https://github.com/ROCmSoftwarePlatform/rocPRIM)
-if(NOT DOWNLOAD_ROCPRIM)
+if(NOT DEPENDENCIES_FORCE_DOWNLOAD)
   find_package(rocprim)
 endif()
 if(NOT rocprim_FOUND)
