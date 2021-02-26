@@ -23,12 +23,13 @@ if(NOT DEPENDENCIES_FORCE_DOWNLOAD)
   find_package(rocprim)
 endif()
 if(NOT rocprim_FOUND)
-  message(STATUS "Downloading and building rocprim.")
+  message(STATUS "rocPRIM not found or force download rocPRIM on. Downloading and building rocprim.")
+  set(ROCPRIM_ROOT ${CMAKE_CURRENT_BINARY_DIR}/deps/rocprim CACHE PATH "")
   download_project(
     PROJ                rocprim
     GIT_REPOSITORY      https://github.com/ROCmSoftwarePlatform/rocPRIM.git
     GIT_TAG             develop
-    INSTALL_DIR         ${CMAKE_CURRENT_BINARY_DIR}/deps/rocprim
+    INSTALL_DIR         ${ROCPRIM_ROOT}
     CMAKE_ARGS          -DBUILD_TEST=OFF -DCMAKE_INSTALL_PREFIX=<INSTALL_DIR> -DCMAKE_PREFIX_PATH=/opt/rocm
     LOG_DOWNLOAD        TRUE
     LOG_CONFIGURE       TRUE
@@ -37,7 +38,7 @@ if(NOT rocprim_FOUND)
     BUILD_PROJECT       TRUE
     UPDATE_DISCONNECTED TRUE # Never update automatically from the remote repository
   )
-  find_package(rocprim REQUIRED CONFIG PATHS ${CMAKE_CURRENT_BINARY_DIR}/deps/rocprim NO_DEFAULT_PATH)
+  find_package(rocprim REQUIRED CONFIG PATHS ${ROCPRIM_ROOT} NO_DEFAULT_PATH)
 endif()
 
 # Test dependencies
@@ -49,7 +50,7 @@ if(BUILD_TEST)
 
   if(NOT GTEST_FOUND)
     message(STATUS "GTest not found or force download GTest on. Downloading and building GTest.")
-    set(GTEST_ROOT ${CMAKE_CURRENT_BINARY_DIR}/gtest CACHE PATH "")
+    set(GTEST_ROOT ${CMAKE_CURRENT_BINARY_DIR}/deps/gtest CACHE PATH "")
     download_project(
       PROJ                googletest
       GIT_REPOSITORY      https://github.com/google/googletest.git
@@ -61,10 +62,10 @@ if(BUILD_TEST)
       LOG_BUILD           TRUE
       LOG_INSTALL         TRUE
       BUILD_PROJECT       TRUE
-      UPDATE_DISCONNECTED TRUE
+      UPDATE_DISCONNECTED TRUE # Never update automatically from the remote repository
     )
   endif()
-  find_package(GTest REQUIRED)
+  find_package(GTest REQUIRED CONFIG PATHS ${GTEST_ROOT})
 endif()
 
 # rocRAND (https://github.com/ROCmSoftwarePlatform/rocRAND)
