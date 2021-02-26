@@ -106,12 +106,6 @@ else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unused-function -Wno-unused-parameter -Werror")
 endif()
 
-if(DISABLE_WERROR)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
-else()
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
-endif()
-
 # Get dependencies
 include(cmake/Dependencies.cmake)
 
