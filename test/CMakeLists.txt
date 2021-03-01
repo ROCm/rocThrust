@@ -46,7 +46,8 @@ function(add_rocthrust_test TEST)
             hip::device
             rocthrust
             roc::rocprim_hip
-            ${GTEST_BOTH_LIBRARIES}
+            GTest::GTest
+            GTest::Main
             roc::rocrand
             TBB::tbb
     )
