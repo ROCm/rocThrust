@@ -9,6 +9,8 @@
 # HIP dependency is handled earlier in the project cmake file
 # when VerifyCompiler.cmake is included.
 
+include_guard()
+
 # For downloading, building, and installing required dependencies
 include(cmake/DownloadProject.cmake)
 
@@ -48,7 +50,37 @@ if(BUILD_TEST)
     find_package(GTest QUIET)
   endif()
 
-  if(NOT GTEST_FOUND)
+  # GTest has created a mess with the results of their FindModule and PackageConfig script results differing:
+  #
+  # MODULE: GTest::GTest, GTest::Main
+  # CONFIG: GTest::gtest, GTest::gtest_main, GTest::gmock, GTest::gmock_main
+  #
+  # In the context of Dependencies.cmake, 4 scenarios may have happened:
+  #
+  #   1. CONFIG detection succeeds
+  #   2. MODULE detection succeeds
+  #   3. Neither succeed
+  #   4. find_package wasn't even invoked
+  #
+  # We have to handle all 4 cases. Because we cannot ALIAS targets which are IMPORTED, we wrap them with a variable,
+  # as ugly as it is.
+
+  # 3. & 4. both require downloading and building GTest and is easiest to detect as the complement of 1. & 2.
+  #
+  # Note: because we're restricted to CMake 3.10 which doesn't have if(TARGET) yet, and testing for the existence
+  #       of IMPORTED targets is otherwise, we check for side-effects of MODULE and CONFIG detection.
+  if(EXISTS GTest_CONFIG)
+    set(GTEST_CONFIG_SUCCEED True)
+  else()
+    set(GTEST_CONFIG_SUCCEED False)
+  endif()
+  if(DEFINED GTEST_FOUND)
+    set(GTEST_MODULE_SUCCEED ${GTEST_FOUND})
+  else()
+    set(GTEST_MODULE_SUCCEED False)
+  endif()
+
+  if((NOT GTEST_MODULE_SUCCEED) AND (NOT GTEST_CONFIG_SUCCEED)) # 3. & 4.
     message(STATUS "GTest not found or force download GTest on. Downloading and building GTest.")
     set(GTEST_ROOT ${CMAKE_CURRENT_BINARY_DIR}/deps/gtest CACHE PATH "")
     download_project(
@@ -64,8 +96,13 @@ if(BUILD_TEST)
       BUILD_PROJECT       TRUE
       UPDATE_DISCONNECTED TRUE # Never update automatically from the remote repository
     )
+    find_package(GTest REQUIRED CONFIG PATHS ${GTEST_ROOT})
+    set(GTest_IMPORTED_targets GTest::gtest GTest::gtest_main)
+  elseif(GTEST_CONFIG_SUCCEED) # 1.
+    set(GTest_IMPORTED_targets GTest::gtest GTest::gtest_main)
+  elseif(GTEST_MODULE_SUCCEED) # 2.
+    set(GTest_IMPORTED_targets GTest::GTest GTest::Main)
   endif()
-  find_package(GTest REQUIRED CONFIG PATHS ${GTEST_ROOT})
 
   if(LARGE_TEST)
     if(NOT DEPENDENCIES_FORCE_DOWNLOAD)

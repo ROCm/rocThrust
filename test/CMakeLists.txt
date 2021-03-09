@@ -46,8 +46,7 @@ function(add_rocthrust_test TEST)
             hip::device
             rocthrust
             roc::rocprim_hip
-            GTest::GTest
-            GTest::Main
+            ${GTest_IMPORTED_targets}
             roc::rocrand
             TBB::tbb
     )
