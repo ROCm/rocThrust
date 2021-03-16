@@ -20,17 +20,19 @@
 #include <thrust/system/hip/detail/guarded_hip_runtime_api.h>
 
 #include <thrust/detail/config.h>
+#include <thrust/detail/raw_pointer_cast.h>
+#include <thrust/detail/raw_reference_cast.h>
 #include <thrust/detail/seq.h>
-#include <thrust/memory.h>
 #include <thrust/system/hip/config.h>
 // No caching allocator in rocPRIM
 // #ifdef THRUST_CACHING_DEVICE_MALLOC
 // #include <thrust/system/cuda/detail/cub/util_allocator.cuh>
 // #endif
-#include <thrust/system/detail/bad_alloc.h>
 #include <thrust/system/hip/detail/util.h>
-
-THRUST_BEGIN_NS
+#include <thrust/system/detail/bad_alloc.h>
+#include <thrust/detail/malloc_and_free.h>
+namespace thrust
+{
 namespace hip_rocprim
 {
 
@@ -54,7 +56,8 @@ malloc(execution_policy<DerivedPolicy>&, std::size_t n)
 {
     void* result = 0;
 
-#ifndef __HIP_DEVICE_COMPILE__
+if (THRUST_IS_HOST_CODE) {
+  #if THRUST_INCLUDE_HOST_CODE
     // No caching allocator in rocPRIM
     // #ifdef __CUB_CACHING_MALLOC
     //   cub::CachingDeviceAllocator &alloc = get_allocator();
@@ -65,12 +68,17 @@ malloc(execution_policy<DerivedPolicy>&, std::size_t n)
 
     if(status != hipSuccess)
     {
-        hipGetLastError(); // Clear global hip error state.
+        // Clear global hip error state.
+        hipError_t clear_error_status = hipGetLastError(); 
+        THRUST_UNUSED_VAR(clear_error_status);
         throw thrust::system::detail::bad_alloc(thrust::hip_category().message(status).c_str());
     }
-#else
-    result = thrust::raw_pointer_cast(thrust::malloc(thrust::seq, n));
-#endif
+    #endif
+  } else {
+      #if THRUST_INCLUDE_DEVICE_CODE
+        result = thrust::raw_pointer_cast(thrust::malloc(thrust::seq, n));
+      #endif
+    }
 
     return result;
 } // end malloc()
@@ -79,7 +87,8 @@ template <typename DerivedPolicy, typename Pointer>
 void __host__ __device__
 free(execution_policy<DerivedPolicy>&, Pointer ptr)
 {
-#ifndef __HIP_DEVICE_COMPILE__
+  if (THRUST_IS_HOST_CODE) {
+    #if THRUST_INCLUDE_HOST_CODE
     // No caching allocator in rocPRIM
     // #ifdef __CUB_CACHING_MALLOC
     //   cub::CachingDeviceAllocator &alloc = get_allocator();
@@ -88,10 +97,13 @@ free(execution_policy<DerivedPolicy>&, Pointer ptr)
     hipError_t status = hipFree(thrust::raw_pointer_cast(ptr));
     // #endif
     hip_rocprim::throw_on_error(status, "device free failed");
-#else
+    #endif
+  } else {
+    #if THRUST_INCLUDE_DEVICE_CODE
     thrust::free(thrust::seq, ptr);
-#endif
+    #endif
+  }
 } // end free()
 
 } // namespace hip_rocprim
-THRUST_END_NS
+} // end namespace thrust

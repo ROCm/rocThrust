@@ -39,7 +39,8 @@
 // rocPRIM includes
 #include <rocprim/rocprim.hpp>
 
-THRUST_BEGIN_NS
+namespace thrust
+{
 namespace hip_rocprim
 {
 namespace __merge_sort
@@ -106,7 +107,7 @@ namespace __merge_sort
               typename KeysIt,
               typename ItemsIt,
               typename CompareOp>
-    THRUST_HIP_RUNTIME_FUNCTION 
+    THRUST_HIP_RUNTIME_FUNCTION
     void merge_sort(execution_policy<Derived>& policy,
                     KeysIt                     keys_first,
                     KeysIt                     keys_last,
@@ -116,6 +117,9 @@ namespace __merge_sort
         typedef typename iterator_traits<KeysIt>::difference_type size_type;
 
         const size_type count = static_cast<size_type>(thrust::distance(keys_first, keys_last));
+
+        if(count == 0)
+            return;
 
         size_t      storage_size = 0;
         hipStream_t stream       = hip_rocprim::stream(policy);
@@ -279,7 +283,10 @@ namespace __radix_sort
         typedef typename iterator_traits<KeysIt>::difference_type size_type;
 
         const size_type count = static_cast<size_type>(thrust::distance(keys_first, keys_last));
-		
+
+        if(count == 0)
+            return;
+
         size_t      storage_size = 0;
         hipStream_t stream       = hip_rocprim::stream(policy);
         bool        debug_sync   = THRUST_HIP_DEBUG_SYNC_FLAG;
@@ -535,5 +542,5 @@ stable_sort_by_key(execution_policy<Derived>& policy,
 }
 
 } // namespace hip_rocprim
-THRUST_END_NS
+} // end namespace thrust
 #endif

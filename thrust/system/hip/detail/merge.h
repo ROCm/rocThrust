@@ -47,7 +47,8 @@
 // rocPRIM includes
 #include <rocprim/rocprim.hpp>
 
-THRUST_BEGIN_NS
+namespace thrust
+{
 namespace hip_rocprim
 {
 namespace __merge
@@ -88,6 +89,9 @@ namespace __merge
             = static_cast<size_type>(thrust::distance(keys1_first, keys1_last));
         size_type input2_size
             = static_cast<size_type>(thrust::distance(keys2_first, keys2_last));
+
+        if( input1_size == 0 && input2_size == 0 )
+            return result;
 
         size_t      storage_size = 0;
         hipStream_t stream       = hip_rocprim::stream(policy);
@@ -160,6 +164,9 @@ namespace __merge
             = static_cast<size_type>(thrust::distance(keys1_first, keys1_last));
         size_type input2_size
             = static_cast<size_type>(thrust::distance(keys2_first, keys2_last));
+
+        if( input1_size == 0 && input2_size == 0 )
+            return thrust::make_pair(keys_result, items_result);;
 
         size_t      storage_size = 0;
         hipStream_t stream       = hip_rocprim::stream(policy);
@@ -418,5 +425,5 @@ merge_by_key(execution_policy<Derived>& policy,
 
 } // namespace hip_rocprim
 
-THRUST_END_NS
+} // end namespace thrust
 #endif

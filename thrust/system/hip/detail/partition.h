@@ -47,7 +47,8 @@
 // rocprim include
 #include <rocprim/rocprim.hpp>
 
-THRUST_BEGIN_NS
+namespace thrust
+{
 namespace hip_rocprim
 {
 namespace __partition
@@ -173,6 +174,9 @@ namespace __partition
         size_t      temp_storage_bytes = 0;
         hipStream_t stream             = hip_rocprim::stream(policy);
         bool        debug_sync         = THRUST_HIP_DEBUG_SYNC_FLAG;
+
+        if(num_items == 0)
+            return thrust::make_pair(selected_result, rejected_result);
 
         // Determine temporary device storage requirements.
         hip_rocprim::throw_on_error(rocprim::partition(NULL,
@@ -880,5 +884,5 @@ is_partitioned(execution_policy<Derived>& policy,
 }
 
 } // namespace hip_rocprim
-THRUST_END_NS
+} // end namespace thrust
 #endif
