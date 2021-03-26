@@ -65,10 +65,10 @@ namespace thrust
  *  \return The end of the output sequence.
  *
  *  \tparam DerivedPolicy The name of the derived execution policy.
- *  \tparam InputIterator is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
+ *  \tparam InputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
  *                        and \c InputIterator's \c value_type is convertible to
  *                        \c OutputIterator's \c value_type.
- *  \tparam OutputIterator is a model of <a href="http://www.sgi.com/tech/stl/OutputIterator.html">Output Iterator</a>,
+ *  \tparam OutputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/output_iterator">Output Iterator</a>,
  *                         and if \c x and \c y are objects of \c OutputIterator's
  *                         \c value_type, then <tt>x + y</tt> is defined. If \c T is
  *                         \c OutputIterator's \c value_type, then <tt>T(0)</tt> is
@@ -91,7 +91,7 @@ namespace thrust
  *  // data is now {1, 1, 3, 5, 6, 9}
  *  \endcode
  *
- *  \see http://www.sgi.com/tech/stl/partial_sum.html
+ *  \see https://en.cppreference.com/w/cpp/algorithm/partial_sum
  *
  */
 template<typename DerivedPolicy,
@@ -127,10 +127,10 @@ __host__ __device__
  *  \param result The beginning of the output sequence.
  *  \return The end of the output sequence.
  *
- *  \tparam InputIterator is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
+ *  \tparam InputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
  *                        and \c InputIterator's \c value_type is convertible to
  *                        \c OutputIterator's \c value_type.
- *  \tparam OutputIterator is a model of <a href="http://www.sgi.com/tech/stl/OutputIterator.html">Output Iterator</a>,
+ *  \tparam OutputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/output_iterator">Output Iterator</a>,
  *                         and if \c x and \c y are objects of \c OutputIterator's
  *                         \c value_type, then <tt>x + y</tt> is defined. If \c T is
  *                         \c OutputIterator's \c value_type, then <tt>T(0)</tt> is
@@ -150,7 +150,7 @@ __host__ __device__
  *  // data is now {1, 1, 3, 5, 6, 9}
  *  \endcode
  *
- *  \see http://www.sgi.com/tech/stl/partial_sum.html
+ *  \see https://en.cppreference.com/w/cpp/algorithm/partial_sum
  *
  */
 template<typename InputIterator,
@@ -184,14 +184,14 @@ template<typename InputIterator,
  *  \return The end of the output sequence.
  *
  *  \tparam DerivedPolicy The name of the derived execution policy.
- *  \tparam InputIterator is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
+ *  \tparam InputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
  *                        and \c InputIterator's \c value_type is convertible to
  *                        \c OutputIterator's \c value_type.
- *  \tparam OutputIterator is a model of <a href="http://www.sgi.com/tech/stl/OutputIterator.html">Output Iterator</a>
+ *  \tparam OutputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/output_iterator">Output Iterator</a>
  *                         and \c OutputIterator's \c value_type is convertible to
  *                         both \c AssociativeOperator's \c first_argument_type and
  *                         \c second_argument_type.
- *  \tparam AssociativeOperator is a model of <a href="http://www.sgi.com/tech/stl/BinaryFunction.html">Binary Function</a>
+ *  \tparam AssociativeOperator is a model of <a href="https://en.cppreference.com/w/cpp/utility/functional/binary_function">Binary Function</a>
  *                              and \c AssociativeOperator's \c result_type is
  *                              convertible to \c OutputIterator's \c value_type.
  *
@@ -210,7 +210,7 @@ template<typename InputIterator,
  *  // data is now {-5, 0, 2, 2, 2, 4, 4, 4, 4, 8}
  *  \endcode
  *
- *  \see http://www.sgi.com/tech/stl/partial_sum.html
+ *  \see https://en.cppreference.com/w/cpp/algorithm/partial_sum
  */
 template<typename DerivedPolicy,
          typename InputIterator,
@@ -244,14 +244,14 @@ __host__ __device__
  *  \param binary_op The associatve operator used to 'sum' values.
  *  \return The end of the output sequence.
  *
- *  \tparam InputIterator is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
+ *  \tparam InputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
  *                        and \c InputIterator's \c value_type is convertible to
  *                        \c OutputIterator's \c value_type.
- *  \tparam OutputIterator is a model of <a href="http://www.sgi.com/tech/stl/OutputIterator.html">Output Iterator</a>
+ *  \tparam OutputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/output_iterator">Output Iterator</a>
  *                         and \c OutputIterator's \c value_type is convertible to
  *                         both \c AssociativeOperator's \c first_argument_type and
  *                         \c second_argument_type.
- *  \tparam AssociativeOperator is a model of <a href="http://www.sgi.com/tech/stl/BinaryFunction.html">Binary Function</a>
+ *  \tparam AssociativeOperator is a model of <a href="https://en.cppreference.com/w/cpp/utility/functional/binary_function">Binary Function</a>
  *                              and \c AssociativeOperator's \c result_type is
  *                              convertible to \c OutputIterator's \c value_type.
  *
@@ -269,7 +269,7 @@ __host__ __device__
  *  // data is now {-5, 0, 2, 2, 2, 4, 4, 4, 4, 8}
  *  \endcode
  *
- *  \see http://www.sgi.com/tech/stl/partial_sum.html
+ *  \see https://en.cppreference.com/w/cpp/algorithm/partial_sum
  */
 template<typename InputIterator,
          typename OutputIterator,
@@ -301,10 +301,10 @@ template<typename InputIterator,
  *  \return The end of the output sequence.
  *
  *  \tparam DerivedPolicy The name of the derived execution policy.
- *  \tparam InputIterator is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
+ *  \tparam InputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
  *                        and \c InputIterator's \c value_type is convertible to
  *                        \c OutputIterator's \c value_type.
- *  \tparam OutputIterator is a model of <a href="http://www.sgi.com/tech/stl/OutputIterator.html">Output Iterator</a>,
+ *  \tparam OutputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/output_iterator">Output Iterator</a>,
  *                         and if \c x and \c y are objects of \c OutputIterator's
  *                         \c value_type, then <tt>x + y</tt> is defined. If \c T is
  *                         \c OutputIterator's \c value_type, then <tt>T(0)</tt> is
@@ -327,7 +327,7 @@ template<typename InputIterator,
  *  // data is now {0, 1, 1, 3, 5, 6}
  *  \endcode
  *
- *  \see http://www.sgi.com/tech/stl/partial_sum.html
+ *  \see https://en.cppreference.com/w/cpp/algorithm/partial_sum
  */
 template<typename DerivedPolicy,
          typename InputIterator,
@@ -356,10 +356,10 @@ __host__ __device__
  *  \param result The beginning of the output sequence.
  *  \return The end of the output sequence.
  *
- *  \tparam InputIterator is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
+ *  \tparam InputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
  *                        and \c InputIterator's \c value_type is convertible to
  *                        \c OutputIterator's \c value_type.
- *  \tparam OutputIterator is a model of <a href="http://www.sgi.com/tech/stl/OutputIterator.html">Output Iterator</a>,
+ *  \tparam OutputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/output_iterator">Output Iterator</a>,
  *                         and if \c x and \c y are objects of \c OutputIterator's
  *                         \c value_type, then <tt>x + y</tt> is defined. If \c T is
  *                         \c OutputIterator's \c value_type, then <tt>T(0)</tt> is
@@ -379,7 +379,7 @@ __host__ __device__
  *  // data is now {0, 1, 1, 3, 5, 6}
  *  \endcode
  *
- *  \see http://www.sgi.com/tech/stl/partial_sum.html
+ *  \see https://en.cppreference.com/w/cpp/algorithm/partial_sum
  */
 template<typename InputIterator,
          typename OutputIterator>
@@ -410,10 +410,10 @@ template<typename InputIterator,
  *  \return The end of the output sequence.
  *
  *  \tparam DerivedPolicy The name of the derived execution policy.
- *  \tparam InputIterator is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
+ *  \tparam InputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
  *                        and \c InputIterator's \c value_type is convertible to
  *                        \c OutputIterator's \c value_type.
- *  \tparam OutputIterator is a model of <a href="http://www.sgi.com/tech/stl/OutputIterator.html">Output Iterator</a>,
+ *  \tparam OutputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/output_iterator">Output Iterator</a>,
  *                         and if \c x and \c y are objects of \c OutputIterator's
  *                         \c value_type, then <tt>x + y</tt> is defined.
  *  \tparam T is convertible to \c OutputIterator's \c value_type.
@@ -434,7 +434,7 @@ template<typename InputIterator,
  *  // data is now {4, 5, 5, 7, 9, 10}
  *  \endcode
  *
- *  \see http://www.sgi.com/tech/stl/partial_sum.html
+ *  \see https://en.cppreference.com/w/cpp/algorithm/partial_sum
  */
 template<typename DerivedPolicy,
          typename InputIterator,
@@ -466,10 +466,10 @@ __host__ __device__
  *  \param init The initial value.
  *  \return The end of the output sequence.
  *
- *  \tparam InputIterator is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
+ *  \tparam InputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
  *                        and \c InputIterator's \c value_type is convertible to
  *                        \c OutputIterator's \c value_type.
- *  \tparam OutputIterator is a model of <a href="http://www.sgi.com/tech/stl/OutputIterator.html">Output Iterator</a>,
+ *  \tparam OutputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/output_iterator">Output Iterator</a>,
  *                         and if \c x and \c y are objects of \c OutputIterator's
  *                         \c value_type, then <tt>x + y</tt> is defined.
  *  \tparam T is convertible to \c OutputIterator's \c value_type.
@@ -488,7 +488,7 @@ __host__ __device__
  *  // data is now {4, 5, 5, 7, 9, 10}
  *  \endcode
  *
- *  \see http://www.sgi.com/tech/stl/partial_sum.html
+ *  \see https://en.cppreference.com/w/cpp/algorithm/partial_sum
  */
 template<typename InputIterator,
          typename OutputIterator,
@@ -522,15 +522,15 @@ template<typename InputIterator,
  *  \return The end of the output sequence.
  *
  *  \tparam DerivedPolicy The name of the derived execution policy.
- *  \tparam InputIterator is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
+ *  \tparam InputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
  *                        and \c InputIterator's \c value_type is convertible to
  *                        \c OutputIterator's \c value_type.
- *  \tparam OutputIterator is a model of <a href="http://www.sgi.com/tech/stl/OutputIterator.html">Output Iterator</a>
+ *  \tparam OutputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/output_iterator">Output Iterator</a>
  *                         and \c OutputIterator's \c value_type is convertible to
  *                         both \c AssociativeOperator's \c first_argument_type and
  *                         \c second_argument_type.
  *  \tparam T is convertible to \c OutputIterator's \c value_type.
- *  \tparam AssociativeOperator is a model of <a href="http://www.sgi.com/tech/stl/BinaryFunction.html">Binary Function</a>
+ *  \tparam AssociativeOperator is a model of <a href="https://en.cppreference.com/w/cpp/utility/functional/binary_function">Binary Function</a>
  *                              and \c AssociativeOperator's \c result_type is
  *                              convertible to \c OutputIterator's \c value_type.
  *
@@ -553,8 +553,8 @@ template<typename InputIterator,
  *
  *  // data is now {1, 1, 1, 2, 2, 2, 4, 4, 4, 4 }
  *  \endcode
- *
- *  \see http://www.sgi.com/tech/stl/partial_sum.html
+ *  
+ *  \see https://en.cppreference.com/w/cpp/algorithm/partial_sum
  */
 template<typename DerivedPolicy,
          typename InputIterator,
@@ -589,15 +589,15 @@ __host__ __device__
  *  \param binary_op The associatve operator used to 'sum' values.
  *  \return The end of the output sequence.
  *
- *  \tparam InputIterator is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
+ *  \tparam InputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
  *                        and \c InputIterator's \c value_type is convertible to
  *                        \c OutputIterator's \c value_type.
- *  \tparam OutputIterator is a model of <a href="http://www.sgi.com/tech/stl/OutputIterator.html">Output Iterator</a>
+ *  \tparam OutputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/output_iterator">Output Iterator</a>
  *                         and \c OutputIterator's \c value_type is convertible to
  *                         both \c AssociativeOperator's \c first_argument_type and
  *                         \c second_argument_type.
  *  \tparam T is convertible to \c OutputIterator's \c value_type.
- *  \tparam AssociativeOperator is a model of <a href="http://www.sgi.com/tech/stl/BinaryFunction.html">Binary Function</a>
+ *  \tparam AssociativeOperator is a model of <a href="https://en.cppreference.com/w/cpp/utility/functional/binary_function">Binary Function</a>
  *                              and \c AssociativeOperator's \c result_type is
  *                              convertible to \c OutputIterator's \c value_type.
  *
@@ -617,8 +617,8 @@ __host__ __device__
  *
  *  // data is now {1, 1, 1, 2, 2, 2, 4, 4, 4, 4 }
  *  \endcode
- *
- *  \see http://www.sgi.com/tech/stl/partial_sum.html
+ *  
+ *  \see https://en.cppreference.com/w/cpp/algorithm/partial_sum
  */
 template<typename InputIterator,
          typename OutputIterator,
@@ -664,11 +664,11 @@ template<typename InputIterator,
  *  \return The end of the output sequence.
  *
  *  \tparam DerivedPolicy The name of the derived execution policy.
- *  \tparam InputIterator1 is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
- *  \tparam InputIterator2 is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
+ *  \tparam InputIterator1 is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
+ *  \tparam InputIterator2 is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
  *                         and \c InputIterator2's \c value_type is convertible to \c OutputIterator's \c value_type.
- *  \tparam OutputIterator is a model of <a href="http://www.sgi.com/tech/stl/OutputIterator.html">Output Iterator</a>,
- *                         and if \c x and \c y are objects of \c OutputIterator's \c value_type, then
+ *  \tparam OutputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/output_iterator">Output Iterator</a>,
+ *                         and if \c x and \c y are objects of \c OutputIterator's \c value_type, then 
  *                         <tt>binary_op(x,y)</tt> is defined.
  *
  *  \pre \p first1 may equal \p result but the range <tt>[first1, last1)</tt> and the range <tt>[result, result + (last1 - first1))</tt> shall not overlap otherwise.
@@ -729,11 +729,11 @@ __host__ __device__
  *  \param result The beginning of the output value sequence.
  *  \return The end of the output sequence.
  *
- *  \tparam InputIterator1 is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
- *  \tparam InputIterator2 is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
+ *  \tparam InputIterator1 is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
+ *  \tparam InputIterator2 is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
  *                         and \c InputIterator2's \c value_type is convertible to \c OutputIterator's \c value_type.
- *  \tparam OutputIterator is a model of <a href="http://www.sgi.com/tech/stl/OutputIterator.html">Output Iterator</a>,
- *                         and if \c x and \c y are objects of \c OutputIterator's \c value_type, then
+ *  \tparam OutputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/output_iterator">Output Iterator</a>,
+ *                         and if \c x and \c y are objects of \c OutputIterator's \c value_type, then 
  *                         <tt>binary_op(x,y)</tt> is defined.
  *
  *  \pre \p first1 may equal \p result but the range <tt>[first1, last1)</tt> and the range <tt>[result, result + (last1 - first1))</tt> shall not overlap otherwise.
@@ -793,13 +793,13 @@ template<typename InputIterator1,
  *  \return The end of the output sequence.
  *
  *  \tparam DerivedPolicy The name of the derived execution policy.
- *  \tparam InputIterator1 is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
- *  \tparam InputIterator2 is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
+ *  \tparam InputIterator1 is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
+ *  \tparam InputIterator2 is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
  *                         and \c InputIterator2's \c value_type is convertible to \c OutputIterator's \c value_type.
- *  \tparam OutputIterator is a model of <a href="http://www.sgi.com/tech/stl/OutputIterator.html">Output Iterator</a>,
- *                         and if \c x and \c y are objects of \c OutputIterator's \c value_type, then
+ *  \tparam OutputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/output_iterator">Output Iterator</a>,
+ *                         and if \c x and \c y are objects of \c OutputIterator's \c value_type, then 
  *                         <tt>binary_op(x,y)</tt> is defined.
- *  \tparam BinaryPredicate is a model of <a href="http://www.sgi.com/tech/stl/BinaryPredicate.html">Binary Predicate</a>.
+ *  \tparam BinaryPredicate is a model of <a href="https://en.cppreference.com/w/cpp/named_req/BinaryPredicate">Binary Predicate</a>.
  *
  *  \pre \p first1 may equal \p result but the range <tt>[first1, last1)</tt> and the range <tt>[result, result + (last1 - first1))</tt> shall not overlap otherwise.
  *  \pre \p first2 may equal \p result but the range <tt>[first2, first2 + (last1 - first1)</tt> and range <tt>[result, result + (last1 - first1))</tt> shall not overlap otherwise.
@@ -865,13 +865,13 @@ __host__ __device__
  *  \param binary_pred  The binary predicate used to determine equality of keys.
  *  \return The end of the output sequence.
  *
- *  \tparam InputIterator1 is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
- *  \tparam InputIterator2 is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
+ *  \tparam InputIterator1 is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
+ *  \tparam InputIterator2 is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
  *                         and \c InputIterator2's \c value_type is convertible to \c OutputIterator's \c value_type.
- *  \tparam OutputIterator is a model of <a href="http://www.sgi.com/tech/stl/OutputIterator.html">Output Iterator</a>,
- *                         and if \c x and \c y are objects of \c OutputIterator's \c value_type, then
+ *  \tparam OutputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/output_iterator">Output Iterator</a>,
+ *                         and if \c x and \c y are objects of \c OutputIterator's \c value_type, then 
  *                         <tt>binary_op(x,y)</tt> is defined.
- *  \tparam BinaryPredicate is a model of <a href="http://www.sgi.com/tech/stl/BinaryPredicate.html">Binary Predicate</a>.
+ *  \tparam BinaryPredicate is a model of <a href="https://en.cppreference.com/w/cpp/named_req/BinaryPredicate">Binary Predicate</a>.
  *
  *  \pre \p first1 may equal \p result but the range <tt>[first1, last1)</tt> and the range <tt>[result, result + (last1 - first1))</tt> shall not overlap otherwise.
  *  \pre \p first2 may equal \p result but the range <tt>[first2, first2 + (last1 - first1)</tt> and range <tt>[result, result + (last1 - first1))</tt> shall not overlap otherwise.
@@ -936,14 +936,14 @@ template<typename InputIterator1,
  *  \return The end of the output sequence.
  *
  *  \tparam DerivedPolicy The name of the derived execution policy.
- *  \tparam InputIterator1 is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
- *  \tparam InputIterator2 is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
+ *  \tparam InputIterator1 is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
+ *  \tparam InputIterator2 is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
  *                         and \c InputIterator2's \c value_type is convertible to \c OutputIterator's \c value_type.
- *  \tparam OutputIterator is a model of <a href="http://www.sgi.com/tech/stl/OutputIterator.html">Output Iterator</a>,
- *                         and if \c x and \c y are objects of \c OutputIterator's \c value_type, then
+ *  \tparam OutputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/output_iterator">Output Iterator</a>,
+ *                         and if \c x and \c y are objects of \c OutputIterator's \c value_type, then 
  *                         <tt>binary_op(x,y)</tt> is defined.
- *  \tparam BinaryPredicate is a model of <a href="http://www.sgi.com/tech/stl/BinaryPredicate.html">Binary Predicate</a>.
- *  \tparam AssociativeOperator is a model of <a href="http://www.sgi.com/tech/stl/BinaryFunction.html">Binary Function</a>
+ *  \tparam BinaryPredicate is a model of <a href="https://en.cppreference.com/w/cpp/named_req/BinaryPredicate">Binary Predicate</a>.
+ *  \tparam AssociativeOperator is a model of <a href="https://en.cppreference.com/w/cpp/utility/functional/binary_function">Binary Function</a>
  *                              and \c AssociativeOperator's \c result_type is
  *                              convertible to \c OutputIterator's \c value_type.
  *
@@ -1015,14 +1015,14 @@ __host__ __device__
  *  \param binary_op The associatve operator used to 'sum' values.
  *  \return The end of the output sequence.
  *
- *  \tparam InputIterator1 is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
- *  \tparam InputIterator2 is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
+ *  \tparam InputIterator1 is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
+ *  \tparam InputIterator2 is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
  *                         and \c InputIterator2's \c value_type is convertible to \c OutputIterator's \c value_type.
- *  \tparam OutputIterator is a model of <a href="http://www.sgi.com/tech/stl/OutputIterator.html">Output Iterator</a>,
- *                         and if \c x and \c y are objects of \c OutputIterator's \c value_type, then
+ *  \tparam OutputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/output_iterator">Output Iterator</a>,
+ *                         and if \c x and \c y are objects of \c OutputIterator's \c value_type, then 
  *                         <tt>binary_op(x,y)</tt> is defined.
- *  \tparam BinaryPredicate is a model of <a href="http://www.sgi.com/tech/stl/BinaryPredicate.html">Binary Predicate</a>.
- *  \tparam AssociativeOperator is a model of <a href="http://www.sgi.com/tech/stl/BinaryFunction.html">Binary Function</a>
+ *  \tparam BinaryPredicate is a model of <a href="https://en.cppreference.com/w/cpp/named_req/BinaryPredicate">Binary Predicate</a>.
+ *  \tparam AssociativeOperator is a model of <a href="https://en.cppreference.com/w/cpp/utility/functional/binary_function">Binary Function</a>
  *                              and \c AssociativeOperator's \c result_type is
  *                              convertible to \c OutputIterator's \c value_type.
  *
@@ -1446,15 +1446,15 @@ template<typename InputIterator1,
  *  \return The end of the output sequence.
  *
  *  \tparam DerivedPolicy The name of the derived execution policy.
- *  \tparam InputIterator1 is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
- *  \tparam InputIterator2 is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
+ *  \tparam InputIterator1 is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
+ *  \tparam InputIterator2 is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
  *                         and \c InputIterator2's \c value_type is convertible to \c OutputIterator's \c value_type.
- *  \tparam OutputIterator is a model of <a href="http://www.sgi.com/tech/stl/OutputIterator.html">Output Iterator</a>,
- *                         and if \c x and \c y are objects of \c OutputIterator's \c value_type, then
+ *  \tparam OutputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/output_iterator">Output Iterator</a>,
+ *                         and if \c x and \c y are objects of \c OutputIterator's \c value_type, then 
  *                         <tt>binary_op(x,y)</tt> is defined.
  *  \tparam T is convertible to \c OutputIterator's \c value_type.
- *  \tparam BinaryPredicate is a model of <a href="http://www.sgi.com/tech/stl/BinaryPredicate.html">Binary Predicate</a>.
- *  \tparam AssociativeOperator is a model of <a href="http://www.sgi.com/tech/stl/BinaryFunction.html">Binary Function</a>
+ *  \tparam BinaryPredicate is a model of <a href="https://en.cppreference.com/w/cpp/named_req/BinaryPredicate">Binary Predicate</a>.
+ *  \tparam AssociativeOperator is a model of <a href="https://en.cppreference.com/w/cpp/utility/functional/binary_function">Binary Function</a>
  *                         and \c AssociativeOperator's \c result_type is convertible to \c OutputIterator's \c value_type.
  *
  *  \pre \p first1 may equal \p result but the range <tt>[first1, last1)</tt> and the range <tt>[result, result + (last1 - first1))</tt> shall not overlap otherwise.
@@ -1532,15 +1532,15 @@ __host__ __device__
  *  \param binary_op The associatve operator used to 'sum' values.
  *  \return The end of the output sequence.
  *
- *  \tparam InputIterator1 is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
- *  \tparam InputIterator2 is a model of <a href="http://www.sgi.com/tech/stl/InputIterator.html">Input Iterator</a>
+ *  \tparam InputIterator1 is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
+ *  \tparam InputIterator2 is a model of <a href="https://en.cppreference.com/w/cpp/iterator/input_iterator">Input Iterator</a>
  *                         and \c InputIterator2's \c value_type is convertible to \c OutputIterator's \c value_type.
- *  \tparam OutputIterator is a model of <a href="http://www.sgi.com/tech/stl/OutputIterator.html">Output Iterator</a>,
- *                         and if \c x and \c y are objects of \c OutputIterator's \c value_type, then
+ *  \tparam OutputIterator is a model of <a href="https://en.cppreference.com/w/cpp/iterator/output_iterator">Output Iterator</a>,
+ *                         and if \c x and \c y are objects of \c OutputIterator's \c value_type, then 
  *                         <tt>binary_op(x,y)</tt> is defined.
  *  \tparam T is convertible to \c OutputIterator's \c value_type.
- *  \tparam BinaryPredicate is a model of <a href="http://www.sgi.com/tech/stl/BinaryPredicate.html">Binary Predicate</a>.
- *  \tparam AssociativeOperator is a model of <a href="http://www.sgi.com/tech/stl/BinaryFunction.html">Binary Function</a>
+ *  \tparam BinaryPredicate is a model of <a href="https://en.cppreference.com/w/cpp/named_req/BinaryPredicate">Binary Predicate</a>.
+ *  \tparam AssociativeOperator is a model of <a href="https://en.cppreference.com/w/cpp/utility/functional/binary_function">Binary Function</a>
  *                         and \c AssociativeOperator's \c result_type is convertible to \c OutputIterator's \c value_type.
  *
  *  \pre \p first1 may equal \p result but the range <tt>[first1, last1)</tt> and the range <tt>[result, result + (last1 - first1))</tt> shall not overlap otherwise.
