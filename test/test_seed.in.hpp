@@ -18,7 +18,10 @@
 #ifndef TEST_SEED_HPP_
 #define TEST_SEED_HPP_
 
-#include "rocrand.hpp"
+#if ${LARGE_TESTS_BOOLEAN}
+  #define LARGE_TEST_ENABLE
+  #include "rocrand.hpp"
+#endif
 #include <initializer_list>
 
 using random_engine = std::minstd_rand;

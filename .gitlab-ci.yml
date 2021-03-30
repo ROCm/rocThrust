@@ -133,7 +133,7 @@ build:cmake-minimum:
       -D BUILD_TEST=ON
       -D BUILD_EXAMPLES=ON
       -D BUILD_BENCHMARKS=ON
-      -D LARGE_TEST=ON
+      -D LARGE_TEST=OFF
       -D DISABLE_WERROR=OFF
       -B $BUILD_MINIMUM_DIR
       ../../.

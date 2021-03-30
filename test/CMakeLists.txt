@@ -41,15 +41,25 @@ function(add_rocthrust_test TEST)
             ${CMAKE_CURRENT_BINARY_DIR}
             ${CMAKE_CURRENT_SOURCE_DIR}
     )
-    target_link_libraries(${TEST_TARGET}
-        PRIVATE
-            hip::device
-            rocthrust
-            roc::rocprim_hip
-            ${GTest_IMPORTED_targets}
-            roc::rocrand
-            TBB::tbb
-    )
+    if(LARGE_TEST)
+        target_link_libraries(${TEST_TARGET}
+            PRIVATE
+                hip::device
+                rocthrust
+                roc::rocprim_hip
+                ${GTest_IMPORTED_targets}
+                roc::rocrand
+                TBB::tbb
+        )
+    else()
+        target_link_libraries(${TEST_TARGET}
+            PRIVATE
+                hip::device
+                rocthrust
+                roc::rocprim_hip
+                ${GTest_IMPORTED_targets}
+        )
+    endif()
     target_compile_definitions(${TEST_TARGET}
         INTERFACE
             THRUST_HOST_SYSTEM=3 # THRUST_HOST_SYSTEM_TBB

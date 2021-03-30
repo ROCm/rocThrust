@@ -185,16 +185,24 @@ inline auto get_random_data(size_t size, T min, T max, int seed) ->
     typename std::enable_if<rocprim::is_integral<T>::value && !std::is_same<T, bool>::value,
                             thrust::host_vector<T>>::type
 {
-    rocrand_generator rand_gen;
-    rocrand_create_generator(&rand_gen,ROCRAND_RNG_PSEUDO_DEFAULT);
-    rocrand_set_seed(rand_gen,seed);
-
     thrust::host_vector<T>           data(size);
-    thrust::device_vector<T>           d_data(size);
 
-    auto num_bytes = (data.end() - data.begin())*sizeof(T);
-    rocrand_generate_char(rand_gen,(uchar *)d_data.data().get(),num_bytes);
-    data = d_data;
+    #ifdef LARGE_TEST_ENABLE
+      rocrand_generator rand_gen;
+      rocrand_create_generator(&rand_gen,ROCRAND_RNG_PSEUDO_DEFAULT);
+      rocrand_set_seed(rand_gen,seed);
+      thrust::device_vector<T>           d_data(size);
+      auto num_bytes = (data.end() - data.begin())*sizeof(T);
+      rocrand_generate_char(rand_gen,(uchar *)d_data.data().get(),num_bytes);
+      data = d_data;
+    #else
+      std::random_device               rd;
+      std::default_random_engine       gen(rd());
+      gen.seed(seed);
+      std::uniform_int_distribution<T> distribution(min, max);
+      std::generate(data.begin(), data.end(), [&]() { return distribution(gen); });
+    #endif
+
     return data;
 }
 
@@ -202,14 +210,24 @@ template <class T>
 inline auto get_random_data(size_t size, T min, T max, int seed) ->
     typename std::enable_if<std::is_same<::rocprim::half,T>::value, thrust::host_vector<T>>::type
 {
-    rocrand_generator rand_gen;
-    rocrand_create_generator(&rand_gen,ROCRAND_RNG_PSEUDO_DEFAULT);
-    rocrand_set_seed(rand_gen,seed);
-
     thrust::host_vector<T>            data(size);
-    thrust::device_vector<T>          d_data(size);
-    rocrand_generate_uniform_half(rand_gen,d_data.data().get(),size);
-    data = d_data;
+
+    #ifdef LARGE_TEST_ENABLE
+      rocrand_generator rand_gen;
+      rocrand_create_generator(&rand_gen,ROCRAND_RNG_PSEUDO_DEFAULT);
+      rocrand_set_seed(rand_gen,seed);
+
+      thrust::device_vector<T>          d_data(size);
+      rocrand_generate_uniform_half(rand_gen,d_data.data().get(),size);
+      data = d_data;
+    #else
+      std::random_device                rd;
+      std::default_random_engine        gen(rd());
+      gen.seed(seed);
+      std::uniform_real_distribution<T> distribution(min, max);
+      std::generate(data.begin(), data.end(), [&]() { return distribution(gen); });
+    #endif
+
     return data;
 }
 
@@ -218,15 +236,23 @@ template <class T>
 inline auto get_random_data(size_t size, T min, T max, int seed) ->
     typename std::enable_if<std::is_same<float,T>::value, thrust::host_vector<T>>::type
 {
+  thrust::host_vector<T>            data(size);
+  #ifdef LARGE_TEST_ENABLE
     rocrand_generator rand_gen;
     rocrand_create_generator(&rand_gen,ROCRAND_RNG_PSEUDO_DEFAULT);
     rocrand_set_seed(rand_gen,seed);
-
-    thrust::host_vector<T>            data(size);
     thrust::device_vector<T>          d_data(size);
     rocrand_generate_uniform(rand_gen,d_data.data().get(),size);
     data = d_data;
-    return data;
+  #else
+    std::random_device                rd;
+    std::default_random_engine        gen(rd());
+    gen.seed(seed);
+    std::uniform_real_distribution<T> distribution(min, max);
+    std::generate(data.begin(), data.end(), [&]() { return distribution(gen); });
+  #endif
+
+  return data;
 }
 
 
@@ -234,14 +260,22 @@ template <class T>
 inline auto get_random_data(size_t size, T min, T max, int seed) ->
     typename std::enable_if<std::is_same<double,T>::value, thrust::host_vector<T>>::type
 {
-    rocrand_generator rand_gen;
-    rocrand_create_generator(&rand_gen,ROCRAND_RNG_PSEUDO_DEFAULT);
-    rocrand_set_seed(rand_gen,seed);
-
     thrust::host_vector<T>            data(size);
-    thrust::device_vector<T>          d_data(size);
-    rocrand_generate_uniform_double(rand_gen,d_data.data().get(),size);
-    data = d_data;
+    #ifdef LARGE_TEST_ENABLE
+      rocrand_generator rand_gen;
+      rocrand_create_generator(&rand_gen,ROCRAND_RNG_PSEUDO_DEFAULT);
+      rocrand_set_seed(rand_gen,seed);
+
+      thrust::device_vector<T>          d_data(size);
+      rocrand_generate_uniform_double(rand_gen,d_data.data().get(),size);
+      data = d_data;
+    #else
+      std::random_device                rd;
+      std::default_random_engine        gen(rd());
+      gen.seed(seed);
+      std::uniform_real_distribution<T> distribution(min, max);
+      std::generate(data.begin(), data.end(), [&]() { return distribution(gen); });
+    #endif
     return data;
 }
 
