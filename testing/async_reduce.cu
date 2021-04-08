@@ -973,7 +973,6 @@ struct test_async_reduce_allocator_on_then_after
     );
 
     KNOWN_FAILURE;
-#if 0
     // FIXME: The below fails because you can't combine allocator attachment,
     // `.on`, and `.after`.
     ASSERT_EQUAL_QUIET(stream1, f2.stream().native_handle());
