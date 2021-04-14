@@ -42,7 +42,7 @@ if( CMAKE_CXX_COMPILER MATCHES ".*/hipcc$" )
     OUTPUT_VARIABLE CXX_OUTPUT
     OUTPUT_STRIP_TRAILING_WHITESPACE
     ERROR_STRIP_TRAILING_WHITESPACE)
-    string(REGEX MATCH ".mcode\-object\-version" TARGET_ID_SUPPORT ${CXX_OUTPUT})
+  string(REGEX MATCH ".mcode\-object\-version" TARGET_ID_SUPPORT ${CXX_OUTPUT})
 endif()
 
 #Set the AMDGPU_TARGETS with backward compatiblity
