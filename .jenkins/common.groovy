@@ -26,7 +26,6 @@ def runCompileCommand(platform, project, jobName, boolean debug=false, boolean s
     platform.runCommand(this, command)
 }
 
-
 def runTestCommand (platform, project)
 {
     String sudo = auxiliary.sudo(platform.jenkinsLabel)
