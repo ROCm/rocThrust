@@ -70,9 +70,6 @@ set(AMDGPU_TARGETS "${DEFAULT_AMDGPU_TARGETS}" CACHE STRING "List of specific ma
 # Verify that hcc or hipcc compiler is used on ROCM platform
 include(cmake/VerifyCompiler.cmake)
 
-# Get dependencies
-include(cmake/Dependencies.cmake)
-
 # Build options
 # Disable -Werror
 option(DISABLE_WERROR "Disable building with Werror" ON)
@@ -107,6 +104,9 @@ if(DISABLE_WERROR)
 else()
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror")
 endif()
+
+# Get dependencies
+include(cmake/Dependencies.cmake)
 
 # Setup VERSION
 rocm_setup_version(VERSION "2.10.9")
