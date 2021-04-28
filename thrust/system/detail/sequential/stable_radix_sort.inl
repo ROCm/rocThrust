@@ -562,7 +562,7 @@ void stable_radix_sort(sequential::execution_policy<DerivedPolicy> &exec,
   size_t N = last - first;
 
   #ifdef __HIP_DEVICE_COMPILE__
-    THRUST_HIP_PRINTF("ERROR:Stable Radix Sort is not currently supported at device side because device malloc is not supported.\n");
+    THRUST_HIP_PRINTF("Abort: Stable Radix Sort is currently disabled for memory objects allocated on the device. HIP malloc does not support device side memory allocation.\n");
     abort();
   #endif
 
@@ -587,7 +587,7 @@ void stable_radix_sort_by_key(sequential::execution_policy<DerivedPolicy> &exec,
   size_t N = last1 - first1;
 
   #ifdef __HIP_DEVICE_COMPILE__
-    THRUST_HIP_PRINTF("ERROR: Stable Radix Sort by Key is not currently supported at device side because device malloc is not supported.\n");
+    THRUST_HIP_PRINTF("Abort: Stable Radix Sort by Key is currently disabled for memory objects allocated on the device. HIP malloc does not support device side memory allocation.\n");
     abort();
   #endif
 
