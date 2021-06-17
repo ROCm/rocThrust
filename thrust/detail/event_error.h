@@ -30,8 +30,7 @@
 
 #include <stdexcept>
 
-namespace thrust
-{
+THRUST_NAMESPACE_BEGIN
 
 enum class event_errc
 {
@@ -160,6 +159,6 @@ inline bool operator<(event_error const& lhs, event_error const& rhs) noexcept
   return lhs.code() < rhs.code();
 }
 
-} // end namespace thrust
+THRUST_NAMESPACE_END
 
 #endif

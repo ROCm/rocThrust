@@ -27,8 +27,7 @@
 #include <thrust/mr/allocator.h>
 #include <ostream>
 
-namespace thrust
-{
+THRUST_NAMESPACE_BEGIN
 namespace system
 {
 namespace tbb
@@ -98,6 +97,6 @@ using thrust::system::tbb::allocator;
 using thrust::system::tbb::universal_allocator;
 } // namsespace tbb
 
-} // namespace thrust
+THRUST_NAMESPACE_END
 
 #include <thrust/system/tbb/detail/memory.inl>

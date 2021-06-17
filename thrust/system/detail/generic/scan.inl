@@ -26,8 +26,7 @@
 #include <thrust/detail/type_traits/iterator/is_output_iterator.h>
 #include <thrust/functional.h>
 
-namespace thrust
-{
+THRUST_NAMESPACE_BEGIN
 namespace system
 {
 namespace detail
@@ -126,4 +125,4 @@ __host__ __device__
 } // end namespace generic
 } // end namespace detail
 } // end namespace system
-} // end namespace thrust
+THRUST_NAMESPACE_END

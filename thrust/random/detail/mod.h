@@ -16,8 +16,9 @@
 
 #pragma once
 
-namespace thrust
-{
+#include <thrust/detail/config.h>
+
+THRUST_NAMESPACE_BEGIN
 
 namespace random
 {
@@ -93,5 +94,5 @@ __host__ __device__
 
 } // end random
 
-} // end thrust
+THRUST_NAMESPACE_END
 

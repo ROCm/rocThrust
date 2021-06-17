@@ -27,7 +27,9 @@
 #include <thrust/scan.h>
 #include <thrust/system/detail/generic/shuffle.h>
 
-namespace thrust {
+#include <cstdint>
+
+THRUST_NAMESPACE_BEGIN
 namespace system {
 namespace detail {
 namespace generic {
@@ -215,5 +217,4 @@ __host__ __device__ void shuffle_copy(
 }  // end namespace generic
 }  // end namespace detail
 }  // end namespace system
-}  // end namespace thrust
-#endif
+THRUST_NAMESPACE_END

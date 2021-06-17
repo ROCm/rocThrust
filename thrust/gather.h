@@ -24,9 +24,7 @@
 #include <thrust/detail/config.h>
 #include <thrust/detail/execution_policy.h>
 
-namespace thrust
-{
-
+THRUST_NAMESPACE_BEGIN
 
 /*! \addtogroup gathering
  *  \ingroup copying
@@ -435,7 +433,7 @@ template<typename InputIterator1,
 /*! \} // gathering
  */
 
-} // end namespace thrust
+THRUST_NAMESPACE_END
 
 #include <thrust/detail/gather.inl>
 

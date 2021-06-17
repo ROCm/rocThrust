@@ -25,8 +25,7 @@
 #include <type_traits>
 #endif
 
-namespace thrust
-{
+THRUST_NAMESPACE_BEGIN
 namespace detail
 {
 
@@ -59,6 +58,8 @@ template<typename Functor, typename Arg1, typename Arg2>
   typedef typename Functor::result_type type;
 };
 
+} // namespace detail
+THRUST_NAMESPACE_END
 
 } // end detail
 } // end thrust

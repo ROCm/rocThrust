@@ -14,6 +14,7 @@
  *  limitations under the License.
  */
 
+#include <thrust/detail/config.h>
 
 #include <limits>
 
@@ -26,8 +27,7 @@
 #include <thrust/detail/cstdint.h>
 #include <thrust/scatter.h>
 
-namespace thrust
-{
+THRUST_NAMESPACE_BEGIN
 namespace system
 {
 namespace detail
@@ -601,4 +601,4 @@ void stable_radix_sort_by_key(sequential::execution_policy<DerivedPolicy> &exec,
 } // end namespace sequential
 } // end namespace detail
 } // end namespace system
-} // end namespace thrust
+THRUST_NAMESPACE_END

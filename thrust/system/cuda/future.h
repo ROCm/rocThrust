@@ -14,8 +14,7 @@
 #include <thrust/system/cuda/pointer.h>
 #include <thrust/system/cuda/detail/execution_policy.h>
 
-namespace thrust
-{
+THRUST_NAMESPACE_BEGIN
 
 namespace system { namespace cuda
 {
@@ -67,7 +66,7 @@ unique_eager_future_type(
   thrust::cuda::execution_policy<DerivedPolicy> const&
 ) noexcept;
 
-} // end namespace thrust
+THRUST_NAMESPACE_END
 
 #include <thrust/system/cuda/detail/future.inl>
 

@@ -21,8 +21,7 @@
 #include <thrust/detail/allocator_aware_execution_policy.h>
 #include <thrust/system/detail/sequential/execution_policy.h>
 
-namespace thrust
-{
+THRUST_NAMESPACE_BEGIN
 namespace detail
 {
 
@@ -49,4 +48,4 @@ struct seq_t : thrust::system::detail::sequential::execution_policy<seq_t>,
 THRUST_INLINE_CONSTANT detail::seq_t seq;
 
 
-} // end thrust
+THRUST_NAMESPACE_END

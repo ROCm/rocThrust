@@ -16,6 +16,9 @@
  */
  
 #include <unittest/unittest.h>
+
+#include <thrust/detail/config.h>
+
 #include <thrust/scan.h>
 #include <thrust/functional.h>
 #include <thrust/iterator/discard_iterator.h>
@@ -598,15 +601,14 @@ struct only_set_when_expected_it
     }
 };
 
-namespace thrust
-{
+THRUST_NAMESPACE_BEGIN
 template<>
 struct iterator_traits<only_set_when_expected_it>
 {
     typedef long long value_type;
     typedef only_set_when_expected_it reference;
 };
-}
+THRUST_NAMESPACE_END
 
 void TestInclusiveScanWithBigIndexesHelper(int magnitude)
 {
