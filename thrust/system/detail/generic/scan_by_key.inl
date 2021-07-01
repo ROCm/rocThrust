@@ -108,8 +108,8 @@ __host__ __device__
                                        BinaryPredicate binary_pred,
                                        AssociativeOperator binary_op)
 {
-  typedef typename thrust::iterator_traits<OutputIterator>::value_type OutputType;
-  typedef unsigned int HeadFlagType;
+  using OutputType = typename thrust::iterator_traits<InputIterator2>::value_type;
+  using HeadFlagType = thrust::detail::uint8_t;
 
   const size_t n = last1 - first1;
 
@@ -205,8 +205,8 @@ __host__ __device__
                                        BinaryPredicate binary_pred,
                                        AssociativeOperator binary_op)
 {
-  typedef typename thrust::iterator_traits<OutputIterator>::value_type OutputType;
-  typedef unsigned int HeadFlagType;
+  using OutputType = T;
+  using HeadFlagType = thrust::detail::uint8_t;
 
   const size_t n = last1 - first1;
 
