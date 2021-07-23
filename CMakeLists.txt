@@ -32,15 +32,8 @@ endif()
 
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE CACHE BOOL "Add paths to linker search and installed rpath")
 
-# rocm-cmake contains common cmake code for rocm projects to help
-# setup and install
-find_package( ROCM 0.6 CONFIG )
-include( ROCMSetupVersion )
-include( ROCMCreatePackage )
-include( ROCMInstallTargets )
-include( ROCMPackageConfigHelpers )
-include( ROCMInstallSymlinks )
-include( ROCMCheckTargetIds OPTIONAL )
+# Get dependencies
+include(cmake/Dependencies.cmake)
 
 # Detect compiler support for target ID
 # This section is deprecated. Please use rocm_check_target_ids for future use.
@@ -115,9 +108,6 @@ if(BUILD_ADDRESS_SANITIZER)
   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address -shared-libasan")
   add_link_options(-fuse-ld=lld)
 endif()
-
-# Get dependencies
-include(cmake/Dependencies.cmake)
 
 # Setup VERSION
 rocm_setup_version(VERSION "2.10.9")
