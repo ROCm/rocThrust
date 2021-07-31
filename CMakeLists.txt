@@ -34,7 +34,7 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE CACHE BOOL "Add paths to linker searc
 
 # rocm-cmake contains common cmake code for rocm projects to help
 # setup and install
-find_package(ROCM 0.6 QUIET CONFIG PATHS /opt/rocm)
+find_package(ROCM 0.6 REQUIRED CONFIG PATHS /opt/rocm)
 include( ROCMSetupVersion )
 include( ROCMCreatePackage )
 include( ROCMInstallTargets )
