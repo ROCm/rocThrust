@@ -42,9 +42,6 @@ include( ROCMPackageConfigHelpers )
 include( ROCMInstallSymlinks )
 include( ROCMCheckTargetIds OPTIONAL )
 
-# Get dependencies
-include(cmake/Dependencies.cmake)
-
 # Detect compiler support for target ID
 # This section is deprecated. Please use rocm_check_target_ids for future use.
 if( CMAKE_CXX_COMPILER MATCHES ".*/hipcc$" )
@@ -69,6 +66,9 @@ else()
     endif()
 endif()
 set(AMDGPU_TARGETS "${DEFAULT_AMDGPU_TARGETS}" CACHE STRING "List of specific machine types for library to target")
+
+# Get dependencies
+include(cmake/Dependencies.cmake)
 
 # Verify that hcc or hipcc compiler is used on ROCM platform
 if (NOT WIN32)
