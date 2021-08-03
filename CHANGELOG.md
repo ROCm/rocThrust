@@ -2,14 +2,14 @@
 
 Full documentation for rocThrust is available at [https://rocthrust.readthedocs.io/en/latest/](https://rocthrust.readthedocs.io/en/latest/)
 
-## [Unreleased rocThrust-2.11.1 for ROCm 4.4.0]
+## [rocThrust-2.11.1 for ROCm 4.4.0]
 ### Added
 - gfx1030 support
 - Address Sanitizer build option
 ### Fixed
 - async_transform unit test failure fixed.
 
-## [Unreleased rocThrust-2.11.0 for ROCm 4.3.0]
+## [rocThrust-2.11.0 for ROCm 4.3.0]
 ### Added
 - Updated to match upstream Thrust 1.11
 - gfx90a support added
