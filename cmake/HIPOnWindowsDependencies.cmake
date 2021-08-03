@@ -7,6 +7,7 @@
 # ###########################
 
 if (WIN32)
+  find_package(ROCM CONFIG QUIET PATHS ${ROCM_PATH} /opt/rocm)
   if(NOT ROCM_FOUND)
     set(rocm_cmake_tag "master" CACHE STRING "rocm-cmake tag to download")
     file(
