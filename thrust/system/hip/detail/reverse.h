@@ -67,7 +67,7 @@ namespace hip_rocprim
                  ResultIt                   result)
     {
         return hip_rocprim::copy(
-            policy, make_reverse_iterator(last), make_reverse_iterator(first), result
+            policy, thrust::make_reverse_iterator(last), thrust::make_reverse_iterator(first), result
         );
     }
 
@@ -82,7 +82,7 @@ namespace hip_rocprim
         ItemsIt         mid(first);
         thrust::advance(mid, N / 2);
 
-        hip_rocprim::swap_ranges(policy, first, mid, make_reverse_iterator(last));
+        hip_rocprim::swap_ranges(policy, first, mid, thrust::make_reverse_iterator(last));
     }
 } // namespace hip_rocprim
 } // end namespace thrust
