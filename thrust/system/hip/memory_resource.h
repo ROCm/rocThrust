@@ -1,5 +1,5 @@
 /*
- *  Copyright 2018 NVIDIA Corporation
+ *  Copyright 2018-2020 NVIDIA Corporation
  *  Modifications Copyright© 2019 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,11 +25,12 @@
 #include <thrust/system/hip/detail/guarded_hip_runtime_api.h>
 #include <thrust/system/hip/detail/managed_memory_pointer.h>
 #include <thrust/system/hip/pointer.h>
+
 #include <thrust/system/detail/bad_alloc.h>
 #include <thrust/system/hip/error.h>
 #include <thrust/system/hip/detail/util.h>
 
-#include <thrust/memory/detail/host_system_resource.h>
+#include <thrust/mr/host_memory_resource.h>
 
 namespace thrust
 {
@@ -91,19 +92,37 @@ namespace detail
         thrust::hip_rocprim::pointer<void> >
         device_memory_resource;
     typedef detail::hip_memory_resource<detail::hipMallocManaged, hipFree,
-        detail::managed_memory_pointer<void> >
+        thrust::hip::universal_pointer<void> >
         managed_memory_resource;
     typedef detail::hip_memory_resource<hipHostMalloc, hipHostFree,
-        thrust::host_memory_resource::pointer>
+        thrust::hip::universal_pointer<void> >
         pinned_memory_resource;
 
 } // end detail
+//! \endcond
 
+/*! The memory resource for the HIP system. Uses <tt>hipMalloc</tt> and wraps
+ *  the result with \p hip::pointer.
+ */
 typedef detail::device_memory_resource memory_resource;
+/*! The universal memory resource for the HIP system. Uses
+ *  <tt>hipMallocManaged</tt> and wraps the result with
+ *  \p hip::universal_pointer.
+ */
 typedef detail::managed_memory_resource universal_memory_resource;
+/*! The host pinned memory resource for the HIP system. Uses
+ *  <tt>hipMallocHost</tt> and wraps the result with \p
+ *  hip::universal_pointer.
+ */
 typedef detail::pinned_memory_resource universal_host_pinned_memory_resource;
 
 } // end hip
 } // end system
 
+namespace hip
+{
+using thrust::system::hip::memory_resource;
+using thrust::system::hip::universal_memory_resource;
+using thrust::system::hip::universal_host_pinned_memory_resource;
+}
 } // end namespace thrust

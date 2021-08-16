@@ -39,9 +39,12 @@ variables:
     - s9300
     - rocm
   before_script:
+    - $SUDO_CMD rm /etc/apt/sources.list.d/rocm.list
     - $SUDO_CMD apt update -qq
     # | Used in the script    | Build tools | Fetch from https:// | rocminfo calls lsmod
     - $SUDO_CMD apt install -y -qq libidn11 wget tar xz-utils bzip2 libnuma-dev libunwind-dev git build-essential pkg-config ninja-build ca-certificates kmod
+    - $SUDO_CMD apt-get install -y -qq wget libidn11 libnuma-dev libunwind-dev git tar xz-utils bzip2 build-essential pkg-config  ninja-build ca-certificates
+    - $SUDO_CMD wget -q -O - https://repo.radeon.com/rocm/rocm.gpg.key | $SUDO_CMD apt-key add -
     # Fetch CMake only if the cache has not been restored
     - if [ ! -d $CMAKE_MINIMUM_PATH ]; then mkdir -p $CMAKE_MINIMUM_PATH; wget --no-check-certificate --quiet -O - $CMAKE_MINIMUM_URL | tar --strip-components=1 -xz -C $CMAKE_MINIMUM_PATH
     - fi
@@ -63,9 +66,12 @@ variables:
     - mi25
     - rocm
   before_script:
+    - $SUDO_CMD rm /etc/apt/sources.list.d/rocm.list
     - $SUDO_CMD apt update -qq
     # | Used in the script    | Build tools | Fetch from https:// | rocminfo calls lsmod
     - $SUDO_CMD apt install -y -qq wget tar xz-utils bzip2 libnuma-dev libunwind-dev git build-essential pkg-config ninja-build ca-certificates kmod
+    - $SUDO_CMD apt-get install -y -qq wget libidn11 libnuma-dev libunwind-dev git tar xz-utils bzip2 build-essential pkg-config  ninja-build ca-certificates
+    - $SUDO_CMD wget -q -O - https://repo.radeon.com/rocm/rocm.gpg.key | $SUDO_CMD apt-key add -
     # Fetch CMake only if the cache has not been restored
     - if [ ! -d $CMAKE_LATEST_PATH ]; then mkdir -p $CMAKE_LATEST_PATH; wget --no-check-certificate --quiet -O - $CMAKE_LATEST_URL | tar --strip-components=1 -xz -C $CMAKE_LATEST_PATH;
     - fi;
