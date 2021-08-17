@@ -147,6 +147,8 @@ TYPED_TEST(UniversalTests, TestUniversalThrustVector)
 
     for(auto size : get_sizes())
     {
+        SCOPED_TRACE(testing::Message() << "with size = " << size);
+
         thrust::host_vector<T>      host(size);
         thrust::universal_vector<T> universal(size);
 
@@ -160,7 +162,7 @@ TYPED_TEST(UniversalTests, TestUniversalThrustVector)
 
         ASSERT_EQ(host.size(), size);
         ASSERT_EQ(universal.size(), size);
-        
+
         for(unsigned int i = 0; i < size; i++)
             ASSERT_EQ(host[i], universal[i]);
     }
@@ -175,6 +177,8 @@ TYPED_TEST(UniversalTests, TestUniversalStdVector)
 
     for(auto size : get_sizes())
     {
+        SCOPED_TRACE(testing::Message() << "with size = " << size);
+
         std::vector<T>                                 host(size);
         std::vector<T, thrust::universal_allocator<T>> universal(size);
 
