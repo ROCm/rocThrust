@@ -95,6 +95,16 @@ build:cmake-latest:
   script:
     - mkdir -p $BUILD_LATEST_DIR
     - cd $BUILD_LATEST_DIR
+    - git clone https://github.com/RadeonOpenCompute/rocm-cmake.git
+    - cd rocm-cmake && mkdir build && cd build
+    - cmake
+      -G Ninja
+      -D CMAKE_CXX_COMPILER=hipcc
+      -D CMAKE_BUILD_TYPE=Release
+      ../
+    - $SUDO_CMD cmake
+        --build ./ --target install
+    - cd .. && cd ..
     - cmake
       -G Ninja
       -D CMAKE_CXX_COMPILER=hipcc
@@ -130,6 +140,16 @@ build:cmake-minimum:
   script:
     - mkdir -p $BUILD_MINIMUM_DIR
     - cd $BUILD_MINIMUM_DIR
+    - git clone https://github.com/RadeonOpenCompute/rocm-cmake.git
+    - cd rocm-cmake && mkdir build && cd build
+    - cmake
+      -G Ninja
+      -D CMAKE_CXX_COMPILER=hipcc
+      -D CMAKE_BUILD_TYPE=Release
+      ../
+    - $SUDO_CMD cmake
+        --build ./ --target install
+    - cd .. && cd ..
     - cmake
       -G Ninja
       -D CMAKE_CXX_COMPILER=hipcc
@@ -183,6 +203,16 @@ deploy:deb:
     # Install rocPRIM package
     - echo ${ROCPRIM_GIT_URL}
     - echo $ROCPRIM_GIT_URL
+    - git clone https://github.com/RadeonOpenCompute/rocm-cmake.git
+    - cd rocm-cmake && mkdir build && cd build
+    - cmake
+      -G Ninja
+      -D CMAKE_CXX_COMPILER=hipcc
+      -D CMAKE_BUILD_TYPE=Release
+      ../
+    - $SUDO_CMD cmake
+        --build ./ --target install
+    - cd .. && cd ..
     - git clone -b develop_stream https://gitlab-ci-token:${CI_JOB_TOKEN}@${ROCPRIM_GIT_URL}
     - cmake
       -G Ninja
