@@ -67,6 +67,9 @@ else()
 endif()
 set(AMDGPU_TARGETS "${DEFAULT_AMDGPU_TARGETS}" CACHE STRING "List of specific machine types for library to target")
 
+# Get dependencies
+include(cmake/Dependencies.cmake)
+
 # Verify that hcc or hipcc compiler is used on ROCM platform
 if (NOT WIN32)
   include(cmake/VerifyCompiler.cmake)
