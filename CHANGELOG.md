@@ -2,6 +2,10 @@
 
 Full documentation for rocThrust is available at [https://rocthrust.readthedocs.io/en/latest/](https://rocthrust.readthedocs.io/en/latest/)
 
+## [Latest changes]
+### Added
+- Updated to match upstream Thrust 1.13.0
+
 ## (Unreleased) rocThrust-2.11.2 for ROCm 4.5.0
 ### Addded
 - Initial HIP on Windows support. See README for instructions on how to build and install.
