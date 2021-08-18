@@ -1,5 +1,5 @@
 # ########################################################################
-# Copyright 2019 Advanced Micro Devices, Inc.
+# Copyright 2019-2021 Advanced Micro Devices, Inc.
 # ########################################################################
 
 if(NOT CMAKE_VERSION VERSION_LESS 3.12)
