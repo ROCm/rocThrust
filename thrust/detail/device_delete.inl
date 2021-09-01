@@ -30,12 +30,7 @@ namespace detail
 {
 
 // define an empty allocator class to use below
-template<typename T>
-struct device_delete_allocator
-{
-  typedef T value_type;
-  typedef thrust::device_system_tag system_type;
-};
+struct device_delete_allocator {};
 
 }
 
@@ -44,7 +39,7 @@ template<typename T>
                      const size_t n)
 {
   // we can use device_allocator to destroy the range
-  thrust::detail::device_delete_allocator<T> a;
+  thrust::detail::device_delete_allocator a;
   thrust::detail::destroy_range(a, ptr, n);
   thrust::device_free(ptr);
 } // end device_delete()

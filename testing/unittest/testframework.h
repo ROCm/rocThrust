@@ -97,10 +97,13 @@ public:
         fill(0);
     }
 
+    // Allow construction from any integral numeric.
+    template <typename T,
+              typename = typename std::enable_if<std::is_integral<T>::value>::type>
     __host__ __device__
-    custom_numeric(int i)
+    custom_numeric(const T& i)
     {
-        fill(i);
+        fill(static_cast<int>(i));
     }
 
     __host__ __device__
@@ -351,7 +354,7 @@ protected:
   // \param test The UnitTest of interest
   // \param concise Whether or not to suppress output
   // \return true if all is well; false if the tests must be immediately aborted
-  virtual bool post_test_sanity_check(const UnitTest &test, bool concise);
+  virtual bool post_test_smoke_check(const UnitTest &test, bool concise);
 
 public:
   inline virtual ~UnitTestDriver() {};
@@ -459,6 +462,22 @@ class TEST##UnitTest : public UnitTest {                         \
 };                                                               \
 TEST##UnitTest TEST##Instance
 
+// Macro to create instances of a test for several array sizes.
+#define DECLARE_SIZED_UNITTEST(TEST)                             \
+class TEST##UnitTest : public UnitTest {                         \
+    public:                                                      \
+    TEST##UnitTest() : UnitTest(#TEST) {}                        \
+    void run()                                                   \
+    {                                                            \
+        std::vector<size_t> sizes = get_test_sizes();            \
+        for(size_t i = 0; i != sizes.size(); ++i)                \
+        {                                                        \
+            TEST(sizes[i]);                                      \
+        }                                                        \
+    }                                                            \
+};                                                               \
+TEST##UnitTest TEST##Instance
+
 // Macro to create instances of a test for several data types and array sizes
 #define DECLARE_VARIABLE_UNITTEST(TEST)                          \
 class TEST##UnitTest : public UnitTest {                         \
@@ -479,7 +498,7 @@ class TEST##UnitTest : public UnitTest {                         \
             TEST<double>(sizes[i]);                              \
         }                                                        \
     }                                                            \
-};                                                               \
+};                                                                 \
 TEST##UnitTest TEST##Instance
 
 #define DECLARE_INTEGRAL_VARIABLE_UNITTEST(TEST)                 \

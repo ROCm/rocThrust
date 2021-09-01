@@ -275,7 +275,7 @@ void UnitTestDriver::list_tests(void)
 }
 
 
-bool UnitTestDriver::post_test_sanity_check(const UnitTest &/*test*/, bool /*concise*/)
+bool UnitTestDriver::post_test_smoke_check(const UnitTest &/*test*/, bool /*concise*/)
 {
   return true;
 }
@@ -381,7 +381,7 @@ bool UnitTestDriver::run_tests(std::vector<UnitTest *>& tests_to_run, const Argu
        }
      }
 
-     if(!post_test_sanity_check(test, concise))
+     if(!post_test_smoke_check(test, concise))
      {
        return false;
      }

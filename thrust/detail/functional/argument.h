@@ -58,7 +58,7 @@ template<unsigned int i>
     };
 
     __host__ __device__
-    THRUST_CONSTEXPR argument(){}
+    constexpr argument(){}
 
     template<typename Env>
     __host__ __device__

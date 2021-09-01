@@ -60,7 +60,7 @@ template<typename Eval>
   typedef Eval eval_type;
 
   __host__ __device__
-  THRUST_CONSTEXPR actor();
+  constexpr actor();
 
   __host__ __device__
   actor(const Eval &base);
@@ -73,7 +73,6 @@ template<typename Eval>
   __host__ __device__
   typename apply_actor<eval_type, thrust::tuple<eval_ref<Ts>...>>::type
   operator()(Ts&&... ts) const;
-
 
   template<typename T>
   __host__ __device__
@@ -153,3 +152,4 @@ template<typename Eval, typename Arg1, typename Arg2>
 THRUST_NAMESPACE_END
 
 #include <thrust/detail/functional/actor.inl>
+

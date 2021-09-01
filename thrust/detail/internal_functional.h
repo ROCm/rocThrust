@@ -195,7 +195,7 @@ template<typename Generator>
   // XXX change to an rvalue reference upon c++0x (which either a named variable
   //     or temporary can bind to)
   template<typename T>
-  __host__ __device__
+  __host__
   void operator()(const T &x)
   {
     // we have to be naughty and const_cast this to get it to work

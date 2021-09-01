@@ -151,7 +151,6 @@ template<typename T, typename Alloc = thrust::device_allocator<T> >
     /*! Move assign operator moves from another \p device_vector.
      *  \param v The device_vector to move.
      */
-
      device_vector &operator=(device_vector &&v)
      { Parent::operator=(std::move(v)); return *this; }
   #endif // THRUST_CPP_DIALECT >= 2011
