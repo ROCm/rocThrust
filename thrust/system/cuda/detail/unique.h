@@ -220,12 +220,12 @@ namespace __unique {
 
       union TempStorage
       {
-        struct
+        struct ScanStorage
         {
           typename BlockScan::TempStorage               scan;
           typename TilePrefixCallback::TempStorage      prefix;
           typename BlockDiscontinuityItems::TempStorage discontinuity;
-        };
+        } scan_storage;
 
         typename BlockLoadItems::TempStorage  load_items;
         shared_items_t shared_items;
@@ -343,13 +343,13 @@ namespace __unique {
 
         if (IS_FIRST_TILE)
         {
-          BlockDiscontinuityItems(temp_storage.discontinuity)
+          BlockDiscontinuityItems(temp_storage.scan_storage.discontinuity)
               .FlagHeads(selection_flags, items_loc, predicate);
         }
         else
         {
           item_type tile_predecessor = items_in[tile_base - 1];
-          BlockDiscontinuityItems(temp_storage.discontinuity)
+          BlockDiscontinuityItems(temp_storage.scan_storage.discontinuity)
               .FlagHeads(selection_flags, items_loc, predicate, tile_predecessor);
         }
 
@@ -369,7 +369,7 @@ namespace __unique {
         Size num_selections_prefix = 0;
         if (IS_FIRST_TILE)
         {
-          BlockScan(temp_storage.scan)
+          BlockScan(temp_storage.scan_storage.scan)
               .ExclusiveSum(selection_flags,
                             selection_idx,
                             num_tile_selections);
@@ -395,7 +395,7 @@ namespace __unique {
                                        temp_storage.scan_storage.prefix,
                                        cub::Sum(),
                                        tile_idx);
-          BlockScan(temp_storage.scan)
+          BlockScan(temp_storage.scan_storage.scan)
               .ExclusiveSum(selection_flags,
                             selection_idx,
                             prefix_cb);

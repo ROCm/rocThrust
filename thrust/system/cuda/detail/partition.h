@@ -166,11 +166,11 @@ namespace __partition {
 
       union TempStorage
       {
-        struct
+        struct ScanStorage
         {
           typename BlockScan::TempStorage          scan;
           typename TilePrefixCallback::TempStorage prefix;
-        };
+        } scan_storage;
 
         typename BlockLoadItems::TempStorage   load_items;
         typename BlockLoadStencil::TempStorage load_stencil;
@@ -417,7 +417,7 @@ namespace __partition {
         Size num_rejected_prefix   = 0;
         if (IS_FIRST_TILE)
         {
-          BlockScan(temp_storage.scan)
+          BlockScan(temp_storage.scan_storage.scan)
               .ExclusiveSum(selection_flags,
                             selection_idx,
                             num_tile_selections);
@@ -443,7 +443,7 @@ namespace __partition {
                                        temp_storage.scan_storage.prefix,
                                        cub::Sum(),
                                        tile_idx);
-          BlockScan(temp_storage.scan)
+          BlockScan(temp_storage.scan_storage.scan)
               .ExclusiveSum(selection_flags,
                             selection_idx,
                             prefix_cb);

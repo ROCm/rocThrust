@@ -121,3 +121,4 @@ using thrust::cuda_cub::par;
 } // namespace cuda
 
 THRUST_NAMESPACE_END
+

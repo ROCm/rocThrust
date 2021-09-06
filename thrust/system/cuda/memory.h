@@ -106,3 +106,4 @@ using thrust::cuda_cub::universal_allocator;
 THRUST_NAMESPACE_END
 
 #include <thrust/system/cuda/detail/memory.inl>
+

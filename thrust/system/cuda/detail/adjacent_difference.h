@@ -539,3 +539,4 @@ THRUST_NAMESPACE_END
 #include <thrust/memory.h>
 #include <thrust/adjacent_difference.h>
 #endif
+

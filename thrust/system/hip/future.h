@@ -7,9 +7,9 @@
 #pragma once
 
 #include <thrust/detail/config.h>
-#include <thrust/detail/cpp11_required.h>
+#include <thrust/detail/cpp14_required.h>
 
-#if THRUST_CPP_DIALECT >= 2011
+#if THRUST_CPP_DIALECT >= 2014
 
 #include <thrust/system/hip/pointer.h>
 #include <thrust/system/hip/detail/execution_policy.h>
@@ -70,4 +70,4 @@ THRUST_NAMESPACE_END
 
 #include <thrust/system/hip/detail/future.inl>
 
-#endif // THRUST_CPP_DIALECT >= 2011
+#endif // C++14

@@ -123,3 +123,4 @@ using thrust::system::cuda::universal_host_pinned_memory_resource;
 }
 
 THRUST_NAMESPACE_END
+
