@@ -1,6 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2016, NVIDIA CORPORATION.  All rights reserved.
- * Modifications Copyright© 2019 Advanced Micro Devices, Inc. All rights reserved.
+ * Copyright (c) 2020, NVIDIA CORPORATION.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -25,31 +24,10 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  ******************************************************************************/
+
 #pragma once
 
-#if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HIP
-#include <thrust/system/hip/config.h>
-#include <thrust/system/hip/detail/execution_policy.h>
-#include <thrust/system/hip/detail/transform.h>
-#include <thrust/functional.h>
-#include <thrust/distance.h>
+#include <thrust/detail/cpp14_required.h>
 
-THRUST_NAMESPACE_BEGIN
-namespace hip_rocprim
-{
-namespace __copy
-{
-    template <class Derived, class InputIt, class OutputIt>
-    OutputIt THRUST_HIP_FUNCTION
-    device_to_device(execution_policy<Derived>& policy,
-                     InputIt                    first,
-                     InputIt                    last,
-                     OutputIt                   result)
-    {
-        typedef typename thrust::iterator_traits<InputIt>::value_type InputTy;
-        return hip_rocprim::transform(policy, first, last, result, thrust::identity<InputTy>());
-    }
-} // namespace __copy
-} // namespace hip_rocprim
-THRUST_NAMESPACE_END
-#endif
+#include <thrust/system/cuda/detail/async/exclusive_scan.h>
+#include <thrust/system/cuda/detail/async/inclusive_scan.h>

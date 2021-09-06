@@ -149,7 +149,6 @@ void assert_equal_quiet(const T1& a, const T2& b,
         unittest::UnitTestFailure f;
         f << "[" << filename << ":" << lineno << "] ";
         f << "values are not equal";
-
         f << " [type='" << type_name<T1>() << "']";
         throw f;
     }
@@ -438,6 +437,7 @@ void assert_equal(ForwardIterator1 first1, ForwardIterator1 last1, ForwardIterat
           {
             f << "  [" << i << "] " << *first1 << "  " << *first2 << "\n";
           }
+        }
       }
 
       first1++;

@@ -95,7 +95,6 @@ __host__ __device__
     // Use the input iterator's value type per https://wg21.link/P0571
     using ValueType = typename thrust::iterator_value<InputIterator2>::type;
 
-
     if (keys_first == keys_last)
         return thrust::make_pair(keys_output, values_output);
 

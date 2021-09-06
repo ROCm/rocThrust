@@ -37,8 +37,7 @@
 #include <thrust/detail/alignment.h>
 #include <thrust/detail/cstdint.h>
 
-namespace thrust
-{
+THRUST_NAMESPACE_BEGIN
 
 namespace hip_rocprim
 {
@@ -102,5 +101,5 @@ transform_exclusive_scan(execution_policy<Derived>& policy,
 
 } // namespace hip_rocprim
 
-} // end namespace thrust
+THRUST_NAMESPACE_END
 #endif

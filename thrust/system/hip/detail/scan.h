@@ -48,8 +48,7 @@
 #include <rocprim/rocprim.hpp>
 
 
-namespace thrust
-{
+THRUST_NAMESPACE_BEGIN
 template <typename DerivedPolicy,
           typename InputIterator,
           typename OutputIterator,
@@ -229,7 +228,8 @@ inclusive_scan(execution_policy<Derived>& policy,
                OutputIt                   result,
                ScanOp                     scan_op)
 {
-    int num_items = static_cast<int>(thrust::distance(first, last));
+    using diff_t = typename thrust::iterator_traits<InputIt>::difference_type;
+    diff_t const num_items = thrust::distance(first, last);
     return hip_rocprim::inclusive_scan_n(policy, first, num_items, result, scan_op);
 }
 
@@ -308,7 +308,8 @@ exclusive_scan(execution_policy<Derived>& policy,
                T                          init,
                ScanOp                     scan_op)
 {
-    int num_items = static_cast<int>(thrust::distance(first, last));
+    using diff_t = typename thrust::iterator_traits<InputIt>::difference_type;
+    diff_t const num_items = thrust::distance(first, last);
     return hip_rocprim::exclusive_scan_n(policy, first, num_items, result, init, scan_op);
 }
 
@@ -330,15 +331,13 @@ exclusive_scan(execution_policy<Derived>& policy,
                OutputIt                   last,
                OutputIt                   result)
 {
-    typedef typename thrust::detail::eval_if<thrust::detail::is_output_iterator<OutputIt>::value,
-                                             thrust::iterator_value<InputIt>,
-                                             thrust::iterator_value<OutputIt>>::type result_type;
-    return exclusive_scan(policy, first, last, result, result_type(0));
+    using init_type = typename thrust::iterator_traits<InputIt>::value_type;
+    return exclusive_scan(policy, first, last, result, init_type{});
 }
 
 } // namespace  hip_rocprim
 
-} // end namespace thrust
+THRUST_NAMESPACE_END
 
 #include <thrust/scan.h>
 

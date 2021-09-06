@@ -32,8 +32,7 @@
 
 #include <thrust/mr/host_memory_resource.h>
 
-namespace thrust
-{
+THRUST_NAMESPACE_BEGIN
 
 namespace system
 {
@@ -46,10 +45,10 @@ namespace detail
     typedef hipError_t (*deallocation_fn)(void *);
 
     template<allocation_fn Alloc, deallocation_fn Dealloc, typename Pointer>
-    class hip_memory_resource THRUST_FINAL : public mr::memory_resource<Pointer>
+    class hip_memory_resource final : public mr::memory_resource<Pointer>
     {
     public:
-        Pointer do_allocate(std::size_t bytes, std::size_t alignment = THRUST_MR_DEFAULT_ALIGNMENT) THRUST_OVERRIDE
+        Pointer do_allocate(std::size_t bytes, std::size_t alignment = THRUST_MR_DEFAULT_ALIGNMENT) override
         {
             (void)alignment;
 
@@ -64,7 +63,7 @@ namespace detail
             return Pointer(ret);
         }
 
-        void do_deallocate(Pointer p, std::size_t bytes, std::size_t alignment) THRUST_OVERRIDE
+        void do_deallocate(Pointer p, std::size_t bytes, std::size_t alignment) override
         {
             (void)bytes;
             (void)alignment;
@@ -125,4 +124,4 @@ using thrust::system::hip::memory_resource;
 using thrust::system::hip::universal_memory_resource;
 using thrust::system::hip::universal_host_pinned_memory_resource;
 }
-} // end namespace thrust
+THRUST_NAMESPACE_END

@@ -27,7 +27,8 @@
 #include <thrust/detail/vector_base.h>
 #include <vector>
 
-namespace thrust { namespace hip_rocprim
+THRUST_NAMESPACE_BEGIN
+namespace hip_rocprim
 {
 
 /*! \p hip::vector is a container that supports random access to elements,
@@ -85,4 +86,4 @@ using thrust::hip_rocprim::vector;
 using thrust::hip_rocprim::universal_vector;
 }
 
-} // namespace thrust
+THRUST_NAMESPACE_END

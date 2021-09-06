@@ -30,8 +30,7 @@
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HIP
 #include <thrust/system/hip/detail/execution_policy.h>
 
-namespace thrust
-{
+THRUST_NAMESPACE_BEGIN
 namespace hip_rocprim
 {
     template <class Derived, class ItemsIt, class ResultIt>
@@ -47,7 +46,7 @@ namespace hip_rocprim
             ItemsIt                    first,
             ItemsIt                    last);
 } // namespace hip_rocprim
-} // end namespace thrust
+THRUST_NAMESPACE_END
 
 #include <thrust/advance.h>
 #include <thrust/distance.h>
@@ -55,8 +54,7 @@ namespace hip_rocprim
 #include <thrust/system/hip/detail/copy.h>
 #include <thrust/system/hip/detail/swap_ranges.h>
 
-namespace thrust
-{
+THRUST_NAMESPACE_BEGIN
 namespace hip_rocprim
 {
     template <class Derived, class ItemsIt, class ResultIt>
@@ -85,5 +83,5 @@ namespace hip_rocprim
         hip_rocprim::swap_ranges(policy, first, mid, thrust::make_reverse_iterator(last));
     }
 } // namespace hip_rocprim
-} // end namespace thrust
+THRUST_NAMESPACE_END
 #endif

@@ -28,7 +28,8 @@
 #include <thrust/mr/allocator.h>
 #include <ostream>
 
-namespace thrust { namespace hip_rocprim
+THRUST_NAMESPACE_BEGIN
+namespace hip_rocprim
 {
 
 /*! Allocates an area of memory available to Thrust's <tt>hip</tt> system.
@@ -103,6 +104,6 @@ using thrust::hip_rocprim::allocator;
 using thrust::hip_rocprim::universal_allocator;
 } // namespace hip
 
-} // namespace thrust
+THRUST_NAMESPACE_END
 
 #include <thrust/system/hip/detail/memory.inl>

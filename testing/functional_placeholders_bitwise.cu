@@ -37,8 +37,8 @@ template<typename Vector> \
 { \
   void operator()(const size_t) \
   { \
-    constexpr size_t NUM_SAMPLES = 10000; \
-    constexpr size_t ZERO = 0; \
+    constexpr size_t num_samples = 10000; \
+    constexpr size_t zero = 0; \
     typedef typename Vector::value_type T; \
     Vector lhs = unittest::random_samples<T>(num_samples); \
     Vector rhs = unittest::random_samples<T>(num_samples); \
@@ -94,4 +94,3 @@ template<typename Vector>
   ASSERT_EQUAL(reference, result);
 }
 DECLARE_INTEGRAL_VECTOR_UNITTEST(TestFunctionalPlaceholdersBitNegate);
-

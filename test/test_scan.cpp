@@ -59,102 +59,65 @@ TYPED_TEST(ScanVectorTests, TestScanSimple)
     Vector result(5);
     Vector output(5);
 
-    input[0] = 1;
-    input[1] = 3;
-    input[2] = -2;
-    input[3] = 4;
-    input[4] = -5;
+    input[0] = 1; input[1] = 3; input[2] = -2; input[3] = 4; input[4] = -5;
 
     Vector input_copy(input);
 
     // inclusive scan
-    iter      = thrust::inclusive_scan(input.begin(), input.end(), output.begin());
-    result[0] = 1;
-    result[1] = 4;
-    result[2] = 2;
-    result[3] = 6;
-    result[4] = 1;
-    ASSERT_EQ(iter - output.begin(), input.size());
-    ASSERT_EQ(input, input_copy);
+    iter = thrust::inclusive_scan(input.begin(), input.end(), output.begin());
+    result[0] = 1; result[1] = 4; result[2] = 2; result[3] = 6; result[4] = 1;
+    ASSERT_EQ(std::size_t(iter - output.begin()), input.size());
+    ASSERT_EQ(input,  input_copy);
     ASSERT_EQ(output, result);
 
     // exclusive scan
-    iter      = thrust::exclusive_scan(input.begin(), input.end(), output.begin(), 0);
-    result[0] = 0;
-    result[1] = 1;
-    result[2] = 4;
-    result[3] = 2;
-    result[4] = 6;
-    ASSERT_EQ(iter - output.begin(), input.size());
-    ASSERT_EQ(input, input_copy);
+    iter = thrust::exclusive_scan(input.begin(), input.end(), output.begin(), T(0));
+    result[0] = 0; result[1] = 1; result[2] = 4; result[3] = 2; result[4] = 6;
+    ASSERT_EQ(std::size_t(iter - output.begin()), input.size());
+    ASSERT_EQ(input,  input_copy);
     ASSERT_EQ(output, result);
 
     // exclusive scan with init
-    iter      = thrust::exclusive_scan(input.begin(), input.end(), output.begin(), 3);
-    result[0] = 3;
-    result[1] = 4;
-    result[2] = 7;
-    result[3] = 5;
-    result[4] = 9;
-    ASSERT_EQ(iter - output.begin(), input.size());
-    ASSERT_EQ(input, input_copy);
+    iter = thrust::exclusive_scan(input.begin(), input.end(), output.begin(), T(3));
+    result[0] = 3; result[1] = 4; result[2] = 7; result[3] = 5; result[4] = 9;
+    ASSERT_EQ(std::size_t(iter - output.begin()), input.size());
+    ASSERT_EQ(input,  input_copy);
     ASSERT_EQ(output, result);
 
     // inclusive scan with op
     iter = thrust::inclusive_scan(input.begin(), input.end(), output.begin(), thrust::plus<T>());
-    result[0] = 1;
-    result[1] = 4;
-    result[2] = 2;
-    result[3] = 6;
-    result[4] = 1;
-    ASSERT_EQ(iter - output.begin(), input.size());
-    ASSERT_EQ(input, input_copy);
+    result[0] = 1; result[1] = 4; result[2] = 2; result[3] = 6; result[4] = 1;
+    ASSERT_EQ(std::size_t(iter - output.begin()), input.size());
+    ASSERT_EQ(input,  input_copy);
     ASSERT_EQ(output, result);
 
     // exclusive scan with init and op
-    iter = thrust::exclusive_scan(input.begin(), input.end(), output.begin(), 3, thrust::plus<T>());
-    result[0] = 3;
-    result[1] = 4;
-    result[2] = 7;
-    result[3] = 5;
-    result[4] = 9;
-    ASSERT_EQ(iter - output.begin(), input.size());
-    ASSERT_EQ(input, input_copy);
+    iter = thrust::exclusive_scan(input.begin(), input.end(), output.begin(), T(3), thrust::plus<T>());
+    result[0] = 3; result[1] = 4; result[2] = 7; result[3] = 5; result[4] = 9;
+    ASSERT_EQ(std::size_t(iter - output.begin()), input.size());
+    ASSERT_EQ(input,  input_copy);
     ASSERT_EQ(output, result);
 
     // inplace inclusive scan
-    input     = input_copy;
-    iter      = thrust::inclusive_scan(input.begin(), input.end(), input.begin());
-    result[0] = 1;
-    result[1] = 4;
-    result[2] = 2;
-    result[3] = 6;
-    result[4] = 1;
-    ASSERT_EQ(iter - input.begin(), input.size());
+    input = input_copy;
+    iter = thrust::inclusive_scan(input.begin(), input.end(), input.begin());
+    result[0] = 1; result[1] = 4; result[2] = 2; result[3] = 6; result[4] = 1;
+    ASSERT_EQ(std::size_t(iter - input.begin()), input.size());
     ASSERT_EQ(input, result);
 
     // inplace exclusive scan with init
-    input     = input_copy;
-    iter      = thrust::exclusive_scan(input.begin(), input.end(), input.begin(), 3);
-    result[0] = 3;
-    result[1] = 4;
-    result[2] = 7;
-    result[3] = 5;
-    result[4] = 9;
-    ASSERT_EQ(iter - input.begin(), input.size());
+    input = input_copy;
+    iter = thrust::exclusive_scan(input.begin(), input.end(), input.begin(), T(3));
+    result[0] = 3; result[1] = 4; result[2] = 7; result[3] = 5; result[4] = 9;
+    ASSERT_EQ(std::size_t(iter - input.begin()), input.size());
     ASSERT_EQ(input, result);
 
     // inplace exclusive scan with implicit init=0
-    input     = input_copy;
-    iter      = thrust::exclusive_scan(input.begin(), input.end(), input.begin());
-    result[0] = 0;
-    result[1] = 1;
-    result[2] = 4;
-    result[3] = 2;
-    result[4] = 6;
-    ASSERT_EQ(iter - input.begin(), input.size());
-    ASSERT_EQ(input, result);
-}
+    input = input_copy;
+    iter = thrust::exclusive_scan(input.begin(), input.end(), input.begin());
+    result[0] = 0; result[1] = 1; result[2] = 4; result[3] = 2; result[4] = 6;
+    ASSERT_EQ(std::size_t(iter - input.begin()), input.size());
+    ASSERT_EQ(input, result);}
 
 template <typename InputIterator, typename OutputIterator>
 OutputIterator

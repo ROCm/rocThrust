@@ -27,7 +27,8 @@
 #include <thrust/detail/pointer.h>
 #include <thrust/detail/reference.h>
 
-namespace thrust { namespace hip_rocprim
+THRUST_NAMESPACE_BEGIN
+namespace hip_rocprim
 {
 
 /*! \p hip::pointer stores a pointer to an object allocated in memory
@@ -132,4 +133,4 @@ using thrust::hip_rocprim::universal_pointer;
 using thrust::hip_rocprim::reference;
 } // namespace hip
 
-} // namespace thrust
+THRUST_NAMESPACE_END
