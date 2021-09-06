@@ -23,7 +23,6 @@
 
 #include <thrust/mr/memory_resource.h>
 #include <thrust/system/hip/detail/guarded_hip_runtime_api.h>
-#include <thrust/system/hip/detail/managed_memory_pointer.h>
 #include <thrust/system/hip/pointer.h>
 
 #include <thrust/system/detail/bad_alloc.h>
@@ -57,6 +56,7 @@ namespace detail
 
             if (status != hipSuccess)
             {
+                hipGetLastError(); // Clear the HIP global error state.
                 throw thrust::system::detail::bad_alloc(thrust::hip_category().message(status).c_str());
             }
 

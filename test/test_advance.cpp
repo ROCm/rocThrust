@@ -22,8 +22,6 @@
 
 TESTS_DEFINE(AdvanceVectorTests, VectorSignedIntegerTestsParams);
 
-// TODO expand this with other iterator types (forward, bidirectional, etc.)
-
 TYPED_TEST(AdvanceVectorTests, TestAdvance)
 {
     using Vector = typename TestFixture::input_type;
@@ -51,10 +49,11 @@ TYPED_TEST(AdvanceVectorTests, TestAdvance)
     ASSERT_EQ(*i, T(10));
 }
 
-template <typename Vector>
-void TestNext()
+TYPED_TEST(AdvanceVectorTests, TestNext)
 {
-    typedef typename Vector::value_type T;
+    using Vector = typename TestFixture::input_type;
+    using T      = typename Vector::value_type;
+
     typedef typename Vector::iterator Iterator;
 
     Vector v(10);
@@ -64,28 +63,28 @@ void TestNext()
 
     Iterator const i1 = thrust::next(i0);
 
-    ASSERT_EQUAL(*i0, T(0));
-    ASSERT_EQUAL(*i1, T(1));
-    
+    ASSERT_EQ(*i0, T(0));
+    ASSERT_EQ(*i1, T(1));
+
     Iterator const i2 = thrust::next(i1, 8);
 
-    ASSERT_EQUAL(*i0, T(0));
-    ASSERT_EQUAL(*i1, T(1));
-    ASSERT_EQUAL(*i2, T(9));
-    
+    ASSERT_EQ(*i0, T(0));
+    ASSERT_EQ(*i1, T(1));
+    ASSERT_EQ(*i2, T(9));
+
     Iterator const i3 = thrust::next(i2, -4);
 
-    ASSERT_EQUAL(*i0, T(0));
-    ASSERT_EQUAL(*i1, T(1));
-    ASSERT_EQUAL(*i2, T(9));
-    ASSERT_EQUAL(*i3, T(5));
+    ASSERT_EQ(*i0, T(0));
+    ASSERT_EQ(*i1, T(1));
+    ASSERT_EQ(*i2, T(9));
+    ASSERT_EQ(*i3, T(5));
 }
-DECLARE_VECTOR_UNITTEST(TestNext);
 
-template <typename Vector>
-void TestPrev()
+TYPED_TEST(AdvanceVectorTests, TestPrev)
 {
-    typedef typename Vector::value_type T;
+    using Vector = typename TestFixture::input_type;
+    using T      = typename Vector::value_type;
+
     typedef typename Vector::iterator Iterator;
 
     Vector v(10);
@@ -95,20 +94,19 @@ void TestPrev()
 
     Iterator const i1 = thrust::prev(i0);
 
-    ASSERT_EQUAL_QUIET(i0, v.end());
-    ASSERT_EQUAL(*i1, T(9));
-    
+    ASSERT_EQ_QUIET(i0, v.end());
+    ASSERT_EQ(*i1, T(9));
+
     Iterator const i2 = thrust::prev(i1, 8);
 
-    ASSERT_EQUAL_QUIET(i0, v.end());
-    ASSERT_EQUAL(*i1, T(9));
-    ASSERT_EQUAL(*i2, T(1));
-    
+    ASSERT_EQ_QUIET(i0, v.end());
+    ASSERT_EQ(*i1, T(9));
+    ASSERT_EQ(*i2, T(1));
+
     Iterator const i3 = thrust::prev(i2, -4);
 
-    ASSERT_EQUAL_QUIET(i0, v.end());
-    ASSERT_EQUAL(*i1, T(9));
-    ASSERT_EQUAL(*i2, T(1));
-    ASSERT_EQUAL(*i3, T(5));
+    ASSERT_EQ_QUIET(i0, v.end());
+    ASSERT_EQ(*i1, T(9));
+    ASSERT_EQ(*i2, T(1));
+    ASSERT_EQ(*i3, T(5));
 }
-DECLARE_VECTOR_UNITTEST(TestPrev);
