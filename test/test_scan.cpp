@@ -324,12 +324,12 @@ TEST(ScanTests, TestScanMixedTypesHost)
 }
 
 // TODO:  Check the failure cause
-/*TEST(ScanTests, TestScanMixedTypesDevice)
+TEST(ScanTests, TestScanMixedTypesDevice)
 {
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
     TestScanMixedTypes<thrust::device_vector<int>, thrust::device_vector<float>>();
-}*/
+}
 
 TYPED_TEST(ScanVariablesTests, TestScanWithOperator)
 {
@@ -743,3 +743,27 @@ TEST(ScanTests, TestExclusiveScanDevice)
         }
     }
 }
+
+#if THRUST_CPP_DIALECT >= 2011
+
+struct Int {
+    int i{};
+    __host__ __device__ explicit Int(int num) : i(num) {}
+    __host__ __device__ Int() : i{} {}
+    __host__ __device__ Int operator+(Int const& o) const { return Int{this->i + o.i}; }
+};
+
+TEST(ScanTests, TestInclusiveScanWithUserDefinedType)
+{
+    thrust::device_vector<Int> vec(5, Int{1});
+
+    thrust::inclusive_scan(
+        thrust::device,
+        vec.cbegin(),
+        vec.cend(),
+        vec.begin());
+
+    ASSERT_EQ(static_cast<Int>(vec.back()).i, 5);
+}
+
+#endif // c++11
