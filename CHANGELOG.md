@@ -5,6 +5,10 @@ Full documentation for rocThrust is available at [https://rocthrust.readthedocs.
 ## (Unreleased) rocThrust 2.13.0 for ROCm 5.0
 ### Added
 - Updated to match upstream Thrust 1.13.0
+- Updated to match upstream Thrust 1.14.0
+
+### Missing
+- Async scan
 
 ## (Unreleased) rocThrust-2.11.2 for ROCm 4.5.0
 ### Addded
