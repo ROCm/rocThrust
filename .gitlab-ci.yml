@@ -241,3 +241,19 @@ deploy:deb:
     # Remove rocPRIM and rocThrust
     - $SUDO_CMD dpkg -r rocthrust
     - $SUDO_CMD dpkg -r rocprim
+
+test:doc:
+  variables:
+    SUDO_CMD: "sudo -E"
+  tags:
+    - rocm # Do it on rocm machine
+  image: rocm/rocm-terminal:latest
+  stage: test
+  needs: []
+  before_script:
+    - $SUDO_CMD rm /etc/apt/sources.list.d/rocm.list
+    - $SUDO_CMD apt update -qq
+    - $SUDO_CMD apt install -y -qq texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended latexmk python-pip python3-sphinx doxygen
+    - $SUDO_CMD -H pip install sphinx_rtd_theme breathe==4.12.0 exhale
+  script:
+    - $SUDO_CMD bash -x ./docs/run_doc.sh
