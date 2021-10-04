@@ -1,5 +1,6 @@
 /******************************************************************************
  * Copyright (c) 2020, NVIDIA CORPORATION.  All rights reserved.
+ * Modifications Copyright© 2021 Advanced Micro Devices, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -32,14 +33,14 @@
 
 #if THRUST_CPP_DIALECT >= 2014
 
-#if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
+#if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HIP
 
 #include <thrust/iterator/iterator_traits.h>
 
-#include <thrust/system/cuda/config.h>
-#include <thrust/system/cuda/detail/async/customization.h>
-#include <thrust/system/cuda/detail/util.h>
-#include <thrust/system/cuda/future.h>
+#include <thrust/system/hip/config.h>
+#include <thrust/system/hip/detail/async/customization.h>
+#include <thrust/system/hip/detail/scan.h>
+#include <thrust/system/hip/future.h>
 
 #include <thrust/type_traits/remove_cvref.h>
 
@@ -55,111 +56,88 @@
 THRUST_NAMESPACE_BEGIN
 namespace system
 {
-namespace cuda
+namespace hip
 {
-namespace detail
-{
+    namespace detail
+    {
 
-template <typename DerivedPolicy,
-          typename ForwardIt,
-          typename Size,
-          typename OutputIt,
-          typename BinaryOp>
-unique_eager_event
-async_inclusive_scan_n(execution_policy<DerivedPolicy>& policy,
-                       ForwardIt first,
-                       Size n,
-                       OutputIt out,
-                       BinaryOp op)
-{
-  using Dispatch32 = cub::DispatchScan<ForwardIt,
-                                       OutputIt,
-                                       BinaryOp,
-                                       cub::NullType,
-                                       thrust::detail::int32_t>;
-  using Dispatch64 = cub::DispatchScan<ForwardIt,
-                                       OutputIt,
-                                       BinaryOp,
-                                       cub::NullType,
-                                       thrust::detail::int64_t>;
+        template <typename DerivedPolicy,
+                  typename ForwardIt,
+                  typename Size,
+                  typename OutputIt,
+                  typename BinaryOp>
+        unique_eager_event async_inclusive_scan_n(execution_policy<DerivedPolicy>& policy,
+                                                  ForwardIt                        first,
+                                                  Size                             n,
+                                                  OutputIt                         out,
+                                                  BinaryOp                         op)
+        {
+            auto const device_alloc = get_async_device_allocator(policy);
 
-  auto const device_alloc = get_async_device_allocator(policy);
-  unique_eager_event ev;
+            unique_eager_event ev;
+            // Determine temporary device storage requirements.
 
-  // Determine temporary device storage requirements.
-  cudaError_t status;
-  size_t tmp_size = 0;
-  {
-    THRUST_INDEX_TYPE_DISPATCH2(status,
-                                Dispatch32::Dispatch,
-                                Dispatch64::Dispatch,
-                                n,
-                                (nullptr,
-                                  tmp_size,
-                                  first,
-                                  out,
-                                  op,
-                                  cub::NullType{},
-                                  n_fixed,
-                                  nullptr,
-                                  THRUST_DEBUG_SYNC_FLAG));
-    thrust::cuda_cub::throw_on_error(status,
-                                     "after determining tmp storage "
-                                     "requirements for inclusive_scan");
-  }
+            size_t tmp_size = 0;
+            thrust::hip_rocprim::throw_on_error(
+                rocprim::
+                    inclusive_scan(nullptr,
+                                        tmp_size,
+                                        first,
+                                        out,
+                                        n,
+                                        op,
+                                        0, // Null stream, just for sizing.
+                                        THRUST_HIP_DEBUG_SYNC_FLAG),
+                "after determining tmp storage "
+                "requirements for inclusive_scan");
 
-  // Allocate temporary storage.
-  auto content = uninitialized_allocate_unique_n<thrust::detail::uint8_t>(
-    device_alloc, tmp_size
-  );
-  void* const tmp_ptr = raw_pointer_cast(content.get());
+            // Allocate temporary storage.
 
-  // Set up stream with dependencies.
-  cudaStream_t const user_raw_stream = thrust::cuda_cub::stream(policy);
+            auto tmp
+                = uninitialized_allocate_unique_n<thrust::detail::uint8_t>(device_alloc, tmp_size);
 
-  if (thrust::cuda_cub::default_stream() != user_raw_stream)
-  {
-    ev = make_dependent_event(
-      std::tuple_cat(
-        std::make_tuple(
-          std::move(content),
-          unique_stream(nonowning, user_raw_stream)
-        ),
-        extract_dependencies(std::move(thrust::detail::derived_cast(policy)))));
-  }
-  else
-  {
-    ev = make_dependent_event(
-      std::tuple_cat(
-        std::make_tuple(std::move(content)),
-        extract_dependencies(std::move(thrust::detail::derived_cast(policy)))));
-  }
+            // The array was dynamically allocated, so we assume that it's suitably
+            // aligned for any type of data. `malloc`/`hipMalloc`/`new`/`std::allocator`
+            // make this guarantee.
+            void* const tmp_ptr = raw_pointer_cast(tmp.get());
 
-  // Run scan.
-  {
-    THRUST_INDEX_TYPE_DISPATCH2(status,
-                                Dispatch32::Dispatch,
-                                Dispatch64::Dispatch,
-                                n,
-                                (tmp_ptr,
-                                 tmp_size,
-                                 first,
-                                 out,
-                                 op,
-                                 cub::NullType{},
-                                 n_fixed,
-                                 user_raw_stream,
-                                 THRUST_DEBUG_SYNC_FLAG));
-    thrust::cuda_cub::throw_on_error(status,
-                                     "after dispatching inclusive_scan kernel");
-  }
+            // Set up stream with dependencies.
 
-  return ev;
+            hipStream_t user_raw_stream = thrust::hip_rocprim::stream(policy);
+
+            if(thrust::hip_rocprim::default_stream() != user_raw_stream)
+            {
+                ev = make_dependent_event(std::tuple_cat(
+                    std::make_tuple(std::move(tmp), unique_stream(nonowning, user_raw_stream)),
+                    extract_dependencies(std::move(thrust::detail::derived_cast(policy)))));
+            }
+            else
+            {
+                ev = make_dependent_event(std::tuple_cat(
+                    std::make_tuple(std::move(tmp)),
+                    extract_dependencies(std::move(thrust::detail::derived_cast(policy)))));
+            }
+
+            // Run reduction.
+
+            thrust::hip_rocprim::throw_on_error(rocprim::inclusive_scan(tmp_ptr,
+                                                                tmp_size,
+                                                                first,
+                                                                out,
+                                                                n,
+                                                                op,
+                                                                user_raw_stream,
+                                                                THRUST_HIP_DEBUG_SYNC_FLAG),
+                                                "after dispatching inclusive_scan kernel");
+
+            return ev;
+        }
+
+    }
 }
+} // namespace system::cuda::detail
 
-}}} // namespace system::cuda::detail
-
-namespace cuda_cub
+namespace hip_rocprim
 {
 
 // ADL entry point.
@@ -168,26 +146,20 @@ template <typename DerivedPolicy,
           typename Sentinel,
           typename OutputIt,
           typename BinaryOp>
-auto async_inclusive_scan(execution_policy<DerivedPolicy>& policy,
-                          ForwardIt first,
-                          Sentinel&& last,
-                          OutputIt&& out,
-                          BinaryOp&& op)
-THRUST_RETURNS(
-  thrust::system::cuda::detail::async_inclusive_scan_n(
-    policy,
-    first,
-    distance(first, THRUST_FWD(last)),
-    THRUST_FWD(out),
-    THRUST_FWD(op)
-  )
-)
+auto async_inclusive_scan(
+    execution_policy<DerivedPolicy>& policy,
+    ForwardIt first,
+    Sentinel&& last,
+    OutputIt&& out,
+    BinaryOp&& op)
+    THRUST_RETURNS(thrust::system::hip::detail::async_inclusive_scan_n(
+        policy, first, distance(first, THRUST_FWD(last)), THRUST_FWD(out), THRUST_FWD(op)))
 
-} // namespace cuda_cub
+} // hip_rocprim
 
 THRUST_NAMESPACE_END
 
-#endif // THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
+#endif // THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HIP
 
 #endif // C++14
 

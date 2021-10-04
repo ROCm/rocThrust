@@ -81,7 +81,7 @@ struct assert_sequence_iterator
   {
     if (val != expected)
     {
-      printf("Error: expected %lld, got %lld\n", expected, val);
+      printf("Error: expected %ld, got %ld\n", expected, val);
 
       *unexpected_value = true;
     }

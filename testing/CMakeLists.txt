@@ -269,3 +269,6 @@ add_thrust_test("zip_iterator_reduce_by_key")
 add_thrust_test("zip_iterator_scan")
 add_thrust_test("zip_iterator_sort")
 add_thrust_test("zip_iterator_sort_by_key")
+
+# async test
+add_subdirectory(async)

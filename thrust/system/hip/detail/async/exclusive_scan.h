@@ -32,14 +32,14 @@
 
 #if THRUST_CPP_DIALECT >= 2014
 
-#if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
+#if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HIP
 
 #include <thrust/iterator/iterator_traits.h>
 
-#include <thrust/system/cuda/config.h>
-#include <thrust/system/cuda/detail/async/customization.h>
-#include <thrust/system/cuda/detail/util.h>
-#include <thrust/system/cuda/future.h>
+#include <thrust/system/hip/config.h>
+#include <thrust/system/hip/detail/async/customization.h>
+#include <thrust/system/hip/detail/util.h>
+#include <thrust/system/hip/future.h>
 
 #include <thrust/type_traits/remove_cvref.h>
 
@@ -55,7 +55,7 @@
 THRUST_NAMESPACE_BEGIN
 namespace system
 {
-namespace cuda
+namespace hip
 {
 namespace detail
 {
@@ -74,40 +74,25 @@ async_exclusive_scan_n(execution_policy<DerivedPolicy>& policy,
                        InitialValueType init,
                        BinaryOp op)
 {
-  using Dispatch32 = cub::DispatchScan<ForwardIt,
-                                       OutputIt,
-                                       BinaryOp,
-                                       InitialValueType,
-                                       thrust::detail::int32_t>;
-  using Dispatch64 = cub::DispatchScan<ForwardIt,
-                                       OutputIt,
-                                       BinaryOp,
-                                       InitialValueType,
-                                       thrust::detail::int64_t>;
-
   auto const device_alloc = get_async_device_allocator(policy);
   unique_eager_event ev;
 
   // Determine temporary device storage requirements.
-  cudaError_t status;
   size_t tmp_size = 0;
   {
-    THRUST_INDEX_TYPE_DISPATCH2(status,
-                                Dispatch32::Dispatch,
-                                Dispatch64::Dispatch,
+    thrust::hip_rocprim::throw_on_error(
+        rocprim::exclusive_scan(nullptr,
+                                tmp_size,
+                                first,
+                                out,
+                                init,
                                 n,
-                                (nullptr,
-                                  tmp_size,
-                                  first,
-                                  out,
-                                  op,
-                                  init,
-                                  n_fixed,
-                                  nullptr,
-                                  THRUST_DEBUG_SYNC_FLAG));
-    thrust::cuda_cub::throw_on_error(status,
-                                     "after determining tmp storage "
-                                     "requirements for exclusive_scan");
+                                op,
+                                nullptr,
+                                THRUST_HIP_DEBUG_SYNC_FLAG),
+        "after determining tmp storage "
+        "requirements for exclusive_scan"
+    );
   }
 
   // Allocate temporary storage.
@@ -117,9 +102,9 @@ async_exclusive_scan_n(execution_policy<DerivedPolicy>& policy,
   void* const tmp_ptr = raw_pointer_cast(content.get());
 
   // Set up stream with dependencies.
-  cudaStream_t const user_raw_stream = thrust::cuda_cub::stream(policy);
+  hipStream_t const user_raw_stream = thrust::hip_rocprim::stream(policy);
 
-  if (thrust::cuda_cub::default_stream() != user_raw_stream)
+  if (thrust::hip_rocprim::default_stream() != user_raw_stream)
   {
     ev = make_dependent_event(
       std::tuple_cat(
@@ -139,29 +124,26 @@ async_exclusive_scan_n(execution_policy<DerivedPolicy>& policy,
 
   // Run scan.
   {
-    THRUST_INDEX_TYPE_DISPATCH2(status,
-                                Dispatch32::Dispatch,
-                                Dispatch64::Dispatch,
+    thrust::hip_rocprim::throw_on_error(
+        rocprim::exclusive_scan(tmp_ptr,
+                                tmp_size,
+                                first,
+                                out,
+                                init,
                                 n,
-                                (tmp_ptr,
-                                  tmp_size,
-                                  first,
-                                  out,
-                                  op,
-                                  init,
-                                  n_fixed,
-                                  user_raw_stream,
-                                  THRUST_DEBUG_SYNC_FLAG));
-    thrust::cuda_cub::throw_on_error(status,
-                                     "after dispatching exclusive_scan kernel");
+                                op,
+                                user_raw_stream,
+                                THRUST_HIP_DEBUG_SYNC_FLAG),
+        "after dispatching exclusive_scan kernel"
+    );
   }
 
   return ev;
 }
 
-}}} // namespace system::cuda::detail
+}}} // namespace system::hip::detail
 
-namespace cuda_cub
+namespace hip_rocprim
 {
 
 // ADL entry point.
@@ -178,7 +160,7 @@ auto async_exclusive_scan(execution_policy<DerivedPolicy>& policy,
                           InitialValueType &&init,
                           BinaryOp&& op)
 THRUST_RETURNS(
-  thrust::system::cuda::detail::async_exclusive_scan_n(
+  thrust::system::hip::detail::async_exclusive_scan_n(
     policy,
     first,
     distance(first, THRUST_FWD(last)),
@@ -188,11 +170,10 @@ THRUST_RETURNS(
   )
 )
 
-} // namespace cuda_cub
+} // namespace hip_rocprim
 
 THRUST_NAMESPACE_END
 
-#endif // THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
+#endif // THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HIP
 
 #endif // C++14
-
