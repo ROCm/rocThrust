@@ -6,6 +6,9 @@
 # rocThrust dependencies
 # ###########################
 
+# For downloading, building, and installing required dependencies
+include(cmake/DownloadProject.cmake)
+
 if (WIN32)
   find_package(ROCM 0.6 CONFIG QUIET PATHS ${ROCM_PATH})
   if(NOT ROCM_FOUND)
