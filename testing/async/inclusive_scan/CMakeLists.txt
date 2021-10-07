@@ -17,7 +17,7 @@ function(add_thrust_test_inclusive TEST)
         add_executable(${TEST_TARGET} ${TEST_SOURCE} $<TARGET_OBJECTS:testframework>)
         target_link_libraries(${TEST_TARGET}
             PRIVATE
-                ../../testing_common
+                testing_common
         )
     else() # Workaround
         add_executable(${TEST_TARGET} ${TEST_SOURCE} ../../unittest/testframework.cu)
