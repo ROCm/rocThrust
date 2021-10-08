@@ -230,7 +230,11 @@ inclusive_scan(execution_policy<Derived>& policy,
 {
     using diff_t = typename thrust::iterator_traits<InputIt>::difference_type;
     diff_t const num_items = thrust::distance(first, last);
-    return hip_rocprim::inclusive_scan_n(policy, first, num_items, result, scan_op);
+    return thrust::hip_rocprim::inclusive_scan_n(policy,
+                                                 first,
+                                                 num_items,
+                                                 result,
+                                                 scan_op);
 }
 
 template <class Derived, class InputIt, class OutputIt>
@@ -240,11 +244,11 @@ inclusive_scan(execution_policy<Derived>& policy,
                OutputIt                   last,
                OutputIt                   result)
 {
-
-    typedef typename thrust::detail::eval_if<thrust::detail::is_output_iterator<OutputIt>::value,
-                                             thrust::iterator_value<InputIt>,
-                                             thrust::iterator_value<OutputIt>>::type result_type;
-    return inclusive_scan(policy, first, last, result, plus<result_type>());
+    return thrust::hip_rocprim::inclusive_scan(policy,
+                                               first,
+                                               last,
+                                               result,
+                                               thrust::plus<>{});
 }
 
 __thrust_exec_check_disable__ template <class Derived,
@@ -310,7 +314,12 @@ exclusive_scan(execution_policy<Derived>& policy,
 {
     using diff_t = typename thrust::iterator_traits<InputIt>::difference_type;
     diff_t const num_items = thrust::distance(first, last);
-    return hip_rocprim::exclusive_scan_n(policy, first, num_items, result, init, scan_op);
+    return hip_rocprim::exclusive_scan_n(policy,
+                                         first,
+                                         num_items,
+                                         result,
+                                         init,
+                                         scan_op);
 }
 
 template <class Derived, class InputIt, class OutputIt, class T>
@@ -321,7 +330,12 @@ exclusive_scan(execution_policy<Derived>& policy,
                OutputIt                   result,
                T                          init)
 {
-    return exclusive_scan(policy, first, last, result, init, plus<T>());
+    return thrust::hip_rocprim::exclusive_scan(policy,
+                                               first,
+                                               last,
+                                               result,
+                                               init,
+                                               thrust::plus<>{});
 }
 
 template <class Derived, class InputIt, class OutputIt>
@@ -332,7 +346,7 @@ exclusive_scan(execution_policy<Derived>& policy,
                OutputIt                   result)
 {
     using init_type = typename thrust::iterator_traits<InputIt>::value_type;
-    return exclusive_scan(policy, first, last, result, init_type{});
+    return hip_rocprim::exclusive_scan(policy, first, last, result, init_type{});
 }
 
 } // namespace  hip_rocprim
