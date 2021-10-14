@@ -197,7 +197,7 @@ inclusive_scan_n(execution_policy<Derived>& policy,
       {
         #if __HCC__ && __HIP_DEVICE_COMPILE__
         THRUST_HIP_PRESERVE_KERNELS_WORKAROUND(
-            (rocprime::inclusive_scan<rocprim::default_config, InputIt, OutputIt, ScanOp>)
+            (rocprim::inclusive_scan<rocprim::default_config, InputIt, OutputIt, ScanOp>)
         );
         #else
         return __scan::inclusive_scan(policy, input_it, result, num_items, scan_op);

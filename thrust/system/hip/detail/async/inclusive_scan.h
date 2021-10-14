@@ -79,8 +79,7 @@ namespace hip
 
             size_t tmp_size = 0;
             thrust::hip_rocprim::throw_on_error(
-                rocprim::
-                    inclusive_scan(nullptr,
+                rocprim::inclusive_scan(nullptr,
                                         tmp_size,
                                         first,
                                         out,
@@ -121,13 +120,13 @@ namespace hip
             // Run reduction.
 
             thrust::hip_rocprim::throw_on_error(rocprim::inclusive_scan(tmp_ptr,
-                                                                tmp_size,
-                                                                first,
-                                                                out,
-                                                                n,
-                                                                op,
-                                                                user_raw_stream,
-                                                                THRUST_HIP_DEBUG_SYNC_FLAG),
+                                                                        tmp_size,
+                                                                        first,
+                                                                        out,
+                                                                        n,
+                                                                        op,
+                                                                        user_raw_stream,
+                                                                        THRUST_HIP_DEBUG_SYNC_FLAG),
                                                 "after dispatching inclusive_scan kernel");
 
             return ev;
@@ -146,12 +145,11 @@ template <typename DerivedPolicy,
           typename Sentinel,
           typename OutputIt,
           typename BinaryOp>
-auto async_inclusive_scan(
-    execution_policy<DerivedPolicy>& policy,
-    ForwardIt first,
-    Sentinel&& last,
-    OutputIt&& out,
-    BinaryOp&& op)
+auto async_inclusive_scan(execution_policy<DerivedPolicy>& policy,
+                          ForwardIt                        first,
+                          Sentinel&&                       last,
+                          OutputIt&&                       out,
+                          BinaryOp&&                       op)
     THRUST_RETURNS(thrust::system::hip::detail::async_inclusive_scan_n(
         policy, first, distance(first, THRUST_FWD(last)), THRUST_FWD(out), THRUST_FWD(op)))
 
