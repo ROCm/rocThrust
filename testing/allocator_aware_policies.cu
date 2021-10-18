@@ -149,12 +149,22 @@ typedef policy_info<
 > cuda_par_info;
 #endif
 
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
+typedef policy_info<
+    thrust::system::hip::detail::par_t,
+    thrust::hip_rocprim::execute_on_stream_base
+> hip_par_info;
+#endif
+
 SimpleUnitTest<
     TestAllocatorAttachment,
     unittest::type_list<
         sequential_info,
 #if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
         cuda_par_info,
+#endif
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
+        hip_par_info,
 #endif
         cpp_par_info,
         omp_par_info,
