@@ -40,7 +40,7 @@ TYPED_TEST(ParallelForTests, HostPathSimpleTest)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    const std::vector<size_t> sizes = { (1ull << 31)*3/2 + 100 }; // = get_sizes();
+    const std::vector<size_t> sizes = { (1ull << 31) * 3 / 2 + 100 }; // = get_sizes();
 
     for(auto size : sizes)
     {
@@ -60,7 +60,7 @@ TYPED_TEST(ParallelForTests, HostPathSimpleTest)
         func.ptr = raw_ptr;
 
         // Run for_each in [0; end] range
-        auto end    = size < 2 ? size : size / 2;
+        auto end    = size * 3 / 4;
         thrust::hip_rocprim::parallel_for(tag, func, end);
 
         std::vector<T> output(size);

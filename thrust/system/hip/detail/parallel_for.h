@@ -43,11 +43,10 @@ namespace hip_rocprim
 {
 namespace __parallel_for
 {
-    template <unsigned int BlockSize/*, unsigned int ItemsPerThread*/>
+    template <unsigned int BlockSize>
     struct kernel_config
     {
         static constexpr unsigned int block_size       = BlockSize;
-        //static constexpr unsigned int items_per_thread = ItemsPerThread;
     };
 
     template <unsigned int BlockSize, class F, class Size>
@@ -63,7 +62,6 @@ namespace __parallel_for
 
         if(items_in_tile == items_per_block)
         {
-            //#pragma unroll
             for(unsigned int i = 0; i < ItemsPerThread; i++)
             {
                 unsigned int idx = BlockSize * i + threadIdx.x;
@@ -72,7 +70,6 @@ namespace __parallel_for
         }
         else
         {
-            //#pragma unroll
             for(unsigned int i = 0; i < ItemsPerThread; i++)
             {
                 unsigned int idx = BlockSize * i + threadIdx.x;
@@ -86,7 +83,7 @@ namespace __parallel_for
     hipError_t THRUST_HIP_RUNTIME_FUNCTION
     parallel_for(Size num_items, F f, hipStream_t stream)
     {
-        using config    = kernel_config<256/*, 1*/>;
+        using config    = kernel_config<256>;
         bool debug_sync = THRUST_HIP_DEBUG_SYNC_FLAG;
         // Use debug_sync
         (void)debug_sync;
@@ -107,10 +104,8 @@ namespace __parallel_for
 
         const unsigned long long max_num_items = dev_prop.maxGridSize[0];
 
-        //constexpr unsigned long long max_num_items = HIP_DEVICE_SIZE_LIMIT;
         constexpr unsigned int block_size   = config::block_size;
         const unsigned int items_per_thread = (num_items + max_num_items - 1) / max_num_items;
-            //config::items_per_thread;
         const auto items_per_block          = block_size * items_per_thread;
         const auto number_of_blocks         = (num_items + items_per_block - 1) / items_per_block;
 
