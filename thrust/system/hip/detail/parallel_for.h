@@ -40,8 +40,8 @@ namespace hip_rocprim
 namespace __parallel_for
 {
     template <unsigned int BlockSize,
-          unsigned int ItemsPerThread,
-          unsigned int SizeLimit = HIP_GRID_SIZE_LIMIT>
+              unsigned int ItemsPerThread,
+              unsigned int SizeLimit = HIP_GRID_SIZE_LIMIT>
     struct kernel_config
     {
         /// \brief Number of threads in a block.
@@ -93,13 +93,13 @@ namespace __parallel_for
         // Use debug_sync
         (void)debug_sync;
 
-        // Find maximum number of items per one step
-        constexpr unsigned long long max_step_items = config::size_limit;
         constexpr unsigned int block_size           = config::block_size;
         constexpr unsigned int items_per_thread     = config::items_per_thread;
+        constexpr auto items_per_block              = block_size * items_per_thread;
 
+        // Find maximum number of items per one step and number of steps
+        constexpr unsigned long long max_step_items = (config::size_limit / items_per_block) * items_per_block;
         const Size steps                            = (num_items + max_step_items - 1) / max_step_items;
-        const auto items_per_block                  = block_size * items_per_thread;
 
         for(Size i = 0, offset = 0; i < steps; ++i, offset += max_step_items)
         {

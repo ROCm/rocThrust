@@ -29,7 +29,7 @@ struct mark_processed_functor
     T*       ptr;
     __host__ __device__ void operator()(size_t x)
     {
-        ptr[x] = 1;
+        ptr[x] += 1;
     }
 };
 
