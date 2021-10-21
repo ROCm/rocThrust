@@ -23,13 +23,16 @@
 
 TESTS_DEFINE(ParallelForTests, ::testing::Types<Params<char> >)
 
-template <typename T>
+template <typename T, size_t limit>
 struct mark_processed_functor
 {
     T*       ptr;
     __host__ __device__ void operator()(size_t x)
     {
-        ptr[x] += 1;
+        if(x < limit)
+        {
+            ptr[x] += 1;
+        }
     }
 };
 
@@ -40,23 +43,25 @@ TYPED_TEST(ParallelForTests, HostPathSimpleTest)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    const std::vector<size_t> sizes = { (1ull << 31) * 3 / 2 + 100 }; // = get_sizes();
+    const size_t mem_limit = (1ull << 31) * 3 / 2;
+
+    const std::vector<size_t> sizes = { 1ull << 31, (1ull << 31) * 3 / 2 - 100, (1ull << 32) * 3}; // = get_sizes();
 
     for(auto size : sizes)
     {
         SCOPED_TRACE(testing::Message() << "with size = " << size);
 
-        auto ptr     = thrust::malloc<T>(tag, sizeof(T) * size);
+        auto ptr     = thrust::malloc<T>(tag, sizeof(T) * std::min(size, mem_limit));
         auto raw_ptr = thrust::raw_pointer_cast(ptr);
         if(size > 0)
             ASSERT_NE(raw_ptr, nullptr);
 
         // Zero input memory
         if(size > 0)
-            HIP_CHECK(hipMemset(raw_ptr, 0, sizeof(T) * size));
+            HIP_CHECK(hipMemset(raw_ptr, 0, sizeof(T) * std::min(size, mem_limit)));
 
         // Create unary function
-        mark_processed_functor<T> func;
+        mark_processed_functor<T, mem_limit> func;
         func.ptr = raw_ptr;
 
         // Run for_each in [0; end] range
@@ -64,9 +69,9 @@ TYPED_TEST(ParallelForTests, HostPathSimpleTest)
         thrust::hip_rocprim::parallel_for(tag, func, end);
 
         std::vector<T> output(size);
-        HIP_CHECK(hipMemcpy(output.data(), raw_ptr, size * sizeof(T), hipMemcpyDeviceToHost));
+        HIP_CHECK(hipMemcpy(output.data(), raw_ptr, std::min(size, mem_limit) * sizeof(T), hipMemcpyDeviceToHost));
 
-        for(size_t i = 0; i < size; i++)
+        for(size_t i = 0; i < std::min(size, mem_limit); i++)
         {
             if(i < end)
             {
