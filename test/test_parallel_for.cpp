@@ -43,35 +43,36 @@ TYPED_TEST(ParallelForTests, HostPathSimpleTest)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    const size_t mem_limit = (1ull << 31) * 3 / 2;
+    const size_t mem_limit = (1ull << 30) * 3;
 
-    const std::vector<size_t> sizes = { 1ull << 31, (1ull << 31) * 3 / 2 - 100, (1ull << 32) * 3}; // = get_sizes();
+    const std::vector<size_t> sizes = { 1ull << 31, (1ull << 30) * 3 - 100, (1ull << 32) * 3 };
 
     for(auto size : sizes)
     {
         SCOPED_TRACE(testing::Message() << "with size = " << size);
 
-        auto ptr     = thrust::malloc<T>(tag, sizeof(T) * std::min(size, mem_limit));
-        auto raw_ptr = thrust::raw_pointer_cast(ptr);
+        auto mem_size = std::min(size, mem_limit);
+        auto ptr      = thrust::malloc<T>(tag, sizeof(T) * mem_size);
+        auto raw_ptr  = thrust::raw_pointer_cast(ptr);
         if(size > 0)
             ASSERT_NE(raw_ptr, nullptr);
 
         // Zero input memory
         if(size > 0)
-            HIP_CHECK(hipMemset(raw_ptr, 0, sizeof(T) * std::min(size, mem_limit)));
+            HIP_CHECK(hipMemset(raw_ptr, 0, sizeof(T) * mem_size));
 
         // Create unary function
         mark_processed_functor<T, mem_limit> func;
         func.ptr = raw_ptr;
 
         // Run for_each in [0; end] range
-        auto end    = size * 3 / 4;
+        auto end      = size * 3 / 4;
         thrust::hip_rocprim::parallel_for(tag, func, end);
 
         std::vector<T> output(size);
-        HIP_CHECK(hipMemcpy(output.data(), raw_ptr, std::min(size, mem_limit) * sizeof(T), hipMemcpyDeviceToHost));
+        HIP_CHECK(hipMemcpy(output.data(), raw_ptr, mem_size * sizeof(T), hipMemcpyDeviceToHost));
 
-        for(size_t i = 0; i < std::min(size, mem_limit); i++)
+        for(size_t i = 0; i < mem_size; i++)
         {
             if(i < end)
             {
