@@ -34,8 +34,8 @@
 #include <thrust/detail/type_traits/result_of_adaptable_function.h>
 #include <thrust/system/hip/detail/par_to_seq.h>
 
-#ifndef HIP_DEVICE_SIZE_LIMIT
-#define HIP_DEVICE_SIZE_LIMIT size_t(std::numeric_limits<int>::max()) + 1
+#ifndef HIP_GRID_SIZE_LIMIT
+#define HIP_GRID_SIZE_LIMIT std::numeric_limits<int>::max() - 1
 #endif
 
 THRUST_NAMESPACE_BEGIN
@@ -43,38 +43,47 @@ namespace hip_rocprim
 {
 namespace __parallel_for
 {
-    template <unsigned int BlockSize>
+    template <unsigned int BlockSize,
+          unsigned int ItemsPerThread,
+          unsigned int SizeLimit = HIP_GRID_SIZE_LIMIT>
     struct kernel_config
     {
-        static constexpr unsigned int block_size       = BlockSize;
+        /// \brief Number of threads in a block.
+        static constexpr unsigned int block_size = BlockSize;
+        /// \brief Number of items processed by each thread.
+        static constexpr unsigned int items_per_thread = ItemsPerThread;
+        /// \brief Number of items processed by a single kernel launch.
+        static constexpr unsigned int size_limit = SizeLimit;
     };
 
-    template <unsigned int BlockSize, class F, class Size>
+    template <unsigned int BlockSize, class F, class Size, unsigned int ItemsPerThread>
     __global__
     THRUST_HIP_LAUNCH_BOUNDS(BlockSize)
-    void kernel(F f, Size num_items, unsigned int ItemsPerThread)
+    void kernel(F f, Size num_items, Size offset)
     {
         const auto         items_per_block = BlockSize * ItemsPerThread;
         Size               tile_base       = blockIdx.x * items_per_block;
-        Size               num_remaining   = num_items - tile_base;
+        Size               num_remaining   = num_items - offset - tile_base;
         const unsigned int items_in_tile   = static_cast<unsigned int>(
             num_remaining < (Size)items_per_block ? num_remaining : items_per_block);
 
         if(items_in_tile == items_per_block)
         {
+            #pragma unroll
             for(unsigned int i = 0; i < ItemsPerThread; i++)
             {
                 unsigned int idx = BlockSize * i + threadIdx.x;
-                f(tile_base + idx);
+                f(offset + tile_base + idx);
             }
         }
         else
         {
+            #pragma unroll
             for(unsigned int i = 0; i < ItemsPerThread; i++)
             {
                 unsigned int idx = BlockSize * i + threadIdx.x;
                 if(idx < items_in_tile)
-                    f(tile_base + idx);
+                    f(offset + tile_base + idx);
             }
         }
     }
@@ -83,42 +92,34 @@ namespace __parallel_for
     hipError_t THRUST_HIP_RUNTIME_FUNCTION
     parallel_for(Size num_items, F f, hipStream_t stream)
     {
-        using config    = kernel_config<256>;
+        using config    = kernel_config<256, 1>;
         bool debug_sync = THRUST_HIP_DEBUG_SYNC_FLAG;
         // Use debug_sync
         (void)debug_sync;
 
         // Find maximum number of items per one step
-        int dev_id;
-        hipDeviceProp_t dev_prop;
+        constexpr unsigned long long max_step_items = config::size_limit;
+        constexpr unsigned int block_size           = config::block_size;
+        constexpr unsigned int items_per_thread     = config::items_per_thread;
 
-        hipGetDevice(&dev_id);
+        const Size steps                            = (num_items + max_step_items - 1) / max_step_items;
+        const auto items_per_block                  = block_size * items_per_thread;
+
+        for(Size i = 0, offset = 0; i < steps; ++i, offset += max_step_items)
+        {
+            const unsigned int number_of_blocks = (std::min((unsigned long long)num_items - offset, max_step_items) + items_per_block - 1) / items_per_block;
+
+            hipLaunchKernelGGL(HIP_KERNEL_NAME(kernel<block_size, F, Size, items_per_thread>),
+                               dim3(number_of_blocks),
+                               dim3(block_size),
+                               0,
+                               stream,
+                               f,
+                               num_items,
+                               offset);
+        }
+
         auto error = hipPeekAtLastError();
-        if(error != hipSuccess)
-            return error;
-
-        hipGetDeviceProperties(&dev_prop, dev_id);
-        error = hipPeekAtLastError();
-        if(error != hipSuccess)
-            return error;
-
-        const unsigned long long max_num_items = dev_prop.maxGridSize[0];
-
-        constexpr unsigned int block_size   = config::block_size;
-        const unsigned int items_per_thread = (num_items + max_num_items - 1) / max_num_items;
-        const auto items_per_block          = block_size * items_per_thread;
-        const auto number_of_blocks         = (num_items + items_per_block - 1) / items_per_block;
-
-        hipLaunchKernelGGL(HIP_KERNEL_NAME(kernel<block_size, F, Size>),
-                           dim3(number_of_blocks),
-                           dim3(block_size),
-                           0,
-                           stream,
-                           f,
-                           num_items,
-                           items_per_thread);
-
-        error = hipPeekAtLastError();
         if(error != hipSuccess)
             return error;
         return hipSuccess;
