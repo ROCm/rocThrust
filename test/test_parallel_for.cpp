@@ -21,6 +21,14 @@
 
 #include "test_header.hpp"
 
+#if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HIP
+#define PARALLEL_FOR thrust::hip_rocprim::parallel_for
+#elif THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
+#define PARALLEL_FOR thrust::cuda_cub::parallel_for
+#endif
+
+#ifdef PARALLEL_FOR
+
 TESTS_DEFINE(ParallelForTests, ::testing::Types<Params<char> >)
 
 template <typename T, size_t limit>
@@ -67,7 +75,7 @@ TYPED_TEST(ParallelForTests, HostPathSimpleTest)
 
         // Run for_each in [0; end] range
         auto end      = size * 3 / 4;
-        thrust::hip_rocprim::parallel_for(tag, func, end);
+        PARALLEL_FOR(tag, func, end);
 
         std::vector<T> output(size);
         HIP_CHECK(hipMemcpy(output.data(), raw_ptr, mem_size * sizeof(T), hipMemcpyDeviceToHost));
@@ -88,3 +96,6 @@ TYPED_TEST(ParallelForTests, HostPathSimpleTest)
         thrust::free(tag, ptr);
     }
 }
+
+#undef PARALLEL_FOR
+#endif
