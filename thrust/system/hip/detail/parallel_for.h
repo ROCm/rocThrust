@@ -34,10 +34,6 @@
 #include <thrust/detail/type_traits/result_of_adaptable_function.h>
 #include <thrust/system/hip/detail/par_to_seq.h>
 
-#ifndef HIP_GRID_SIZE_LIMIT
-#define HIP_GRID_SIZE_LIMIT std::numeric_limits<int>::max() - 1
-#endif
-
 THRUST_NAMESPACE_BEGIN
 namespace hip_rocprim
 {
@@ -61,7 +57,7 @@ namespace __parallel_for
     THRUST_HIP_LAUNCH_BOUNDS(BlockSize)
     void kernel(F f, Size num_items, Size offset)
     {
-        const auto         items_per_block = BlockSize * ItemsPerThread;
+        constexpr auto     items_per_block = BlockSize * ItemsPerThread;
         Size               tile_base       = blockIdx.x * items_per_block;
         Size               num_remaining   = num_items - offset - tile_base;
         const unsigned int items_in_tile   = static_cast<unsigned int>(

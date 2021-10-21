@@ -70,6 +70,10 @@
 #define THRUST_HIP_DEBUG_SYNC_FLAG false
 #endif
 
+#ifndef HIP_GRID_SIZE_LIMIT
+#define HIP_GRID_SIZE_LIMIT std::numeric_limits<unsigned int>::max()
+#endif
+
 // Workaround, so kernel(s) called by function is/are not lost,
 // Implicit instantiation of function template
 // that will be used in #if __THRUST_HAS_HIPRT__ block.
