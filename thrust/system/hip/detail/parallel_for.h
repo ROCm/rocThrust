@@ -34,24 +34,28 @@
 #include <thrust/detail/type_traits/result_of_adaptable_function.h>
 #include <thrust/system/hip/detail/par_to_seq.h>
 
+#ifndef HIP_DEVICE_SIZE_LIMIT
+#define HIP_DEVICE_SIZE_LIMIT size_t(std::numeric_limits<int>::max()) + 1
+#endif
+
 THRUST_NAMESPACE_BEGIN
 namespace hip_rocprim
 {
 namespace __parallel_for
 {
-    template <unsigned int BlockSize, unsigned int ItemsPerThread>
+    template <unsigned int BlockSize/*, unsigned int ItemsPerThread*/>
     struct kernel_config
     {
         static constexpr unsigned int block_size       = BlockSize;
-        static constexpr unsigned int items_per_thread = ItemsPerThread;
+        //static constexpr unsigned int items_per_thread = ItemsPerThread;
     };
 
-    template <unsigned int BlockSize, unsigned int ItemsPerThread, class F, class Size>
+    template <unsigned int BlockSize, class F, class Size>
     __global__
     THRUST_HIP_LAUNCH_BOUNDS(BlockSize)
-    void kernel(F f, Size num_items)
+    void kernel(F f, Size num_items, unsigned int ItemsPerThread)
     {
-        constexpr auto     items_per_block = BlockSize * ItemsPerThread;
+        const auto         items_per_block = BlockSize * ItemsPerThread;
         Size               tile_base       = blockIdx.x * items_per_block;
         Size               num_remaining   = num_items - tile_base;
         const unsigned int items_in_tile   = static_cast<unsigned int>(
@@ -59,7 +63,7 @@ namespace __parallel_for
 
         if(items_in_tile == items_per_block)
         {
-            #pragma unroll
+            //#pragma unroll
             for(unsigned int i = 0; i < ItemsPerThread; i++)
             {
                 unsigned int idx = BlockSize * i + threadIdx.x;
@@ -68,7 +72,7 @@ namespace __parallel_for
         }
         else
         {
-            #pragma unroll
+            //#pragma unroll
             for(unsigned int i = 0; i < ItemsPerThread; i++)
             {
                 unsigned int idx = BlockSize * i + threadIdx.x;
@@ -82,25 +86,44 @@ namespace __parallel_for
     hipError_t THRUST_HIP_RUNTIME_FUNCTION
     parallel_for(Size num_items, F f, hipStream_t stream)
     {
-        using config    = kernel_config<256, 1>;
+        using config    = kernel_config<256/*, 1*/>;
         bool debug_sync = THRUST_HIP_DEBUG_SYNC_FLAG;
         // Use debug_sync
         (void)debug_sync;
 
-        constexpr unsigned int block_size       = config::block_size;
-        constexpr unsigned int items_per_thread = config::items_per_thread;
-        constexpr auto         items_per_block  = block_size * items_per_thread;
-        const auto number_of_blocks = (num_items + items_per_block - 1) / items_per_block;
+        // Find maximum number of items per one step
+        int dev_id;
+        hipDeviceProp_t dev_prop;
 
-        hipLaunchKernelGGL(HIP_KERNEL_NAME(kernel<block_size, items_per_thread, F, Size>),
+        hipGetDevice(&dev_id);
+        auto error = hipPeekAtLastError();
+        if(error != hipSuccess)
+            return error;
+
+        hipGetDeviceProperties(&dev_prop, dev_id);
+        error = hipPeekAtLastError();
+        if(error != hipSuccess)
+            return error;
+
+        const unsigned long long max_num_items = dev_prop.maxGridSize[0];
+
+        //constexpr unsigned long long max_num_items = HIP_DEVICE_SIZE_LIMIT;
+        constexpr unsigned int block_size   = config::block_size;
+        const unsigned int items_per_thread = (num_items + max_num_items - 1) / max_num_items;
+            //config::items_per_thread;
+        const auto items_per_block          = block_size * items_per_thread;
+        const auto number_of_blocks         = (num_items + items_per_block - 1) / items_per_block;
+
+        hipLaunchKernelGGL(HIP_KERNEL_NAME(kernel<block_size, F, Size>),
                            dim3(number_of_blocks),
                            dim3(block_size),
                            0,
                            stream,
                            f,
-                           num_items);
+                           num_items,
+                           items_per_thread);
 
-        auto error = hipPeekAtLastError();
+        error = hipPeekAtLastError();
         if(error != hipSuccess)
             return error;
         return hipSuccess;
