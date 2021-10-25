@@ -1150,11 +1150,12 @@ namespace __merge_sort {
   doit_step(void*        d_temp_storage,
             size_t&      temp_storage_bytes,
             KeysIt       keys,
-            ItemsIt      items,
+            ItemsIt      ,
             Size         keys_count,
             CompareOp    compare_op,
             cudaStream_t stream,
-            bool         debug_sync)
+            bool         debug_sync,
+            thrust::detail::integral_constant<bool, false> /* sort_keys */)
   {
     using core::AgentPlan;
     using core::get_agent_plan;
@@ -1182,8 +1183,52 @@ namespace __merge_sort {
                    SORT_ITEMS> >
         merge_agent;
 
-    cudaError_t status = cudaSuccess;
+  template <class KeysIt,
+            class ItemsIt,
+            class Size,
+            class CompareOp>
+  THRUST_RUNTIME_FUNCTION cudaError_t
+  doit_step(void *d_temp_storage,
+            size_t &temp_storage_bytes,
+            KeysIt keys,
+            ItemsIt items,
+            Size keys_count,
+            CompareOp compare_op,
+            cudaStream_t stream,
+            bool debug_sync,
+            thrust::detail::integral_constant<bool, true> /* sort_items */)
+  {
+    using DispatchMergeSortT =
+      cub::DispatchMergeSort<KeysIt, ItemsIt, KeysIt, ItemsIt, Size, CompareOp>;
 
+    return DispatchMergeSortT::Dispatch(d_temp_storage,
+                                        temp_storage_bytes,
+                                        keys,
+                                        items,
+                                        keys,
+                                        items,
+                                        keys_count,
+                                        compare_op,
+                                        stream,
+                                        debug_sync);
+  }
+
+  template <class SORT_ITEMS,
+            class /* STABLE */,
+            class KeysIt,
+            class ItemsIt,
+            class Size,
+            class CompareOp>
+  THRUST_RUNTIME_FUNCTION cudaError_t
+  doit_step(void *d_temp_storage,
+            size_t &temp_storage_bytes,
+            KeysIt keys,
+            ItemsIt items,
+            Size keys_count,
+            CompareOp compare_op,
+            cudaStream_t stream,
+            bool debug_sync)
+  {
     if (keys_count == 0)
       return status;
 
@@ -1266,7 +1311,17 @@ namespace __merge_sort {
       CUDA_CUB_RET_IF_FAIL(cudaPeekAtLastError());
     }
 
-    return status;
+    thrust::detail::integral_constant<bool, SORT_ITEMS::value> sort_items{};
+
+    return doit_step(d_temp_storage,
+                     temp_storage_bytes,
+                     keys,
+                     items,
+                     keys_count,
+                     compare_op,
+                     stream,
+                     debug_sync,
+                     sort_items);
   }
 
   template <typename SORT_ITEMS,
@@ -1317,7 +1372,7 @@ namespace __merge_sort {
                                            debug_sync);
     cuda_cub::throw_on_error(status, "merge_sort: failed on 2nd step");
 
-    status = cuda_cub::synchronize(policy);
+    status = cuda_cub::synchronize_optional(policy);
     cuda_cub::throw_on_error(status, "merge_sort: failed to synchronize");
   }
 }    // namespace __merge_sort
@@ -1608,7 +1663,7 @@ namespace __smart_sort {
     }
 
     cuda_cub::throw_on_error(
-      cuda_cub::synchronize(policy),
+      cuda_cub::synchronize_optional(policy),
       "smart_sort: failed to synchronize");
   }
 }    // namespace __smart_sort
