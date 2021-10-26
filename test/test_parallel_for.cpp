@@ -48,7 +48,7 @@ TYPED_TEST(ParallelForTests, HostPathSimpleTest)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    const std::vector<size_t> sizes = { 1ull << 31, (1ull << 30) * 3 - 100, (1ull << 32) * 3, (1ull << 34) };
+    const std::vector<size_t> sizes = { (1ull << 31) + 65535, (1ull << 32) + (1ull << 20) - 1 };
 
     for(auto size : sizes)
     {
