@@ -70,8 +70,8 @@
 #define THRUST_HIP_DEBUG_SYNC_FLAG false
 #endif
 
-#ifndef HIP_GRID_SIZE_LIMIT
-#define HIP_GRID_SIZE_LIMIT std::numeric_limits<unsigned int>::max()
+#ifndef THRUST_HIP_GRID_SIZE_LIMIT
+#define THRUST_HIP_GRID_SIZE_LIMIT std::numeric_limits<unsigned int>::max()
 #endif
 
 // Workaround, so kernel(s) called by function is/are not lost,

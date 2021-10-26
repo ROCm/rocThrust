@@ -1,6 +1,6 @@
 /******************************************************************************
  * Copyright (c) 2016, NVIDIA CORPORATION.  All rights reserved.
- * Modifications Copyright (c) 2019, Advanced Micro Devices, Inc.  All rights reserved.
+ * Modifications Copyright (c) 2019, 2021, Advanced Micro Devices, Inc.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -34,14 +34,15 @@
 #include <thrust/detail/type_traits/result_of_adaptable_function.h>
 #include <thrust/system/hip/detail/par_to_seq.h>
 
-THRUST_NAMESPACE_BEGIN
+namespace thrust
+{
 namespace hip_rocprim
 {
 namespace __parallel_for
 {
     template <unsigned int BlockSize,
               unsigned int ItemsPerThread,
-              unsigned int SizeLimit = HIP_GRID_SIZE_LIMIT>
+              unsigned int SizeLimit = THRUST_HIP_GRID_SIZE_LIMIT>
     struct kernel_config
     {
         /// \brief Number of threads in a block.
@@ -93,17 +94,18 @@ namespace __parallel_for
         // Use debug_sync
         (void)debug_sync;
 
-        constexpr unsigned int block_size           = config::block_size;
-        constexpr unsigned int items_per_thread     = config::items_per_thread;
-        constexpr auto items_per_block              = block_size * items_per_thread;
+        constexpr unsigned int block_size       = config::block_size;
+        constexpr unsigned int items_per_thread = config::items_per_thread;
+        constexpr auto items_per_block          = block_size * items_per_thread;
 
         // Find maximum number of items per one step and number of steps
-        constexpr unsigned long long max_step_items = (config::size_limit / items_per_block) * items_per_block;
-        const Size steps                            = (num_items + max_step_items - 1) / max_step_items;
+        constexpr size_t aligned_size_limit     = (config::size_limit / items_per_block) * items_per_block;
+        const Size number_of_launch             = (num_items + aligned_size_limit - 1) / aligned_size_limit;
 
-        for(Size i = 0, offset = 0; i < steps; ++i, offset += max_step_items)
+        for(Size i = 0, offset = 0; i < number_of_launch; ++i, offset += aligned_size_limit)
         {
-            const unsigned int number_of_blocks = (std::min((unsigned long long)num_items - offset, max_step_items) + items_per_block - 1) / items_per_block;
+            const size_t current_items = std::min<size_t>(num_items - offset, aligned_size_limit);
+            const unsigned int number_of_blocks = (current_items + items_per_block - 1) / items_per_block;
 
             hipLaunchKernelGGL(HIP_KERNEL_NAME(kernel<block_size, F, Size, items_per_thread>),
                                dim3(number_of_blocks),
@@ -165,5 +167,5 @@ parallel_for(execution_policy<Derived>& policy, F f, Size count)
 }
 
 } // namespace hip_rocprim
-THRUST_NAMESPACE_END
+} // end namespace thrust
 #endif

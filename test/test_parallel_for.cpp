@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
- *  Modifications Copyright© 2019 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2019, 2021 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -29,18 +29,15 @@
 
 #ifdef PARALLEL_FOR
 
-TESTS_DEFINE(ParallelForTests, ::testing::Types<Params<char> >)
+TESTS_DEFINE(ParallelForTests, ::testing::Types<Params<unsigned long long> >)
 
-template <typename T, size_t limit>
+template <typename T>
 struct mark_processed_functor
 {
     T*       ptr;
     __host__ __device__ void operator()(size_t x)
     {
-        if(x < limit)
-        {
-            ptr[x] += 1;
-        }
+        atomicAdd(ptr, T(x));
     }
 };
 
@@ -51,46 +48,33 @@ TYPED_TEST(ParallelForTests, HostPathSimpleTest)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    const size_t mem_limit = (1ull << 30) * 3;
-
-    const std::vector<size_t> sizes = { 1ull << 31, (1ull << 30) * 3 - 100, (1ull << 32) * 3 };
+    const std::vector<size_t> sizes = { 1ull << 31, (1ull << 30) * 3 - 100, (1ull << 32) * 3, (1ull << 34) };
 
     for(auto size : sizes)
     {
         SCOPED_TRACE(testing::Message() << "with size = " << size);
 
-        auto mem_size = std::min(size, mem_limit);
-        auto ptr      = thrust::malloc<T>(tag, sizeof(T) * mem_size);
+        auto ptr      = thrust::malloc<T>(tag, sizeof(T));
         auto raw_ptr  = thrust::raw_pointer_cast(ptr);
         if(size > 0)
             ASSERT_NE(raw_ptr, nullptr);
 
         // Zero input memory
         if(size > 0)
-            HIP_CHECK(hipMemset(raw_ptr, 0, sizeof(T) * mem_size));
+            HIP_CHECK(hipMemset(raw_ptr, 0, sizeof(T)));
 
         // Create unary function
-        mark_processed_functor<T, mem_limit> func;
+        mark_processed_functor<T> func;
         func.ptr = raw_ptr;
 
-        // Run for_each in [0; end] range
-        auto end      = size * 3 / 4;
-        PARALLEL_FOR(tag, func, end);
+        // Run for each in [0; size] range
+        PARALLEL_FOR(tag, func, size);
 
-        std::vector<T> output(size);
-        HIP_CHECK(hipMemcpy(output.data(), raw_ptr, mem_size * sizeof(T), hipMemcpyDeviceToHost));
+        T output;
+        HIP_CHECK(hipMemcpy(&output, raw_ptr, sizeof(T), hipMemcpyDeviceToHost));
+        output <<= 1;
 
-        for(size_t i = 0; i < mem_size; i++)
-        {
-            if(i < end)
-            {
-                ASSERT_EQ(output[i], T(1)) << "where index = " << i;
-            }
-            else
-            {
-                ASSERT_EQ(output[i], T(0)) << "where index = " << i;
-            }
-        }
+        ASSERT_EQ(output, T(size * (size - 1)));
 
         // Free
         thrust::free(tag, ptr);
