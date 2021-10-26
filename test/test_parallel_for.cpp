@@ -29,15 +29,17 @@
 
 #ifdef PARALLEL_FOR
 
-TESTS_DEFINE(ParallelForTests, ::testing::Types<Params<unsigned long long> >)
+typedef ::testing::Types<Params<unsigned int>, Params<unsigned long long>> TestsParams;
+
+TESTS_DEFINE(ParallelForTests, TestsParams)
 
 template <typename T>
-struct mark_processed_functor
+struct add_functor
 {
     T*       ptr;
     __host__ __device__ void operator()(size_t x)
     {
-        atomicAdd(ptr, T(x));
+        atomicAdd(ptr, T(x + 1));
     }
 };
 
@@ -56,25 +58,23 @@ TYPED_TEST(ParallelForTests, HostPathSimpleTest)
 
         auto ptr      = thrust::malloc<T>(tag, sizeof(T));
         auto raw_ptr  = thrust::raw_pointer_cast(ptr);
-        if(size > 0)
-            ASSERT_NE(raw_ptr, nullptr);
+        ASSERT_NE(raw_ptr, nullptr);
 
         // Zero input memory
-        if(size > 0)
-            HIP_CHECK(hipMemset(raw_ptr, 0, sizeof(T)));
+        HIP_CHECK(hipMemset(raw_ptr, 0, sizeof(T)));
 
         // Create unary function
-        mark_processed_functor<T> func;
+        add_functor<T> func;
         func.ptr = raw_ptr;
 
-        // Run for each in [0; size] range
+        // Add all numbers: 1+2+...+size = size * (size+1) / 2
         PARALLEL_FOR(tag, func, size);
 
         T output;
         HIP_CHECK(hipMemcpy(&output, raw_ptr, sizeof(T), hipMemcpyDeviceToHost));
-        output <<= 1;
+        output *= 2;
 
-        ASSERT_EQ(output, T(size * (size - 1)));
+        ASSERT_EQ(output, T(size * (size + 1)));
 
         // Free
         thrust::free(tag, ptr);
