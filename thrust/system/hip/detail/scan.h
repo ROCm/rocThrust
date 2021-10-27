@@ -244,11 +244,14 @@ inclusive_scan(execution_policy<Derived>& policy,
                OutputIt                   last,
                OutputIt                   result)
 {
+    typedef typename thrust::detail::eval_if<thrust::detail::is_output_iterator<OutputIt>::value,
+                                             thrust::iterator_value<InputIt>,
+                                             thrust::iterator_value<OutputIt>>::type result_type;
     return thrust::hip_rocprim::inclusive_scan(policy,
                                                first,
                                                last,
                                                result,
-                                               thrust::plus<>{});
+                                               thrust::plus<result_type>());
 }
 
 __thrust_exec_check_disable__ template <class Derived,
@@ -335,7 +338,7 @@ exclusive_scan(execution_policy<Derived>& policy,
                                                last,
                                                result,
                                                init,
-                                               thrust::plus<>{});
+                                               thrust::plus<T>());
 }
 
 template <class Derived, class InputIt, class OutputIt>
