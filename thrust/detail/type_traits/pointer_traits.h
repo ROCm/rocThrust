@@ -30,34 +30,10 @@ namespace detail
 
 template<typename Ptr> struct pointer_element;
 
-template<template<typename> class Ptr, typename Arg>
-  struct pointer_element<Ptr<Arg> >
+template<template<typename, typename...> class Ptr, typename T, typename... Tail>
+  struct pointer_element<Ptr<T, Tail...>>
 {
-  typedef Arg type;
-};
-
-template<template<typename,typename> class Ptr, typename Arg1, typename Arg2>
-  struct pointer_element<Ptr<Arg1,Arg2> >
-{
-  typedef Arg1 type;
-};
-
-template<template<typename,typename,typename> class Ptr, typename Arg1, typename Arg2, typename Arg3>
-  struct pointer_element<Ptr<Arg1,Arg2,Arg3> >
-{
-  typedef Arg1 type;
-};
-
-template<template<typename,typename,typename,typename> class Ptr, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
-  struct pointer_element<Ptr<Arg1,Arg2,Arg3,Arg4> >
-{
-  typedef Arg1 type;
-};
-
-template<template<typename,typename,typename,typename,typename> class Ptr, typename Arg1, typename Arg2, typename Arg3, typename Arg4, typename Arg5>
-  struct pointer_element<Ptr<Arg1,Arg2,Arg3,Arg4,Arg5> >
-{
-  typedef Arg1 type;
+  typedef T type;
 };
 
 template<typename T>
