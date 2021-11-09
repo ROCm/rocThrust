@@ -37,7 +37,9 @@
 #    define THRUST_DEVICE_NEEDS_RESTORATION
 #  endif
 #else // GNUC pre 4.5.0
-#  if !defined(HIP_INCLUDE_HIP_AMD_DETAIL_DRIVER_TYPES_H)
+//#  if !defined(HIP_INCLUDE_HIP_AMD_DETAIL_DRIVER_TYPES_H) Changed as per SWDEV-298576
+//This change is already in mainline and not required while merging to mainline
+#  if !defined(__HIP_PLATFORM_AMD__)
 #    ifdef __host__
 #      undef __host__
 #    endif
