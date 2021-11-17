@@ -14,8 +14,11 @@ stages:
 
 variables:
   # Tested CMake versions
-  CMAKE_MINIMUM_VERSION: 3.10.2
-  CMAKE_LATEST_VERSION: 3.17.0
+  CMAKE_MINIMUM_VERSION: 3.16.9
+  CMAKE_MINIMUM_URL: "https://cmake.org/files/v3.16/cmake-3.16.9-Linux-x86_64.tar.gz"
+
+  CMAKE_LATEST_VERSION: 3.21.4
+  CMAKE_LATEST_URL: "https://cmake.org/files/v3.21/cmake-3.21.4-linux-x86_64.tar.gz"
   # Cluster config
 
   # Image-specific helper
@@ -23,13 +26,11 @@ variables:
   # Helper variables
   DEPS_DIR: $CI_PROJECT_DIR/deps
   BUILD_DIR: $CI_PROJECT_DIR/build
-  CMAKE_MINIMUM_URL: "https://cmake.org/files/v3.10/cmake-3.10.2-Linux-x86_64.tar.gz"
-  CMAKE_MINIMUM_PATH: "$CI_PROJECT_DIR/deps/cmake-3.10.2"
-  CMAKE_LATEST_URL: "https://cmake.org/files/v3.16/cmake-3.16.0-Linux-x86_64.tar.gz"
-  CMAKE_LATEST_PATH: "$CI_PROJECT_DIR/deps/cmake-3.17.0"
-  BUILD_MINIMUM_DIR: $CI_PROJECT_DIR/build/cmake-3.10.2
-  BUILD_LATEST_DIR: $CI_PROJECT_DIR/build/cmake-3.17.0
-  PACKAGE_DIR: $CI_PROJECT_DIR/build/package
+  CMAKE_MINIMUM_PATH: $DEPS_DIR/cmake-$CMAKE_MINIMUM_VERSION
+  BUILD_MINIMUM_DIR: $BUILD_DIR/cmake-$CMAKE_MINIMUM_VERSION
+  CMAKE_LATEST_PATH: $DEPS_DIR/cmake-$CMAKE_LATEST_VERSION
+  BUILD_LATEST_DIR: $BUILD_DIR/cmake-$CMAKE_LATEST_VERSION
+  PACKAGE_DIR: $BUILD_DIR/package
   ROCPRIM_GIT_BRANCH: develop_stream
 
 .deps:cmake-minimum:
@@ -106,7 +107,7 @@ build:cmake-latest:
       -D BUILD_EXAMPLE=OFF
       -D ROCM_DEP_ROCMCORE=OFF
       ../.
-    - $SUDO_CMD cpack
+    - cpack
       -G "DEB"
     - $SUDO_CMD dpkg -i rocprim*.deb
     - cd ../..
@@ -172,7 +173,7 @@ build:cmake-minimum:
       -D BUILD_EXAMPLE=OFF
       -D ROCM_DEP_ROCMCORE=OFF
       ../.
-    - $SUDO_CMD cpack
+    - cpack
       -G "DEB"
     - $SUDO_CMD dpkg -i rocprim*.deb
     - cd ../..
@@ -221,7 +222,7 @@ package:deb:
   script:
     - mkdir -p $PACKAGE_DIR
     - cd $BUILD_MINIMUM_DIR
-    - $SUDO_CMD cpack
+    - cpack
       -G "DEB;ZIP"
       -B $PACKAGE_DIR
   artifacts:
@@ -259,11 +260,13 @@ deploy:deb:
       -D CMAKE_CXX_COMPILER=hipcc
       -D CMAKE_BUILD_TYPE=Release
       -D ONLY_INSTALL=ON
-      -B $PACKAGE_DIR
-      ./rocPRIM
-    - $SUDO_CMD cpack
-      -G "DEB;ZIP"
-      -B $PACKAGE_DIR
+      -B rocPRIM/build
+      rocPRIM
+    - cd rocPRIM/build &&
+      cpack
+        -G "DEB;ZIP"
+        -B $PACKAGE_DIR &&
+      cd ../..
     # Install rocPRIM and rocThrust
     - $SUDO_CMD dpkg -i $PACKAGE_DIR/rocprim*.deb
     - $SUDO_CMD dpkg -i $PACKAGE_DIR/rocthrust*.deb
