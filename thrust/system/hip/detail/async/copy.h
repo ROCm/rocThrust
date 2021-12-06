@@ -128,6 +128,8 @@ auto async_copy_n(
 
   // Run copy.
 
+  std::cerr << "hipMemcpyAsync: " << direction_of_copy(from_exec, to_exec) << std::endl;
+
   thrust::hip_rocprim::throw_on_error(
     hipMemcpyAsync(
       thrust::raw_pointer_cast(&*output)
