@@ -31,6 +31,8 @@
 // this file must not be included on its own, ever,
 // but must be part of include in thrust/system/hip/detail/copy.h
 
+#include <iostream>
+
 #include <thrust/system/hip/config.h>
 
 
@@ -69,6 +71,8 @@ namespace __copy
                         T const*                                  src,
                         Size                                      count)
     {
+        std::cerr << "trivial_copy_from_device" << std::endl;
+
         hipError_t status;
         status = hip_rocprim::trivial_copy_from_device(
             dst, src, count, hip_rocprim::stream(device_s));
@@ -113,6 +117,7 @@ namespace __copy
                               Size                                      num_items,
                               OutputIt                                  result)
     {
+        std::cerr << "trivial_copy_to_device" << std::endl;
         // get type of the input data
         typedef typename thrust::iterator_value<InputIt>::type InputTy;
 
