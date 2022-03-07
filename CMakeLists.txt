@@ -15,12 +15,13 @@ endif()
 project(rocthrust LANGUAGES CXX)
 
 #Adding CMAKE_PREFIX_PATH
-list( APPEND CMAKE_PREFIX_PATH /opt/rocm/llvm /opt/rocm )
+list( APPEND CMAKE_PREFIX_PATH /opt/rocm/llvm /opt/rocm ${ROCM_PATH} )
 
 # CMake modules
 list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_SOURCE_DIR}/cmake
   ${HIP_PATH}/cmake /opt/rocm/hip/cmake # FindHIP.cmake
+  ${ROCM_PATH}/lib/cmake/hip /opt/rocm/lib/cmake/hip # FindHIP.cmake
 )
 
 # Set a default build type if none was specified
@@ -40,6 +41,7 @@ include( ROCMCreatePackage )
 include( ROCMInstallTargets )
 include( ROCMPackageConfigHelpers )
 include( ROCMInstallSymlinks )
+include( ROCMHeaderWrapper )
 include( ROCMCheckTargetIds OPTIONAL )
 
 # Detect compiler support for target ID
@@ -83,6 +85,8 @@ option(BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(DOWNLOAD_ROCPRIM "Download rocPRIM and do not search for rocPRIM package" OFF)
 option(BUILD_ADDRESS_SANITIZER "Build with address sanitizer enabled" OFF)
 option(ENABLE_UPSTREAM_TESTS "Enable upstream tests" OFF)
+#Set the header wrapper ON by default. 
+option(BUILD_FILE_REORG_BACKWARD_COMPATIBILITY "Build with file/folder reorg with backward compatibility enabled" ON)
 
 set(RNG_SEED_COUNT 0 CACHE STRING "Number of true random sequences to test each input size for")
 set(PRNG_SEEDS 1 CACHE STRING "Seeds of pseudo random sequences to test each input size for")
@@ -159,6 +163,27 @@ endif()
 if(BUILD_BENCHMARKS)
   add_subdirectory(internal/benchmark)
 endif()
+
+if(BUILD_FILE_REORG_BACKWARD_COMPATIBILITY)
+  rocm_wrap_header_dir(
+            ${CMAKE_SOURCE_DIR}/thrust
+	    PATTERNS "*.h"
+	    PATTERNS "*.inl"
+	    PATTERN "*.cuh"
+	    PATTERN "*.hpp"
+	    GUARDS SYMLINK WRAPPER
+	    WRAPPER_LOCATIONS rocthrust
+	  )
+  rocm_wrap_header_file(
+            thrust/rocthrust_version.hpp 
+	    GUARDS SYMLINK WRAPPER
+            WRAPPER_LOCATIONS rocthrust/include
+          )
+  rocm_install(
+	    DIRECTORY
+	    "${PROJECT_BINARY_DIR}/rocthrust"
+	    DESTINATION "." )
+endif( )
 
 set(THRUST_OPTIONS_DEBUG ${THRUST_OPTIONS_WARNINGS})
 set(THRUST_OPTIONS_RELEASE ${THRUST_OPTIONS_WARNINGS})
