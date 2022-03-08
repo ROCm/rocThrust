@@ -172,8 +172,8 @@ set(THRUST_OPTIONS_RELEASE ${THRUST_OPTIONS_WARNINGS})
 # Package
 set(CPACK_DEBIAN_ARCHIVE_TYPE "gnutar")
 
-rocm_package_add_deb_dependency(DEPENDS "rocprim-dev >= 2.10.1")
-rocm_package_add_rpm_dependency(DEPENDS "rocprim-devel >= 2.10.1")
+rocm_package_add_deb_dependencies(DEPENDS "rocprim-dev >= 2.10.1")
+rocm_package_add_rpm_dependencies(DEPENDS "rocprim-devel >= 2.10.1")
 set(CPACK_DEBIAN_PACKAGE_CONFLICTS "hip-thrust, thrust")
 set(CPACK_RPM_PACKAGE_CONFLICTS "hip-thrust, thrust")
 
