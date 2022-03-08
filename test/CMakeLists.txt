@@ -81,6 +81,7 @@ function(add_rocthrust_test TEST)
                 LABELS "hip"
         )
     endif()
+    rocm_install(TARGETS ${TEST_TARGET} COMPONENT tests)
     if (WIN32 AND NOT DEFINED DLLS_COPIED)
       set(DLLS_COPIED "YES")
       set(DLLS_COPIED ${DLLS_COPIED} PARENT_SCOPE)

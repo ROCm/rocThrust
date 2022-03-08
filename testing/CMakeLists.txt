@@ -105,6 +105,7 @@ function(add_thrust_test TEST)
                 LABELS upstream
         )
     endif()
+    rocm_install(TARGETS ${TEST_TARGET} COMPONENT tests)
 endfunction()
 
 # ****************************************************************************
