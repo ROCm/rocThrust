@@ -21,11 +21,11 @@
 #include <cstddef>
 
 #ifndef __has_cpp_attribute
-#    define __has_cpp_attribute(X) 0
+#  define __has_cpp_attribute(X) 0
 #endif
 
 #if THRUST_CPP_DIALECT >= 2014 && __has_cpp_attribute(nodiscard)
-#    define THRUST_NODISCARD [[nodiscard]]
+#  define THRUST_NODISCARD [[nodiscard]]
 #else
 #  define THRUST_NODISCARD
 #endif
