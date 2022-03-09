@@ -11,13 +11,22 @@ configure_file(
   @ONLY
 )
 
+#Creat wrapper for generated version file
+if(BUILD_FILE_REORG_BACKWARD_COMPATIBILITY)
+  rocm_wrap_header_file(
+      "rocthrust_version.hpp"
+      WRAPPER_LOCATIONS rocthrust/include/thrust
+      OUTPUT_LOCATIONS rocthrust/wrapper/include/thrust
+  )
+endif()
+
 # Only header target, does not include dependencies
 add_library(rocthrust INTERFACE)
 target_include_directories(rocthrust
   INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>
-    $<INSTALL_INTERFACE:include/rocthrust>
+    $<INSTALL_INTERFACE:include/>
 )
 
 target_link_libraries(rocthrust
@@ -55,6 +64,16 @@ rocm_install(
   ${EXCLUDE_PATTERNS}
   PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ
 )
+
+#Install the wrapper to rocthrust folder. 
+#So wrapper would be in /opt/rocm-xxx/rocthrust/include/thrust
+if (BUILD_FILE_REORG_BACKWARD_COMPATIBILITY)
+  rocm_install(
+    DIRECTORY
+    "${PROJECT_BINARY_DIR}/rocthrust/wrapper/"
+    DESTINATION rocthrust/ 
+  )
+endif()
 
 include(ROCMExportTargetsHeaderOnly)
 # Export targets

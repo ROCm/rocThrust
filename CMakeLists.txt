@@ -164,6 +164,7 @@ if(BUILD_BENCHMARKS)
   add_subdirectory(internal/benchmark)
 endif()
 
+#Create header wrapper for backward compatibility
 if(BUILD_FILE_REORG_BACKWARD_COMPATIBILITY)
   rocm_wrap_header_dir(
             ${CMAKE_SOURCE_DIR}/thrust
@@ -172,17 +173,9 @@ if(BUILD_FILE_REORG_BACKWARD_COMPATIBILITY)
 	    PATTERN "*.cuh"
 	    PATTERN "*.hpp"
 	    GUARDS SYMLINK WRAPPER
-	    WRAPPER_LOCATIONS rocthrust
+	    WRAPPER_LOCATIONS rocthrust/include/thrust
+            OUTPUT_LOCATIONS rocthrust/wrapper/include/thrust
 	  )
-  rocm_wrap_header_file(
-            thrust/rocthrust_version.hpp 
-	    GUARDS SYMLINK WRAPPER
-            WRAPPER_LOCATIONS rocthrust/include
-          )
-  rocm_install(
-	    DIRECTORY
-	    "${PROJECT_BINARY_DIR}/rocthrust"
-	    DESTINATION "." )
 endif( )
 
 set(THRUST_OPTIONS_DEBUG ${THRUST_OPTIONS_WARNINGS})
