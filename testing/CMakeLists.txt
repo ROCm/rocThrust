@@ -8,7 +8,7 @@ target_include_directories(testing_common
     BEFORE
     INTERFACE
         $<BUILD_INTERFACE:${GTEST_INCLUDE_DIRS}>
-        $<BUILD_INTERFACE:.>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
 )
 target_link_libraries(testing_common
     INTERFACE
