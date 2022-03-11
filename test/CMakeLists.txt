@@ -44,8 +44,8 @@ function(add_rocthrust_test TEST)
     add_executable(${TEST_TARGET} ${TEST_SOURCE})
     target_include_directories(${TEST_TARGET} SYSTEM BEFORE
         PUBLIC
-            ${GTEST_INCLUDE_DIRS}
-            ${CMAKE_CURRENT_BINARY_DIR}
+            $<BUILD_INTERFACE:${GTEST_INCLUDE_DIRS}>
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
     )
     target_link_libraries(${TEST_TARGET}
         PRIVATE

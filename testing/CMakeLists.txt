@@ -7,8 +7,8 @@ target_include_directories(testing_common
     SYSTEM
     BEFORE
     INTERFACE
-        ${GTEST_INCLUDE_DIRS}
-        .
+        $<BUILD_INTERFACE:${GTEST_INCLUDE_DIRS}>
+        $<BUILD_INTERFACE:.>
 )
 target_link_libraries(testing_common
     INTERFACE
