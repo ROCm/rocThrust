@@ -15,12 +15,13 @@ endif()
 project(rocthrust LANGUAGES CXX)
 
 #Adding CMAKE_PREFIX_PATH
-list( APPEND CMAKE_PREFIX_PATH /opt/rocm/llvm /opt/rocm )
+list( APPEND CMAKE_PREFIX_PATH /opt/rocm/llvm /opt/rocm ${ROCM_PATH} )
 
 # CMake modules
 list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_SOURCE_DIR}/cmake
   ${HIP_PATH}/cmake /opt/rocm/hip/cmake # FindHIP.cmake
+  ${ROCM_PATH}/lib/cmake/hip /opt/rocm/lib/cmake/hip # FindHIP.cmake
 )
 
 # Set a default build type if none was specified
@@ -40,7 +41,10 @@ include( ROCMCreatePackage )
 include( ROCMInstallTargets )
 include( ROCMPackageConfigHelpers )
 include( ROCMInstallSymlinks )
-include( ROCMCheckTargetIds OPTIONAL )
+include( ROCMHeaderWrapper )
+include( ROCMCheckTargetIds )
+include( ROCMClients )
+
 
 # Detect compiler support for target ID
 # This section is deprecated. Please use rocm_check_target_ids for future use.
@@ -83,6 +87,8 @@ option(BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(DOWNLOAD_ROCPRIM "Download rocPRIM and do not search for rocPRIM package" OFF)
 option(BUILD_ADDRESS_SANITIZER "Build with address sanitizer enabled" OFF)
 option(ENABLE_UPSTREAM_TESTS "Enable upstream tests" OFF)
+#Set the header wrapper ON by default. 
+option(BUILD_FILE_REORG_BACKWARD_COMPATIBILITY "Build with file/folder reorg with backward compatibility enabled" ON)
 
 set(RNG_SEED_COUNT 0 CACHE STRING "Number of true random sequences to test each input size for")
 set(PRNG_SEEDS 1 CACHE STRING "Seeds of pseudo random sequences to test each input size for")
@@ -136,8 +142,13 @@ print_configuration_summary()
 # Thrust (with HIP backend)
 add_subdirectory(thrust)
 
+if(BUILD_TEST OR BUILD_BENCHMARKS)
+  rocm_package_setup_component(clients)
+endif()
+
 # Tests
 if(BUILD_TEST)
+  rocm_package_setup_client_component(tests)
   if (ENABLE_UPSTREAM_TESTS)
     enable_testing()
   endif()
@@ -160,18 +171,31 @@ if(BUILD_BENCHMARKS)
   add_subdirectory(internal/benchmark)
 endif()
 
+#Create header wrapper for backward compatibility
+if(BUILD_FILE_REORG_BACKWARD_COMPATIBILITY)
+  rocm_wrap_header_dir(
+      ${CMAKE_SOURCE_DIR}/thrust
+      PATTERNS "*.h" "*.inl" "*.cuh" "*.hpp"
+      HEADER_LOCATION include/thrust
+      GUARDS SYMLINK WRAPPER
+      WRAPPER_LOCATIONS rocthrust/include/thrust
+      OUTPUT_LOCATIONS rocthrust/wrapper/include/thrust
+  )
+endif( )
+
 set(THRUST_OPTIONS_DEBUG ${THRUST_OPTIONS_WARNINGS})
 set(THRUST_OPTIONS_RELEASE ${THRUST_OPTIONS_WARNINGS})
 
 # Package
 set(CPACK_DEBIAN_ARCHIVE_TYPE "gnutar")
 
-set(CPACK_DEBIAN_PACKAGE_DEPENDS "rocprim-dev (>= 2.10.1)") # 1.5.18263 is HIP version in ROCm 1.8.2
+rocm_package_add_deb_dependencies(DEPENDS "rocprim-dev >= 2.10.1")
+rocm_package_add_rpm_dependencies(DEPENDS "rocprim-devel >= 2.10.1")
 set(CPACK_DEBIAN_PACKAGE_CONFLICTS "hip-thrust, thrust")
 set(CPACK_RPM_PACKAGE_CONFLICTS "hip-thrust, thrust")
-set(CPACK_RPM_PACKAGE_REQUIRES "rocprim-devel >= 2.10.1")
 
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_RPM_PACKAGE_LICENSE "ASL 2.0")
 
 # if(NOT CPACK_PACKAGING_INSTALL_PREFIX)
 #   set(CPACK_PACKAGING_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")

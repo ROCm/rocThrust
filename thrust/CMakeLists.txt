@@ -11,13 +11,23 @@ configure_file(
   @ONLY
 )
 
+#Creat wrapper for generated version file
+if(BUILD_FILE_REORG_BACKWARD_COMPATIBILITY)
+  rocm_wrap_header_file(
+      "rocthrust_version.hpp"
+      HEADER_LOCATION include/thrust
+      WRAPPER_LOCATIONS rocthrust/include/thrust
+      OUTPUT_LOCATIONS rocthrust/wrapper/include/thrust
+  )
+endif()
+
 # Only header target, does not include dependencies
 add_library(rocthrust INTERFACE)
 target_include_directories(rocthrust
   INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/..>
-    $<INSTALL_INTERFACE:rocthrust/include/>
+    $<INSTALL_INTERFACE:include/>
 )
 
 target_link_libraries(rocthrust
@@ -34,7 +44,6 @@ set(INCLUDE_INSTALL_DIR ${CMAKE_INSTALL_INCLUDEDIR})
 # does not support header-only libraries (INTERFACE targets)
 rocm_install_targets(
   TARGETS rocthrust
-  PREFIX rocthrust
 )
 if(CMAKE_VERSION VERSION_LESS 3.7)
   # Workaround: old versions of CMake do not support set(CPACK_DEBIAN_ARCHIVE_TYPE "gnutar")
@@ -46,7 +55,7 @@ rocm_install(
   DIRECTORY
     "./"
     "${PROJECT_BINARY_DIR}/thrust/include/"
-  DESTINATION rocthrust/include/thrust
+  DESTINATION include/thrust
   FILES_MATCHING
   PATTERN "*.h"
   PATTERN "*.cuh"
@@ -57,14 +66,21 @@ rocm_install(
   PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ
 )
 
+#Install the wrapper to rocthrust folder. 
+#So wrapper would be in /opt/rocm-xxx/rocthrust/include/thrust
+if (BUILD_FILE_REORG_BACKWARD_COMPATIBILITY)
+  rocm_install(
+    DIRECTORY
+    "${PROJECT_BINARY_DIR}/rocthrust/wrapper/"
+    DESTINATION rocthrust/ 
+  )
+endif()
+
 include(ROCMExportTargetsHeaderOnly)
 # Export targets
 rocm_export_targets_header_only(
   TARGETS roc::rocthrust
-  PREFIX rocthrust
   DEPENDS PACKAGE rocprim
   NAMESPACE roc::
 )
 
-# Create symlinks
-rocm_install_symlink_subdir(rocthrust)
