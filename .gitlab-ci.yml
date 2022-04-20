@@ -1,5 +1,5 @@
 # ########################################################################
-# Copyright 2019-2021 Advanced Micro Devices, Inc.
+# Copyright 2019-2022 Advanced Micro Devices, Inc.
 # ########################################################################
 
 include:
@@ -10,6 +10,7 @@ include:
       - /deps-cmake.yaml
       - /deps-rocm.yaml
       - /gpus-rocm.yaml
+      - /rules.yaml
 
 stages:
   - build   # Tests if builds succeed (CMake)
@@ -19,13 +20,6 @@ variables:
   # Helper variables
   PACKAGE_DIR: $BUILD_DIR/package
   ROCPRIM_GIT_BRANCH: develop_stream
-
-.deps:doc:
-  image: sphinxdoc/sphinx-latexpdf
-  before_script:
-    - $SUDO_CMD apt update -qq
-    - $SUDO_CMD apt install -y -qq doxygen
-    - $SUDO_CMD pip3 install sphinx_rtd_theme breathe exhale
 
 .cmake-latest:
   extends:
@@ -78,6 +72,9 @@ variables:
   stage: build
   extends:
     - .gpus:rocm-gpus
+    - .rules:build
+  tags:
+    - rocm-build
   script:
     - !reference [.install-rocprim, script]
     # Setup env vars for testing
@@ -131,9 +128,6 @@ build:cmake-latest:
 
 build:cmake-minimum:
   stage: build
-  needs:
-    - job: build:cmake-latest
-      artifacts: false
   extends:
     - .cmake-minimum
     - .build:common
@@ -142,6 +136,9 @@ build:package:
   stage: build
   extends:
     - .cmake-minimum
+    - .rules:build
+  tags:
+    - rocm-build
   script:
     - !reference [.install-rocprim, script]
     - cmake
@@ -165,6 +162,9 @@ test:package:
     - build:package
   extends:
     - .cmake-minimum
+    - .rules:test
+  tags:
+    - rocm-build
   script:
     - !reference [.install-rocprim, script]
     - $SUDO_CMD dpkg -i $PACKAGE_DIR/rocthrust*.deb
@@ -183,9 +183,15 @@ test:package:
     - $SUDO_CMD dpkg -r rocprim-dev
 
 test:doc:
-  extends: .deps:doc
+  image: sphinxdoc/sphinx-latexpdf
   needs: []
   stage: test
+  extends:
+    - .rules:test
+  before_script:
+    - $SUDO_CMD apt update -qq
+    - $SUDO_CMD apt install -y -qq doxygen
+    - $SUDO_CMD pip3 install sphinx_rtd_theme breathe exhale
   script:
     - bash -x ./docs/run_doc.sh
 
@@ -193,6 +199,7 @@ test:
   stage: test
   extends:
     - .cmake-latest
+    - .rules:test
     - .gpus:rocm
   needs:
     - build:cmake-latest
