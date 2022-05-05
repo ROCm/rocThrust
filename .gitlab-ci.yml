@@ -178,7 +178,7 @@ test:
     - .rules:test
     - .gpus:rocm
   needs:
-    - build:cmake-latest
+    - build:cmake-minimum
   script:
     - cd $CI_PROJECT_DIR/build
     - cmake
