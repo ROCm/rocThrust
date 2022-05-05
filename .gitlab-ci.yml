@@ -122,7 +122,7 @@ build:package:
       -S $CI_PROJECT_DIR
       -B $PACKAGE_DIR
       -G Ninja
-      -D CMAKE_BUILD_TYPE=release
+      -D CMAKE_BUILD_TYPE=Release
       -D CMAKE_CXX_COMPILER=hipcc
     - cd $PACKAGE_DIR
     - cpack
