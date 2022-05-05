@@ -174,7 +174,7 @@ test:doc:
 test:
   stage: test
   extends:
-    - .cmake-latest
+    - .cmake-minimum
     - .rules:test
     - .gpus:rocm
   needs:
