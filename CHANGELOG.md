@@ -4,7 +4,7 @@ Full documentation for rocThrust is available at [https://rocthrust.readthedocs.
 
 ## (Unreleased) rocThrust 2.16.0 for ROCm 5.3
 ### Changed
-- ROCm support for device malloc has been enabled again. As a result, rocThrust functionality dependent on device malloc works again (device launched `thrust::sort` and `thrust::sort_by_key`). 
+- rocThrust functionality dependent on device malloc works is functional as ROCm 5.2 reneabled device malloc. Device launched `thrust::sort` and `thrust::sort_by_key` are available for use.
  
 ## rocThrust 2.15.0 for ROCm 5.2
 ### Added
