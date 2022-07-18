@@ -256,7 +256,7 @@ TEST(SortByKeyTests, TestSortByKeyBoolDescending)
     }
 }
 
-
+#ifndef _WIN32
 __global__
 THRUST_HIP_LAUNCH_BOUNDS_DEFAULT
 void SortByKeyKernel(int const N, int* keys, short* values)
@@ -309,3 +309,4 @@ TEST(SortByKeyTests, TestSortByKeyDevice)
         }
     }
 }
+#endif

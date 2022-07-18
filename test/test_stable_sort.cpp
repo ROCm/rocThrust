@@ -189,7 +189,7 @@ TYPED_TEST(StableSortVectorTests, TestStableSortWithIndirection)
     ASSERT_EQ(data[6], T(2));
 }
 
-
+#ifndef _WIN32
 __global__
 THRUST_HIP_LAUNCH_BOUNDS_DEFAULT
 void StableSortKernel(int const N, int* array)
@@ -231,3 +231,4 @@ TEST(StableSortTests, TestStableSortDevice)
         }
     }
 }
+#endif

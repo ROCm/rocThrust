@@ -181,7 +181,7 @@ TYPED_TEST(StableSortByKeyVectorPrimitiveTests, TestStableSortByKey)
     }
 }
 
-
+#ifndef _WIN32
 __global__
 THRUST_HIP_LAUNCH_BOUNDS_DEFAULT
 void StableSortByKeyKernel(int const N, int* keys, short* values)
@@ -235,3 +235,4 @@ TEST(StableSortByKeyTests, TestStableSortByKeyDevice)
         }
     }
 }
+#endif

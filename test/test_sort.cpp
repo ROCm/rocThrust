@@ -437,6 +437,7 @@ TEST(SortTests, TestSortBoolDescending)
     }
 }
 
+#ifndef _WIN32
 //TODO: refactor this test into a different set of tests
 __global__
 THRUST_HIP_LAUNCH_BOUNDS_DEFAULT
@@ -479,3 +480,4 @@ TEST(SortTests, TestSortDevice)
         }
     }
 }
+#endif
