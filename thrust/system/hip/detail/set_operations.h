@@ -61,7 +61,7 @@ namespace __set_operations
         T    key2 = data[mid];
         bool pred = UpperBound ? !comp(key, key2) : comp(key2, key);
         if(pred)
-            begin = (long long)mid + 1;
+            begin = mid + static_cast<Size>(1);
         else
             end = mid;
     }
