@@ -5,6 +5,8 @@ Full documentation for rocThrust is available at [https://rocthrust.readthedocs.
 ## (Unreleased) rocThrust 2.17.0 for ROCm 5.4
 ### Added
 - Updated to match upstream Thrust 1.17.0
+### Fixed
+- Large indices now work correctly for set_difference and set_intersection.
 
 ## (Unreleased) rocThrust 2.16.0 for ROCm 5.3
 ### Added
