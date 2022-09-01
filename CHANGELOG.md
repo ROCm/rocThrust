@@ -2,10 +2,13 @@
 
 Full documentation for rocThrust is available at [https://rocthrust.readthedocs.io/en/latest/](https://rocthrust.readthedocs.io/en/latest/)
 
+## (Unreleased) rocThrust 2.17.0 for ROCm 5.4
+### Added
+- Updated to match upstream Thrust 1.17.0
+
 ## (Unreleased) rocThrust 2.16.0 for ROCm 5.3
 ### Added
 - Updated to match upstream Thrust 1.16.0
-- Updated to match upstream Thrust 1.17.0
 ### Changed
 - rocThrust functionality dependent on device malloc works is functional as ROCm 5.2 reneabled device malloc. Device launched `thrust::sort` and `thrust::sort_by_key` are available for use.
 
