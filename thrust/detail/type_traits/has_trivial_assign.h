@@ -35,14 +35,14 @@ template<typename T> struct has_trivial_assign
       bool,
       (is_pod<T>::value && !is_const<T>::value)
 #if THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_MSVC
-      || __is_trivially_assignable(T)
+      || __is_trivially_assignable(T, const T)
 #elif THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_GCC
 // only use the intrinsic for >= 4.3
 #if (__GNUC__ >= 4) && (__GNUC_MINOR__ >= 3)
-      || __is_trivially_assignable(T)
+      || __is_trivially_assignable(T, const T)
 #endif // GCC VERSION
 #elif THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_CLANG
-      || __is_trivially_assignable(T)
+      || __is_trivially_assignable(T, const T)
 #endif // THRUST_HOST_COMPILER
     >
 {};
