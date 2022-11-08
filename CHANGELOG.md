@@ -2,6 +2,10 @@
 
 Full documentation for rocThrust is available at [https://rocthrust.readthedocs.io/en/latest/](https://rocthrust.readthedocs.io/en/latest/)
 
+## rocThrust 2.16.0 for ROCm 5.3.2
+### Known issues
+- thrust::merge no longer correctly supports different iterator types for keys_input1 and keys_input2 (starting from the 5.3.0 release).
+
 ## rocThrust 2.16.0 for ROCm 5.3
 ### Changed
 - rocThrust functionality dependent on device malloc works is functional as ROCm 5.2 reneabled device malloc. Device launched `thrust::sort` and `thrust::sort_by_key` are available for use.
