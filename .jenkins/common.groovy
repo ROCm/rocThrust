@@ -31,8 +31,7 @@ def runTestCommand (platform, project)
     String sudo = auxiliary.sudo(platform.jenkinsLabel)
     String centos = platform.jenkinsLabel.contains('centos') ? '3' : ''
 
-    def extraArgs = ''
-    def testCommand = "ctest $(extraArgs) --output-on-failure"
+    def testCommand = "ctest --output-on-failure"
     def hmmTestCommand = ''
     def excludeRegex = 'reduce_by_key.hip'
     
