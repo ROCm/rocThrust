@@ -29,7 +29,6 @@ def runCompileCommand(platform, project, jobName, boolean debug=false, boolean s
 def runTestCommand (platform, project)
 {
     String sudo = auxiliary.sudo(platform.jenkinsLabel)
-    String centos = platform.jenkinsLabel.contains('centos') ? '3' : ''
 
     def testCommand = "ctest --output-on-failure"
     def hmmTestCommand = ''
