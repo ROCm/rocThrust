@@ -20,8 +20,8 @@ list( APPEND CMAKE_PREFIX_PATH /opt/rocm/llvm /opt/rocm ${ROCM_PATH} )
 # CMake modules
 list(APPEND CMAKE_MODULE_PATH
   ${CMAKE_CURRENT_SOURCE_DIR}/cmake
-  ${HIP_PATH}/cmake /opt/rocm/hip/cmake # FindHIP.cmake
   ${ROCM_PATH}/lib/cmake/hip /opt/rocm/lib/cmake/hip # FindHIP.cmake
+  ${HIP_PATH}/cmake /opt/rocm/hip/cmake # FindHIP.cmake
 )
 
 # Set a default build type if none was specified
@@ -172,7 +172,7 @@ if(BUILD_BENCHMARKS)
 endif()
 
 #Create header wrapper for backward compatibility
-if(BUILD_FILE_REORG_BACKWARD_COMPATIBILITY)
+if(BUILD_FILE_REORG_BACKWARD_COMPATIBILITY AND NOT WIN32)
   rocm_wrap_header_dir(
       ${CMAKE_SOURCE_DIR}/thrust
       PATTERNS "*.h" "*.inl" "*.cuh" "*.hpp"
@@ -201,7 +201,7 @@ set(CPACK_RPM_PACKAGE_LICENSE "ASL 2.0")
 #   set(CPACK_PACKAGING_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 # endif()
 
-set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "\${CPACK_PACKAGING_INSTALL_PREFIX}" "\${CPACK_PACKAGING_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
+set(CPACK_RPM_EXCLUDE_FROM_AUTO_FILELIST_ADDITION "\${CPACK_PACKAGING_INSTALL_PREFIX}" )
 
 rocm_create_package(
   NAME rocthrust
