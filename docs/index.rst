@@ -12,8 +12,9 @@ rocThrust User Guide
    :caption: Contents:
    :numbered:
 
+   introduction
+   installing
    cpp_api
-   api/library_root
 
 Indices and tables
 ------------------
