@@ -3,17 +3,20 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to rocThrust's documentation!
-==================================
+====================
+rocThrust User Guide
+====================
 
 .. toctree::
-   :maxdepth: 3 
+   :maxdepth: 3
    :caption: Contents:
+   :numbered:
 
+   cpp_api
    api/library_root
-   
+
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`search`

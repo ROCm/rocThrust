@@ -35,7 +35,13 @@ read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ['sphinx.ext.mathjax', 'breathe', 'exhale']
+extensions = [
+    'sphinx.ext.mathjax',
+    'sphinx_rtd_theme',
+    'breathe',
+    'exhale',
+]
+
 breathe_projects = { "rocThrust": "./docBin/xml" }
 breathe_default_project = "rocThrust"
 
@@ -97,6 +103,7 @@ else:
     import sphinx_rtd_theme
     html_theme = "sphinx_rtd_theme"
     html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_logo = "rocm_logo.png"
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
