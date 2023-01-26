@@ -167,7 +167,7 @@ test:doc:
   before_script:
     - $SUDO_CMD apt update -qq
     - $SUDO_CMD apt install -y -qq doxygen
-    - $SUDO_CMD pip3 install sphinx_rtd_theme breathe exhale
+    - $SUDO_CMD pip3 install --user -r $CI_PROJECT_DIR/docs/requirements.txt
   script:
     - bash -x $CI_PROJECT_DIR/docs/run_doc.sh
 
