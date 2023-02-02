@@ -39,7 +39,7 @@ The rocThrust sources are available from the `rocThrust GitHub Repository <https
 Building the Library
 --------------------
 
-After obtaining the sources, rocRAND can be built using the installation script. Note that this method only works on Linux, see the following sections for how to build rocThrust on Windows::
+After obtaining the sources, rocThrust can be built using the installation script. Note that this method only works on Linux, see the following sections for how to build rocThrust on Windows::
 
     cd rocThrust
     ./install --install
