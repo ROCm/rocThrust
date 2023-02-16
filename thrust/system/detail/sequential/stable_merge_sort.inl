@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2021 NVIDIA Corporation
- *  Modifications Copyright© 2019-2022 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2019-2023 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,6 +24,10 @@
 #include <thrust/merge.h>
 #include <thrust/system/detail/sequential/insertion_sort.h>
 #include <thrust/detail/minmax.h>
+
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+#include <nv/target>
+#endif
 
 THRUST_NAMESPACE_BEGIN
 namespace system
@@ -375,9 +379,10 @@ void stable_merge_sort(sequential::execution_policy<DerivedPolicy> &exec,
                        RandomAccessIterator last,
                        StrictWeakOrdering comp)
 {
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
   if (THRUST_IS_DEVICE_CODE) {
     #if THRUST_INCLUDE_DEVICE_CODE
-      // avoid recursion in CUDA or HIP threads
+      // avoid recursion in HIP threads
       stable_merge_sort_detail::iterative_stable_merge_sort(exec, first, last, comp);
     #endif
   } else {
@@ -385,6 +390,14 @@ void stable_merge_sort(sequential::execution_policy<DerivedPolicy> &exec,
       stable_merge_sort_detail::recursive_stable_merge_sort(exec, first, last, comp);
     #endif
   }
+#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+  NV_IF_TARGET(NV_IS_DEVICE, (
+    // avoid recursion in CUDA threads
+    stable_merge_sort_detail::iterative_stable_merge_sort(exec, first, last, comp);
+  ), (
+    stable_merge_sort_detail::recursive_stable_merge_sort(exec, first, last, comp);
+  ));
+#endif
 }
 
 
@@ -399,9 +412,10 @@ void stable_merge_sort_by_key(sequential::execution_policy<DerivedPolicy> &exec,
                               RandomAccessIterator2 first2,
                               StrictWeakOrdering comp)
 {
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
   if (THRUST_IS_DEVICE_CODE) {
     #if THRUST_INCLUDE_DEVICE_CODE
-      // avoid recursion in CUDA or HIP threads
+      // avoid recursion in HIP threads
       stable_merge_sort_detail::iterative_stable_merge_sort_by_key(exec, first1, last1, first2, comp);
     #endif
   } else {
@@ -409,6 +423,14 @@ void stable_merge_sort_by_key(sequential::execution_policy<DerivedPolicy> &exec,
       stable_merge_sort_detail::recursive_stable_merge_sort_by_key(exec, first1, last1, first2, comp);
     #endif
   }
+#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+  NV_IF_TARGET(NV_IS_DEVICE, (
+    // avoid recursion in CUDA threads
+    stable_merge_sort_detail::iterative_stable_merge_sort_by_key(exec, first1, last1, first2, comp);
+  ), (
+    stable_merge_sort_detail::recursive_stable_merge_sort_by_key(exec, first1, last1, first2, comp);
+  ));
+#endif
 }
 
 

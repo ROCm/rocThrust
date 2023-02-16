@@ -1,5 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
+ *  Modifications Copyright© 2023 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -17,14 +18,15 @@
 #pragma once
 
 #include <thrust/detail/config.h>
-#include <limits>
+#include <thrust/detail/type_deduction.h>
 
-#if THRUST_CPP_DIALECT >= 2011
-  #include <thrust/detail/type_deduction.h>
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+#include <nv/target>
 #endif
 
-THRUST_NAMESPACE_BEGIN
+#include <limits>
 
+THRUST_NAMESPACE_BEGIN
 namespace detail
 {
 
@@ -33,6 +35,7 @@ __host__ __device__ __thrust_forceinline__
 Integer clz(Integer x)
 {
   Integer result;
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
   if (THRUST_IS_DEVICE_CODE) {
     #if THRUST_INCLUDE_DEVICE_CODE
       result = ::__clz(x);
@@ -52,6 +55,23 @@ Integer clz(Integer x)
       }
     #endif
   }
+#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+  NV_IF_TARGET(NV_IS_DEVICE, (
+    result = ::__clz(x);
+  ), (
+    int num_bits = 8 * sizeof(Integer);
+    int num_bits_minus_one = num_bits - 1;
+    result = num_bits;
+    for (int i = num_bits_minus_one; i >= 0; --i)
+    {
+      if ((Integer(1) << i) & x)
+      {
+        result = num_bits_minus_one - i;
+        break;
+      }
+    }
+  ));
+#endif
   return result;
 }
 

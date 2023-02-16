@@ -1,5 +1,6 @@
 /*
  *  Copyright 2008-2018 NVIDIA Corporation
+ *  Modifications Copyright© 2023 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,6 +25,10 @@
 #include <thrust/detail/allocator/default_construct_range.h>
 #include <thrust/detail/allocator/destroy_range.h>
 #include <thrust/detail/allocator/fill_construct_range.h>
+
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+#include <nv/target>
+#endif
 
 #include <stdexcept> // for std::runtime_error
 #include <utility> // for use of std::swap in the WAR below
@@ -432,6 +437,7 @@ __host__ __device__
   void contiguous_storage<T,Alloc>
     ::swap_allocators(false_type, Alloc &other)
 {
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
   if (THRUST_IS_DEVICE_CODE) {
     #if THRUST_INCLUDE_DEVICE_CODE
       // allocators must be equal when swapping containers with allocators that propagate on swap
@@ -445,6 +451,17 @@ __host__ __device__
       }
     #endif
   }
+#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+  NV_IF_TARGET(NV_IS_DEVICE, (
+    // allocators must be equal when swapping containers with allocators that propagate on swap
+    assert(!is_allocator_not_equal(other));
+  ), (
+    if (is_allocator_not_equal(other))
+    {
+      throw allocator_mismatch_on_swap();
+    }
+  ));
+#endif
   thrust::swap(m_allocator, other);
 } // end contiguous_storage::swap_allocators()
 

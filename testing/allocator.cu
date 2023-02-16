@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
- *  Modifications Copyright© 2019 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2019-2023 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -14,11 +14,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
- 
+
 #include <unittest/unittest.h>
 #include <thrust/detail/config.h>
 #include <thrust/device_malloc_allocator.h>
 #include <thrust/system/cpp/vector.h>
+
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+#include <nv/target>
+#endif
+
 #include <memory>
 
 template <typename T>
@@ -79,9 +84,12 @@ template <typename T>
 
 struct my_allocator_with_custom_destroy
 {
-  typedef T         value_type;
-  typedef T &       reference;
-  typedef const T & const_reference;
+  // This is only used with thrust::cpp::vector:
+  using system_type = thrust::cpp::tag;
+
+  using value_type = T;
+  using reference = T &;
+  using const_reference = const T &;
 
   static bool g_state;
 
@@ -100,8 +108,12 @@ struct my_allocator_with_custom_destroy
   void destroy(T *)
 
   {
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
 #if !__CUDA_ARCH__
     g_state = true;
+#endif
+#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+    NV_IF_TARGET(NV_IS_HOST, (g_state = true;));
 #endif
   }
 
@@ -139,12 +151,14 @@ bool my_allocator_with_custom_destroy<T>::g_state = false;
 template <typename T>
 void TestAllocatorCustomDestroy(size_t n)
 {
+  my_allocator_with_custom_destroy<T>::g_state = false;
+
   {
     thrust::cpp::vector<T, my_allocator_with_custom_destroy<T> > vec(n);
   } // destroy everything
 
-  if (0 < n)
-    ASSERT_EQUAL(true, my_allocator_with_custom_destroy<T>::g_state);
+  // state should only be true when there are values to destroy:
+  ASSERT_EQUAL(n > 0, my_allocator_with_custom_destroy<T>::g_state);
 }
 DECLARE_VARIABLE_UNITTEST(TestAllocatorCustomDestroy);
 
@@ -223,7 +237,6 @@ void TestAllocatorTraitsRebind()
 }
 DECLARE_UNITTEST(TestAllocatorTraitsRebind);
 
-#if THRUST_CPP_DIALECT >= 2011
 void TestAllocatorTraitsRebindCpp11()
 {
   ASSERT_EQUAL(
@@ -271,5 +284,3 @@ void TestAllocatorTraitsRebindCpp11()
   );
 }
 DECLARE_UNITTEST(TestAllocatorTraitsRebindCpp11);
-#endif // C++11
-

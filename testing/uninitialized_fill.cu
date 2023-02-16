@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
- *  Modifications Copyright© 2019 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2019-2023 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -20,6 +20,9 @@
 #include <thrust/device_malloc_allocator.h>
 #include <thrust/iterator/retag.h>
 
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+#include <nv/target>
+#endif
 
 template<typename ForwardIterator, typename T>
 void uninitialized_fill(my_system &system,
@@ -173,12 +176,22 @@ struct CopyConstructTest
   __host__ __device__
   CopyConstructTest(const CopyConstructTest&)
   {
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
 #if defined(__CUDA_ARCH__) || defined(__HIP_DEVICE_COMPILE__)
     copy_constructed_on_device = true;
     copy_constructed_on_host   = false;
 #else
     copy_constructed_on_device = false;
     copy_constructed_on_host   = true;
+#endif
+#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+    NV_IF_TARGET(NV_IS_DEVICE, (
+      copy_constructed_on_device = true;
+      copy_constructed_on_host   = false;
+    ), (
+      copy_constructed_on_device = false;
+      copy_constructed_on_host   = true;
+    ));
 #endif
   }
 
