@@ -192,7 +192,7 @@ typedef ::testing::Types<Params<short>,
 // Scalar signed interger types
 typedef ::testing::Types<Params<short>, Params<int>, Params<long long>> SignedIntegerTestsParams;
 
-#if defined(WIN32) && defined(__HIP__)
+#if defined(_WIN32) && defined(__HIP__)
 // Scalar unsigned interger types of all lengths
 typedef ::testing::Types<Params<thrust::detail::uint16_t>,
                          Params<thrust::detail::uint32_t>,
