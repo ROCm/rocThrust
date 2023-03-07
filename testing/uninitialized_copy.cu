@@ -183,8 +183,8 @@ struct CopyConstructTest
       copy_constructed_on_device = false;
       copy_constructed_on_host   = true;
     ));
-  }
 #endif
+  }
 
   __host__ __device__
   CopyConstructTest &operator=(const CopyConstructTest &x)

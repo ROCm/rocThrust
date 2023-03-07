@@ -82,7 +82,7 @@ bool must_perform_optional_synchronization(execution_policy<Derived> &policy)
 }
 
 template <class Derived>
-hipError_t synchronize_stream(execution_policy<Derived>& policy)
+__host__ __device__ hipError_t synchronize_stream(execution_policy<Derived>& policy)
 {
   hipError_t result;
 if (THRUST_IS_HOST_CODE) {
@@ -108,30 +108,16 @@ template <class Derived> __host__ __device__
 hipError_t synchronize_stream_optional(execution_policy<Derived> &policy)
 {
   hipError_t result;
-  if (THRUST_IS_HOST_CODE) {
-    #if THRUST_INCLUDE_HOST_CODE
-      if(must_perform_optional_synchronization(policy)){
-        hipStreamSynchronize(stream(policy));
-        result = hipGetLastError();
-      }else{
-        result = hipSuccess;
-      }
-    #endif
-  } else {
-    #if THRUST_INCLUDE_DEVICE_CODE
-      #if __THRUST_HAS_HIPRT__
-        if(must_perform_optional_synchronization(policy)){
-          hipDeviceSynchronize();
-          result = hipGetLastError();
-        }else{
-          result = hipSuccess;
-        }
-      #else
-        THRUST_UNUSED_VAR(policy);
-        result = hipSuccess;
-      #endif
-    #endif
+
+  if (must_perform_optional_synchronization(policy))
+  {
+    result = synchronize_stream(policy);
   }
+  else
+  {
+    result = hipSuccess;
+  }
+
   return result;
 }
 
