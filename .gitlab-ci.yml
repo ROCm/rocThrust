@@ -84,7 +84,7 @@ copyright-date:
     - !reference [.install-rocprim, script]
     # Setup env vars for testing
     - rng_seed_count=0; prng_seeds="0";
-    - if [ $CI_COMMIT_BRANCH == develop_stream ] ; then rng_seed_count=3; prng_seeds="0 1000";
+    - if [ $CI_COMMIT_BRANCH == develop_stream ] ; then rng_seed_count=3; prng_seeds="0, 1000";
     - fi;
     # Build rocThrust
     - cmake
