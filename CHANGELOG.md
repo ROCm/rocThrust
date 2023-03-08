@@ -4,7 +4,7 @@ Full documentation for rocThrust is available at [https://rocthrust.readthedocs.
 
 ## (Unreleased) rocThrust 2.17.0 for ROCm 6.0
 ### Added
-- Updated to match upstream Thrust 2.0.0
+- Updated to match upstream Thrust 2.0.1
 ### Changed
 - Removed cub symlink from the root of the repository.
 - Removed support for deprecated macros (THRUST_DEVICE_BACKEND and THRUST_HOST_BACKEND).

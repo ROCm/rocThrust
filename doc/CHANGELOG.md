@@ -1,5 +1,11 @@
 # Changelog
 
+## Thrust 2.0.1
+
+### Summary
+
+Thrust 2.0.1 is a minor bugfix release that provides an updated version of CUB.
+
 ## Thrust 2.0.0
 
 ### Summary
