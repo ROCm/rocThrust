@@ -177,7 +177,7 @@ function(thrust_create_target target_name)
   _thrust_find_backend(${TCT_HOST} REQUIRED)
   _thrust_find_backend(${TCT_DEVICE} REQUIRED)
 
-  # We can just create an INTERFACE IMPORTED target here instead of going
+  # We can just create an INTERFACE IMPORTED targetere instead of going
   # through _thrust_declare_interface_alias as long as we aren't hanging any
   # Thrust/CUB include paths directly on ${target_name}.
   add_library(${target_name} INTERFACE IMPORTED)

@@ -26,8 +26,10 @@
 #include <thrust/detail/allocator/destroy_range.h>
 #include <thrust/detail/allocator/fill_construct_range.h>
 
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
-#include <nv/target>
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
+#  include <thrust/system/hip/detail/nv/target.h>
+#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+#  include <nv/target>
 #endif
 
 #include <stdexcept> // for std::runtime_error
@@ -437,21 +439,6 @@ __host__ __device__
   void contiguous_storage<T,Alloc>
     ::swap_allocators(false_type, Alloc &other)
 {
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
-  if (THRUST_IS_DEVICE_CODE) {
-    #if THRUST_INCLUDE_DEVICE_CODE
-      // allocators must be equal when swapping containers with allocators that propagate on swap
-      assert(!is_allocator_not_equal(other));
-    #endif
-  } else {
-    #if THRUST_INCLUDE_HOST_CODE
-      if (is_allocator_not_equal(other))
-      {
-        throw allocator_mismatch_on_swap();
-      }
-    #endif
-  }
-#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
   NV_IF_TARGET(NV_IS_DEVICE, (
     // allocators must be equal when swapping containers with allocators that propagate on swap
     assert(!is_allocator_not_equal(other));
@@ -461,7 +448,6 @@ __host__ __device__
       throw allocator_mismatch_on_swap();
     }
   ));
-#endif
   thrust::swap(m_allocator, other);
 } // end contiguous_storage::swap_allocators()
 

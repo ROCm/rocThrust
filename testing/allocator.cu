@@ -20,8 +20,10 @@
 #include <thrust/device_malloc_allocator.h>
 #include <thrust/system/cpp/vector.h>
 
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
-#include <nv/target>
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
+#  include <thrust/system/hip/detail/nv/target.h>
+#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+#  include <nv/target>
 #endif
 
 #include <memory>
@@ -108,13 +110,7 @@ struct my_allocator_with_custom_destroy
   void destroy(T *)
 
   {
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
-#if !__CUDA_ARCH__
-    g_state = true;
-#endif
-#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
-    NV_IF_TARGET(NV_IS_HOST, (g_state = true;));
-#endif
+    NV_IF_TARGET(NV_IS_HOST, (g_state = true;), (g_state = true;));
   }
 
   value_type *allocate(std::ptrdiff_t n)

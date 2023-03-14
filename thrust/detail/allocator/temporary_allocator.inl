@@ -23,12 +23,14 @@
 #include <thrust/system/detail/bad_alloc.h>
 #include <cassert>
 
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
-#include <nv/target>
-#if (defined(_NVHPC_CUDA) || defined(__CUDA_ARCH__))
-#include <thrust/system/cuda/detail/terminate.h>
-#endif // NVCC device pass or NVC++
-#endif // CUDA
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
+#  include <thrust/system/hip/detail/nv/target.h>
+#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+#  include <nv/target>
+#  if (defined(_NVHPC_CUDA) || defined(__CUDA_ARCH__))
+#    include <thrust/system/cuda/detail/terminate.h>
+#  endif // NVCC device pass or NVC++
+#endif
 
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HIP
 #include <thrust/system/hip/detail/terminate.h>
@@ -54,24 +56,18 @@ __host__ __device__
     // note that we pass cnt to deallocate, not a value derived from result.second
     deallocate(result.first, cnt);
 
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
-    if (THRUST_IS_HOST_CODE) {
-      #if THRUST_INCLUDE_HOST_CODE
-        throw thrust::system::detail::bad_alloc("temporary_buffer::allocate: get_temporary_buffer failed");
-      #endif
-    } else {
-      #if THRUST_INCLUDE_DEVICE_CODE
-        thrust::system::hip::detail::terminate_with_message("temporary_buffer::allocate: get_temporary_buffer failed");
-      #endif
-    }
-#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
     NV_IF_TARGET(NV_IS_HOST, (
       throw thrust::system::detail::bad_alloc("temporary_buffer::allocate: get_temporary_buffer failed");
     ), ( // NV_IS_DEVICE
       thrust::system::cuda::detail::terminate_with_message("temporary_buffer::allocate: get_temporary_buffer failed");
     ));
-#else
-    throw thrust::system::detail::bad_alloc("temporary_buffer::allocate: get_temporary_buffer failed");
+#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
+    NV_IF_TARGET(NV_IS_HOST, (
+      throw thrust::system::detail::bad_alloc("temporary_buffer::allocate: get_temporary_buffer failed");
+    ), ( // NV_IS_DEVICE
+      thrust::system::hip::detail::terminate_with_message("temporary_buffer::allocate: get_temporary_buffer failed");
+    ));
 #endif
   } // end if
 

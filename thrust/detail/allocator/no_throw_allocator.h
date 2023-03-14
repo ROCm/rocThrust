@@ -19,8 +19,10 @@
 
 #include <thrust/detail/config.h>
 
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
-#include <nv/target>
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
+#  include <thrust/system/hip/detail/nv/target.h>
+#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+#  include <nv/target>
 #endif
 
 THRUST_NAMESPACE_BEGIN
@@ -48,20 +50,6 @@ template<typename BaseAllocator>
     __host__ __device__
     void deallocate(typename super_t::pointer p, typename super_t::size_type n)
     {
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
-#if !defined(__CUDA_ARCH__) && !defined(__HIP_DEVICE_COMPILE__)
-      try
-      {
-        super_t::deallocate(p, n);
-      } // end try
-      catch(...)
-      {
-        // catch anything
-      } // end catch
-#else
-      super_t::deallocate(p, n);
-#endif
-#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
       NV_IF_TARGET(NV_IS_HOST, (
         try
         {
@@ -74,7 +62,6 @@ template<typename BaseAllocator>
       ), (
         super_t::deallocate(p, n);
       ));
-#endif
     } // end deallocate()
 
     inline __host__ __device__

@@ -77,17 +77,7 @@
 #if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
 // libcu++ still needs to be ported to HIP, so for HIP backend these definitions
 // are still in use.
-#if defined(_NVHPC_CUDA)
-#  define THRUST_IS_DEVICE_CODE __builtin_is_device_code()
-#  define THRUST_IS_HOST_CODE (!__builtin_is_device_code())
-#  define THRUST_INCLUDE_DEVICE_CODE 1
-#  define THRUST_INCLUDE_HOST_CODE 1
-#elif defined(__CUDA_ARCH__)
-#  define THRUST_IS_DEVICE_CODE 1
-#  define THRUST_IS_HOST_CODE 0
-#  define THRUST_INCLUDE_DEVICE_CODE 1
-#  define THRUST_INCLUDE_HOST_CODE 0
-#elif defined(__HIP_DEVICE_COMPILE__)
+#if defined(__HIP_DEVICE_COMPILE__)
 #  define THRUST_IS_DEVICE_CODE 1
 #  define THRUST_IS_HOST_CODE 0
 #  define THRUST_INCLUDE_DEVICE_CODE 1

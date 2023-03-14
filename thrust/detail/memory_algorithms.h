@@ -16,8 +16,10 @@
 #include <thrust/detail/memory_wrapper.h>
 #include <thrust/addressof.h>
 
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
-#include <nv/target>
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
+#  include <thrust/system/hip/detail/nv/target.h>
+#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+#  include <nv/target>
 #endif
 
 #include <utility>
@@ -117,19 +119,6 @@ void uninitialized_construct(
   using T = typename iterator_traits<ForwardIt>::value_type;
 
   ForwardIt current = first;
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
-  #if !__CUDA_ARCH__ // No exceptions in CUDA.
-  try {
-  #endif
-    for (; current != last; ++current)
-      ::new (static_cast<void*>(addressof(*current))) T(args...);
-  #if !__CUDA_ARCH__ // No exceptions in CUDA.
-  } catch (...) {
-    destroy(first, current);
-    throw;
-  }
-  #endif
-#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
   // No exceptions in CUDA.
   NV_IF_TARGET(NV_IS_HOST, (
     try {
@@ -147,7 +136,6 @@ void uninitialized_construct(
       ::new (static_cast<void*>(addressof(*current))) T(args...);
     }
   ));
-#endif
 }
 
 template <typename Allocator, typename ForwardIt, typename... Args>
@@ -165,19 +153,6 @@ void uninitialized_construct_with_allocator(
   typename traits::allocator_type alloc_T(alloc);
 
   ForwardIt current = first;
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
-  #if !__CUDA_ARCH__ // No exceptions in CUDA.
-  try {
-  #endif
-    for (; current != last; ++current)
-      traits::construct(alloc_T, addressof(*current), args...);
-  #if !__CUDA_ARCH__ // No exceptions in CUDA.
-  } catch (...) {
-    destroy(alloc_T, first, current);
-    throw;
-  }
-  #endif
-#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
   // No exceptions in CUDA.
   NV_IF_TARGET(NV_IS_HOST, (
     try {
@@ -195,7 +170,6 @@ void uninitialized_construct_with_allocator(
       traits::construct(alloc_T, addressof(*current), args...);
     }
   ));
-#endif
 }
 
 template <typename ForwardIt, typename Size, typename... Args>
@@ -206,19 +180,6 @@ void uninitialized_construct_n(
   using T = typename iterator_traits<ForwardIt>::value_type;
 
   ForwardIt current = first;
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
-#if !__CUDA_ARCH__ // No exceptions in CUDA.
-  try {
-  #endif
-    for (; n > 0; (void) ++current, --n)
-      ::new (static_cast<void*>(addressof(*current))) T(args...);
-  #if !__CUDA_ARCH__ // No exceptions in CUDA.
-  } catch (...) {
-    destroy(first, current);
-    throw;
-  }
-  #endif
-#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
   // No exceptions in CUDA.
   NV_IF_TARGET(NV_IS_HOST, (
     try {
@@ -236,7 +197,6 @@ void uninitialized_construct_n(
       ::new (static_cast<void*>(addressof(*current))) T(args...);
     }
   ));
-#endif
 }
 
 template <typename Allocator, typename ForwardIt, typename Size, typename... Args>
@@ -254,19 +214,6 @@ void uninitialized_construct_n_with_allocator(
   typename traits::allocator_type alloc_T(alloc);
 
   ForwardIt current = first;
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
-#if !__CUDA_ARCH__ // No exceptions in CUDA.
-  try {
-  #endif
-    for (; n > 0; (void) ++current, --n)
-      traits::construct(alloc_T, addressof(*current), args...);
-  #if !__CUDA_ARCH__ // No exceptions in CUDA.
-  } catch (...) {
-    destroy(alloc_T, first, current);
-    throw;
-  }
-  #endif
-#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
   // No exceptions in CUDA.
   NV_IF_TARGET(NV_IS_HOST, (
     try {
@@ -284,7 +231,6 @@ void uninitialized_construct_n_with_allocator(
       traits::construct(alloc_T, addressof(*current), args...);
     }
   ));
-#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
