@@ -20,11 +20,7 @@
 #include <thrust/detail/config.h>
 #include <thrust/detail/type_deduction.h>
 
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
-#  include <thrust/system/hip/detail/nv/target.h>
-#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
-#  include <nv/target>
-#endif
+#include <thrust/detail/nv_target.h>
 
 #include <limits>
 

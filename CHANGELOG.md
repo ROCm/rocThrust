@@ -5,9 +5,12 @@ Full documentation for rocThrust is available at [https://rocthrust.readthedocs.
 ## (Unreleased) rocThrust 2.17.0 for ROCm 6.0
 ### Added
 - Updated to match upstream Thrust 2.0.1
+- NV_IF_TARGET macro from libcu++ for NVIDIA backend and HIP implementation for HIP backend.
 ### Changed
 - Removed cub symlink from the root of the repository.
 - Removed support for deprecated macros (THRUST_DEVICE_BACKEND and THRUST_HOST_BACKEND).
+### Known issues
+- For NVIDIA backend, `NV_IF_TARGET` and `THRUST_RDC_ENABLED` intend to substitute the `THRUST_HAS_CUDART` macro, which is now no longer used in Thrust (provided for legacy support only). However, there is no `THRUST_RDC_ENABLED` macro available for the HIP backend, so some branches in Thrust's code may be unreachable in the HIP backend.
 
 ## (Unreleased) rocThrust 2.18.0 for ROCm 5.7
 ### Fixed 

@@ -26,11 +26,7 @@
 #include <thrust/detail/allocator/destroy_range.h>
 #include <thrust/detail/allocator/fill_construct_range.h>
 
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
-#  include <thrust/system/hip/detail/nv/target.h>
-#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
-#  include <nv/target>
-#endif
+#include <thrust/detail/nv_target.h>
 
 #include <stdexcept> // for std::runtime_error
 #include <utility> // for use of std::swap in the WAR below

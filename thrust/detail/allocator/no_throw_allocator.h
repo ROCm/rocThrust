@@ -19,11 +19,7 @@
 
 #include <thrust/detail/config.h>
 
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
-#  include <thrust/system/hip/detail/nv/target.h>
-#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
-#  include <nv/target>
-#endif
+#include <thrust/detail/nv_target.h>
 
 THRUST_NAMESPACE_BEGIN
 namespace detail

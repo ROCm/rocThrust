@@ -23,14 +23,13 @@
 #include <thrust/system/detail/bad_alloc.h>
 #include <cassert>
 
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
-#  include <thrust/system/hip/detail/nv/target.h>
-#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
-#  include <nv/target>
+#include <thrust/detail/nv_target.h>
+
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
 #  if (defined(_NVHPC_CUDA) || defined(__CUDA_ARCH__))
 #    include <thrust/system/cuda/detail/terminate.h>
 #  endif // NVCC device pass or NVC++
-#endif
+#endif // CUDA
 
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HIP
 #include <thrust/system/hip/detail/terminate.h>
