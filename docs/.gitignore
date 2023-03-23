@@ -1,0 +1,10 @@
+_build
+_images
+_static
+_templates
+docBin
+html
+xml
+latex
+*.tag
+api
