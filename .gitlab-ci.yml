@@ -2,7 +2,16 @@
 # Copyright 2019 Advanced Micro Devices, Inc.
 # ########################################################################
 
-image: rocm/rocm-terminal:latest
+include:
+  - project: 'amd/ci-templates'
+    ref: main
+    file:
+      - /defaults.yaml
+      - /deps-cmake.yaml
+      - /deps-docs.yaml
+      - /deps-rocm.yaml
+      - /gpus-rocm.yaml
+      - /rules.yaml
 
 stages:
   #- build:cmake_latest   # Tests if builds succeed (CMake)
@@ -286,17 +295,28 @@ deploy:deb:
     - $SUDO_CMD dpkg -r rocprim
 
 test:doc:
-  variables:
-    SUDO_CMD: "sudo -E"
-  tags:
-    - rocm # Do it on rocm machine
-  image: rocm/rocm-terminal:latest
   stage: test
-  needs: []
-  before_script:
-    - $SUDO_CMD rm /etc/apt/sources.list.d/rocm.list
-    - $SUDO_CMD apt update -qq
-    - $SUDO_CMD apt install -y -qq texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended latexmk python-pip python3-sphinx doxygen
-    - $SUDO_CMD -H pip install sphinx_rtd_theme breathe==4.12.0 exhale
+  extends:
+    - .build:docs
+    - .rules:test
+
+test:
+  stage: test
+  extends:
+    - .cmake-minimum
+    - .rules:test
+    - .gpus:rocm
+  needs:
+    - build:cmake-minimum
   script:
-    - $SUDO_CMD bash -x ./docs/run_doc.sh
+    - cd $CI_PROJECT_DIR/build
+    - cmake
+      -D CMAKE_PREFIX_PATH=/opt/rocm
+      -P $CI_PROJECT_DIR/cmake/GenerateResourceSpec.cmake
+    - cat ./resources.json
+    - ctest
+      --output-on-failure
+      --repeat-until-fail 2
+      --tests-regex $GPU_TARGET
+      --resource-spec-file ./resources.json
+      --parallel $PARALLEL_JOBS
