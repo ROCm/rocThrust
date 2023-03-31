@@ -1,19 +1,15 @@
-.. rocThrusts documentation master file, created by
-   sphinx-quickstart on Mon Jan  8 09:51:41 2018.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+====================
+rocThrust User Guide
+====================
 
-Welcome to rocThrust's documentation!
-==================================
+Overview
+========
 
-.. toctree::
-   :maxdepth: 3 
-   :caption: Contents:
+Thrust is a parallel algorithm library. This library has been ported to `HIP <https://github.com/ROCm-Developer-Tools/HIP>`_ / `ROCm <https://rocm.github.io/>`_ platform, which uses the `rocPRIM <https://github.com/ROCmSoftwarePlatform/rocPRIM>`_ library. The HIP ported library works on HIP/ROCm platforms. Currently there is no CUDA backend in place.
 
-   api/library_root
-   
+
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`search`
