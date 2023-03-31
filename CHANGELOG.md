@@ -2,6 +2,19 @@
 
 Full documentation for rocThrust is available at [https://rocthrust.readthedocs.io/en/latest/](https://rocthrust.readthedocs.io/en/latest/)
 
+## (Unreleased) rocThrust 2.18.0 for ROCm 5.6
+### Fixed 
+- `lower_bound`, `upper_bound`, and `binary_search` failed to compile for certain types.
+### Changed
+- Updated `docs` directory structure to match the standard of [rocm-docs-core](https://github.com/RadeonOpenCompute/rocm-docs-core).
+
+## (Unreleased) rocThrust 2.17.0 for ROCm 5.5
+### Added
+- Updated to match upstream Thrust 1.17.2
+### Fixed
+- set_difference and set_intersection no longer hang if the number of items is above `UINT_MAX`. Previously, the unit tests for set_difference and set_intersection failed the `TestSetDifferenceWithBigIndexes`.
+- Windows HIP SDK support
+
 ## rocThrust 2.16.0 for ROCm 5.3
 ### Changed
 - rocThrust functionality dependent on device malloc works is functional as ROCm 5.2 reneabled device malloc. Device launched `thrust::sort` and `thrust::sort_by_key` are available for use.

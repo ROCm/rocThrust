@@ -8,6 +8,7 @@ include:
     file:
       - /defaults.yaml
       - /deps-cmake.yaml
+      - /deps-docs.yaml
       - /deps-rocm.yaml
       - /gpus-rocm.yaml
 
@@ -183,11 +184,10 @@ test:package:
     - $SUDO_CMD dpkg -r rocprim-dev
 
 test:doc:
-  extends: .deps:doc
-  needs: []
   stage: test
-  script:
-    - bash -x ./docs/run_doc.sh
+  extends:
+    - .build:docs
+    - .rules:test
 
 test:
   stage: test
