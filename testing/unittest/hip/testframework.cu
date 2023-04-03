@@ -61,13 +61,6 @@ void list_devices(void)
   std::cout << std::endl;
 }
 
-// provide next, which c++03 doesn't have
-template<typename Iterator> Iterator my_next(Iterator iter)
-{
-  return ++iter;
-}
-
-
 std::vector<int> HIPTestDriver::target_devices(const ArgumentMap &kwargs)
 {
   std::vector<int> result;
@@ -198,7 +191,7 @@ bool HIPTestDriver::run_tests(const ArgumentSet &args, const ArgumentMap &kwargs
     // run tests
     result &= UnitTestDriver::run_tests(args, kwargs);
 
-    if(!concise && my_next(device) != devices.end())
+    if(!concise && std::next(device) != devices.end())
     {
       // provide some separation between the output of separate tests
       std::cout << std::endl;
