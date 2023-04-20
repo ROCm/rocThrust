@@ -87,15 +87,13 @@ hipError_t synchronize_stream(execution_policy<Derived>& policy)
   hipError_t result;
 if (THRUST_IS_HOST_CODE) {
   #if THRUST_INCLUDE_HOST_CODE
-    hipStreamSynchronize(stream(policy));
-    result = hipGetLastError();
+    result = hipStreamSynchronize(stream(policy));
   #endif
 } else {
   #if THRUST_INCLUDE_DEVICE_CODE
     #if __THRUST_HAS_HIPRT__
       THRUST_UNUSED_VAR(policy);
-      hipDeviceSynchronize();
-      result = hipGetLastError();
+      result = hipDeviceSynchronize();
     #else
       THRUST_UNUSED_VAR(policy);
       result = hipSuccess;

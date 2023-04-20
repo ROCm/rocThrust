@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
- *  Modifications Copyright© 2019 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2019-2023 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -54,8 +54,8 @@ int set_device_from_ctest()
         std::transform(amdgpu_target.cbegin(), amdgpu_target.cend(), amdgpu_target.begin(), ::toupper);
         std::string reqs = std::getenv((rg0 + "_" + amdgpu_target).c_str());
         int device_id = std::atoi(reqs.substr(reqs.find(':') + 1, reqs.find(',') - (reqs.find(':') + 1)).c_str());
-        hipSetDevice(device_id);
-        return device_id; 
+        hipError_t status = hipSetDevice(device_id);
+        return status == hipSuccess ? device_id : 0;
     }
     else
         return 0;

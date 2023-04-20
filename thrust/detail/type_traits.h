@@ -170,10 +170,11 @@ template<typename T> struct has_trivial_copy_constructor
       || __is_trivially_copyable(T)
 #endif // GCC VERSION
 #endif // THRUST_HOST_COMPILER
-    >
-{};
+                                                                >
+ {
+ };
 
-template<typename T> struct has_trivial_destructor : public is_pod<T> {};
+ template<typename T> struct has_trivial_destructor : public is_pod<T> {};
 
 template<typename T> struct is_const          : public false_type {};
 template<typename T> struct is_const<const T> : public true_type {};
