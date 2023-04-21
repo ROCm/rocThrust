@@ -55,7 +55,11 @@ int set_device_from_ctest()
         std::string reqs = std::getenv((rg0 + "_" + amdgpu_target).c_str());
         int device_id = std::atoi(reqs.substr(reqs.find(':') + 1, reqs.find(',') - (reqs.find(':') + 1)).c_str());
         hipError_t status = hipSetDevice(device_id);
-        return status == hipSuccess ? device_id : 0;
+        if(status != hipSuccess)
+        {
+            [] { FAIL() << "could not set HIP device"; }();
+        }
+        return device_id;
     }
     else
         return 0;

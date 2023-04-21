@@ -157,24 +157,26 @@ template<typename T> struct has_trivial_constructor
       >
 {};
 
-template<typename T> struct has_trivial_copy_constructor
-  : public integral_constant<
-      bool,
-      is_pod<T>::value
+template <typename T>
+struct has_trivial_copy_constructor : public integral_constant<bool,
+                                                               is_pod<T>::value
 #if THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_MSVC || \
     THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_CLANG
-      || __is_trivially_copyable(T)
+                                                                   || __is_trivially_copyable(T)
 #elif THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_GCC
 // only use the intrinsic for >= 4.3
 #if (__GNUC__ >= 4) && (__GNUC_MINOR__ >= 3)
-      || __is_trivially_copyable(T)
+                                                                    || __is_trivially_copyable(T)
 #endif // GCC VERSION
 #endif // THRUST_HOST_COMPILER
-                                                                >
- {
- };
+                                                               >
+{
+};
 
- template<typename T> struct has_trivial_destructor : public is_pod<T> {};
+template <typename T>
+struct has_trivial_destructor : public is_pod<T>
+{
+};
 
 template<typename T> struct is_const          : public false_type {};
 template<typename T> struct is_const<const T> : public true_type {};

@@ -5,6 +5,18 @@
 #include <hip/hip_runtime.h>
 #include <numeric>
 
+#define HIP_CHECK(condition)                                                                     \
+    do                                                                                           \
+    {                                                                                            \
+        hipError_t error = condition;                                                            \
+        if(error != hipSuccess)                                                                  \
+        {                                                                                        \
+            std::cout << "HIP error: " << hipGetErrorString(error) << " on: " << __FILE__ << ":" \
+                      << __LINE__ << std::endl;                                                  \
+            exit(EXIT_FAILURE);                                                                  \
+        }                                                                                        \
+    } while(0)
+
 __global__ void dummy_kernel() {}
 
 bool binary_exists_for_current_device()
@@ -25,30 +37,19 @@ bool binary_exists_for_current_device()
 void list_devices(void)
 {
   int deviceCount;
-  hipError_t status = hipGetDeviceCount(&deviceCount);
-  if(status != hipSuccess || deviceCount == 0)
+  HIP_CHECK(hipGetDeviceCount(&deviceCount));
+  if(deviceCount == 0)
   {
       std::cout << "There is no device supporting HIP" << std::endl;
-      return;
   }
 
   int selected_device;
-  status = hipGetDevice(&selected_device);
-  if(status != hipSuccess)
-  {
-      std::cout << "There is no device selected" << std::endl;
-      return;
-  }
+  HIP_CHECK(hipGetDevice(&selected_device));
 
   for (int dev = 0; dev < deviceCount; ++dev)
   {
     hipDeviceProp_t deviceProp;
-    status = hipGetDeviceProperties(&deviceProp, dev);
-
-    if(status != hipSuccess)
-    {
-        continue;
-    }
+    HIP_CHECK(hipGetDeviceProperties(&deviceProp, dev));
 
     if(dev == 0)
     {
@@ -88,12 +89,8 @@ std::vector<int> HIPTestDriver::target_devices(const ArgumentMap &kwargs)
   if(device_id < 0)
   {
     // target all devices in the system
-    int        count  = 0;
-    hipError_t status = hipGetDeviceCount(&count);
-    if(status != hipSuccess)
-    {
-      return result;
-    }
+    int count = 0;
+    HIP_CHECK(hipGetDeviceCount(&count));
 
     result.resize(count);
     std::iota(result.begin(), result.end(), 0);
@@ -173,26 +170,20 @@ bool HIPTestDriver::run_tests(const ArgumentSet &args, const ArgumentMap &kwargs
       device != devices.end();
       ++device)
   {
-    hipError_t status = hipDeviceSynchronize();
-    (void)status;
+    HIP_CHECK(hipDeviceSynchronize());
 
     // set the device
-    status = hipSetDevice(*device);
+    HIP_CHECK(hipSetDevice(*device));
 
-    // check if device can be set and a binary exists for this device
+    // check if a binary exists for this device
     // if none exists, skip the device silently unless this is the only one we're targeting
-    if(status != hipSuccess || (devices.size() > 1 && !binary_exists_for_current_device()))
+    if(devices.size() > 1 && !binary_exists_for_current_device())
     {
       // note which device we're skipping
       hipDeviceProp_t deviceProp;
-      status = hipGetDeviceProperties(&deviceProp, *device);
+      HIP_CHECK(hipGetDeviceProperties(&deviceProp, *device));
 
-      std::cout << "Skipping Device " << *device << ": \"";
-      if(status == hipSuccess)
-      {
-        std::cout << deviceProp.name;
-      }
-      std::cout << "\"" << std::endl;
+      std::cout << "Skipping Device " << *device << ": \"" << deviceProp.name << "\"" << std::endl;
 
       continue;
     }
@@ -201,14 +192,9 @@ bool HIPTestDriver::run_tests(const ArgumentSet &args, const ArgumentMap &kwargs
     {
       // note which device we're testing
       hipDeviceProp_t deviceProp;
-      status = hipGetDeviceProperties(&deviceProp, *device);
+      HIP_CHECK(hipGetDeviceProperties(&deviceProp, *device));
 
-      std::cout << "Testing Device " << *device << ": \"";
-      if(status == hipSuccess)
-      {
-        std::cout << deviceProp.name;
-      }
-      std::cout << "\"" << std::endl;
+      std::cout << "Testing Device " << *device << ": \"" << deviceProp.name << "\"" << std::endl;
     }
 
     // check error status before running any tests
@@ -229,18 +215,10 @@ bool HIPTestDriver::run_tests(const ArgumentSet &args, const ArgumentMap &kwargs
 
 int HIPTestDriver::current_device_architecture() const
 {
-  int        current = -1;
-  hipError_t status  = hipGetDevice(&current);
-  if(status != hipSuccess)
-  {
-    return 0;
-  }
+  int current = -1;
+  HIP_CHECK(hipGetDevice(&current));
   hipDeviceProp_t deviceProp;
-  status = hipGetDeviceProperties(&deviceProp, current);
-  if(status != hipSuccess)
-  {
-    return 0;
-  }
+  HIP_CHECK(hipGetDeviceProperties(&deviceProp, current));
 
   return 100 * deviceProp.major + 10 * deviceProp.minor;
 }
@@ -252,15 +230,11 @@ UnitTestDriver &driver_instance(thrust::system::hip::tag)
 }
 
 bool HIPTestDriver::supports_managed_memory() const {
-  int        current = -1;
-  hipError_t status  = hipGetDevice(&current);
-  if(status != hipSuccess)
-  {
-    return false;
-  }
+  int current = -1;
+  HIP_CHECK(hipGetDevice(&current));
 
   int managedMemory = 0;
-  status = hipDeviceGetAttribute(&managedMemory, hipDeviceAttributeManagedMemory, current);
+  HIP_CHECK(hipDeviceGetAttribute(&managedMemory, hipDeviceAttributeManagedMemory, current));
 
-  return status == hipSuccess && managedMemory;
+  return managedMemory;
 }
