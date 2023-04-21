@@ -5,5 +5,4 @@ subtrees:
   - numbered: False
     entries:
     - file: installing
-    - file: introduction
     - file: cpp_api
