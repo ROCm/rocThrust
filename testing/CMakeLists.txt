@@ -43,7 +43,7 @@ if(HIP_COMPILER STREQUAL "nvcc")
             LANGUAGE CXX
     )
     target_sources(testframework PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/unittest/cuda/testframework.cu)
-elseif(HIP_COMPILER STREQUAL "hcc" OR HIP_COMPILER STREQUAL "clang")
+elseif(HIP_COMPILER STREQUAL "clang")
     set_source_files_properties(unittest/hip/testframework.cu
     PROPERTIES
         LANGUAGE CXX
