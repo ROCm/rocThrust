@@ -32,7 +32,22 @@
 #include <hip/hip_runtime.h>
 #include <hip/hip_runtime_api.h>
 
-#define HIP_CHECK(condition) ASSERT_EQ(condition, hipSuccess)
+// GoogleTest-compatible HIP_CHECK macro. FAIL is called to log the Google Test trace.
+// The lambda is invoked immediately as assertions that generate a fatal failure can
+// only be used in void-returning functions.
+#ifndef HIP_CHECK
+#define HIP_CHECK(condition)                                                                      \
+    do                                                                                            \
+    {                                                                                             \
+        hipError_t error = condition;                                                             \
+        if(error != hipSuccess)                                                                   \
+        {                                                                                         \
+            [error]() { FAIL() << "HIP error " << error << ": " << hipGetErrorString(error); }(); \
+            exit(error);                                                                          \
+        }                                                                                         \
+    } while(0)
+#endif
+
 #endif // THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HIP
 
 #include "test_assertions.hpp"
@@ -54,11 +69,7 @@ int set_device_from_ctest()
         std::transform(amdgpu_target.cbegin(), amdgpu_target.cend(), amdgpu_target.begin(), ::toupper);
         std::string reqs = std::getenv((rg0 + "_" + amdgpu_target).c_str());
         int device_id = std::atoi(reqs.substr(reqs.find(':') + 1, reqs.find(',') - (reqs.find(':') + 1)).c_str());
-        hipError_t status = hipSetDevice(device_id);
-        if(status != hipSuccess)
-        {
-            [] { FAIL() << "could not set HIP device"; }();
-        }
+        HIP_CHECK(hipSetDevice(device_id));
         return device_id;
     }
     else

@@ -161,5 +161,5 @@ TEST(TransformIteratorTests, TestDeviceOperator)
 {
     thrust::device_vector<int> dv(1);
     auto                       iter = thrust::make_transform_iterator(dv.begin(), DeviceOp {});
-    (void)iter;
+    THRUST_UNUSED_VAR(iter);
 }
