@@ -216,7 +216,6 @@ make -j4
 ./benchmarks/benchmark_thrust_bench
 ```
 
-
 ## Documentation
 
 Documentation is available [here](https://rocthrust.readthedocs.io/en/latest/).
