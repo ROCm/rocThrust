@@ -9,6 +9,9 @@ Full documentation for rocThrust is available at [https://rocthrust.readthedocs.
 ### Changed
 - Removed cub symlink from the root of the repository.
 - Removed support for deprecated macros (THRUST_DEVICE_BACKEND and THRUST_HOST_BACKEND).
+- The cmake build system now additionally accepts `GPU_TARGETS` in addition to `AMDGPU_TARGETS` for
+  setting the targeted gpu architectures. `GPU_TARGETS=all` will compile for all supported architectures.
+  `AMDGPU_TARGETS` is only provided for backwards compatibility, `GPU_TARGETS` should be preferred.
 ### Known issues
 - For NVIDIA backend, `NV_IF_TARGET` and `THRUST_RDC_ENABLED` intend to substitute the `THRUST_HAS_CUDART` macro, which is now no longer used in Thrust (provided for legacy support only). However, there is no `THRUST_RDC_ENABLED` macro available for the HIP backend, so some branches in Thrust's code may be unreachable in the HIP backend.
 
