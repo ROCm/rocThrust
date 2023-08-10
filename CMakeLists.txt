@@ -88,7 +88,7 @@ option(DOWNLOAD_ROCPRIM "Download rocPRIM and do not search for rocPRIM package"
 option(BUILD_ADDRESS_SANITIZER "Build with address sanitizer enabled" OFF)
 option(ENABLE_UPSTREAM_TESTS "Enable upstream tests" OFF)
 #Set the header wrapper ON by default. 
-option(BUILD_FILE_REORG_BACKWARD_COMPATIBILITY "Build with file/folder reorg with backward compatibility enabled" ON)
+option(BUILD_FILE_REORG_BACKWARD_COMPATIBILITY "Build with file/folder reorg with backward compatibility enabled" OFF)
 
 set(RNG_SEED_COUNT 0 CACHE STRING "Number of true random sequences to test each input size for")
 set(PRNG_SEEDS 1 CACHE STRING "Seeds of pseudo random sequences to test each input size for")
