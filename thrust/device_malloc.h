@@ -61,8 +61,7 @@ THRUST_NAMESPACE_BEGIN
 template<typename T>
 inline thrust::device_ptr<T> device_malloc(const std::size_t n);
 
-/*! This version of \p device_malloc allocates sequential device storage
- *  for bytes.
+/*! This version of \p device_malloc allocates untyped sequential device storage.
  *
  *  \param n The number of bytes to allocate sequentially
  *           in device memory.
