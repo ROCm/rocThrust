@@ -12,10 +12,6 @@ subtrees:
 - caption: API
   entries:
   - file: cpp_api
-- caption: Releases
-  entries:
-  - file: releases/versioning
-  - file: releases/releases
 - caption: Contributing
   entries:
   - file: contributing/contributing
