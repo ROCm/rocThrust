@@ -6,6 +6,8 @@
 
 from rocm_docs import ROCmDocs
 
+external_projects_current_project = "rocthrust"
+
 docs_core = ROCmDocs("rocThrust Documentation")
 docs_core.run_doxygen()
 docs_core.setup()
