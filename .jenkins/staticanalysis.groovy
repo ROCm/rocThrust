@@ -32,10 +32,10 @@ def runCI =
     {
         platform, project->
 
-        runCompileCommand(platform, project, jobName, settings)
+        runCompileCommand(platform, project, jobName, settings.debug)
     }
 
-    buildProject(prj , formatCheck, nodes.dockerArray, compileCommand, null, null, staticAnalysis)
+    buildProject(prj, formatCheck, nodes.dockerArray, compileCommand, null, null, staticAnalysis)
 }
 
 ci: { 
