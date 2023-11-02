@@ -16,7 +16,7 @@ def runCI =
     def prj = new rocProject('rocThrust', 'address-sanitizer')
 
     prj.defaults.ccache = true
-    prj.timeout.compile = 420
+    prj.timeout.compile = 480
 
     // Define test architectures, optional rocm version argument is available
     def nodes = new dockerNodes(nodeDetails, jobName, prj)
