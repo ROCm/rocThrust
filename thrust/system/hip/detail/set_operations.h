@@ -1,6 +1,6 @@
 /******************************************************************************
  * Copyright (c) 2016, NVIDIA CORPORATION.  All rights reserved.
- * Modifications Copyright (c) 2019-2022, Advanced Micro Devices, Inc.  All rights reserved.
+ * Modifications Copyright (c) 2019-2023, Advanced Micro Devices, Inc.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -28,18 +28,19 @@
 #pragma once
 
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HIP
+
 #include <thrust/detail/cstdint.h>
+#include <thrust/detail/mpl/math.h>
 #include <thrust/detail/temporary_array.h>
-#include <thrust/system/hip/detail/util.h>
-#include <thrust/system/hip/detail/execution_policy.h>
-#include <thrust/system/hip/detail/get_value.h>
-#include <thrust/system/hip/detail/par_to_seq.h>
+#include <thrust/distance.h>
 #include <thrust/extrema.h>
 #include <thrust/pair.h>
 #include <thrust/set_operations.h>
+#include <thrust/system/hip/detail/execution_policy.h>
+#include <thrust/system/hip/detail/get_value.h>
+#include <thrust/system/hip/detail/par_to_seq.h>
+#include <thrust/system/hip/detail/util.h>
 
-#include <thrust/detail/mpl/math.h>
-#include <thrust/distance.h>
 
 // rocprim include
 #include <rocprim/rocprim.hpp>
@@ -917,8 +918,12 @@ namespace __set_operations
         const unsigned int number_of_blocks = (keys_total + items_per_block - 1) / items_per_block;
 
         // Calculate required temporary storage
-        size_t scan_state_bytes
-            = ::rocprim::detail::align_size(block_state_type::get_storage_size(number_of_blocks));
+        size_t scan_state_bytes;
+        status = block_state_type::get_storage_size(number_of_blocks, stream, scan_state_bytes);
+        if (status != hipSuccess) {
+            return status;
+        }
+        scan_state_bytes = ::rocprim::detail::align_size(scan_state_bytes);
         size_t ordered_block_id_bytes
             = ::rocprim::detail::align_size(ordered_block_id_type::get_storage_size());
         size_t partition_storage_bytes = (number_of_blocks + 1) * sizeof(pair<Size, Size>);
@@ -942,7 +947,11 @@ namespace __set_operations
 
         auto ptr = reinterpret_cast<char*>(temporary_storage);
         // Create and initialize lookback_scan_state obj
-        auto blocks_state = block_state_type::create(ptr, number_of_blocks);
+        block_state_type blocks_state; 
+        status = block_state_type::create(blocks_state, ptr, number_of_blocks, stream);
+        if (status != hipSuccess) {
+            return status;
+        }
         ptr += scan_state_bytes;
         // Create and initialize ordered_block_id obj
         auto ordered_bid
