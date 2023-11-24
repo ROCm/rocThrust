@@ -1,11 +1,12 @@
-#include <thrust/host_vector.h>
+#include <thrust/detail/config.h>
 #include <thrust/device_vector.h>
+#include <thrust/host_vector.h>
 #include <thrust/pair.h>
-#include <thrust/sort.h>
+#include <thrust/partition.h>
 #include <thrust/reduce.h>
 #include <thrust/scan.h>
+#include <thrust/sort.h>
 #include <thrust/transform_reduce.h>
-#include <thrust/detail/config.h>
 
 #if THRUST_CPP_DIALECT >= 2011
 #include <thrust/random.h>
@@ -202,6 +203,15 @@ T sample_standard_deviation(InputIt first, InputIt last, T average)
 
   return sqrt(vc.value / T(vc.count - 1));
 }
+
+template <typename T>
+struct is_even
+{
+  __host__ __device__ bool operator()(T x) const
+  {
+    return ((int)x % 2) == 0;
+  }
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -733,6 +743,72 @@ struct shuffle_trial_base : trial_base<TrialKind>
 };
 #endif
 
+template <typename Container, typename TrialKind = regular_trial>
+struct partition_trial_base : trial_base<TrialKind>
+{
+  Container input;
+
+  void setup(uint64_t elements)
+  {
+    input.resize(elements);
+
+    randomize(input);
+  }
+};
+
+template <typename Container, typename TrialKind = regular_trial>
+struct partition_copy_trial_base : trial_base<TrialKind>
+{
+  Container input;
+  Container out_true;
+  Container out_false;
+
+  void setup(uint64_t elements)
+  {
+    input.resize(elements);
+    out_true.resize(elements);
+    out_false.resize(elements);
+
+    randomize(input);
+  }
+};
+
+template <typename Container, typename TrialKind = regular_trial>
+struct partition_stencil_trial_base : trial_base<TrialKind>
+{
+  Container input;
+  Container stencil;
+
+  void setup(uint64_t elements)
+  {
+    input.resize(elements);
+    stencil.resize(elements);
+
+    randomize(input);
+    randomize(stencil);
+  }
+};
+
+template <typename Container, typename TrialKind = regular_trial>
+struct partition_copy_stencil_trial_base : trial_base<TrialKind>
+{
+  Container input;
+  Container out_true;
+  Container out_false;
+  Container stencil;
+
+  void setup(uint64_t elements)
+  {
+    input.resize(elements);
+    out_true.resize(elements);
+    out_false.resize(elements);
+    stencil.resize(elements);
+
+    randomize(input);
+    randomize(stencil);
+  }
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
@@ -959,6 +1035,162 @@ struct shuffle_tester
 };
 #endif
 
+template <typename T>
+struct partition_tester
+{
+  static char const* test_name()
+  {
+    return "partition";
+  }
+
+  struct std_trial : partition_trial_base<std::vector<T>>
+  {
+    void operator()()
+    {
+        std::partition(this->input.begin(), this->input.end(), is_even<T> {});
+    }
+  };
+
+  struct thrust_trial : partition_trial_base<thrust::device_vector<T>>
+  {
+    void operator()()
+    {
+        thrust::partition(this->input.begin(), this->input.end(), is_even<T> {});
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+        cudaError_t err = cudaDeviceSynchronize();
+        if(err != cudaSuccess)
+          throw thrust::error_code(err, thrust::cuda_category());
+#endif
+    }
+  };
+};
+
+template <typename T>
+struct partition_copy_tester
+{
+  static char const* test_name()
+  {
+    return "partition_copy";
+  }
+
+  struct std_trial : partition_copy_trial_base<std::vector<T>>
+  {
+    void operator()()
+    {
+        std::partition_copy(this->input.begin(),
+                            this->input.end(),
+                            this->out_true.begin(),
+                            this->out_false.begin(),
+                            is_even<T> {});
+    }
+  };
+  struct thrust_trial : partition_copy_trial_base<thrust::device_vector<T>>
+  {
+    void operator()()
+    {
+        thrust::partition_copy(this->input.begin(),
+                               this->input.end(),
+                               this->out_true.begin(),
+                               this->out_false.begin(),
+                               is_even<T> {});
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+        cudaError_t err = cudaDeviceSynchronize();
+        if(err != cudaSuccess)
+          throw thrust::error_code(err, thrust::cuda_category());
+#endif
+    }
+  };
+};
+
+template <typename T>
+struct partition_stencil_tester
+{
+  static char const* test_name()
+  {
+    return "partition_stencil";
+  }
+
+  struct std_trial : partition_stencil_trial_base<std::vector<T>>
+  {
+    void operator()()
+    {
+        std::vector<std::tuple<T, T>> zipped(this->input.size());
+        std::transform(this->input.begin(), this->input.end(), this->stencil.begin(), zipped.begin(), [](T a, T b) {
+            return std::tuple<T, T> {a, b};
+        });
+        std::partition(zipped.begin(), zipped.end(), [](std::tuple<T, T> t) {
+            return is_even<T> {}(std::get<1>(t));
+        });
+        std::transform(zipped.begin(), zipped.end(), this->input.begin(), [](std::tuple<T, T> t) {
+            return std::get<0>(t);
+        });
+    }
+  };
+
+  struct thrust_trial : partition_stencil_trial_base<thrust::device_vector<T>>
+  {
+    void operator()()
+    {
+        thrust::partition(
+            this->input.begin(), this->input.end(), this->stencil.begin(), is_even<T> {});
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+        cudaError_t err = cudaDeviceSynchronize();
+        if(err != cudaSuccess)
+          throw thrust::error_code(err, thrust::cuda_category());
+#endif
+    }
+  };
+};
+
+template <typename T>
+struct partition_copy_stencil_tester
+{
+  static char const* test_name()
+  {
+    return "partition_copy_stencil";
+  }
+
+  struct std_trial : partition_copy_stencil_trial_base<std::vector<T>>
+  {
+    void operator()()
+    {
+        std::vector<std::tuple<T, T>> zipped(this->input.size());
+        std::vector<std::tuple<T, T>> zipped_true(this->input.size());
+        std::vector<std::tuple<T, T>> zipped_false(this->input.size());
+
+        std::transform(this->input.begin(), this->input.end(), this->stencil.begin(), zipped.begin(), [](T a, T b) {
+            return std::tuple<T, T> {a, b};
+        });
+        auto partition = std::partition_copy(zipped.begin(), zipped.end(), zipped_true.begin(), zipped_false.begin(), [](std::tuple<T, T> t) {
+            return is_even<T> {}(std::get<1>(t));
+        });
+        std::transform(zipped_true.begin(), partition.first, this->out_true.begin(), [](std::tuple<T, T> t) {
+            return std::get<0>(t);
+        });
+        std::transform(zipped_false.begin(), partition.second, this->out_false.begin(), [](std::tuple<T, T> t) {
+            return std::get<0>(t);
+        });
+    }
+  };
+  struct thrust_trial : partition_copy_stencil_trial_base<thrust::device_vector<T>>
+  {
+    void operator()()
+    {
+        thrust::partition_copy(this->input.begin(),
+                               this->input.end(),
+                               this->stencil.begin(),
+                               this->out_true.begin(),
+                               this->out_false.begin(),
+                               is_even<T> {});
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+        cudaError_t err = cudaDeviceSynchronize();
+        if(err != cudaSuccess)
+          throw thrust::error_code(err, thrust::cuda_category());
+#endif
+    }
+  };
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 
 template <
@@ -1013,6 +1245,38 @@ void run_core_primitives_experiments_for_type()
 
   experiment_driver<
       shuffle_tester
+    , ElementMetaType
+    , Elements / sizeof(typename ElementMetaType::type)
+    , BaselineTrials
+    , RegularTrials
+  >::run_experiment();
+
+  experiment_driver<
+      partition_tester
+    , ElementMetaType
+    , Elements / sizeof(typename ElementMetaType::type)
+    , BaselineTrials
+    , RegularTrials
+  >::run_experiment();
+
+  experiment_driver<
+      partition_copy_tester
+    , ElementMetaType
+    , Elements / sizeof(typename ElementMetaType::type)
+    , BaselineTrials
+    , RegularTrials
+  >::run_experiment();
+
+  experiment_driver<
+      partition_stencil_tester
+    , ElementMetaType
+    , Elements / sizeof(typename ElementMetaType::type)
+    , BaselineTrials
+    , RegularTrials
+  >::run_experiment();
+
+  experiment_driver<
+      partition_copy_stencil_tester
     , ElementMetaType
     , Elements / sizeof(typename ElementMetaType::type)
     , BaselineTrials
