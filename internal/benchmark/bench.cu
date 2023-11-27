@@ -18,16 +18,14 @@
 #include <algorithm>
 #include <numeric>
 
+#include <climits> // For CHAR_BIT.
+#include <cmath> // For `sqrt` and `abs`.
+#include <cstdlib> // For `atoi`.
+#include <exception>
+#include <iostream>
 #include <map>
 #include <string>
-#include <exception>
-
-#include <iostream>
-
-#include <cassert>
-#include <cstdlib>    // For `atoi`.
-#include <climits>    // For CHAR_BIT.
-#include <cmath>      // For `sqrt` and `abs`.
+#include <type_traits>
 
 #include <stdint.h>   // For `intN_t`.
 
@@ -204,12 +202,26 @@ T sample_standard_deviation(InputIt first, InputIt last, T average)
   return sqrt(vc.value / T(vc.count - 1));
 }
 
+template <typename T, bool = std::is_integral<T>::value>
+struct partition_predicate
+{
+};
+
 template <typename T>
-struct is_even
+struct partition_predicate<T, true>
 {
   __host__ __device__ bool operator()(T x) const
   {
-    return ((int)x % 2) == 0;
+    return (x % 2) == 0;
+  }
+};
+
+template <typename T>
+struct partition_predicate<T, false>
+{
+  __host__ __device__ bool operator()(T x) const
+  {
+    return x > 0.5;
   }
 };
 
@@ -1047,7 +1059,7 @@ struct partition_tester
   {
     void operator()()
     {
-        std::partition(this->input.begin(), this->input.end(), is_even<T> {});
+        std::partition(this->input.begin(), this->input.end(), partition_predicate<T> {});
     }
   };
 
@@ -1055,7 +1067,7 @@ struct partition_tester
   {
     void operator()()
     {
-        thrust::partition(this->input.begin(), this->input.end(), is_even<T> {});
+        thrust::partition(this->input.begin(), this->input.end(), partition_predicate<T> {});
 #if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
         cudaError_t err = cudaDeviceSynchronize();
         if(err != cudaSuccess)
@@ -1081,7 +1093,7 @@ struct partition_copy_tester
                             this->input.end(),
                             this->out_true.begin(),
                             this->out_false.begin(),
-                            is_even<T> {});
+                            partition_predicate<T> {});
     }
   };
   struct thrust_trial : partition_copy_trial_base<thrust::device_vector<T>>
@@ -1092,7 +1104,7 @@ struct partition_copy_tester
                                this->input.end(),
                                this->out_true.begin(),
                                this->out_false.begin(),
-                               is_even<T> {});
+                               partition_predicate<T> {});
 #if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
         cudaError_t err = cudaDeviceSynchronize();
         if(err != cudaSuccess)
@@ -1119,7 +1131,7 @@ struct partition_stencil_tester
             return std::tuple<T, T> {a, b};
         });
         std::partition(zipped.begin(), zipped.end(), [](std::tuple<T, T> t) {
-            return is_even<T> {}(std::get<1>(t));
+            return partition_predicate<T> {}(std::get<1>(t));
         });
         std::transform(zipped.begin(), zipped.end(), this->input.begin(), [](std::tuple<T, T> t) {
             return std::get<0>(t);
@@ -1132,7 +1144,7 @@ struct partition_stencil_tester
     void operator()()
     {
         thrust::partition(
-            this->input.begin(), this->input.end(), this->stencil.begin(), is_even<T> {});
+            this->input.begin(), this->input.end(), this->stencil.begin(), partition_predicate<T> {});
 #if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
         cudaError_t err = cudaDeviceSynchronize();
         if(err != cudaSuccess)
@@ -1162,7 +1174,7 @@ struct partition_copy_stencil_tester
             return std::tuple<T, T> {a, b};
         });
         auto partition = std::partition_copy(zipped.begin(), zipped.end(), zipped_true.begin(), zipped_false.begin(), [](std::tuple<T, T> t) {
-            return is_even<T> {}(std::get<1>(t));
+            return partition_predicate<T> {}(std::get<1>(t));
         });
         std::transform(zipped_true.begin(), partition.first, this->out_true.begin(), [](std::tuple<T, T> t) {
             return std::get<0>(t);
@@ -1181,7 +1193,7 @@ struct partition_copy_stencil_tester
                                this->stencil.begin(),
                                this->out_true.begin(),
                                this->out_false.begin(),
-                               is_even<T> {});
+                               partition_predicate<T> {});
 #if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
         cudaError_t err = cudaDeviceSynchronize();
         if(err != cudaSuccess)
