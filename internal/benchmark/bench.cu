@@ -1,3 +1,4 @@
+#include <iterator>
 #include <thrust/detail/config.h>
 #include <thrust/device_vector.h>
 #include <thrust/host_vector.h>
@@ -1167,19 +1168,19 @@ struct partition_copy_stencil_tester
     void operator()()
     {
         std::vector<std::tuple<T, T>> zipped(this->input.size());
-        std::vector<std::tuple<T, T>> zipped_true(this->input.size());
-        std::vector<std::tuple<T, T>> zipped_false(this->input.size());
+        std::vector<std::tuple<T, T>> zipped_true{};
+        std::vector<std::tuple<T, T>> zipped_false{};
 
         std::transform(this->input.begin(), this->input.end(), this->stencil.begin(), zipped.begin(), [](T a, T b) {
             return std::tuple<T, T> {a, b};
         });
-        auto partition = std::partition_copy(zipped.begin(), zipped.end(), zipped_true.begin(), zipped_false.begin(), [](std::tuple<T, T> t) {
+        std::partition_copy(zipped.begin(), zipped.end(), std::back_inserter(zipped_true), std::back_inserter(zipped_false), [](std::tuple<T, T> t) {
             return partition_predicate<T> {}(std::get<1>(t));
         });
-        std::transform(zipped_true.begin(), partition.first, this->out_true.begin(), [](std::tuple<T, T> t) {
+        std::transform(zipped_true.begin(), zipped_true.end(), this->out_true.begin(), [](std::tuple<T, T> t) {
             return std::get<0>(t);
         });
-        std::transform(zipped_false.begin(), partition.second, this->out_false.begin(), [](std::tuple<T, T> t) {
+        std::transform(zipped_false.begin(), zipped_false.end(), this->out_false.begin(), [](std::tuple<T, T> t) {
             return std::get<0>(t);
         });
     }
