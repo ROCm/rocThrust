@@ -1069,11 +1069,6 @@ struct partition_tester
     void operator()()
     {
         thrust::partition(this->input.begin(), this->input.end(), partition_predicate<T> {});
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
-        cudaError_t err = cudaDeviceSynchronize();
-        if(err != cudaSuccess)
-          throw thrust::error_code(err, thrust::cuda_category());
-#endif
     }
   };
 };
@@ -1106,11 +1101,6 @@ struct partition_copy_tester
                                this->out_true.begin(),
                                this->out_false.begin(),
                                partition_predicate<T> {});
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
-        cudaError_t err = cudaDeviceSynchronize();
-        if(err != cudaSuccess)
-          throw thrust::error_code(err, thrust::cuda_category());
-#endif
     }
   };
 };
@@ -1195,11 +1185,6 @@ struct partition_copy_stencil_tester
                                this->out_true.begin(),
                                this->out_false.begin(),
                                partition_predicate<T> {});
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
-        cudaError_t err = cudaDeviceSynchronize();
-        if(err != cudaSuccess)
-          throw thrust::error_code(err, thrust::cuda_category());
-#endif
     }
   };
 };
