@@ -3,6 +3,10 @@
 Documentation for rocThrust available at
 [https://rocm.docs.amd.com/projects/rocThrust/en/latest/](https://rocm.docs.amd.com/projects/rocThrust/en/latest/).
 
+## (Unreleased) rocThrust 3.0.1 for ROCm 6.x
+### Changed
+- Updated internal calls to `rocprim::detail::invoke_result` to use the public API `rocprim::invoke_result`.
+
 ## rocThrust 3.0.0 for ROCm 6.0
 ### Additions
 - Updated to match upstream Thrust 2.0.1
