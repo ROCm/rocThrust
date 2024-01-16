@@ -176,6 +176,8 @@ test:package:
 
 test:doc:
   stage: test
+  variables:
+    SPHINX_DIR: $DOCS_DIR/sphinx
   extends:
     - .build:docs
     - .rules:test
