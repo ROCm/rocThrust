@@ -3,7 +3,12 @@
 Documentation for rocThrust available at
 [https://rocm.docs.amd.com/projects/rocThrust/en/latest/](https://rocm.docs.amd.com/projects/rocThrust/en/latest/).
 
-## (Unreleased) rocThrust 3.0.1 for ROCm 6.2
+## (Unreleased) rocThrust 3.1.0 for ROCm 6.2
+
+### Additions
+
+* Merged changes from upstream CCCL/thrust 2.2.0
+  * Updated the contents of `system/hip` and `test` with the upstream changes to `system/cuda` and `testing`
 
 ### Changes
 
