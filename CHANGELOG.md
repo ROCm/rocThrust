@@ -14,6 +14,7 @@ Documentation for rocThrust available at
 
 * Updated internal calls to `rocprim::detail::invoke_result` to use the public API `rocprim::invoke_result`.
 * Use `rocprim::device_adjacent_difference` for `adjacent_difference` API call.
+* Updated internal use of custom iterator in `thrust::detail::unique_by_key` to use rocPRIM's `rocprim::unique_by_key`.
 
 ## rocThrust 3.0.0 for ROCm 6.0
 
