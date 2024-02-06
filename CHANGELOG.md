@@ -35,6 +35,7 @@ Documentation for rocThrust available at
 - Updated `docs` directory structure to match the standard of [rocm-docs-core](https://github.com/RadeonOpenCompute/rocm-docs-core).
 - Removed references to and workarounds for deprecated hcc
 
+
 ## rocThrust 2.17.0 for ROCm 5.5
 
 ### Additions
