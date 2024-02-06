@@ -3,6 +3,12 @@
 Documentation for rocThrust available at
 [https://rocm.docs.amd.com/projects/rocThrust/en/latest/](https://rocm.docs.amd.com/projects/rocThrust/en/latest/).
 
+## (Unreleased) rocThrust 3.0.1 for ROCm 6.1
+
+### Fixes
+
+* Ported a fix from thrust 2.2 that ensures `thrust::optional` is trivially copyable.
+
 ## rocThrust 3.0.0 for ROCm 6.0
 ### Additions
 - Updated to match upstream Thrust 2.0.1
