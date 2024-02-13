@@ -18,62 +18,38 @@ Fundamental types
 
     *
       - Type
-      - Size of type
       - rocThrust support
       - Thrust support
     *
-      - :code:`unsigned char`
-      - 8 bit
+      - :code:`int8`
       - ✅
       - ✅
     *
-      - :code:`unsigned short`
-      - 16 bit
+      - :code:`int16`
       - ✅
       - ✅
     *
-      - :code:`unsigned int`
-      - 32 bit
+      - :code:`int32`
       - ✅
       - ✅
     *
-      - :code:`unsigned long long`
-      - 64 bit
-      - ✅
-      - ✅
-    *
-      - :code:`char`
-      - 8 bit
-      - ✅
-      - ✅
-    *
-      - :code:`short`
-      - 16 bit
-      - ✅
-      - ✅
-    *
-      - :code:`int`
-      - 32 bit
-      - ✅
-      - ✅
-    *
-      - :code:`long long`
-      - 64 bit
+      - :code:`int64`
       - ✅
       - ✅
     *
       - :code:`half` [1]_
-      - 16 bit
+      - ⚠️
+      - ⚠️
+    *
+      - :code:`bfloat16` [1]_
       - ⚠️
       - ⚠️
     *
       - :code:`float`
-      - 32 bit
       - ✅
       - ✅
     *
       - :code:`double`
-      - 64 bit
       - ✅
       - ✅
 
@@ -83,4 +59,4 @@ Custom types
 rocThrust and Thrust support custom, user-defined types, if they provide the interface required by the used functions.
 
 .. rubric:: Footnotes
-.. [1] Limited support on the host side.
+.. [1] These types are supported in rocThrust and Thrust, however the host-side hip-implementations of these types miss some functionality, and are mostly intended as storage types to be passed between functions.
