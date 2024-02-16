@@ -23,8 +23,19 @@
  *  \brief Includes nv macros depending on the backend.
  */
 
+#include <hip/hip_runtime.h>
+
 #if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
 #  include <thrust/system/hip/detail/nv/target.h>
+
 #elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
 #  include <nv/target>
+
+#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CPP
+#if defined(__HIP_PLATFORM_AMD__)
+#  include <thrust/system/hip/detail/nv/target.h>
+#elif defined(__HIP_PLATFORM_NVIDIA__)
+#  include <nv/target>
+#else
+#pragma message("Warning: when using a host compiler other than hipcc or nvcc, one of __HIP_PLATFORM_AMD__ or __HIP_PLATFORM_NVIDIA__ must be defined.")
 #endif
