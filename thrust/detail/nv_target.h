@@ -23,7 +23,8 @@
  *  \brief Includes nv macros depending on the backend.
  */
 
-#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP || \
+    THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CPP
 #  include <thrust/system/hip/detail/nv/target.h>
 #elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
 #  include <nv/target>
