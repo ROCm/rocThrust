@@ -61,27 +61,27 @@ namespace hip_rocprim
 namespace __adjacent_difference
 {
     template <typename InputIt, typename OutputIt, typename BinaryOp>
-    hipError_t THRUST_HIP_RUNTIME_FUNCTION
-    __adjecent_difference(void* const       temporary_storage,
-            size_t&           storage_size,
-            const InputIt     input,
-            const OutputIt    output,
-            const size_t      size,
-            const BinaryOp    op,
-            const hipStream_t stream,
-            const bool        debug_synchronous,
-            thrust::detail::integral_constant<bool, true> /* comparable */)
+    hipError_t THRUST_HIP_RUNTIME_FUNCTION __adjecent_difference(
+        void* const       temporary_storage,
+        size_t&           storage_size,
+        const InputIt     input,
+        const OutputIt    output,
+        const size_t      size,
+        const BinaryOp    op,
+        const hipStream_t stream,
+        const bool        debug_synchronous,
+        thrust::detail::integral_constant<bool, true> /* iterators are comparable */)
     {
         if(input != output)
         {
             return rocprim::adjacent_difference(temporary_storage,
-                                                storage_size,
-                                                input,
-                                                output,
-                                                size,
-                                                op,
-                                                stream,
-                                                debug_synchronous);
+                                                      storage_size,
+                                                      input,
+                                                      output,
+                                                      size,
+                                                      op,
+                                                      stream,
+                                                      debug_synchronous);
         }
         else
         {
@@ -97,25 +97,22 @@ namespace __adjacent_difference
     }
 
     template <typename InputIt, typename OutputIt, typename BinaryOp>
-    hipError_t THRUST_HIP_RUNTIME_FUNCTION
-    __adjecent_difference(void* const       temporary_storage,
-            size_t&           storage_size,
-            const InputIt     input,
-            const OutputIt    output,
-            const size_t      size,
-            const BinaryOp    op,
-            const hipStream_t stream,
-            const bool        debug_synchronous,
-            thrust::detail::integral_constant<bool, false> /* comparable */)
+    hipError_t THRUST_HIP_RUNTIME_FUNCTION __adjecent_difference(
+        void* const       temporary_storage,
+        size_t&           storage_size,
+        const InputIt     input,
+        const OutputIt    output,
+        const size_t      size,
+        const BinaryOp    op,
+        const hipStream_t stream,
+        const bool        debug_synchronous,
+        thrust::detail::integral_constant<bool, false> /* iterators are not comparable */)
     {
         return rocprim::adjacent_difference_inplace(
             temporary_storage, storage_size, input, output, size, op, stream, debug_synchronous);
     }
 
-    template <typename Derived,
-              typename InputIt,
-              typename OutputIt,
-              typename BinaryOp>
+    template <typename Derived, typename InputIt, typename OutputIt, typename BinaryOp>
     static OutputIt THRUST_HIP_RUNTIME_FUNCTION
     adjacent_difference(execution_policy<Derived>& policy,
                         InputIt                    first,
@@ -134,17 +131,30 @@ namespace __adjacent_difference
         {
             return result;
         }
+
+        using unwrap_input_iterator
+            = thrust::detail::try_unwrap_contiguous_iterator_return_t<InputIt>;
+        using unwrap_output_iterator
+            = thrust::detail::try_unwrap_contiguous_iterator_return_t<OutputIt>;
+
+        using input_value_type  = thrust::iterator_value_t<unwrap_input_iterator>;
+        using output_value_type = thrust::iterator_value_t<unwrap_output_iterator>;
+
         constexpr bool can_compare_iterators
-            = std::is_pointer<InputIt>::value && std::is_pointer<OutputIt>::value
-                && std::is_same<thrust::iterator_value_t<InputIt>,
-                                thrust::iterator_value_t<OutputIt>>::value;
+            = std::is_pointer<unwrap_input_iterator>::value
+              && std::is_pointer<unwrap_output_iterator>::value
+              && std::is_same<input_value_type, output_value_type>::value;
+
+        auto first_unwrap  = thrust::detail::try_unwrap_contiguous_iterator(first);
+        auto result_unwrap = thrust::detail::try_unwrap_contiguous_iterator(result);
+
         thrust::detail::integral_constant<bool, can_compare_iterators> comparable;
 
         // Determine temporary device storage requirements.
         hip_rocprim::throw_on_error(__adjecent_difference(nullptr,
                                                             storage_size,
-                                                            first,
-                                                            result,
+                                                            first_unwrap,
+                                                            result_unwrap,
                                                             static_cast<size_t>(num_items),
                                                             binary_op,
                                                             stream,
@@ -159,8 +169,8 @@ namespace __adjacent_difference
 
         hip_rocprim::throw_on_error(__adjecent_difference(ptr,
                                                             storage_size,
-                                                            first,
-                                                            result,
+                                                            first_unwrap,
+                                                            result_unwrap,
                                                             static_cast<size_t>(num_items),
                                                             binary_op,
                                                             stream,
