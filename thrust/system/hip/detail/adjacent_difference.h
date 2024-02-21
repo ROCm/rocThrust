@@ -60,6 +60,57 @@ namespace hip_rocprim
 {
 namespace __adjacent_difference
 {
+    template <typename InputIt, typename OutputIt, typename BinaryOp>
+    hipError_t THRUST_HIP_RUNTIME_FUNCTION
+    __adjecent_difference(void* const       temporary_storage,
+            size_t&           storage_size,
+            const InputIt     input,
+            const OutputIt    output,
+            const size_t      size,
+            const BinaryOp    op,
+            const hipStream_t stream,
+            const bool        debug_synchronous,
+            thrust::detail::integral_constant<bool, true> /* comparable */)
+    {
+        if(input != output)
+        {
+            return rocprim::adjacent_difference(temporary_storage,
+                                                storage_size,
+                                                input,
+                                                output,
+                                                size,
+                                                op,
+                                                stream,
+                                                debug_synchronous);
+        }
+        else
+        {
+            return rocprim::adjacent_difference_inplace(temporary_storage,
+                                                        storage_size,
+                                                        input,
+                                                        output,
+                                                        size,
+                                                        op,
+                                                        stream,
+                                                        debug_synchronous);
+        }
+    }
+
+    template <typename InputIt, typename OutputIt, typename BinaryOp>
+    hipError_t THRUST_HIP_RUNTIME_FUNCTION
+    __adjecent_difference(void* const       temporary_storage,
+            size_t&           storage_size,
+            const InputIt     input,
+            const OutputIt    output,
+            const size_t      size,
+            const BinaryOp    op,
+            const hipStream_t stream,
+            const bool        debug_synchronous,
+            thrust::detail::integral_constant<bool, false> /* comparable */)
+    {
+        return rocprim::adjacent_difference_inplace(
+            temporary_storage, storage_size, input, output, size, op, stream, debug_synchronous);
+    }
 
     template <typename Derived,
               typename InputIt,
@@ -83,34 +134,39 @@ namespace __adjacent_difference
         {
             return result;
         }
+        constexpr bool can_compare_iterators
+            = std::is_pointer<InputIt>::value && std::is_pointer<OutputIt>::value
+                && std::is_same<thrust::iterator_value_t<InputIt>,
+                                thrust::iterator_value_t<OutputIt>>::value;
+        thrust::detail::integral_constant<bool, can_compare_iterators> comparable;
 
         // Determine temporary device storage requirements.
-        hip_rocprim::throw_on_error(
-            rocprim::adjacent_difference_inplace(nullptr,
-                                                 storage_size,
-                                                 first,
-                                                 result,
-                                                 static_cast<size_t>(num_items),
-                                                 binary_op,
-                                                 stream,
-                                                 debug_sync),
-            "adjacent_difference failed on 1st step");
+        hip_rocprim::throw_on_error(__adjecent_difference(nullptr,
+                                                            storage_size,
+                                                            first,
+                                                            result,
+                                                            static_cast<size_t>(num_items),
+                                                            binary_op,
+                                                            stream,
+                                                            debug_sync,
+                                                            comparable),
+                                    "adjacent_difference failed on 1st step");
 
         // Allocate temporary storage.
-        thrust::detail::temporary_array<thrust::detail::uint8_t, Derived>
-            tmp(policy, storage_size);
-        void *ptr = static_cast<void*>(tmp.data().get());
+        thrust::detail::temporary_array<thrust::detail::uint8_t, Derived> tmp(policy,
+                                                                                storage_size);
+        void* ptr = static_cast<void*>(tmp.data().get());
 
-        hip_rocprim::throw_on_error(
-            rocprim::adjacent_difference_inplace(ptr,
-                                                 storage_size,
-                                                 first,
-                                                 result,
-                                                 static_cast<size_t>(num_items),
-                                                 binary_op,
-                                                 stream,
-                                                 debug_sync),
-            "adjacent_difference failed on 2nd step");
+        hip_rocprim::throw_on_error(__adjecent_difference(ptr,
+                                                            storage_size,
+                                                            first,
+                                                            result,
+                                                            static_cast<size_t>(num_items),
+                                                            binary_op,
+                                                            stream,
+                                                            debug_sync,
+                                                            comparable),
+                                    "adjacent_difference failed on 2nd step");
 
         hip_rocprim::throw_on_error(hip_rocprim::synchronize_optional(policy));
 
