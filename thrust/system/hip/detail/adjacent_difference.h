@@ -132,6 +132,7 @@ namespace __adjacent_difference
             return result;
         }
 
+        // Check if iterators can be compared
         using unwrap_input_iterator
             = thrust::detail::try_unwrap_contiguous_iterator_return_t<InputIt>;
         using unwrap_output_iterator
@@ -145,6 +146,7 @@ namespace __adjacent_difference
               && std::is_pointer<unwrap_output_iterator>::value
               && std::is_same<input_value_type, output_value_type>::value;
 
+        // Unwrap iterators to make them comparable
         auto first_unwrap  = thrust::detail::try_unwrap_contiguous_iterator(first);
         auto result_unwrap = thrust::detail::try_unwrap_contiguous_iterator(result);
 
