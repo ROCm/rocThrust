@@ -94,15 +94,30 @@ namespace __reduce
                                                     debug_sync),
                                     "reduce failed on 1st step");
 
-        size_t storage_size = temp_storage_bytes + sizeof(T);
+        size_t storage_size;
+        void*  ptr       = nullptr;
+        void*  temp_stor = nullptr;
+        T*     d_ret_ptr;
+
+        // Calculate storage_size including alignment
+        hip_rocprim::throw_on_error(rocprim::detail::temp_storage::partition(
+            ptr,
+            storage_size,
+            rocprim::detail::temp_storage::make_linear_partition(
+                rocprim::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
+                rocprim::detail::temp_storage::ptr_aligned_array(&d_ret_ptr, 1))));
 
         // Allocate temporary storage.
-        thrust::detail::temporary_array<thrust::detail::uint8_t, Derived>
-            tmp(policy, storage_size);
-        void *ptr = static_cast<void*>(tmp.data().get());
+        thrust::detail::temporary_array<thrust::detail::uint8_t, Derived> tmp(policy, storage_size);
+        ptr = static_cast<void*>(tmp.data().get());
 
-        T* d_ret_ptr = reinterpret_cast<T*>(
-            reinterpret_cast<char*>(ptr) + temp_storage_bytes);
+        // Create pointers with alignment
+        hip_rocprim::throw_on_error(rocprim::detail::temp_storage::partition(
+            ptr,
+            storage_size,
+            rocprim::detail::temp_storage::make_linear_partition(
+                rocprim::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
+                rocprim::detail::temp_storage::ptr_aligned_array(&d_ret_ptr, 1))));
 
         hip_rocprim::throw_on_error(rocprim::reduce(ptr,
                                                     temp_storage_bytes,
