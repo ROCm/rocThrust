@@ -42,6 +42,7 @@
 #include <thrust/system/hip/detail/uninitialized_copy.h>
 #include <thrust/system/hip/detail/util.h>
 
+#include "general/temp_storage.hpp"
 
 // rocprim include
 #include <rocprim/rocprim.hpp>
@@ -95,26 +96,26 @@ namespace __partition
         value_type* d_partition_out;
 
         // Calculate storage_size including alignment
-        hip_rocprim::throw_on_error(rocprim::detail::temp_storage::partition(
+        hip_rocprim::throw_on_error(thrust::detail::temp_storage::partition(
             ptr,
             storage_size,
-            rocprim::detail::temp_storage::make_linear_partition(
-                rocprim::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
-                rocprim::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1),
-                rocprim::detail::temp_storage::ptr_aligned_array(&d_partition_out, num_items))));
+            thrust::detail::temp_storage::make_linear_partition(
+                thrust::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
+                thrust::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1),
+                thrust::detail::temp_storage::ptr_aligned_array(&d_partition_out, num_items))));
 
         // Allocate temporary storage.
         thrust::detail::temporary_array<thrust::detail::uint8_t, Derived> tmp(policy, storage_size);
         ptr = static_cast<void*>(tmp.data().get());
 
         // Create pointers with alignment
-        hip_rocprim::throw_on_error(rocprim::detail::temp_storage::partition(
+        hip_rocprim::throw_on_error(thrust::detail::temp_storage::partition(
             ptr,
             storage_size,
-            rocprim::detail::temp_storage::make_linear_partition(
-                rocprim::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
-                rocprim::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1),
-                rocprim::detail::temp_storage::ptr_aligned_array(&d_partition_out, num_items))));
+            thrust::detail::temp_storage::make_linear_partition(
+                thrust::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
+                thrust::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1),
+                thrust::detail::temp_storage::ptr_aligned_array(&d_partition_out, num_items))));
 
         hip_rocprim::throw_on_error(rocprim::partition(ptr,
                                                        temp_storage_bytes,
@@ -179,26 +180,26 @@ namespace __partition
         value_type* d_partition_out;
 
         // Calculate storage_size including alignment
-        hip_rocprim::throw_on_error(rocprim::detail::temp_storage::partition(
+        hip_rocprim::throw_on_error(thrust::detail::temp_storage::partition(
             ptr,
             storage_size,
-            rocprim::detail::temp_storage::make_linear_partition(
-                rocprim::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
-                rocprim::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1),
-                rocprim::detail::temp_storage::ptr_aligned_array(&d_partition_out, num_items))));
+            thrust::detail::temp_storage::make_linear_partition(
+                thrust::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
+                thrust::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1),
+                thrust::detail::temp_storage::ptr_aligned_array(&d_partition_out, num_items))));
 
         // Allocate temporary storage.
         thrust::detail::temporary_array<thrust::detail::uint8_t, Derived> tmp(policy, storage_size);
         ptr = static_cast<void*>(tmp.data().get());
 
         // Create pointers with alignment
-        hip_rocprim::throw_on_error(rocprim::detail::temp_storage::partition(
+        hip_rocprim::throw_on_error(thrust::detail::temp_storage::partition(
             ptr,
             storage_size,
-            rocprim::detail::temp_storage::make_linear_partition(
-                rocprim::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
-                rocprim::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1),
-                rocprim::detail::temp_storage::ptr_aligned_array(&d_partition_out, num_items))));
+            thrust::detail::temp_storage::make_linear_partition(
+                thrust::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
+                thrust::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1),
+                thrust::detail::temp_storage::ptr_aligned_array(&d_partition_out, num_items))));
 
         thrust::transform_iterator<Predicate, StencilIt> flags {stencil, predicate};
 
@@ -312,24 +313,24 @@ namespace __partition
         size_type* d_num_selected_out;
 
         // Calculate storage_size including alignment
-        hip_rocprim::throw_on_error(rocprim::detail::temp_storage::partition(
+        hip_rocprim::throw_on_error(thrust::detail::temp_storage::partition(
             ptr,
             storage_size,
-            rocprim::detail::temp_storage::make_linear_partition(
-                rocprim::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
-                rocprim::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1))));
+            thrust::detail::temp_storage::make_linear_partition(
+                thrust::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
+                thrust::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1))));
 
         // Allocate temporary storage.
         thrust::detail::temporary_array<thrust::detail::uint8_t, Derived> tmp(policy, storage_size);
         ptr = static_cast<void*>(tmp.data().get());
 
         // Create pointers with alignment
-        hip_rocprim::throw_on_error(rocprim::detail::temp_storage::partition(
+        hip_rocprim::throw_on_error(thrust::detail::temp_storage::partition(
             ptr,
             storage_size,
-            rocprim::detail::temp_storage::make_linear_partition(
-                rocprim::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
-                rocprim::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1))));
+            thrust::detail::temp_storage::make_linear_partition(
+                thrust::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
+                thrust::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1))));
 
         hip_rocprim::throw_on_error(rocprim::partition_two_way(ptr,
                                                                temp_storage_bytes,
@@ -393,24 +394,24 @@ namespace __partition
         size_type* d_num_selected_out;
 
         // Calculate storage_size including alignment
-        hip_rocprim::throw_on_error(rocprim::detail::temp_storage::partition(
+        hip_rocprim::throw_on_error(thrust::detail::temp_storage::partition(
             ptr,
             storage_size,
-            rocprim::detail::temp_storage::make_linear_partition(
-                rocprim::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
-                rocprim::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1))));
+            thrust::detail::temp_storage::make_linear_partition(
+                thrust::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
+                thrust::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1))));
 
         // Allocate temporary storage.
         thrust::detail::temporary_array<thrust::detail::uint8_t, Derived> tmp(policy, storage_size);
         ptr = static_cast<void*>(tmp.data().get());
 
         // Create pointers with alignment
-        hip_rocprim::throw_on_error(rocprim::detail::temp_storage::partition(
+        hip_rocprim::throw_on_error(thrust::detail::temp_storage::partition(
             ptr,
             storage_size,
-            rocprim::detail::temp_storage::make_linear_partition(
-                rocprim::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
-                rocprim::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1))));
+            thrust::detail::temp_storage::make_linear_partition(
+                thrust::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
+                thrust::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1))));
 
         thrust::transform_iterator<Predicate, StencilIt> flags {stencil, predicate};
 

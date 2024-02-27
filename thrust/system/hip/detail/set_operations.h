@@ -41,6 +41,7 @@
 #include <thrust/system/hip/detail/par_to_seq.h>
 #include <thrust/system/hip/detail/util.h>
 
+#include "general/temp_storage.hpp"
 
 // rocprim include
 #include <rocprim/rocprim.hpp>
@@ -1070,24 +1071,24 @@ namespace __set_operations
         size_type* d_output_count;
 
         // Calculate storage_size including alignment
-        hip_rocprim::throw_on_error(rocprim::detail::temp_storage::partition(
+        hip_rocprim::throw_on_error(thrust::detail::temp_storage::partition(
             ptr,
             storage_size,
-            rocprim::detail::temp_storage::make_linear_partition(
-                rocprim::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
-                rocprim::detail::temp_storage::ptr_aligned_array(&d_output_count, 1))));
+            thrust::detail::temp_storage::make_linear_partition(
+                thrust::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
+                thrust::detail::temp_storage::ptr_aligned_array(&d_output_count, 1))));
 
         // Allocate temporary storage.
         thrust::detail::temporary_array<thrust::detail::uint8_t, Derived> tmp(policy, storage_size);
         ptr = static_cast<void*>(tmp.data().get());
 
         // Create pointers with alignment
-        hip_rocprim::throw_on_error(rocprim::detail::temp_storage::partition(
+        hip_rocprim::throw_on_error(thrust::detail::temp_storage::partition(
             ptr,
             storage_size,
-            rocprim::detail::temp_storage::make_linear_partition(
-                rocprim::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
-                rocprim::detail::temp_storage::ptr_aligned_array(&d_output_count, 1))));
+            thrust::detail::temp_storage::make_linear_partition(
+                thrust::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
+                thrust::detail::temp_storage::ptr_aligned_array(&d_output_count, 1))));
 
         hip_rocprim::throw_on_error(doit_step<HAS_VALUES>(ptr,
                                                           temp_storage_bytes,
