@@ -37,12 +37,11 @@
 #include <thrust/pair.h>
 #include <thrust/partition.h>
 #include <thrust/system/hip/detail/find.h>
+#include <thrust/system/hip/detail/general/temp_storage.h>
 #include <thrust/system/hip/detail/par_to_seq.h>
 #include <thrust/system/hip/detail/reverse.h>
 #include <thrust/system/hip/detail/uninitialized_copy.h>
 #include <thrust/system/hip/detail/util.h>
-
-#include "general/temp_storage.hpp"
 
 // rocprim include
 #include <rocprim/rocprim.hpp>

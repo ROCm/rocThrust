@@ -20,16 +20,14 @@
 
 #pragma once
 
-#include <cstddef>
-
+#include <thrust/system/hip/detail/general/various.h>
 #include <thrust/tuple.h>
 
-#include "various.hpp"
+#include <cstddef>
 
 THRUST_NAMESPACE_BEGIN
 namespace detail
 {
-
 namespace temp_storage
 {
 

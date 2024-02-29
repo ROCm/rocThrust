@@ -35,10 +35,9 @@
 #include <thrust/iterator/iterator_traits.h>
 #include <thrust/iterator/transform_iterator.h>
 #include <thrust/system/hip/config.h>
+#include <thrust/system/hip/detail/general/temp_storage.h>
 #include <thrust/system/hip/detail/par_to_seq.h>
 #include <thrust/system/hip/detail/util.h>
-
-#include "general/temp_storage.hpp"
 
 // rocPRIM includes
 #include <rocprim/rocprim.hpp>

@@ -36,9 +36,8 @@
 #include <thrust/pair.h>
 #include <thrust/system/hip/config.h>
 #include <thrust/system/hip/detail/get_value.h>
+#include <thrust/system/hip/detail/general/temp_storage.h>
 #include <thrust/system/hip/detail/reduce.h>
-
-#include "general/temp_storage.hpp"
 
 // rocprim include
 #include <rocprim/rocprim.hpp>
