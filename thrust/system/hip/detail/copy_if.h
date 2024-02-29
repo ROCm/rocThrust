@@ -78,6 +78,7 @@ namespace __copy_if
     THRUST_HIP_RUNTIME_FUNCTION OutputIt
     copy_if(execution_policy<Derived>& policy, InputIt first, InputIt last, OutputIt output, Predicate predicate)
     {
+        using namespace thrust::system::hip_rocprim::temp_storage;
         typedef typename iterator_traits<InputIt>::difference_type size_type;
 
         size_type   num_items          = thrust::distance(first, last);
@@ -104,26 +105,25 @@ namespace __copy_if
         void*      ptr       = nullptr;
         void*      temp_stor = nullptr;
         size_type* d_num_selected_out;
+    
 
         // Calculate storage_size including alignment
-        hip_rocprim::throw_on_error(thrust::detail::temp_storage::partition(
-            ptr,
-            storage_size,
-            thrust::detail::temp_storage::make_linear_partition(
-                thrust::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
-                thrust::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1))));
+        hip_rocprim::throw_on_error(
+            partition(ptr,
+                      storage_size,
+                      make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
+                                            ptr_aligned_array(&d_num_selected_out, 1))));
 
         // Allocate temporary storage.
         thrust::detail::temporary_array<thrust::detail::uint8_t, Derived> tmp(policy, storage_size);
         ptr = static_cast<void*>(tmp.data().get());
 
         // Create pointers with alignment
-        hip_rocprim::throw_on_error(thrust::detail::temp_storage::partition(
-            ptr,
-            storage_size,
-            thrust::detail::temp_storage::make_linear_partition(
-                thrust::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
-                thrust::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1))));
+        hip_rocprim::throw_on_error(
+            partition(ptr,
+                      storage_size,
+                      make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
+                                            ptr_aligned_array(&d_num_selected_out, 1))));
 
         hip_rocprim::throw_on_error(rocprim::select(ptr,
                                                     temp_storage_bytes,
@@ -150,6 +150,7 @@ namespace __copy_if
             OutputIt                   output,
             Predicate                  predicate)
     {
+        using namespace thrust::system::hip_rocprim::temp_storage;
         typedef typename iterator_traits<InputIt>::difference_type size_type;
 
         size_type   num_items          = thrust::distance(first, last);
@@ -180,24 +181,22 @@ namespace __copy_if
         size_type* d_num_selected_out;
 
         // Calculate storage_size including alignment
-        hip_rocprim::throw_on_error(thrust::detail::temp_storage::partition(
-            ptr,
-            storage_size,
-            thrust::detail::temp_storage::make_linear_partition(
-                thrust::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
-                thrust::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1))));
+        hip_rocprim::throw_on_error(
+            partition(ptr,
+                      storage_size,
+                      make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
+                                            ptr_aligned_array(&d_num_selected_out, 1))));
 
         // Allocate temporary storage.
         thrust::detail::temporary_array<thrust::detail::uint8_t, Derived> tmp(policy, storage_size);
         ptr = static_cast<void*>(tmp.data().get());
 
         // Create pointers with alignment
-        hip_rocprim::throw_on_error(thrust::detail::temp_storage::partition(
-            ptr,
-            storage_size,
-            thrust::detail::temp_storage::make_linear_partition(
-                thrust::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
-                thrust::detail::temp_storage::ptr_aligned_array(&d_num_selected_out, 1))));
+        hip_rocprim::throw_on_error(
+            partition(ptr,
+                      storage_size,
+                      make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
+                                            ptr_aligned_array(&d_num_selected_out, 1))));
 
         hip_rocprim::throw_on_error(rocprim::select(ptr,
                                                     temp_storage_bytes,

@@ -26,7 +26,9 @@
 #include <cstddef>
 
 THRUST_NAMESPACE_BEGIN
-namespace detail
+namespace system
+{
+namespace hip_rocprim
 {
 namespace temp_storage
 {
@@ -134,7 +136,7 @@ namespace temp_storage
             size_t required_alignment = 1;
             size_t required_size      = 0;
 
-            thrust::detail::apply_to_each_in_tuple(
+            thrust::system::hip::detail::apply_to_each_in_tuple(
                 this->sub_partitions, [&](const auto& sub_partition) {
                     const auto sub_layout = sub_partition.get_layout();
 
@@ -142,9 +144,9 @@ namespace temp_storage
 
                     if(sub_layout.size > 0)
                     {
-                        required_size
-                            = thrust::detail::align_size(required_size, sub_layout.alignment)
-                              + sub_layout.size;
+                        required_size = thrust::system::hip::detail::align_size(
+                                            required_size, sub_layout.alignment)
+                                        + sub_layout.size;
                     }
                 });
 
@@ -157,17 +159,20 @@ namespace temp_storage
         void set_storage(void* const storage)
         {
             size_t offset = 0;
-            thrust::detail::apply_to_each_in_tuple(this->sub_partitions, [&](auto& sub_partition) {
-                const auto sub_layout = sub_partition.get_layout();
+            thrust::system::hip::detail::apply_to_each_in_tuple(
+                this->sub_partitions, [&](auto& sub_partition) {
+                    const auto sub_layout = sub_partition.get_layout();
 
-                if(sub_layout.size > 0)
-                {
-                    offset = thrust::detail::align_size(offset, sub_layout.alignment);
-                }
+                    if(sub_layout.size > 0)
+                    {
+                        offset
+                            = thrust::system::hip::detail::align_size(offset, sub_layout.alignment);
+                    }
 
-                sub_partition.set_storage(static_cast<void*>(static_cast<char*>(storage) + offset));
-                offset += sub_layout.size;
-            });
+                    sub_partition.set_storage(
+                        static_cast<void*>(static_cast<char*>(storage) + offset));
+                    offset += sub_layout.size;
+                });
         }
     };
 
@@ -205,7 +210,7 @@ namespace temp_storage
             size_t required_alignment = 1;
             size_t required_size      = 0;
 
-            thrust::detail::apply_to_each_in_tuple(
+            thrust::system::hip::detail::apply_to_each_in_tuple(
                 this->sub_partitions, [&](const auto& sub_partition) {
                     const auto sub_layout = sub_partition.get_layout();
 
@@ -221,9 +226,9 @@ namespace temp_storage
         /// \param storage - Base pointer to the storage to be used for this partition.
         void set_storage(void* const storage)
         {
-            thrust::detail::apply_to_each_in_tuple(this->sub_partitions, [&](auto& sub_partition) {
-                sub_partition.set_storage(storage);
-            });
+            thrust::system::hip::detail::apply_to_each_in_tuple(
+                this->sub_partitions,
+                [&](auto& sub_partition) { sub_partition.set_storage(storage); });
         }
     };
 
@@ -284,7 +289,7 @@ namespace temp_storage
 
         return hipSuccess;
     }
-} // namespace temp_storage
-
-} // namespace detail
+} // end namespace temp_storage
+} // end namespace hip
+} // end namespace system
 THRUST_NAMESPACE_END

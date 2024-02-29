@@ -164,6 +164,7 @@ namespace __extrema
             BinaryOp                   binary_op,
             T*                         )
     {
+        using namespace thrust::system::hip_rocprim::temp_storage;
         if(num_items == 0)
             hip_rocprim::throw_on_error(hipErrorInvalidValue,
                                         "extrema number of items is zero");
@@ -189,24 +190,22 @@ namespace __extrema
         T*     d_result;
 
         // Calculate storage_size including alignment
-        hip_rocprim::throw_on_error(thrust::detail::temp_storage::partition(
-            ptr,
-            storage_size,
-            thrust::detail::temp_storage::make_linear_partition(
-                thrust::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
-                thrust::detail::temp_storage::ptr_aligned_array(&d_result, 1))));
+        hip_rocprim::throw_on_error(
+            partition(ptr,
+                      storage_size,
+                      make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
+                                            ptr_aligned_array(&d_result, 1))));
 
         // Allocate temporary storage.
         thrust::detail::temporary_array<thrust::detail::uint8_t, Derived> tmp(policy, storage_size);
         ptr = static_cast<void*>(tmp.data().get());
 
         // Create pointers with alignment
-        hip_rocprim::throw_on_error(thrust::detail::temp_storage::partition(
-            ptr,
-            storage_size,
-            thrust::detail::temp_storage::make_linear_partition(
-                thrust::detail::temp_storage::make_partition(&temp_stor, temp_storage_bytes),
-                thrust::detail::temp_storage::ptr_aligned_array(&d_result, 1))));
+        hip_rocprim::throw_on_error(
+            partition(ptr,
+                      storage_size,
+                      make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
+                                            ptr_aligned_array(&d_result, 1))));
 
         hip_rocprim::throw_on_error(rocprim::reduce(ptr,
                                                     temp_storage_bytes,

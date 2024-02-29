@@ -25,9 +25,7 @@
 #include <hip/hip_runtime.h>
 
 THRUST_NAMESPACE_BEGIN
-namespace detail
-{
-
+namespace system { namespace hip { namespace detail {
 template <typename T,
           typename U,
           std::enable_if_t<thrust::detail::is_integral<T>::value && std::is_unsigned<U>::value, int>
@@ -61,4 +59,6 @@ __host__ __device__ inline auto apply_to_each_in_tuple(Tuple&& t, Function&& f)
 }
 
 } // end namespace detail
+} // end namespace hip
+} // end namespace system
 THRUST_NAMESPACE_END
