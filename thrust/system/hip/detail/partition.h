@@ -95,25 +95,19 @@ namespace __partition
         size_type*  d_num_selected_out;
         value_type* d_partition_out;
 
-        // Calculate storage_size including alignment
-        hip_rocprim::throw_on_error(
-            partition(ptr,
-                      storage_size,
-                      make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
+        auto l_part = make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
                                             ptr_aligned_array(&d_num_selected_out, 1),
-                                            ptr_aligned_array(&d_partition_out, num_items))));
+                                            ptr_aligned_array(&d_partition_out, num_items));
+
+        // Calculate storage_size including alignment
+        hip_rocprim::throw_on_error(partition(ptr, storage_size, l_part));
 
         // Allocate temporary storage.
         thrust::detail::temporary_array<thrust::detail::uint8_t, Derived> tmp(policy, storage_size);
         ptr = static_cast<void*>(tmp.data().get());
 
         // Create pointers with alignment
-        hip_rocprim::throw_on_error(
-            partition(ptr,
-                      storage_size,
-                      make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
-                                            ptr_aligned_array(&d_num_selected_out, 1),
-                                            ptr_aligned_array(&d_partition_out, num_items))));
+        hip_rocprim::throw_on_error(partition(ptr, storage_size, l_part));
 
         hip_rocprim::throw_on_error(rocprim::partition(ptr,
                                                        temp_storage_bytes,
@@ -178,25 +172,19 @@ namespace __partition
         size_type*  d_num_selected_out;
         value_type* d_partition_out;
 
-        // Calculate storage_size including alignment
-        hip_rocprim::throw_on_error(
-            partition(ptr,
-                      storage_size,
-                      make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
+        auto l_part = make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
                                             ptr_aligned_array(&d_num_selected_out, 1),
-                                            ptr_aligned_array(&d_partition_out, num_items))));
+                                            ptr_aligned_array(&d_partition_out, num_items));
+
+        // Calculate storage_size including alignment
+        hip_rocprim::throw_on_error(partition(ptr, storage_size, l_part));
 
         // Allocate temporary storage.
         thrust::detail::temporary_array<thrust::detail::uint8_t, Derived> tmp(policy, storage_size);
         ptr = static_cast<void*>(tmp.data().get());
 
         // Create pointers with alignment
-        hip_rocprim::throw_on_error(
-            partition(ptr,
-                      storage_size,
-                      make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
-                                            ptr_aligned_array(&d_num_selected_out, 1),
-                                            ptr_aligned_array(&d_partition_out, num_items))));
+        hip_rocprim::throw_on_error(partition(ptr, storage_size, l_part));
 
         thrust::transform_iterator<Predicate, StencilIt> flags {stencil, predicate};
 
@@ -310,23 +298,18 @@ namespace __partition
         void*      temp_stor = nullptr;
         size_type* d_num_selected_out;
 
+        auto l_part = make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
+                                            ptr_aligned_array(&d_num_selected_out, 1));
+
         // Calculate storage_size including alignment
-        hip_rocprim::throw_on_error(
-            partition(ptr,
-                      storage_size,
-                      make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
-                                            ptr_aligned_array(&d_num_selected_out, 1))));
+        hip_rocprim::throw_on_error(partition(ptr, storage_size, l_part));
 
         // Allocate temporary storage.
         thrust::detail::temporary_array<thrust::detail::uint8_t, Derived> tmp(policy, storage_size);
         ptr = static_cast<void*>(tmp.data().get());
 
         // Create pointers with alignment
-        hip_rocprim::throw_on_error(
-            partition(ptr,
-                      storage_size,
-                      make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
-                                            ptr_aligned_array(&d_num_selected_out, 1))));
+        hip_rocprim::throw_on_error(partition(ptr, storage_size, l_part));
 
         hip_rocprim::throw_on_error(rocprim::partition_two_way(ptr,
                                                                temp_storage_bytes,
@@ -390,23 +373,18 @@ namespace __partition
         void*      temp_stor = nullptr;
         size_type* d_num_selected_out;
 
+        auto l_part = make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
+                                            ptr_aligned_array(&d_num_selected_out, 1));
+
         // Calculate storage_size including alignment
-        hip_rocprim::throw_on_error(
-            partition(ptr,
-                      storage_size,
-                      make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
-                                            ptr_aligned_array(&d_num_selected_out, 1))));
+        hip_rocprim::throw_on_error(partition(ptr, storage_size, l_part));
 
         // Allocate temporary storage.
         thrust::detail::temporary_array<thrust::detail::uint8_t, Derived> tmp(policy, storage_size);
         ptr = static_cast<void*>(tmp.data().get());
 
         // Create pointers with alignment
-        hip_rocprim::throw_on_error(
-            partition(ptr,
-                      storage_size,
-                      make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
-                                            ptr_aligned_array(&d_num_selected_out, 1))));
+        hip_rocprim::throw_on_error(partition(ptr, storage_size, l_part));
 
         thrust::transform_iterator<Predicate, StencilIt> flags {stencil, predicate};
 

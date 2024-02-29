@@ -100,23 +100,18 @@ namespace __reduce
         void*  temp_stor = nullptr;
         T*     d_ret_ptr;
 
+        auto l_part = make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
+                                            ptr_aligned_array(&d_ret_ptr, 1));
+
         // Calculate storage_size including alignment
-        hip_rocprim::throw_on_error(
-            partition(ptr,
-                      storage_size,
-                      make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
-                                            ptr_aligned_array(&d_ret_ptr, 1))));
+        hip_rocprim::throw_on_error(partition(ptr, storage_size, l_part));
 
         // Allocate temporary storage.
         thrust::detail::temporary_array<thrust::detail::uint8_t, Derived> tmp(policy, storage_size);
         ptr = static_cast<void*>(tmp.data().get());
 
         // Create pointers with alignment
-        hip_rocprim::throw_on_error(
-            partition(ptr,
-                      storage_size,
-                      make_linear_partition(make_partition(&temp_stor, temp_storage_bytes),
-                                            ptr_aligned_array(&d_ret_ptr, 1))));
+        hip_rocprim::throw_on_error(partition(ptr, storage_size, l_part));
 
         hip_rocprim::throw_on_error(rocprim::reduce(ptr,
                                                     temp_storage_bytes,
