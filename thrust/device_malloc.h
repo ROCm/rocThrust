@@ -33,7 +33,7 @@ THRUST_NAMESPACE_BEGIN
 /*! This version of \p device_malloc allocates sequential device storage for
  *  new objects of the given type.
  *
- *  \param n The number of objects of type T to allocate
+ *  \overload \param n The number of objects of type T to allocate
  *           sequentially in device memory.
  *  \return A \p device_ptr to the newly allocated memory.
  *
@@ -96,4 +96,3 @@ inline thrust::device_ptr<void> device_malloc(const std::size_t n);
 THRUST_NAMESPACE_END
 
 #include <thrust/detail/device_malloc.inl>
-
