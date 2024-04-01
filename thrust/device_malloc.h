@@ -33,7 +33,7 @@ THRUST_NAMESPACE_BEGIN
 /*! This version of \p device_malloc allocates sequential device storage for
  *  new objects of the given type.
  *
- *  \overload \param n The number of objects of type T to allocate
+ *  \param n The number of objects of type T to allocate
  *           sequentially in device memory.
  *  \return A \p device_ptr to the newly allocated memory.
  *
