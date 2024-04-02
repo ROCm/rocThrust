@@ -10,7 +10,7 @@ rocThrust documentation
 
 rocThrust is a parallel algorithm library. This library has been ported to :doc:`HIP <hip:index>`/:doc:`ROCm <rocm:index>`, which use the :doc:`rocPRIM <rocprim:index>` library. The HIP ported library works on HIP/ROCm platforms. There is no CUDA backend for rocThrust.
 
-You can access rocThrust code on `GitHub repository <https://github.com/ROCm/rocThrust>`_.
+You can access rocThrust code on the `GitHub repository <https://github.com/ROCm/rocThrust>`_.
 
 The documentation is structured as follows:
 
