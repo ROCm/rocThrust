@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
- *  Modifications Copyright© 2019-2023 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2019-2024 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -62,22 +62,57 @@
 namespace test
 {
 
-int set_device_from_ctest()
+inline char* get_env(const char* name)
 {
-    static const std::string rg0 = "CTEST_RESOURCE_GROUP_0";
-    if (std::getenv(rg0.c_str()) != nullptr)
+    char* env;
+#ifdef _MSC_VER
+    size_t  len;
+    errno_t err = _dupenv_s(&env, &len, name);
+    if(err)
     {
-        std::string amdgpu_target = std::getenv(rg0.c_str());
-        std::transform(amdgpu_target.cbegin(), amdgpu_target.cend(), amdgpu_target.begin(), ::toupper);
-        std::string reqs = std::getenv((rg0 + "_" + amdgpu_target).c_str());
-        int device_id = std::atoi(reqs.substr(reqs.find(':') + 1, reqs.find(',') - (reqs.find(':') + 1)).c_str());
-        HIP_CHECK(hipSetDevice(device_id));
-        return device_id;
+        return nullptr;
     }
-    else
-        return 0;
+#else
+    env = std::getenv(name);
+#endif
+    return env;
 }
 
+inline void clean_env(char* name)
+{
+#ifdef _MSC_VER
+    if(name != nullptr)
+    {
+        free(name);
+    }
+#endif
+    (void)name;
+}
+
+inline int set_device_from_ctest()
+{
+    static const std::string rg0    = "CTEST_RESOURCE_GROUP_0";
+    char*                    env    = get_env(rg0.c_str());
+    int                      device = 0;
+    if(env != nullptr)
+    {
+        std::string amdgpu_target(env);
+        std::transform(
+            amdgpu_target.cbegin(),
+            amdgpu_target.cend(),
+            amdgpu_target.begin(),
+            // Feeding std::toupper plainly results in implicitly truncating conversions between int and char triggering warnings.
+            [](unsigned char c) { return static_cast<char>(std::toupper(c)); });
+        char*       env_reqs = get_env((rg0 + "_" + amdgpu_target).c_str());
+        std::string reqs(env_reqs);
+        device = std::atoi(
+            reqs.substr(reqs.find(':') + 1, reqs.find(',') - (reqs.find(':') + 1)).c_str());
+        clean_env(env_reqs);
+        HIP_CHECK(hipSetDevice(device));
+    }
+    clean_env(env);
+    return device;
+}
 }
 
 // Input type parameter

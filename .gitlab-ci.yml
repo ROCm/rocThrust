@@ -1,5 +1,5 @@
 # ########################################################################
-# Copyright 2019-2023 Advanced Micro Devices, Inc.
+# Copyright 2019-2024 Advanced Micro Devices, Inc.
 # ########################################################################
 
 include:
@@ -10,6 +10,7 @@ include:
       - /deps-cmake.yaml
       - /deps-docs.yaml
       - /deps-rocm.yaml
+      - /deps-windows.yaml
       - /gpus-rocm.yaml
       - /rules.yaml
 
@@ -22,6 +23,7 @@ variables:
   # Helper variables
   PACKAGE_DIR: $BUILD_DIR/package
   ROCPRIM_GIT_BRANCH: develop_stream
+  ROCPRIM_DIR: ${CI_PROJECT_DIR}/rocPRIM
 
 copyright-date:
   extends:
@@ -58,7 +60,7 @@ copyright-date:
     - branch_name="$ROCPRIM_GIT_BRANCH"
     - if [ $CI_COMMIT_BRANCH == develop ] || [ $CI_COMMIT_BRANCH == master ]; then branch_name=$CI_COMMIT_BRANCH;
     - fi;
-    - git clone -b $branch_name https://gitlab-ci-token:${CI_JOB_TOKEN}@${ROCPRIM_GIT_URL} $CI_PROJECT_DIR/rocPRIM
+    - git clone -b $branch_name https://gitlab-ci-token:${CI_JOB_TOKEN}@${ROCPRIM_GIT_URL} $ROCPRIM_DIR
     - cmake
       -G Ninja
       -D CMAKE_CXX_COMPILER=hipcc
@@ -66,9 +68,9 @@ copyright-date:
       -D BUILD_TEST=OFF
       -D BUILD_EXAMPLE=OFF
       -D ROCM_DEP_ROCMCORE=OFF
-      -S $CI_PROJECT_DIR/rocPRIM
-      -B $CI_PROJECT_DIR/rocPRIM/build
-    - cd $CI_PROJECT_DIR/rocPRIM/build
+      -S $ROCPRIM_DIR
+      -B $ROCPRIM_DIR/build
+    - cd $ROCPRIM_DIR/build
     - cpack
       -G "DEB"
     - $SUDO_CMD dpkg -i rocprim*.deb
@@ -149,6 +151,53 @@ build:package:
       - $PACKAGE_DIR/rocthrust*.zip
     expire_in: 2 weeks
 
+build:windows:
+  stage: build
+  needs: []
+  extends:
+    - .rules:build
+    - .gpus:rocm-windows
+    - .deps:rocm-windows
+    - .deps:visual-studio-devshell
+  script:
+    # Download, configure, and install rocPRIM
+    - $BRANCH_NAME=$ROCPRIM_GIT_BRANCH
+    - if ( $CI_COMMIT_BRANCH -eq "develop" -or $CI_COMMIT_BRANCH -eq "master" ) { $branch_name=$CI_COMMIT_BRANCH }
+    - git clone -b $BRANCH_NAME https://gitlab-ci-token:$CI_JOB_TOKEN@$ROCPRIM_GIT_URL $ROCPRIM_DIR
+    - \& cmake
+      -S "$ROCPRIM_DIR"
+      -B "$ROCPRIM_DIR/build"
+      -G Ninja
+      -D CMAKE_BUILD_TYPE=Release
+      -D GPU_TARGETS=$GPU_TARGET
+      -D BUILD_TEST=OFF
+      -D BUILD_EXAMPLE=OFF
+      -D BUILD_BENCHMARK=OFF
+      -D BUILD_SHARED_LIBS=$BUILD_SHARED_LIBS
+      -D CMAKE_CXX_COMPILER:FILEPATH="$ROCM_PATH/bin/clang++.exe"
+      -D CMAKE_INSTALL_PREFIX:PATH="$ROCPRIM_DIR/build/install" *>&1
+    - \& cmake --build "$ROCPRIM_DIR/build" --target install *>&1
+    # Configure and build rocThrust
+    - \& cmake 
+      -S "$CI_PROJECT_DIR" 
+      -B "$CI_PROJECT_DIR/build" 
+      -G Ninja 
+      -D CMAKE_BUILD_TYPE=Release
+      -D GPU_TARGETS=$GPU_TARGET
+      -D BUILD_TEST=ON
+      -D BUILD_EXAMPLES=OFF
+      -D BUILD_BENCHMARKS=OFF
+      -D CMAKE_CXX_FLAGS=-Wno-deprecated-declarations
+      -D CMAKE_CXX_COMPILER:FILEPATH="${env:HIP_PATH}/bin/clang++.exe"
+      -D CMAKE_INSTALL_PREFIX:PATH="$CI_PROJECT_DIR/build/install"
+      -D CMAKE_PREFIX_PATH:PATH="$ROCPRIM_DIR/build/install;${env:HIP_PATH}" *>&1
+    - \& cmake --build "$CI_PROJECT_DIR/build" *>&1
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/build/
+      - $ROCPRIM_DIR/build/install
+    expire_in: 2 weeks
+
 test:package:
   stage: test
   needs:
@@ -157,7 +206,7 @@ test:package:
     - .cmake-minimum
     - .rules:test
   tags:
-    - build
+    - rocm
   script:
     - !reference [.install-rocprim, script]
     - $SUDO_CMD dpkg -i $PACKAGE_DIR/rocthrust*.deb
@@ -168,8 +217,11 @@ test:package:
       -G Ninja
       -D CMAKE_CXX_COMPILER=hipcc
       -D CMAKE_BUILD_TYPE=Release
+      -D GPU_TARGETS=$GPU_TARGETS
       -D ROCPRIM_ROOT=/opt/rocm/rocprim
     - cmake --build $CI_PROJECT_DIR/package_test
+    - cd $CI_PROJECT_DIR/package_test
+    - ctest --output-on-failure
     # Remove rocPRIM and rocThrust
     - $SUDO_CMD dpkg -r rocthrust-dev
     - $SUDO_CMD dpkg -r rocprim-dev
@@ -205,3 +257,43 @@ test:
       --tests-regex $GPU_TARGET
       --resource-spec-file ./resources.json
       --parallel $PARALLEL_JOBS
+
+.rocm-windows:test:
+  extends:
+    - .gpus:rocm-windows
+    - .rules:test
+  stage: test
+  script:
+    - \& ctest --test-dir "$CI_PROJECT_DIR/build" --output-on-failure --no-tests=error *>&1
+
+test:rocm-windows:
+  extends:
+    - .rocm-windows:test
+  needs:
+    - build:windows
+
+.rocm-windows:test-install:
+  extends:
+    - .deps:rocm-windows
+    - .deps:visual-studio-devshell
+    - .gpus:rocm-windows
+    - .rules:test
+  stage: test
+  script:
+    - \& cmake --build "$CI_PROJECT_DIR/build" --target install *>&1
+    - \& cmake
+      -G Ninja
+      -S "$CI_PROJECT_DIR/extra"
+      -B "$CI_PROJECT_DIR/build/package_test"
+      -D CMAKE_BUILD_TYPE=Release
+      -D GPU_TARGETS=$GPU_TARGET
+      -D CMAKE_CXX_COMPILER:FILEPATH="$ROCM_PATH/bin/clang++.exe"
+      -D CMAKE_PREFIX_PATH:PATH="$ROCPRIM_DIR/build/install;${env:HIP_PATH}" *>&1
+    - \& cmake --build "$CI_PROJECT_DIR/build/package_test" *>&1
+    - \& ctest --test-dir "$CI_PROJECT_DIR/build/package_test" --output-on-failure --no-tests=error *>&1
+
+test:rocm-windows-install:
+  extends:
+    - .rocm-windows:test-install
+  needs:
+    - build:windows
