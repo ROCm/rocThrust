@@ -151,9 +151,8 @@ std::vector<seed_type> get_seeds()
     return seeds;
 }
 
-#if defined(_WIN32) && defined(__clang__)
 template <class T>
-inline auto get_random_data(size_t size, T, T, int seed) ->
+inline auto get_random_data(size_t size, T, T, seed_type seed) ->
     typename std::enable_if<std::is_same<T, bool>::value, thrust::host_vector<T>>::type
 {
     std::random_device          rd;
@@ -166,7 +165,7 @@ inline auto get_random_data(size_t size, T, T, int seed) ->
 }
 
 template <class T>
-inline auto get_random_data(size_t size, T min, T max, int seed) ->
+inline auto get_random_data(size_t size, T min, T max, seed_type seed) ->
     typename std::enable_if<rocprim::is_integral<T>::value && !std::is_same<T, bool>::value,
                             thrust::host_vector<T>>::type
 {
@@ -180,7 +179,7 @@ inline auto get_random_data(size_t size, T min, T max, int seed) ->
 }
 
 template <class T>
-inline auto get_random_data(size_t size, T min, T max, int seed) ->
+inline auto get_random_data(size_t size, T min, T max, seed_type seed) ->
     typename std::enable_if<rocprim::is_floating_point<T>::value, thrust::host_vector<T>>::type
 {
     std::random_device                rd;
@@ -192,6 +191,7 @@ inline auto get_random_data(size_t size, T min, T max, int seed) ->
     return data;
 }
 
+#if defined(_WIN32) && defined(__clang__)
 template <>
 inline thrust::host_vector<unsigned char> get_random_data(size_t size, unsigned char min, unsigned char max, int seed_value)
 {
@@ -213,46 +213,6 @@ inline thrust::host_vector<signed char> get_random_data(size_t size, signed char
     std::uniform_int_distribution<int> distribution(static_cast<int>(min), static_cast<int>(max));
     thrust::host_vector<signed char> data(size);
     std::generate(data.begin(), data.end(), [&]() { return static_cast<signed char>(distribution(gen)); });
-    return data;
-}
-#else
-template <class T>
-inline auto get_random_data(size_t size, T, T, uint64_t seed) ->
-    typename std::enable_if<std::is_same<T, bool>::value, thrust::host_vector<T>>::type
-{
-    std::random_device          rd;
-    std::default_random_engine  gen(rd());
-    gen.seed(seed);
-    std::bernoulli_distribution distribution(0.5);
-    thrust::host_vector<T>      data(size);
-    std::generate(data.begin(), data.end(), [&]() { return distribution(gen); });
-    return data;
-}
-
-template <class T>
-inline auto get_random_data(size_t size, T min, T max, uint64_t seed) ->
-    typename std::enable_if<rocprim::is_integral<T>::value && !std::is_same<T, bool>::value,
-                            thrust::host_vector<T>>::type
-{
-    std::random_device               rd;
-    std::default_random_engine       gen(rd());
-    gen.seed(seed);
-    std::uniform_int_distribution<T> distribution(min, max);
-    thrust::host_vector<T>           data(size);
-    std::generate(data.begin(), data.end(), [&]() { return distribution(gen); });
-    return data;
-}
-
-template <class T>
-inline auto get_random_data(size_t size, T min, T max, uint64_t seed) ->
-    typename std::enable_if<rocprim::is_floating_point<T>::value, thrust::host_vector<T>>::type
-{
-    std::random_device                rd;
-    std::default_random_engine        gen(rd());
-    gen.seed(seed);
-    std::uniform_real_distribution<T> distribution(min, max);
-    thrust::host_vector<T>            data(size);
-    std::generate(data.begin(), data.end(), [&]() { return distribution(gen); });
     return data;
 }
 #endif
