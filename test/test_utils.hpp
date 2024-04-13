@@ -193,7 +193,7 @@ inline auto get_random_data(size_t size, T min, T max, seed_type seed) ->
 
 #if defined(_WIN32) && defined(__clang__)
 template <>
-inline thrust::host_vector<unsigned char> get_random_data(size_t size, unsigned char min, unsigned char max, int seed_value)
+inline thrust::host_vector<unsigned char> get_random_data(size_t size, unsigned char min, unsigned char max, seed_type seed_value)
 {
     std::random_device                 rd;
     std::default_random_engine         gen(rd());
@@ -205,7 +205,7 @@ inline thrust::host_vector<unsigned char> get_random_data(size_t size, unsigned 
 }
 
 template <>
-inline thrust::host_vector<signed char> get_random_data(size_t size, signed char min, signed char max, int seed_value)
+inline thrust::host_vector<signed char> get_random_data(size_t size, signed char min, signed char max, seed_type seed_value)
 {
     std::random_device                 rd;
     std::default_random_engine         gen(rd());
