@@ -8,7 +8,7 @@
 Bitwise reproducibility
 ******************************************
 
-With the exception of the below functions, all rocThrust API functions are bitwise reproducible - that is, given identical inputs, the function will return the exact same result in repeated invocations.
+With the exception of the following functions, all rocThrust API functions are bitwise reproducible - that is, given identical inputs, the function will return the exact same result in repeated invocations.
 
 * scan (inclusive & exclusive)
 * scan_by_key (inclusive & exclusive)
