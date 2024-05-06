@@ -1,6 +1,6 @@
 /******************************************************************************
  * Copyright (c) 2016, NVIDIA CORPORATION.  All rights meserved.
- *  Modifications Copyright© 2019-2023 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2019-2024 Advanced Micro Devices, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -206,7 +206,9 @@ trivial_copy_device_to_device(Policy& policy, Type* dst, Type const* src, size_t
     hipStream_t stream = hip_rocprim::stream(policy);
     //
     status = ::hipMemcpyAsync(dst, src, sizeof(Type) * count, hipMemcpyDeviceToDevice, stream);
-    hip_rocprim::synchronize(policy);
+    if(status != hipSuccess)
+        return status;
+    status = hip_rocprim::synchronize(policy);
     return status;
 }
 
