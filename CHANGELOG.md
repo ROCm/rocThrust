@@ -3,6 +3,16 @@
 Documentation for rocThrust available at
 [https://rocm.docs.amd.com/projects/rocThrust/en/latest/](https://rocm.docs.amd.com/projects/rocThrust/en/latest/).
 
+## (Unreleased) rocThrust 3.2.0 for ROCm 6.3
+
+### Changes
+
+* Enabled the upstream (thrust) test suite for execution by default. It can still be disabled by CMake option `-DENABLE_UPSTREAM_TESTS=OFF`.
+
+### Fixes
+
+* Fixed the HIP backend not passing `TestCopyIfNonTrivial` from the upstream (thrust) test suite. 
+
 ## (Unreleased) rocThrust 3.1.0 for ROCm 6.2
 
 ### Additions
