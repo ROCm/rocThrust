@@ -117,7 +117,7 @@ THRUST_NAMESPACE_END
 
 #if defined(__GLIBCXX__) && __has_feature(is_trivially_assignable)
 #define THRUST_OPTIONAL_IS_TRIVIALLY_COPY_ASSIGNABLE(T) \
-  __is_trivially_assignable(T, T const&)
+  __is_trivially_assignable(T&, T const&)
 #else
 #define THRUST_OPTIONAL_IS_TRIVIALLY_COPY_ASSIGNABLE(T) \
   std::is_trivially_copy_assignable<T>::value
@@ -133,7 +133,7 @@ THRUST_NAMESPACE_END
 
 #if defined(__GLIBCXX__) && __has_feature(is_trivially_assignable)
 #define THRUST_OPTIONAL_IS_TRIVIALLY_MOVE_ASSIGNABLE(T) \
-  __is_trivially_assignable(T, T&&)
+  __is_trivially_assignable(T&, T&&)
 #else
 #define THRUST_OPTIONAL_IS_TRIVIALLY_MOVE_ASSIGNABLE(T) \
   std::is_trivially_move_assignable<T>::value
@@ -1580,7 +1580,7 @@ public:
 
     *this = nullopt;
     this->construct(std::forward<Args>(args)...);
-    return value();
+    return this->m_value;
   }
 
   /// \group emplace
@@ -1594,7 +1594,7 @@ public:
   emplace(std::initializer_list<U> il, Args &&... args) {
     *this = nullopt;
     this->construct(il, std::forward<Args>(args)...);
-    return value();
+    return this->m_value;
   }
 
   /// Swaps this optional with the other.
@@ -2746,14 +2746,11 @@ public:
   ///
   /// \group emplace
   __thrust_exec_check_disable__
-  template <class... Args>
+  template <class U>
   __host__ __device__
-  T &emplace(Args &&... args) noexcept {
-    static_assert(std::is_constructible<T, Args &&...>::value,
-                  "T must be constructible with Args");
-
-    *this = nullopt;
-    this->construct(std::forward<Args>(args)...);
+  T &emplace(U& u) noexcept {
+    m_value = addressof(u);
+    return *m_value;
   }
 
   /// Swaps this optional with the other.
@@ -2873,3 +2870,4 @@ template <class T> struct hash<THRUST_NS_QUALIFIER::optional<T>> {
 } // namespace std
 
 #endif // THRUST_CPP_DIALECT >= 2011
+

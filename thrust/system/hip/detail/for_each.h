@@ -1,6 +1,6 @@
 /******************************************************************************
  * Copyright (c) 2016, NVIDIA CORPORATION.  All rights reserved.
- * Modifications Copyright (c) 2019-2023, Advanced Micro Devices, Inc.  All rights reserved.
+ * Modifications Copyright (c) 2019-2024, Advanced Micro Devices, Inc.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -58,7 +58,7 @@ struct for_each_f
     template <class Size>
     THRUST_HIP_FUNCTION void operator()(Size idx)
     {
-        op(raw_reference_cast(input[idx]));
+        op(raw_reference_cast(*(input + static_cast<typename std::iterator_traits<Input>::difference_type>(idx))));
     }
 };
 
@@ -78,7 +78,7 @@ for_each_n(execution_policy<Derived>& policy, Input first, Size count, UnaryOp o
                               for_each_f<Input, wrapped_t>(first, wrapped_op),
                               count);
 
-    return first + count;
+    return first + static_cast<typename std::iterator_traits<Input>::difference_type>(count);
 }
 
 // for_each
