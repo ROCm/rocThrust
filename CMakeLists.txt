@@ -1,5 +1,5 @@
 # ########################################################################
-# Copyright 2019-2023 Advanced Micro Devices, Inc.
+# Copyright 2019-2024 Advanced Micro Devices, Inc.
 # ########################################################################
 
 cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
@@ -122,7 +122,7 @@ if(BUILD_ADDRESS_SANITIZER)
 endif()
 
 # Setup VERSION
-rocm_setup_version(VERSION "2.18.0")
+rocm_setup_version(VERSION "3.0.1")
 
 # Print configuration summary
 include(cmake/Summary.cmake)
@@ -182,6 +182,8 @@ rocm_package_add_deb_dependencies(DEPENDS "rocprim-dev >= 2.10.1")
 rocm_package_add_rpm_dependencies(DEPENDS "rocprim-devel >= 2.10.1")
 set(CPACK_DEBIAN_PACKAGE_CONFLICTS "hip-thrust, thrust")
 set(CPACK_RPM_PACKAGE_CONFLICTS "hip-thrust, thrust")
+set(CPACK_DEBIAN_DEVEL_PACKAGE_PROVIDES "hipstdpar")
+set(CPACK_RPM_DEVEL_PACKAGE_PROVIDES "hipstdpar")
 
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
 set(CPACK_RPM_PACKAGE_LICENSE "ASL 2.0")
