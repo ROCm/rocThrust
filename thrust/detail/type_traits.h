@@ -755,7 +755,7 @@ template<typename T>
 template <typename Invokable, typename... Args>
 using invoke_result_t =
 #if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
-      typename ::rocprim::invoke_result<Invokable, Args...>::type;
+  typename ::rocprim::invoke_result<Invokable, Args...>::type;
 #elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
 #if THRUST_CPP_DIALECT < 2017
   typename ::cuda::std::result_of<Invokable(Args...)>::type;
@@ -763,7 +763,11 @@ using invoke_result_t =
   ::cuda::std::invoke_result_t<Invokable, Args...>;
 #endif
 #else
+#if THRUST_CPP_DIALECT < 2017
+  std::result_of_t<Invokable(Args...)>;
+#else // 2017+
   std::invoke_result_t<Invokable, Args...>;
+#endif
 #endif
 
 template <class F, class... Us>
