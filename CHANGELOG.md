@@ -5,6 +5,12 @@ Documentation for rocThrust available at
 
 ## (Unreleased) rocThrust 3.2.0 for ROCm 6.3
 
+### Additions
+
+* Merged changes from upstream CCCL/thrust 2.3.2
+  * Only the NVIDIA backend uses `tuple` and `pair` types from libcu++, other backends continue to
+    use the original Thrust implementations and hence do not require libcu++ (CCCL) as a dependency.
+
 ### Changes
 
 * Enabled the upstream (thrust) test suite for execution by default. It can still be disabled by CMake option `-DENABLE_UPSTREAM_TESTS=OFF`.
