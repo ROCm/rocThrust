@@ -292,9 +292,7 @@ struct transform_input_iterator_t
     {
     }
 
-#if THRUST_CPP_DIALECT >= 2011
   transform_input_iterator_t(const self_t &) = default;
-#endif
 
   // UnaryOp might not be copy assignable, such as when it is a lambda.  Define
   // an explicit copy assignment operator that doesn't try to assign it.
