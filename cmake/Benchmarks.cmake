@@ -10,7 +10,7 @@
 
 # Registers a .cu as C++ rocThrust benchmark
 function(add_thrust_benchmark BENCHMARK_NAME BENCHMARK_SOURCE NOT_INTERNAL)
-    set(BENCHMARK_TARGET "benchmark_trust_${BENCHMARK_NAME}")
+    set(BENCHMARK_TARGET "benchmark_thrust_${BENCHMARK_NAME}")
     set_source_files_properties(${BENCHMARK_SOURCE}
         PROPERTIES
             LANGUAGE CXX
