@@ -21,6 +21,8 @@
 
 #pragma once
 
+#include <thrust/detail/config.h>
+
 #include <thrust/mr/memory_resource.h>
 #include <thrust/system/hip/detail/guarded_hip_runtime_api.h>
 #include <thrust/system/hip/pointer.h>

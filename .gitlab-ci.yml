@@ -11,7 +11,9 @@ include:
       - /deps-docs.yaml
       - /deps-rocm.yaml
       - /deps-windows.yaml
+      - /deps-nvcc.yaml
       - /gpus-rocm.yaml
+      - /gpus-nvcc.yaml
       - /rules.yaml
 
 stages:
@@ -297,3 +299,80 @@ test:rocm-windows-install:
     - .rocm-windows:test-install
   needs:
     - build:windows
+
+.nvcc:
+  extends:
+    - .deps:nvcc
+    - .gpus:nvcc-gpus
+    - .deps:cmake-latest
+    - .rules:manual
+  before_script:
+    - !reference [".deps:nvcc", before_script]
+    - !reference [".deps:cmake-latest", before_script]
+
+build:cuda-and-omp:
+  stage: build
+  extends:
+    - .nvcc
+    - .rules:build
+  tags:
+    - build
+  variables:
+    CCCL_GIT_BRANCH: v2.3.2
+    CCCL_DIR: ${CI_PROJECT_DIR}/cccl
+  needs: []
+  script:
+    - git clone -b $CCCL_GIT_BRANCH https://github.com/NVIDIA/cccl.git $CCCL_DIR
+    # Replace CCCL Thrust headers with rocThrust headers
+    - rm -R $CCCL_DIR/thrust/thrust
+    - cp -r $CI_PROJECT_DIR/thrust $CCCL_DIR/thrust
+    # Build tests and examples from CCCL Thrust
+    - cmake
+      -G Ninja
+      -D CMAKE_BUILD_TYPE=Release
+      -D CMAKE_CUDA_ARCHITECTURES="$GPU_TARGETS"
+      -D THRUST_ENABLE_TESTING=ON
+      -D THRUST_ENABLE_EXAMPLES=ON
+      -D THRUST_ENABLE_BENCHMARKS=OFF
+      -D THRUST_ENABLE_MULTICONFIG=ON
+      -D THRUST_MULTICONFIG_ENABLE_SYSTEM_OMP=ON
+      -D THRUST_MULTICONFIG_ENABLE_SYSTEM_CUDA=ON
+      -B $CI_PROJECT_DIR/build
+      -S $CCCL_DIR/thrust
+    - cmake --build $CI_PROJECT_DIR/build
+    - cd $CI_PROJECT_DIR/build
+    - ctest --output-on-failure --tests-regex "thrust.example.cmake.add_subdir|thrust.test.cmake.check_source_files"
+  artifacts:
+    paths:
+      - $CI_PROJECT_DIR/build/bin/
+      - $CI_PROJECT_DIR/build/CMakeCache.txt
+      - $CI_PROJECT_DIR/build/examples/cuda/CTestTestfile.cmake
+      - $CI_PROJECT_DIR/build/examples/CTestTestfile.cmake
+      - $CI_PROJECT_DIR/build/testing/unittest/CTestTestfile.cmake
+      - $CI_PROJECT_DIR/build/testing/async/CTestTestfile.cmake
+      - $CI_PROJECT_DIR/build/testing/omp/CTestTestfile.cmake
+      - $CI_PROJECT_DIR/build/testing/cuda/CTestTestfile.cmake
+      - $CI_PROJECT_DIR/build/testing/regression/CTestTestfile.cmake
+      - $CI_PROJECT_DIR/build/testing/cpp/CTestTestfile.cmake
+      - $CI_PROJECT_DIR/build/testing/CTestTestfile.cmake
+      - $CI_PROJECT_DIR/build/CTestTestfile.cmake
+      - $CCCL_DIR/thrust/cmake/ThrustRunTest.cmake
+      - $CCCL_DIR/thrust/cmake/ThrustRunExample.cmake
+      - $CI_PROJECT_DIR/build/.ninja_log
+    expire_in: 1 week
+
+test:cuda-and-omp:
+  stage: test
+  needs:
+    - build:cuda-and-omp
+  extends:
+    - .nvcc
+    - .gpus:nvcc
+    - .rules:test
+  before_script:
+    # This is only needed because of the legacy before_script in .gpus:nvcc would otherwise overwrite before_script
+    - !reference [.nvcc, before_script]
+  script:
+    - cd $CI_PROJECT_DIR/build
+    # These tests are executed on the build stage because they require sources
+    - ctest --output-on-failure --exclude-regex "thrust.example.cmake.add_subdir|thrust.test.cmake.check_source_files"
