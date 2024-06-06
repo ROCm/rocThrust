@@ -249,6 +249,7 @@ public:
         : base(other) {}
 
 #if THRUST_CPP_DIALECT >= 2011
+    /*! Default copy assignment operator. */
     stateless_resource_allocator & operator=(const stateless_resource_allocator &) = default;
 #endif
 
