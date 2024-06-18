@@ -145,23 +145,26 @@ struct Params<thrust::device_vector<T>, ExecutionPolicy>
 // Set of test parameter types
 
 // Host and device vectors of all type as a test parameter
-typedef ::testing::Types<Params<thrust::host_vector<short>>,
-                         Params<thrust::host_vector<int>>,
-                         Params<thrust::host_vector<long long>>,
-                         Params<thrust::host_vector<unsigned short>>,
-                         Params<thrust::host_vector<unsigned int>>,
-                         Params<thrust::host_vector<unsigned long long>>,
-                         Params<thrust::host_vector<float>>,
-                         Params<thrust::host_vector<double>>,
-                         Params<thrust::device_vector<short>>,
-                         Params<thrust::device_vector<int>>,
-                         Params<thrust::device_vector<int>, std::decay_t<decltype(thrust::hip::par_nosync)>>,
-                         Params<thrust::device_vector<long long>>,
-                         Params<thrust::device_vector<unsigned short>>,
-                         Params<thrust::device_vector<unsigned int>>,
-                         Params<thrust::device_vector<unsigned long long>>,
-                         Params<thrust::device_vector<float>>,
-                         Params<thrust::device_vector<double>>>
+typedef ::testing::Types<
+    Params<thrust::host_vector<short>>,
+    Params<thrust::host_vector<int>>,
+    Params<thrust::host_vector<long long>>,
+    Params<thrust::host_vector<unsigned short>>,
+    Params<thrust::host_vector<unsigned int>>,
+    Params<thrust::host_vector<unsigned long long>>,
+    Params<thrust::host_vector<float>>,
+    Params<thrust::host_vector<double>>,
+    Params<thrust::device_vector<short>>,
+    Params<thrust::device_vector<int>>,
+    Params<thrust::device_vector<int>, std::decay_t<decltype(thrust::hip::par_nosync)>>,
+    Params<thrust::device_vector<long long>>,
+    Params<thrust::device_vector<unsigned short>>,
+    Params<thrust::device_vector<unsigned int>>,
+    Params<thrust::device_vector<unsigned long long>>,
+    Params<thrust::device_vector<float>>,
+    Params<thrust::device_vector<float>, std::decay_t<decltype(thrust::hip::par_det)>>,
+    Params<thrust::device_vector<float>, std::decay_t<decltype(thrust::hip::par_det_nosync)>>,
+    Params<thrust::device_vector<double>>>
     FullTestsParams;
 
 // Host and device vectors of signed type
