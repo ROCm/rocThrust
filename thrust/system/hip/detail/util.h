@@ -85,6 +85,19 @@ bool must_perform_optional_synchronization(execution_policy<Derived> &policy)
 }
 
 template <class Derived>
+__host__ __device__ integral_constant<bool, true> allows_nondeterminism(execution_policy<Derived>&)
+{
+    return {};
+}
+
+template <class Derived>
+__host__ __device__ auto nondeterministic(execution_policy<Derived>& policy)
+    -> decltype(allows_nondeterminism(derived_cast(policy)))
+{
+    return {};
+}
+
+template <class Derived>
 __host__ __device__ hipError_t synchronize_stream(execution_policy<Derived>& policy)
 {
   hipError_t result;

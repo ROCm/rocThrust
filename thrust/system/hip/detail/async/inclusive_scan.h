@@ -75,17 +75,18 @@ namespace hip
             // Determine temporary device storage requirements.
 
             size_t tmp_size = 0;
-            thrust::hip_rocprim::throw_on_error(
-                rocprim::inclusive_scan(nullptr,
-                                        tmp_size,
-                                        first,
-                                        out,
-                                        n,
-                                        op,
-                                        0, // Null stream, just for sizing.
-                                        THRUST_HIP_DEBUG_SYNC_FLAG),
-                "after determining tmp storage "
-                "requirements for inclusive_scan");
+            thrust::hip_rocprim::throw_on_error(thrust::hip_rocprim::__scan::invoke_inclusive_scan(
+                                                    policy,
+                                                    nullptr,
+                                                    tmp_size,
+                                                    first,
+                                                    out,
+                                                    n,
+                                                    op,
+                                                    0, // Null stream, just for sizing.
+                                                    THRUST_HIP_DEBUG_SYNC_FLAG),
+                                                "after determining tmp storage "
+                                                "requirements for inclusive_scan");
 
             // Allocate temporary storage.
 
@@ -115,15 +116,17 @@ namespace hip
             }
 
             // Run reduction.
-            thrust::hip_rocprim::throw_on_error(rocprim::inclusive_scan(tmp_ptr,
-                                                                        tmp_size,
-                                                                        first,
-                                                                        out,
-                                                                        n,
-                                                                        op,
-                                                                        user_raw_stream,
-                                                                        THRUST_HIP_DEBUG_SYNC_FLAG),
-                                                "after dispatching inclusive_scan kernel");
+            thrust::hip_rocprim::throw_on_error(
+                thrust::hip_rocprim::__scan::invoke_inclusive_scan(policy,
+                                                                   tmp_ptr,
+                                                                   tmp_size,
+                                                                   first,
+                                                                   out,
+                                                                   n,
+                                                                   op,
+                                                                   user_raw_stream,
+                                                                   THRUST_HIP_DEBUG_SYNC_FLAG),
+                "after dispatching inclusive_scan kernel");
 
             return ev;
         }
