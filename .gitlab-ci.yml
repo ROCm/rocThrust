@@ -79,25 +79,33 @@ copyright-date:
 
 .build:common:
   stage: build
+  tags:
+    - build
   extends:
     - .gpus:rocm-gpus
     - .rules:build
-  tags:
-    - build
+  variables:
+    EXTRA_CMAKE_CXX_FLAGS: ""
   script:
     - !reference [.install-rocprim, script]
-    # Setup env vars for testing
-    - rng_seed_count=0; prng_seeds="0";
-    - if [ $CI_COMMIT_BRANCH == develop_stream ] ; then rng_seed_count=3; prng_seeds="0, 1000";
-    - fi;
+    - | # Setup env vars for testing
+        rng_seed_count=0; prng_seeds="0";
+        if [[ $CI_COMMIT_BRANCH == "develop_stream" ]]; then 
+            rng_seed_count=3
+            prng_seeds="0, 1000"
+        fi
+    - | # Add hardened libc++ assertions for tests only
+        if [[ $BUILD_TARGET == "TEST" ]]; then
+            echo "Configuring with hardened libc++!"
+            EXTRA_CMAKE_CXX_FLAGS+=" -D_GLIBCXX_ASSERTIONS=ON"
+        fi
     # Build rocThrust
     - cmake
       -G Ninja
       -D CMAKE_CXX_COMPILER=hipcc
-      -D CMAKE_BUILD_TYPE=Release
-      -D BUILD_TEST=ON
-      -D BUILD_EXAMPLES=ON
-      -D BUILD_BENCHMARKS=ON
+      -D CMAKE_CXX_FLAGS="$EXTRA_CMAKE_CXX_FLAGS"
+      -D CMAKE_BUILD_TYPE=$BUILD_TYPE
+      -D BUILD_$BUILD_TARGET=ON
       -D GPU_TARGETS=$GPU_TARGETS
       -D AMDGPU_TEST_TARGETS=$GPU_TARGETS
       -D RNG_SEED_COUNT=$rng_seed_count
@@ -122,12 +130,20 @@ build:cmake-latest:
   extends:
     - .cmake-latest
     - .build:common
+  parallel:
+    matrix:
+      - BUILD_TYPE: Release
+        BUILD_TARGET: [BENCHMARKS, TEST, EXAMPLES]
 
 build:cmake-minimum:
   stage: build
   extends:
     - .cmake-minimum
     - .build:common
+  parallel:
+    matrix:
+      - BUILD_TYPE: Release
+        BUILD_TARGET: [BENCHMARKS, TEST, EXAMPLES]
 
 build:package:
   stage: build
@@ -243,7 +259,11 @@ test:
     - .rules:test
     - .gpus:rocm
   needs:
-    - build:cmake-minimum
+    - job: build:cmake-minimum
+      parallel:
+        matrix:
+          - BUILD_TYPE: Release
+            BUILD_TARGET: TEST
   script:
     - cd $CI_PROJECT_DIR/build
     - cmake
