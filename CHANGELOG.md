@@ -11,6 +11,7 @@ Documentation for rocThrust available at
   * Only the NVIDIA backend uses `tuple` and `pair` types from libcu++, other backends continue to
     use the original Thrust implementations and hence do not require libcu++ (CCCL) as a dependency.
 * Added the `thrust::hip::par_det` execution policy to enable bitwise reproducibility on algorithms that are not bitwise reproducible by default.
+* Fix tests failing when compiling with `-D_GLIBCXX_ASSERTIONS=ON`.
 
 ### Changes
 
