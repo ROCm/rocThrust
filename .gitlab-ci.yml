@@ -60,7 +60,7 @@ copyright-date:
 .install-rocprim:
   script:
     - branch_name="$ROCPRIM_GIT_BRANCH"
-    - if [ $CI_COMMIT_BRANCH == develop ] || [ $CI_COMMIT_BRANCH == master ]; then branch_name=$CI_COMMIT_BRANCH;
+    - if [[ $CI_COMMIT_BRANCH == "develop" ]] || [[ $CI_COMMIT_BRANCH == "master" ]]; then branch_name=$CI_COMMIT_BRANCH;
     - fi;
     - git clone -b $branch_name https://gitlab-ci-token:${CI_JOB_TOKEN}@${ROCPRIM_GIT_URL} $ROCPRIM_DIR
     - cmake
