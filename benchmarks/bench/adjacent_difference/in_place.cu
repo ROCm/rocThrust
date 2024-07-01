@@ -134,7 +134,7 @@ int main(int argc, char* argv[])
     {
         b->UseManualTime();
         b->Unit(benchmark::kMicrosecond);
-        b->MinTime(0.5); // in seconds
+        b->MinTime(0.4); // in seconds
     }
 
     // Run benchmarks
