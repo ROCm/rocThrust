@@ -29,7 +29,7 @@ import subprocess
 import sys
 import time
 
-BenchmarkContext = namedtuple('BenchmarkContext', ['gpu_architecture', 'benchmark_output_dir', 'benchmark_dir', 'benchmark_filename_regex', 'benchmark_filter_regex', 'repetitions', 'seed'])
+BenchmarkContext = namedtuple('BenchmarkContext', ['gpu_architecture', 'benchmark_output_dir', 'benchmark_dir', 'benchmark_filename_regex', 'benchmark_filter_regex', 'seed'])
 
 def run_benchmarks(benchmark_context):
     def is_benchmark_executable(filename):
@@ -59,8 +59,6 @@ def run_benchmarks(benchmark_context):
             f'--benchmark_out={results_json_path}',
             f'--benchmark_filter={benchmark_context.benchmark_filter_regex}'
         ]
-        if benchmark_context.repetitions:
-            args += ['--repetitions', benchmark_context.repetitions]
         if benchmark_context.seed:
             args += ['--seed', benchmark_context.seed]
         try:
@@ -96,10 +94,6 @@ def main():
         help='Regular expression that controls the list of benchmarks to run in each benchmark executable',
         default='',
         required=False)
-    parser.add_argument('--repetitions',
-        help='Controls the number of repetitions for each benchmark case',
-        default='',
-        required=False)
     parser.add_argument('--seed',
         help='Controls the seed for random number generation for each benchmark case',
         default='',
@@ -113,7 +107,6 @@ def main():
         args.benchmark_dir,
         args.benchmark_filename_regex,
         args.benchmark_filter_regex,
-        args.repetitions,
         args.seed)
 
     benchmark_run_successful = run_benchmarks(benchmark_context)

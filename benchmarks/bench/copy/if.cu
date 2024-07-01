@@ -142,7 +142,6 @@ void add_benchmarks(const std::string&                            name,
 int main(int argc, char* argv[])
 {
     cli::Parser parser(argc, argv);
-    parser.set_optional<int>("repetitions", "repetitions", 5, "number of repetitions");
     parser.set_optional<std::string>(
         "name_format", "name_format", "human", "either: json,human,txt");
     parser.set_optional<std::string>("seed", "seed", "random", bench_utils::get_seed_message());
@@ -150,13 +149,13 @@ int main(int argc, char* argv[])
 
     // Parse argv
     benchmark::Initialize(&argc, argv);
-    const int repetitions = parser.get<int>("repetitions");
     bench_utils::bench_naming::set_format(
-        parser.get<std::string>("name_format")); /* either: json,human*/
+        parser.get<std::string>("name_format")); /* either: json,human,txt */
     const std::string seed_type = parser.get<std::string>("seed");
-    parser.set_optional<std::string>("seed", "seed", "random", bench_utils::get_seed_message());
-    parser.run_and_exit_if_error();
 
+    // Benchmark info
+    bench_utils::add_common_benchmark_info();
+    benchmark::AddCustomContext("seed", seed_type);
 
     // Add benchmark
     std::vector<benchmark::internal::Benchmark*> benchmarks;
@@ -168,7 +167,6 @@ int main(int argc, char* argv[])
         b->UseManualTime();
         b->Unit(benchmark::kMicrosecond);
         b->MinTime(0.5); // in seconds
-        b->Repetitions(repetitions);
     }
 
     // Run benchmarks
