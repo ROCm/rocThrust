@@ -192,7 +192,7 @@ build:windows:
       -D BUILD_EXAMPLE=OFF
       -D BUILD_BENCHMARK=OFF
       -D BUILD_SHARED_LIBS=$BUILD_SHARED_LIBS
-      -D CMAKE_CXX_COMPILER:FILEPATH="$ROCM_PATH/bin/clang++.exe"
+      -D CMAKE_CXX_COMPILER:FILEPATH="${env:HIP_PATH}/bin/clang++.exe"
       -D CMAKE_INSTALL_PREFIX:PATH="$ROCPRIM_DIR/build/install" *>&1
     - \& cmake --build "$ROCPRIM_DIR/build" --target install *>&1
     # Configure and build rocThrust
@@ -309,7 +309,7 @@ test:rocm-windows:
       -B "$CI_PROJECT_DIR/build/package_test"
       -D CMAKE_BUILD_TYPE=Release
       -D GPU_TARGETS=$GPU_TARGET
-      -D CMAKE_CXX_COMPILER:FILEPATH="$ROCM_PATH/bin/clang++.exe"
+      -D CMAKE_CXX_COMPILER:FILEPATH="${env:HIP_PATH}/bin/clang++.exe"
       -D CMAKE_PREFIX_PATH:PATH="$ROCPRIM_DIR/build/install;${env:HIP_PATH}" *>&1
     - \& cmake --build "$CI_PROJECT_DIR/build/package_test" *>&1
     - \& ctest --test-dir "$CI_PROJECT_DIR/build/package_test" --output-on-failure --no-tests=error *>&1
