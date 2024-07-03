@@ -38,7 +38,7 @@
 
 struct in_place
 {
-    template <typename T, typename Policy = thrust::detail::host_t>
+    template <typename T, typename Policy = thrust::detail::device_t>
     float64_t run(thrust::device_vector<T> input)
     {
         bench_utils::gpu_timer d_timer;
