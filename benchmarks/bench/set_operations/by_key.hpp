@@ -46,12 +46,12 @@ struct by_key
               typename ValueT,
               typename OpT,
               typename Policy = thrust::detail::device_t>
-    float64_t run(thrust::device_vector<KeyT>   input_keys,
-                  thrust::device_vector<ValueT> input_vals,
-                  thrust::device_vector<KeyT>   output_keys,
-                  thrust::device_vector<ValueT> output_vals,
-                  const std::size_t             elements_in_A,
-                  const OpT                     op)
+    float64_t run(thrust::device_vector<KeyT>&   input_keys,
+                  thrust::device_vector<ValueT>& input_vals,
+                  thrust::device_vector<KeyT>&   output_keys,
+                  thrust::device_vector<ValueT>& output_vals,
+                  const std::size_t              elements_in_A,
+                  const OpT                      op)
     {
         bench_utils::gpu_timer d_timer;
 

@@ -39,7 +39,7 @@
 struct pairs
 {
     template <typename KeyT, typename ValueT, typename Policy = thrust::detail::device_t>
-    float64_t run(thrust::device_vector<KeyT> keys, thrust::device_vector<ValueT> vals)
+    float64_t run(thrust::device_vector<KeyT>& keys, thrust::device_vector<ValueT>& vals)
     {
         bench_utils::gpu_timer d_timer;
 

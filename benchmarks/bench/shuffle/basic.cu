@@ -42,7 +42,7 @@
 struct basic
 {
     template <typename T, typename Policy = thrust::detail::device_t>
-    float64_t run(thrust::device_vector<T> data, const std::string rng_engine)
+    float64_t run(thrust::device_vector<T>& data, const std::string rng_engine)
     {
         auto do_engine = [&](auto&& engine_constructor) {
             bench_utils::gpu_timer d_timer;

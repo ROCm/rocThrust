@@ -39,9 +39,9 @@
 struct by_key
 {
     template <typename KeyT, typename ValueT, typename Policy = thrust::detail::device_t>
-    float64_t run(thrust::device_vector<KeyT>   input_keys,
-                  thrust::device_vector<ValueT> input_vals,
-                  thrust::device_vector<ValueT> output_vals)
+    float64_t run(thrust::device_vector<KeyT>&   input_keys,
+                  thrust::device_vector<ValueT>& input_vals,
+                  thrust::device_vector<ValueT>& output_vals)
     {
         bench_utils::gpu_timer d_timer;
 

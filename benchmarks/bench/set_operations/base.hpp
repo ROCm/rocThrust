@@ -43,10 +43,10 @@
 struct basic
 {
     template <typename T, typename OpT, typename Policy = thrust::detail::device_t>
-    float64_t run(thrust::device_vector<T> input,
-                  thrust::device_vector<T> output,
-                  const std::size_t        elements_in_A,
-                  const OpT                op)
+    float64_t run(thrust::device_vector<T>& input,
+                  thrust::device_vector<T>& output,
+                  const std::size_t         elements_in_A,
+                  const OpT                 op)
     {
         bench_utils::gpu_timer d_timer;
 

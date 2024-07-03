@@ -40,8 +40,9 @@
 struct upper_bound
 {
     template <typename T, typename Policy = thrust::detail::device_t>
-    float64_t
-    run(thrust::device_vector<T> input, thrust::device_vector<T> output, const std::size_t elements)
+    float64_t run(thrust::device_vector<T>& input,
+                  thrust::device_vector<T>& output,
+                  const std::size_t         elements)
     {
         bench_utils::gpu_timer d_timer;
 

@@ -52,11 +52,11 @@ struct less_then_t
 struct basic
 {
     template <typename T, typename Policy = thrust::detail::device_t>
-    float64_t
-    run(thrust::device_vector<T> input, const std::size_t elements, less_then_t<T> select_op)
+    float64_t run(thrust::device_vector<T>& input,
+                  thrust::device_vector<T>& output,
+                  const std::size_t         elements,
+                  less_then_t<T>            select_op)
     {
-        thrust::device_vector<T> output(elements);
-
         bench_utils::gpu_timer d_timer;
 
         d_timer.start(0);
@@ -91,9 +91,12 @@ void run_benchmark(benchmark::State& state,
 
     thrust::device_vector<T> input = bench_utils::generate(elements, seed_type);
 
+    // Output
+    thrust::device_vector<T> output(elements);
+
     for(auto _ : state)
     {
-        float64_t duration = benchmark.template run<T>(input, elements, select_op);
+        float64_t duration = benchmark.template run<T>(input, output, elements, select_op);
         state.SetIterationTime(duration);
         gpu_times.push_back(duration);
     }

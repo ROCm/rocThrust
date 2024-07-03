@@ -58,10 +58,8 @@ template <int Val>
 struct custom
 {
     template <typename T, typename Policy = thrust::detail::device_t>
-    float64_t run(thrust::device_vector<T> input, const std::size_t elements)
+    float64_t run(thrust::device_vector<T>& input, thrust::device_vector<T>& output)
     {
-        thrust::device_vector<T> output(elements);
-
         bench_utils::gpu_timer d_timer;
 
         d_timer.start(0);
@@ -85,9 +83,12 @@ void run_benchmark(benchmark::State& state, const std::size_t elements, const st
     // Generate input
     thrust::device_vector<T> input = bench_utils::generate(elements, seed_type);
 
+    // Output
+    thrust::device_vector<T> output(elements);
+
     for(auto _ : state)
     {
-        float64_t duration = benchmark.template run<T>(input, elements);
+        float64_t duration = benchmark.template run<T>(input, output);
         state.SetIterationTime(duration);
         gpu_times.push_back(duration);
     }

@@ -51,7 +51,7 @@ struct seg_size_t
 struct basic
 {
     template <typename T, typename Policy = thrust::detail::device_t>
-    float64_t run(thrust::device_vector<T> output, seg_size_t<T> op)
+    float64_t run(thrust::device_vector<T>& output, seg_size_t<T> op)
     {
         bench_utils::gpu_timer d_timer;
 

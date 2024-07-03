@@ -39,7 +39,7 @@
 struct keys_custom
 {
     template <typename T, typename Policy = thrust::detail::device_t>
-    float64_t run(thrust::device_vector<T> input)
+    float64_t run(thrust::device_vector<T>& input)
     {
         thrust::device_vector<T> vec = input;
 

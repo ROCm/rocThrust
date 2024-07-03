@@ -52,7 +52,7 @@ struct _if
 {
     template <typename T, typename Policy = thrust::detail::device_t>
     float64_t
-    run(thrust::device_vector<T> input, thrust::device_vector<T> output, less_then_t<T> select_op)
+    run(thrust::device_vector<T>& input, thrust::device_vector<T>& output, less_then_t<T> select_op)
     {
         bench_utils::gpu_timer d_timer;
 
