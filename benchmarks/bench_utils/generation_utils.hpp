@@ -47,6 +47,9 @@
 // rocPRIM
 #include <rocprim/rocprim.hpp>
 
+// rocRAND
+#include <rocrand/rocrand.h>
+
 // Google Benchmark
 #include <benchmark/benchmark.h>
 
@@ -56,6 +59,7 @@
 #include <limits>
 #include <random>
 #include <string>
+#include <type_traits>
 
 namespace bench_utils
 {
@@ -140,42 +144,90 @@ const int entropy_reductions[] = {0, 2, 4, 6};
 
 namespace detail
 {
+    // std::uniform_int_distribution is undefined for anything other than:
+    // short, int, long, long long, unsigned short, unsigned int, unsigned long, or unsigned long long
     template <typename T>
-    thrust::device_vector<T> generate(const std::size_t elements,
-                                      const std::string seed_type,
-                                      const int         entropy_reduction,
-                                      T                 min,
-                                      T                 max)
+    struct is_valid_for_int_distribution
+        : std::integral_constant<
+              bool,
+              std::is_same<short, T>::value || std::is_same<unsigned short, T>::value
+                  || std::is_same<int, T>::value || std::is_same<unsigned int, T>::value
+                  || std::is_same<long, T>::value || std::is_same<unsigned long, T>::value
+                  || std::is_same<long long, T>::value
+                  || std::is_same<unsigned long long, T>::value>
     {
-        std::vector<T>             data(elements);
-        const managed_seed         managed_seed {seed_type};
-        const unsigned int         seed = managed_seed.get_0();
-        std::default_random_engine gen(seed);
+    };
 
-        if(entropy_reduction >= 5)
+    template <class T, class Enable = void>
+    struct random_to_item_t
+    {
+    };
+
+    // Floating point types
+    template <typename T>
+    struct random_to_item_t<T, typename std::enable_if<std::is_floating_point<T>::value>::type>
+    {
+        double m_min;
+        double m_max;
+
+        __host__ __device__ random_to_item_t(T min, T max)
+            : m_min(static_cast<double>(min))
+            , m_max(static_cast<double>(max))
         {
-            thrust::generate(data.begin(), data.end(), gen);
-            return data;
         }
 
-        // If entropy is not 0, reduce entropy by applying bitwise AND to random bits:
-        // "An Improved Supercomputer Sorting Benchmark", 1992
-        // Kurt Thearling & Stephen Smith.
-        const std::size_t max_random_size = 1024 * 1024 + 4321;
-        thrust::generate(data.begin(), data.begin() + std::min(elements, max_random_size), [&]() {
-            auto v = gen();
-            for(int e = 0; e < entropy_reduction; e++)
-            {
-                v &= gen();
-            }
-            return static_cast<T>(min + v * (max - min));
-        });
-        for(size_t i = max_random_size; i < elements; i += max_random_size)
+        __host__ __device__ auto operator()(double random_value) const
         {
-            std::copy_n(data.begin(), std::min(elements - i, max_random_size), data.begin() + i);
+            return static_cast<T>((m_max - m_min) * random_value + m_min);
         }
-        return data;
-    }
+    };
+
+    // Integral types
+    template <typename T>
+    struct random_to_item_t<T, typename std::enable_if<!std::is_floating_point<T>::value>::type>
+    {
+        using CastT = typename std::conditional<
+            std::is_same<T, int128_t>::value || std::is_same<T, uint128_t>::value,
+            typename std::conditional<std::is_signed<T>::value, long, unsigned long>::type,
+            T>::type;
+
+        double m_min;
+        double m_max;
+
+        __host__ __device__ random_to_item_t(T min, T max)
+            : m_min(static_cast<double>(min))
+            , m_max(static_cast<double>(max))
+        {
+        }
+
+        __host__ __device__ auto operator()(double random_value) const
+        {
+            return static_cast<CastT>(floor((m_max - m_min + 1) * random_value + m_min));
+        }
+    };
+
+    struct and_t
+    {
+        template <class T>
+        __host__ __device__ T operator()(T a, T b) const
+        {
+            return a & b;
+        }
+
+        __host__ __device__ float operator()(float a, float b) const
+        {
+            const std::uint32_t result
+                = reinterpret_cast<std::uint32_t&>(a) & reinterpret_cast<std::uint32_t&>(b);
+            return reinterpret_cast<const float&>(result);
+        }
+
+        __host__ __device__ double operator()(double a, double b) const
+        {
+            const std::uint64_t result
+                = reinterpret_cast<std::uint64_t&>(a) & reinterpret_cast<std::uint64_t&>(b);
+            return reinterpret_cast<const double&>(result);
+        }
+    };
 
     template <class T>
     struct geq_t
@@ -188,6 +240,193 @@ namespace detail
         }
     };
 
+    template <class T>
+    class value_wrapper_t
+    {
+        T m_val {};
+
+    public:
+        explicit value_wrapper_t(T val)
+            : m_val(val)
+        {
+        }
+
+        T get() const
+        {
+            return m_val;
+        }
+
+        value_wrapper_t& operator++()
+        {
+            m_val++;
+            return *this;
+        }
+    };
+
+    class seed_t : public value_wrapper_t<unsigned long long int>
+    {
+    public:
+        using value_wrapper_t::value_wrapper_t;
+        using value_wrapper_t::operator++;
+
+        seed_t()
+            : value_wrapper_t(42)
+        {
+        }
+    };
+
+    struct device_generator_base_t
+    {
+        const std::size_t elements {0};
+        const std::string seed_type {"random"};
+        seed_t            seed {};
+        const int         entropy_reduction {0 /*bit_entropy::_1_000*/};
+
+        device_generator_base_t(std::size_t        m_elements,
+                                const std::string& m_seed_type,
+                                int                m_entropy_reduction)
+            : elements(m_elements)
+            , seed_type(m_seed_type)
+            , entropy_reduction(m_entropy_reduction)
+        {
+            rocrand_create_generator(&gen, ROCRAND_RNG_PSEUDO_DEFAULT);
+            const managed_seed managed_seed {seed_type};
+            seed = seed_t {managed_seed.get_0()};
+        }
+
+        ~device_generator_base_t()
+        {
+            rocrand_destroy_generator(gen);
+        }
+
+        template <typename T>
+        thrust::device_vector<T> generate(T min, T max)
+        {
+            thrust::device_vector<T>       data(elements);
+            const thrust::detail::device_t policy {};
+
+            if(entropy_reduction == 0) /*bit_entropy::_1_000*/
+            {
+                const double* uniform_distribution
+                    = this->new_uniform_distribution(seed, data.size());
+
+                thrust::transform(policy,
+                                  uniform_distribution,
+                                  uniform_distribution + data.size(),
+                                  data.data(),
+                                  random_to_item_t<T>(min, max));
+                return data;
+            }
+            else if(entropy_reduction >= 5) /*bit_entropy::_0_000*/
+            {
+                std::mt19937 rng;
+                rng.seed(static_cast<std::mt19937::result_type>(seed.get()));
+                std::uniform_real_distribution<float> dist(0.0f, 1.0f);
+                T random_value = detail::random_to_item_t<T>(min, max)(dist(rng));
+                thrust::fill(policy, data.data(), data.data() + data.size(), random_value);
+                return data;
+            }
+            else
+            {
+                const double* uniform_distribution
+                    = this->new_uniform_distribution(seed, data.size());
+                ++seed;
+
+                thrust::transform(policy,
+                                  uniform_distribution,
+                                  uniform_distribution + data.size(),
+                                  data.data(),
+                                  random_to_item_t<T>(min, max));
+
+                const int number_of_steps = entropy_reduction;
+
+                thrust::device_vector<T> tmp(data.size());
+
+                for(int i = 0; i < number_of_steps; i++, ++seed)
+                {
+                    this->no_entropy_generate(tmp, min, max);
+
+                    thrust::transform(policy,
+                                      data.data(),
+                                      data.data() + data.size(),
+                                      tmp.data(),
+                                      data.data(),
+                                      detail::and_t {});
+                }
+                return data;
+            }
+        }
+
+        const double* new_uniform_distribution(seed_t seed, std::size_t num_items)
+        {
+            distribution.resize(num_items);
+            double* d_distribution = thrust::raw_pointer_cast(distribution.data());
+
+            rocrand_set_seed(gen, seed.get());
+            rocrand_generate_uniform_double(gen, d_distribution, num_items);
+
+            return d_distribution;
+        }
+
+    private:
+        rocrand_generator             gen;
+        thrust::device_vector<double> distribution;
+
+        template <typename T, typename Policy = thrust::detail::device_t>
+        void no_entropy_generate(thrust::device_vector<T>& data, T m_min, T m_max)
+        {
+            const double* uniform_distribution = this->new_uniform_distribution(seed, data.size());
+
+            thrust::transform(Policy {},
+                              uniform_distribution,
+                              uniform_distribution + data.size(),
+                              data.data(),
+                              detail::random_to_item_t<T>(m_min, m_max));
+            return;
+        }
+    };
+
+    template <class T>
+    struct device_vector_generator_t : device_generator_base_t
+    {
+        const T min {std::numeric_limits<T>::min()};
+        const T max {std::numeric_limits<T>::max()};
+
+        device_vector_generator_t(std::size_t        m_elements,
+                                  const std::string& m_seed_type,
+                                  int                m_entropy_reduction,
+                                  T                  m_min,
+                                  T                  m_max)
+            : device_generator_base_t(m_elements, m_seed_type, m_entropy_reduction)
+            , min(m_min)
+            , max(m_max)
+        {
+        }
+
+        operator thrust::device_vector<T>()
+        {
+            return device_generator_base_t::generate(min, max);
+        }
+    };
+
+    template <>
+    struct device_vector_generator_t<void> : device_generator_base_t
+    {
+        device_vector_generator_t(std::size_t        m_elements,
+                                  const std::string& m_seed_type,
+                                  int                m_entropy_reduction)
+            : device_generator_base_t(m_elements, m_seed_type, m_entropy_reduction)
+        {
+        }
+
+        template <typename T>
+        operator thrust::device_vector<T>()
+        {
+            return device_generator_base_t::generate(std::numeric_limits<T>::min(),
+                                                     std::numeric_limits<T>::max());
+        }
+    };
+
     template <typename T>
     std::size_t gen_uniform_offsets(const std::string         seed_type,
                                     thrust::device_vector<T>& segment_offsets,
@@ -196,11 +435,9 @@ namespace detail
     {
         const T elements = segment_offsets.size() - 2;
 
-        segment_offsets = bench_utils::detail::generate(segment_offsets.size(),
-                                                        seed_type,
-                                                        0 /*100*/,
-                                                        static_cast<T>(min_segment_size),
-                                                        static_cast<T>(max_segment_size));
+        segment_offsets
+            = device_generator_base_t(segment_offsets.size(), seed_type, 0 /*bit_entropy::_1_000*/)
+                  .generate(static_cast<T>(min_segment_size), static_cast<T>(max_segment_size));
 
         // Find the range of contiguous offsets starting from index 0 which sum is greater or
         // equal than 'elements'.
@@ -280,7 +517,7 @@ namespace detail
         hipDeviceSynchronize();
     }
 
-    // TODO: use this approach when rocPRIM allows it.
+    // TODO: use this approach for gen_key_segments when rocPRIM allows it.
     // template <class T>
     // struct offset_to_iterator_t
     // {
@@ -349,69 +586,6 @@ namespace detail
     //                         total_segments);
     //     hipDeviceSynchronize();
     // }
-
-    struct device_generator_base_t
-    {
-        const std::size_t elements {0};
-        const std::string seed_type {"random"};
-        const int         entropy_reduction {0 /*100*/};
-
-        device_generator_base_t(std::size_t        m_elements,
-                                const std::string& m_seed_type,
-                                int                m_entropy_reduction)
-            : elements(m_elements)
-            , seed_type(m_seed_type)
-            , entropy_reduction(m_entropy_reduction)
-        {
-        }
-
-        template <typename T>
-        thrust::device_vector<T> generate(T min, T max)
-        {
-            return bench_utils::detail::generate(elements, seed_type, entropy_reduction, min, max);
-        }
-    };
-
-    template <class T>
-    struct device_vector_generator_t : device_generator_base_t
-    {
-        const T min {std::numeric_limits<T>::min()};
-        const T max {std::numeric_limits<T>::max()};
-
-        device_vector_generator_t(std::size_t        m_elements,
-                                  const std::string& m_seed_type,
-                                  int                m_entropy_reduction,
-                                  T                  m_min,
-                                  T                  m_max)
-            : device_generator_base_t(m_elements, m_seed_type, m_entropy_reduction)
-            , min(m_min)
-            , max(m_max)
-        {
-        }
-
-        operator thrust::device_vector<T>()
-        {
-            return device_generator_base_t::generate(min, max);
-        }
-    };
-
-    template <>
-    struct device_vector_generator_t<void> : device_generator_base_t
-    {
-        device_vector_generator_t(std::size_t        m_elements,
-                                  const std::string& m_seed_type,
-                                  int                m_entropy_reduction)
-            : device_generator_base_t(m_elements, m_seed_type, m_entropy_reduction)
-        {
-        }
-
-        template <typename T>
-        operator thrust::device_vector<T>()
-        {
-            return device_generator_base_t::generate(std::numeric_limits<T>::min(),
-                                                     std::numeric_limits<T>::max());
-        }
-    };
 
     struct device_uniform_key_segments_generator_t
     {
