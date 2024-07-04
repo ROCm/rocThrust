@@ -36,6 +36,7 @@
 #include <thrust/fill.h>
 #include <thrust/find.h>
 #include <thrust/generate.h>
+#include <thrust/host_vector.h>
 #include <thrust/iterator/constant_iterator.h>
 #include <thrust/iterator/counting_iterator.h>
 #include <thrust/iterator/transform_output_iterator.h>
@@ -365,6 +366,8 @@ namespace detail
             rocrand_set_seed(gen, seed.get());
             rocrand_generate_uniform_double(gen, d_distribution, num_items);
 
+            hipDeviceSynchronize();
+
             return d_distribution;
         }
 
@@ -441,84 +444,93 @@ namespace detail
 
         // Find the range of contiguous offsets starting from index 0 which sum is greater or
         // equal than 'elements'.
-        auto tail = [&]() {
-            const thrust::detail::device_t policy {};
+        const thrust::detail::device_t policy {};
 
-            // Add the offset 'elements + 1' to the array of segment offsets to make sure that
-            // there is at least one offset greater than 'elements'.
-            thrust::fill_n(policy, segment_offsets.data() + elements, 1, elements + 1);
+        // Add the offset 'elements + 1' to the array of segment offsets to make sure that
+        // there is at least one offset greater than 'elements'.
+        thrust::fill_n(policy, segment_offsets.data() + elements, 1, elements + 1);
 
-            // Perform an exclusive prefix sum scan with first value 0, so what we compute is
-            // scan[i + 1] = \sum_{i=0}^{i} segment_offsets[i] for i \in [0, elements+1]
-            // and scan[0] = 0;
-            thrust::exclusive_scan(policy,
-                                   segment_offsets.data(),
-                                   segment_offsets.data() + segment_offsets.size(),
-                                   segment_offsets.data() /*, thrust::plus<>{}*/);
+        // Perform an exclusive prefix sum scan with first value 0, so what we compute is
+        // scan[i + 1] = \sum_{i=0}^{i} segment_offsets[i] for i \in [0, elements+1]
+        // and scan[0] = 0.
+        thrust::exclusive_scan(policy,
+                               segment_offsets.data(),
+                               segment_offsets.data() + segment_offsets.size(),
+                               segment_offsets.data() /*, thrust::plus<>{}*/);
 
-            // Find first sum of offsets greater than 'elements', we are sure that there is
-            // going to be one because we added elements + 1 at the end of the segment_offsets.
-            auto iter = thrust::find_if(policy,
-                                        segment_offsets.data(),
-                                        segment_offsets.data() + segment_offsets.size(),
-                                        geq_t<T> {elements});
+        // Find first sum of offsets greater than 'elements', we are sure that there is
+        // going to be one because we added elements + 1 at the end of the segment_offsets.
+        auto iter = thrust::find_if(policy,
+                                    segment_offsets.data(),
+                                    segment_offsets.data() + segment_offsets.size(),
+                                    geq_t<T> {elements});
 
-            // Compute the element's index.
-            auto dist = thrust::distance(segment_offsets.data(), iter);
-            // Fill next item with 'elements'.
-            thrust::fill_n(policy, segment_offsets.data() + dist, 1, elements);
-            // Return next item's index.
-            return dist + 1;
-        };
-
-        return tail();
+        // Compute the element's index.
+        auto dist = thrust::distance(segment_offsets.data(), iter);
+        // Fill next item with 'elements'.
+        thrust::fill_n(policy, segment_offsets.data() + dist, 1, elements);
+        // Return next item's index.
+        return dist + 1;
     }
 
-    // Temporal approach for generation of key segments withouth using iterators.
+    template <class T>
+    struct constant_op
+    {
+        std::size_t val;
+
+        __device__ __forceinline__ T operator()(const T& /*key*/) const
+        {
+            return static_cast<T>(val);
+        }
+    };
+
+    template <class T>
+    struct idx_to_op
+    {
+        T*           keys            = nullptr;
+        std::size_t* segment_offsets = nullptr;
+
+        __device__ __forceinline__ std::size_t operator()(std::size_t i)
+        {
+            const std::size_t init_offset = segment_offsets[i];
+            const std::size_t end_offset  = segment_offsets[i + 1];
+            thrust::transform(thrust::device,
+                              keys + init_offset,
+                              keys + end_offset,
+                              keys + init_offset,
+                              constant_op<T> {i});
+            return i;
+        }
+    };
+
+    // Temporal approach for generation of key segments.
     template <typename T>
     void gen_key_segments(thrust::device_vector<T>&      keys,
                           thrust::device_vector<size_t>& segment_offsets)
     {
         const std::size_t total_segments = segment_offsets.size() - 1;
 
-        thrust::device_vector<T*>          d_srcs(total_segments);
-        thrust::device_vector<T*>          d_dsts(total_segments);
-        thrust::device_vector<std::size_t> d_sizes(total_segments);
+        thrust::counting_iterator<int>     iota(0);
+        thrust::device_vector<std::size_t> segment_indices(iota, iota + total_segments);
 
-        for(std::size_t segment = 0; segment < total_segments; ++segment)
-        {
-            d_sizes[segment]              = segment_offsets[segment + 1] - segment_offsets[segment];
-            const std::size_t        size = d_sizes[segment];
-            thrust::device_vector<T> seq(size);
-            thrust::sequence(seq.begin(), seq.end());
-            d_srcs[segment] = thrust::raw_pointer_cast(&seq[0]);
-            d_dsts[segment] = thrust::raw_pointer_cast(&keys[segment_offsets[segment]]);
-        }
+        idx_to_op<T> op {thrust::raw_pointer_cast(keys.data()),
+                         thrust::raw_pointer_cast(segment_offsets.data())};
 
-        std::uint8_t* d_temp_storage     = nullptr;
-        std::size_t   temp_storage_bytes = 0;
-
-        rocprim::batch_copy(d_temp_storage,
-                            temp_storage_bytes,
-                            thrust::raw_pointer_cast(d_srcs.data()),
-                            thrust::raw_pointer_cast(d_dsts.data()),
-                            thrust::raw_pointer_cast(d_sizes.data()),
-                            total_segments);
-
-        thrust::device_vector<std::uint8_t> temp_storage(temp_storage_bytes);
-        d_temp_storage = thrust::raw_pointer_cast(temp_storage.data());
-
-        rocprim::batch_copy(d_temp_storage,
-                            temp_storage_bytes,
-                            thrust::raw_pointer_cast(d_srcs.data()),
-                            thrust::raw_pointer_cast(d_dsts.data()),
-                            thrust::raw_pointer_cast(d_sizes.data()),
-                            total_segments);
-        hipDeviceSynchronize();
+        thrust::transform(
+            segment_indices.begin(), segment_indices.end(), segment_indices.begin(), op);
     }
 
     // TODO: use this approach for gen_key_segments when rocPRIM allows it.
     // template <class T>
+    // struct repeat_index_t
+    // {
+    // __host__ __device__ __forceinline__ thrust::constant_iterator<T> operator()(std::size_t i)
+    // {
+    //     return thrust::constant_iterator<T>(static_cast<T>(i));
+    // }
+    // };
+
+    // template <typename T>
     // struct offset_to_iterator_t
     // {
     //     T* base_it;
@@ -526,15 +538,6 @@ namespace detail
     //     __host__ __device__ __forceinline__ T* operator()(std::size_t offset) const
     //     {
     //         return base_it + offset;
-    //     }
-    // };
-
-    // template <class T>
-    // struct repeat_index_t
-    // {
-    //     __host__ __device__ __forceinline__ thrust::constant_iterator<T> operator()(std::size_t i)
-    //     {
-    //         return thrust::constant_iterator<T>(static_cast<T>(i));
     //     }
     // };
 
@@ -547,7 +550,7 @@ namespace detail
     //         return offsets[i + 1] - offsets[i];
     //     }
     // };
-
+    //
     // template <typename T>
     // void gen_key_segments(thrust::device_vector<T>&           keys,
     //                       thrust::device_vector<std::size_t>& segment_offsets)
