@@ -18,8 +18,9 @@ include:
 
 stages:
   - lint
-  - build   # Tests if builds succeed (CMake)
-  - test    # Tests if unit tests are passing (CTest)
+  - build     # Tests if builds succeed (CMake)
+  - test      # Tests if unit tests are passing (CTest)
+  - benchmark # Runs the non-internal benchmarks (Google Benchmark)
 
 variables:
   # Helper variables
@@ -115,6 +116,7 @@ copyright-date:
     - cmake --build $CI_PROJECT_DIR/build
   artifacts:
     paths:
+    - $CI_PROJECT_DIR/build/benchmarks/*
     - $CI_PROJECT_DIR/build/test/*
     - $CI_PROJECT_DIR/build/testing/*
     - $CI_PROJECT_DIR/build/deps/*
@@ -396,3 +398,38 @@ test:cuda-and-omp:
     - cd $CI_PROJECT_DIR/build
     # These tests are executed on the build stage because they require sources
     - ctest --output-on-failure --exclude-regex "thrust.example.cmake.add_subdir|thrust.test.cmake.check_source_files"
+
+.benchmark-base:
+  stage: benchmark
+  extends:
+    - .rules:benchmark
+  variables:
+    BENCHMARK_RESULT_DIR: ${CI_PROJECT_DIR}/benchmark_results
+    BENCHMARK_RESULT_CACHE_DIR: ${BENCHMARK_RESULT_DIR}_cache
+
+benchmark:
+  needs:
+    - build:cmake-minimum
+  extends:
+    - .cmake-minimum
+    - .gpus:rocm
+    - .benchmark-base
+  variables:
+    BENCHMARK_FILENAME_REGEX: ^benchmark
+    BENCHMARK_ALGORITHM_REGEX: ""
+  timeout: 3h
+  script:
+    - 'printf "CI Variables used in benchmarks:\nBENCHMARK_RESULT_DIR: %s\nBENCHMARK_FILENAME_REGEX: %s\nBENCHMARK_ALGORITHM_REGEX: %s \n" "$BENCHMARK_RESULT_DIR" "$BENCHMARK_FILENAME_REGEX" "$BENCHMARK_ALGORITHM_REGEX"'
+    - cd "${CI_PROJECT_DIR}"
+    - mkdir -p "${BENCHMARK_RESULT_DIR}"
+    - python3
+      .gitlab/run_benchmarks.py
+      --benchmark_dir "${CI_PROJECT_DIR}/build/benchmarks"
+      --benchmark_gpu_architecture "${GPU_TARGET}"
+      --benchmark_output_dir "${BENCHMARK_RESULT_DIR}"
+      --benchmark_filename_regex "${BENCHMARK_FILENAME_REGEX}"
+      --benchmark_filter_regex "${BENCHMARK_ALGORITHM_REGEX}"
+  artifacts:
+    paths:
+      - ${BENCHMARK_RESULT_DIR}
+    expire_in: 1 week
