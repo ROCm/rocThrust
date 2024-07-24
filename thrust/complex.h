@@ -38,7 +38,7 @@
     reinterpret_cast< \
       const typename thrust::detail::remove_reference<decltype(z)>::type::value_type (&)[2] \
     >(z)[1]
-#  define THRUST_STD_COMPLEX_DEVICE __device__
+#  define THRUST_STD_COMPLEX_DEVICE THRUST_DEVICE
 #else
 #  define THRUST_STD_COMPLEX_REAL(z) (z).real()
 #  define THRUST_STD_COMPLEX_IMAG(z) (z).imag()
@@ -168,7 +168,7 @@ public:
    *
    *  \param re The real part of the number.
    */
-  __host__ __device__
+  THRUST_HOST_DEVICE
   complex(const T& re);
 
   /*! Construct a complex number from its real and imaginary parts.
@@ -176,7 +176,7 @@ public:
    *  \param re The real part of the number.
    *  \param im The imaginary part of the number.
    */
-  __host__ __device__
+  THRUST_HOST_DEVICE
   complex(const T& re, const T& im);
 
 #if THRUST_CPP_DIALECT >= 2011
@@ -193,7 +193,7 @@ public:
 #else
   /*! Default construct a complex number.
    */
-  __host__ __device__
+  THRUST_HOST_DEVICE
   complex();
 
   /*! This copy constructor copies from a \p complex with a type that is
@@ -201,7 +201,7 @@ public:
    *
    *  \param z The \p complex to copy from.
    */
-  __host__ __device__
+  THRUST_HOST_DEVICE
   complex(const complex<T>& z);
 #endif
 
@@ -213,7 +213,7 @@ public:
    *  \tparam U is convertible to \c value_type.
    */
   template <typename U>
-  __host__ __device__
+  THRUST_HOST_DEVICE
   complex(const complex<U>& z);
 
   /*! This converting copy constructor copies from a <tt>std::complex</tt> with
@@ -221,7 +221,7 @@ public:
    *
    *  \param z The \p complex to copy from.
    */
-  __host__ THRUST_STD_COMPLEX_DEVICE
+  THRUST_HOST THRUST_STD_COMPLEX_DEVICE
   complex(const std::complex<T>& z);
 
   /*! This converting copy constructor copies from a <tt>std::complex</tt> with
@@ -232,7 +232,7 @@ public:
    *  \tparam U is convertible to \c value_type.
    */
   template <typename U>
-  __host__ THRUST_STD_COMPLEX_DEVICE
+  THRUST_HOST THRUST_STD_COMPLEX_DEVICE
   complex(const std::complex<U>& z);
 
 
@@ -244,7 +244,7 @@ public:
    *
    *  \param re The real part of the number.
    */
-  __host__ __device__
+  THRUST_HOST_DEVICE
   complex& operator=(const T& re);
 
 #if THRUST_CPP_DIALECT >= 2011
@@ -260,7 +260,7 @@ public:
    *
    *  \param z The \p complex to copy from.
    */
-  __host__ __device__
+  THRUST_HOST_DEVICE
   complex& operator=(const complex<T>& z);
 #endif
 
@@ -272,7 +272,7 @@ public:
    *  \tparam U is convertible to \c value_type.
    */
   template <typename U>
-  __host__ __device__
+  THRUST_HOST_DEVICE
   complex& operator=(const complex<U>& z);
 
   /*! Assign `z.real()` and `z.imag()` to the real and imaginary parts of this
@@ -280,7 +280,7 @@ public:
    *
    *  \param z The \p complex to copy from.
    */
-  __host__ THRUST_STD_COMPLEX_DEVICE
+  THRUST_HOST THRUST_STD_COMPLEX_DEVICE
   complex& operator=(const std::complex<T>& z);
 
   /*! Assign `z.real()` and `z.imag()` to the real and imaginary parts of this
@@ -291,7 +291,7 @@ public:
    *  \tparam U is convertible to \c value_type.
    */
   template <typename U>
-  __host__ THRUST_STD_COMPLEX_DEVICE
+  THRUST_HOST THRUST_STD_COMPLEX_DEVICE
   complex& operator=(const std::complex<U>& z);
 
 
@@ -305,7 +305,7 @@ public:
    *  \tparam U is convertible to \c value_type.
    */
   template <typename U>
-  __host__ __device__
+  THRUST_HOST_DEVICE
   complex<T>& operator+=(const complex<U>& z);
 
   /*! Subtracts a \p complex from this \p complex and assigns the result to
@@ -316,7 +316,7 @@ public:
    *  \tparam U is convertible to \c value_type.
    */
   template <typename U>
-  __host__ __device__
+  THRUST_HOST_DEVICE
   complex<T>& operator-=(const complex<U>& z);
 
   /*! Multiplies this \p complex by another \p complex and assigns the result
@@ -327,7 +327,7 @@ public:
    *  \tparam U is convertible to \c value_type.
    */
   template <typename U>
-  __host__ __device__
+  THRUST_HOST_DEVICE
   complex<T>& operator*=(const complex<U>& z);
 
   /*! Divides this \p complex by another \p complex and assigns the result to
@@ -338,7 +338,7 @@ public:
    *  \tparam U is convertible to \c value_type.
    */
   template <typename U>
-  __host__ __device__
+  THRUST_HOST_DEVICE
   complex<T>& operator/=(const complex<U>& z);
 
   /*! Adds a scalar to this \p complex and assigns the result to this
@@ -349,7 +349,7 @@ public:
    *  \tparam U is convertible to \c value_type.
    */
   template <typename U>
-  __host__ __device__
+  THRUST_HOST_DEVICE
   complex<T>& operator+=(const U& z);
 
   /*! Subtracts a scalar from this \p complex and assigns the result to
@@ -360,7 +360,7 @@ public:
    *  \tparam U is convertible to \c value_type.
    */
   template <typename U>
-  __host__ __device__
+  THRUST_HOST_DEVICE
   complex<T>& operator-=(const U& z);
 
   /*! Multiplies this \p complex by a scalar and assigns the result
@@ -371,7 +371,7 @@ public:
    *  \tparam U is convertible to \c value_type.
    */
   template <typename U>
-  __host__ __device__
+  THRUST_HOST_DEVICE
   complex<T>& operator*=(const U& z);
 
   /*! Divides this \p complex by a scalar and assigns the result to
@@ -382,7 +382,7 @@ public:
    *  \tparam U is convertible to \c value_type.
    */
   template <typename U>
-  __host__ __device__
+  THRUST_HOST_DEVICE
   complex<T>& operator/=(const U& z);
 
 
@@ -394,22 +394,22 @@ public:
 
   /*! Returns the real part of this \p complex.
    */
-  __host__ __device__
+  THRUST_HOST_DEVICE
   T real() const volatile { return data.x; }
 
   /*! Returns the imaginary part of this \p complex.
    */
-  __host__ __device__
+  THRUST_HOST_DEVICE
   T imag() const volatile { return data.y; }
 
   /*! Returns the real part of this \p complex.
    */
-  __host__ __device__
+  THRUST_HOST_DEVICE
   T real() const { return data.x; }
 
   /*! Returns the imaginary part of this \p complex.
    */
-  __host__ __device__
+  THRUST_HOST_DEVICE
   T imag() const { return data.y; }
 
 
@@ -423,28 +423,28 @@ public:
    *
    *  \param re The new real part of this \p complex.
    */
-  __host__ __device__
+  THRUST_HOST_DEVICE
   void real(T re) volatile { data.x = re; }
 
   /*! Sets the imaginary part of this \p complex.
    *
    *  \param im The new imaginary part of this \p complex.e
    */
-  __host__ __device__
+  THRUST_HOST_DEVICE
   void imag(T im) volatile { data.y = im; }
 
   /*! Sets the real part of this \p complex.
    *
    *  \param re The new real part of this \p complex.
    */
-  __host__ __device__
+  THRUST_HOST_DEVICE
   void real(T re) { data.x = re; }
 
   /*! Sets the imaginary part of this \p complex.
    *
    *  \param im The new imaginary part of this \p complex.
    */
-  __host__ __device__
+  THRUST_HOST_DEVICE
   void imag(T im) { data.y = im; }
 
 
@@ -453,7 +453,7 @@ public:
 
   /*! Casts this \p complex to a <tt>std::complex</tt> of the same type.
    */
-  __host__
+  THRUST_HOST
   operator std::complex<T>() const { return std::complex<T>(real(), imag()); }
 
 private:
@@ -468,7 +468,7 @@ private:
  *  \param z The \p complex from which to calculate the absolute value.
  */
 template<typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 T abs(const complex<T>& z);
 
 /*! Returns the phase angle (also known as argument) in radians of a \p complex.
@@ -476,7 +476,7 @@ T abs(const complex<T>& z);
  *  \param z The \p complex from which to calculate the phase angle.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 T arg(const complex<T>& z);
 
 /*! Returns the square of the magnitude of a \p complex.
@@ -484,7 +484,7 @@ T arg(const complex<T>& z);
  *  \param z The \p complex from which to calculate the norm.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 T norm(const complex<T>& z);
 
 /*! Returns the complex conjugate of a \p complex.
@@ -492,7 +492,7 @@ T norm(const complex<T>& z);
  *  \param z The \p complex from which to calculate the complex conjugate.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T> conj(const complex<T>& z);
 
 /*! Returns a \p complex with the specified magnitude and phase.
@@ -501,7 +501,7 @@ complex<T> conj(const complex<T>& z);
  *  \param theta The phase of the returned \p complex in radians.
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<typename detail::promoted_numerical_type<T0, T1>::type>
 polar(const T0& m, const T1& theta = T1());
 
@@ -513,7 +513,7 @@ polar(const T0& m, const T1& theta = T1());
  *  \param z The \p complex argument.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T> proj(const T& z);
 
 
@@ -529,7 +529,7 @@ complex<T> proj(const T& z);
  *  \param y The second \p complex.
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<typename detail::promoted_numerical_type<T0, T1>::type>
 operator+(const complex<T0>& x, const complex<T1>& y);
 
@@ -542,7 +542,7 @@ operator+(const complex<T0>& x, const complex<T1>& y);
  *  \param y The scalar.
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<typename detail::promoted_numerical_type<T0, T1>::type>
 operator+(const complex<T0>& x, const T1& y);
 
@@ -555,7 +555,7 @@ operator+(const complex<T0>& x, const T1& y);
  *  \param y The \p complex.
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<typename detail::promoted_numerical_type<T0, T1>::type>
 operator+(const T0& x, const complex<T1>& y);
 
@@ -568,7 +568,7 @@ operator+(const T0& x, const complex<T1>& y);
  *  \param y The second \p complex (subtrahend).
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<typename detail::promoted_numerical_type<T0, T1>::type>
 operator-(const complex<T0>& x, const complex<T1>& y);
 
@@ -581,7 +581,7 @@ operator-(const complex<T0>& x, const complex<T1>& y);
  *  \param y The scalar (subtrahend).
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<typename detail::promoted_numerical_type<T0, T1>::type>
 operator-(const complex<T0>& x, const T1& y);
 
@@ -594,7 +594,7 @@ operator-(const complex<T0>& x, const T1& y);
  *  \param y The \p complex (subtrahend).
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<typename detail::promoted_numerical_type<T0, T1>::type>
 operator-(const T0& x, const complex<T1>& y);
 
@@ -607,7 +607,7 @@ operator-(const T0& x, const complex<T1>& y);
  *  \param y The second \p complex.
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<typename detail::promoted_numerical_type<T0, T1>::type>
 operator*(const complex<T0>& x, const complex<T1>& y);
 
@@ -617,7 +617,7 @@ operator*(const complex<T0>& x, const complex<T1>& y);
  *  \param y The scalar.
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<typename detail::promoted_numerical_type<T0, T1>::type>
 operator*(const complex<T0>& x, const T1& y);
 
@@ -630,7 +630,7 @@ operator*(const complex<T0>& x, const T1& y);
  *  \param y The \p complex.
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<typename detail::promoted_numerical_type<T0, T1>::type>
 operator*(const T0& x, const complex<T1>& y);
 
@@ -643,7 +643,7 @@ operator*(const T0& x, const complex<T1>& y);
  *  \param y The denomimator (divisor).
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<typename detail::promoted_numerical_type<T0, T1>::type>
 operator/(const complex<T0>& x, const complex<T1>& y);
 
@@ -656,7 +656,7 @@ operator/(const complex<T0>& x, const complex<T1>& y);
  *  \param y The scalar denomimator (divisor).
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<typename detail::promoted_numerical_type<T0, T1>::type>
 operator/(const complex<T0>& x, const T1& y);
 
@@ -669,7 +669,7 @@ operator/(const complex<T0>& x, const T1& y);
  *  \param y The complex denomimator (divisor).
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<typename detail::promoted_numerical_type<T0, T1>::type>
 operator/(const T0& x, const complex<T1>& y);
 
@@ -682,7 +682,7 @@ operator/(const T0& x, const complex<T1>& y);
  *  \param y The \p complex argument.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T>
 operator+(const complex<T>& y);
 
@@ -692,7 +692,7 @@ operator+(const complex<T>& y);
  *  \param y The \p complex argument.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T>
 operator-(const complex<T>& y);
 
@@ -705,7 +705,7 @@ operator-(const complex<T>& y);
  *  \param z The \p complex argument.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T> exp(const complex<T>& z);
 
 /*! Returns the complex natural logarithm of a \p complex number.
@@ -713,7 +713,7 @@ complex<T> exp(const complex<T>& z);
  *  \param z The \p complex argument.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T> log(const complex<T>& z);
 
 /*! Returns the complex base 10 logarithm of a \p complex number.
@@ -721,7 +721,7 @@ complex<T> log(const complex<T>& z);
  *  \param z The \p complex argument.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T> log10(const complex<T>& z);
 
 
@@ -737,7 +737,7 @@ complex<T> log10(const complex<T>& z);
  *  \param y The exponent.
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<typename detail::promoted_numerical_type<T0, T1>::type>
 pow(const complex<T0>& x, const complex<T1>& y);
 
@@ -750,7 +750,7 @@ pow(const complex<T0>& x, const complex<T1>& y);
  *  \param y The exponent.
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<typename detail::promoted_numerical_type<T0, T1>::type>
 pow(const complex<T0>& x, const T1& y);
 
@@ -763,7 +763,7 @@ pow(const complex<T0>& x, const T1& y);
  *  \param y The exponent.
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<typename detail::promoted_numerical_type<T0, T1>::type>
 pow(const T0& x, const complex<T1>& y);
 
@@ -772,7 +772,7 @@ pow(const T0& x, const complex<T1>& y);
  *  \param z The \p complex argument.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T> sqrt(const complex<T>& z);
 
 
@@ -783,7 +783,7 @@ complex<T> sqrt(const complex<T>& z);
  *  \param z The \p complex argument.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T> cos(const complex<T>& z);
 
 /*! Returns the complex sine of a \p complex number.
@@ -791,7 +791,7 @@ complex<T> cos(const complex<T>& z);
  *  \param z The \p complex argument.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T> sin(const complex<T>& z);
 
 /*! Returns the complex tangent of a \p complex number.
@@ -799,7 +799,7 @@ complex<T> sin(const complex<T>& z);
  *  \param z The \p complex argument.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T> tan(const complex<T>& z);
 
 
@@ -811,7 +811,7 @@ complex<T> tan(const complex<T>& z);
  *  \param z The \p complex argument.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T> cosh(const complex<T>& z);
 
 /*! Returns the complex hyperbolic sine of a \p complex number.
@@ -819,7 +819,7 @@ complex<T> cosh(const complex<T>& z);
  *  \param z The \p complex argument.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T> sinh(const complex<T>& z);
 
 /*! Returns the complex hyperbolic tangent of a \p complex number.
@@ -827,7 +827,7 @@ complex<T> sinh(const complex<T>& z);
  *  \param z The \p complex argument.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T> tanh(const complex<T>& z);
 
 
@@ -842,7 +842,7 @@ complex<T> tanh(const complex<T>& z);
  *  \param z The \p complex argument.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T> acos(const complex<T>& z);
 
 /*! Returns the complex arc sine of a \p complex number.
@@ -853,7 +853,7 @@ complex<T> acos(const complex<T>& z);
  *  \param z The \p complex argument.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T> asin(const complex<T>& z);
 
 /*! Returns the complex arc tangent of a \p complex number.
@@ -864,7 +864,7 @@ complex<T> asin(const complex<T>& z);
  *  \param z The \p complex argument.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T> atan(const complex<T>& z);
 
 
@@ -879,7 +879,7 @@ complex<T> atan(const complex<T>& z);
  *  \param z The \p complex argument.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T> acosh(const complex<T>& z);
 
 /*! Returns the complex inverse hyperbolic sine of a \p complex number.
@@ -890,7 +890,7 @@ complex<T> acosh(const complex<T>& z);
  *  \param z The \p complex argument.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T> asinh(const complex<T>& z);
 
 /*! Returns the complex inverse hyperbolic tangent of a \p complex number.
@@ -901,7 +901,7 @@ complex<T> asinh(const complex<T>& z);
  *  \param z The \p complex argument.
  */
 template <typename T>
-__host__ __device__
+THRUST_HOST_DEVICE
 complex<T> atanh(const complex<T>& z);
 
 
@@ -930,7 +930,7 @@ operator<<(std::basic_ostream<CharT, Traits>& os, const complex<T>& z);
  *  \param z The \p complex number to set.
  */
 template <typename T, typename CharT, typename Traits>
-__host__
+THRUST_HOST
 std::basic_istream<CharT, Traits>&
 operator>>(std::basic_istream<CharT, Traits>& is, complex<T>& z);
 
@@ -944,7 +944,7 @@ operator>>(std::basic_istream<CharT, Traits>& is, complex<T>& z);
  *  \param y The second \p complex.
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 bool operator==(const complex<T0>& x, const complex<T1>& y);
 
 /*! Returns true if two \p complex numbers are equal and false otherwise.
@@ -953,7 +953,7 @@ bool operator==(const complex<T0>& x, const complex<T1>& y);
  *  \param y The second \p complex.
  */
 template <typename T0, typename T1>
-__host__ THRUST_STD_COMPLEX_DEVICE
+THRUST_HOST THRUST_STD_COMPLEX_DEVICE
 bool operator==(const complex<T0>& x, const std::complex<T1>& y);
 
 /*! Returns true if two \p complex numbers are equal and false otherwise.
@@ -962,7 +962,7 @@ bool operator==(const complex<T0>& x, const std::complex<T1>& y);
  *  \param y The second \p complex.
  */
 template <typename T0, typename T1>
-__host__ THRUST_STD_COMPLEX_DEVICE
+THRUST_HOST THRUST_STD_COMPLEX_DEVICE
 bool operator==(const std::complex<T0>& x, const complex<T1>& y);
 
 /*! Returns true if the imaginary part of the \p complex number is zero and
@@ -972,7 +972,7 @@ bool operator==(const std::complex<T0>& x, const complex<T1>& y);
  *  \param y The \p complex.
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 bool operator==(const T0& x, const complex<T1>& y);
 
 /*! Returns true if the imaginary part of the \p complex number is zero and
@@ -982,7 +982,7 @@ bool operator==(const T0& x, const complex<T1>& y);
  *  \param y The scalar.
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 bool operator==(const complex<T0>& x, const T1& y);
 
 /*! Returns true if two \p complex numbers are different and false otherwise.
@@ -991,7 +991,7 @@ bool operator==(const complex<T0>& x, const T1& y);
  *  \param y The second \p complex.
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 bool operator!=(const complex<T0>& x, const complex<T1>& y);
 
 /*! Returns true if two \p complex numbers are different and false otherwise.
@@ -1000,7 +1000,7 @@ bool operator!=(const complex<T0>& x, const complex<T1>& y);
  *  \param y The second \p complex.
  */
 template <typename T0, typename T1>
-__host__ THRUST_STD_COMPLEX_DEVICE
+THRUST_HOST THRUST_STD_COMPLEX_DEVICE
 bool operator!=(const complex<T0>& x, const std::complex<T1>& y);
 
 /*! Returns true if two \p complex numbers are different and false otherwise.
@@ -1009,7 +1009,7 @@ bool operator!=(const complex<T0>& x, const std::complex<T1>& y);
  *  \param y The second \p complex.
  */
 template <typename T0, typename T1>
-__host__ THRUST_STD_COMPLEX_DEVICE
+THRUST_HOST THRUST_STD_COMPLEX_DEVICE
 bool operator!=(const std::complex<T0>& x, const complex<T1>& y);
 
 /*! Returns true if the imaginary part of the \p complex number is not zero or
@@ -1019,7 +1019,7 @@ bool operator!=(const std::complex<T0>& x, const complex<T1>& y);
  *  \param y The \p complex.
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 bool operator!=(const T0& x, const complex<T1>& y);
 
 /*! Returns true if the imaginary part of the \p complex number is not zero or
@@ -1029,7 +1029,7 @@ bool operator!=(const T0& x, const complex<T1>& y);
  *  \param y The scalar.
  */
 template <typename T0, typename T1>
-__host__ __device__
+THRUST_HOST_DEVICE
 bool operator!=(const complex<T0>& x, const T1& y);
 
 THRUST_NAMESPACE_END

@@ -3,7 +3,7 @@
 #include <limits>
 #include <map>
 #include <thrust/random.h>
-#include <thrust/sccatter.h>
+#include <thrust/scatter.h>
 #include <thrust/sequence.h>
 #include <thrust/shuffle.h>
 #include <thrust/sort.h>

@@ -830,14 +830,14 @@ namespace __partition {
 // Thrust API entry points
 //-------------------------
 
-__thrust_exec_check_disable__
+_CCCL_EXEC_CHECK_DISABLE
 template <class Derived,
           class InputIt,
           class StencilIt,
           class SelectedOutIt,
           class RejectedOutIt,
           class Predicate>
-pair<SelectedOutIt, RejectedOutIt> __host__ __device__
+pair<SelectedOutIt, RejectedOutIt> _CCCL_HOST_DEVICE
 partition_copy(execution_policy<Derived> &policy,
                InputIt                    first,
                InputIt                    last,
@@ -865,13 +865,13 @@ partition_copy(execution_policy<Derived> &policy,
   return ret;
 }
 
-__thrust_exec_check_disable__
+_CCCL_EXEC_CHECK_DISABLE
 template <class Derived,
           class InputIt,
           class SelectedOutIt,
           class RejectedOutIt,
           class Predicate>
-pair<SelectedOutIt, RejectedOutIt> __host__ __device__
+pair<SelectedOutIt, RejectedOutIt> _CCCL_HOST_DEVICE
 partition_copy(execution_policy<Derived> &policy,
                InputIt                    first,
                InputIt                    last,
@@ -897,13 +897,13 @@ partition_copy(execution_policy<Derived> &policy,
   return ret;
 }
 
-__thrust_exec_check_disable__
+_CCCL_EXEC_CHECK_DISABLE
 template <class Derived,
           class InputIt,
           class SelectedOutIt,
           class RejectedOutIt,
           class Predicate>
-pair<SelectedOutIt, RejectedOutIt> __host__ __device__
+pair<SelectedOutIt, RejectedOutIt> _CCCL_HOST_DEVICE
 stable_partition_copy(execution_policy<Derived> &policy,
                       InputIt                    first,
                       InputIt                    last,
@@ -929,14 +929,14 @@ stable_partition_copy(execution_policy<Derived> &policy,
   return ret;
 }
 
-__thrust_exec_check_disable__
+_CCCL_EXEC_CHECK_DISABLE
 template <class Derived,
           class InputIt,
           class StencilIt,
           class SelectedOutIt,
           class RejectedOutIt,
           class Predicate>
-pair<SelectedOutIt, RejectedOutIt> __host__ __device__
+pair<SelectedOutIt, RejectedOutIt> _CCCL_HOST_DEVICE
 stable_partition_copy(execution_policy<Derived> &policy,
                       InputIt                    first,
                       InputIt                    last,
@@ -966,12 +966,12 @@ stable_partition_copy(execution_policy<Derived> &policy,
 
 /// inplace
 
-__thrust_exec_check_disable__
+_CCCL_EXEC_CHECK_DISABLE
 template <class Derived,
           class Iterator,
           class StencilIt,
           class Predicate>
-Iterator __host__ __device__
+Iterator _CCCL_HOST_DEVICE
 partition(execution_policy<Derived> &policy,
           Iterator                   first,
           Iterator                   last,
@@ -989,11 +989,11 @@ partition(execution_policy<Derived> &policy,
   return last;
 }
 
-__thrust_exec_check_disable__
+_CCCL_EXEC_CHECK_DISABLE
 template <class Derived,
           class Iterator,
           class Predicate>
-Iterator __host__ __device__
+Iterator _CCCL_HOST_DEVICE
 partition(execution_policy<Derived> &policy,
           Iterator                   first,
           Iterator                   last,
@@ -1012,12 +1012,12 @@ partition(execution_policy<Derived> &policy,
   return last;
 }
 
-__thrust_exec_check_disable__
+_CCCL_EXEC_CHECK_DISABLE
 template <class Derived,
           class Iterator,
           class StencilIt,
           class Predicate>
-Iterator __host__ __device__
+Iterator _CCCL_HOST_DEVICE
 stable_partition(execution_policy<Derived> &policy,
                  Iterator                   first,
                  Iterator                   last,
@@ -1040,11 +1040,11 @@ stable_partition(execution_policy<Derived> &policy,
   return ret;
 }
 
-__thrust_exec_check_disable__
+_CCCL_EXEC_CHECK_DISABLE
 template <class Derived,
           class Iterator,
           class Predicate>
-Iterator __host__ __device__
+Iterator _CCCL_HOST_DEVICE
 stable_partition(execution_policy<Derived> &policy,
                  Iterator                   first,
                  Iterator                   last,
@@ -1071,7 +1071,7 @@ stable_partition(execution_policy<Derived> &policy,
 template <class Derived,
           class ItemsIt,
           class Predicate>
-bool __host__ __device__
+bool _CCCL_HOST_DEVICE
 is_partitioned(execution_policy<Derived> &policy,
                ItemsIt                    first,
                ItemsIt                    last,
