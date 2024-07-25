@@ -222,7 +222,7 @@ namespace __reduce_by_key
                                                          debug_sync),
                                     "reduce_by_key failed on 2nd step");
 
-        size_type num_runs_out = hip_rocprim::get_value(policy, d_num_runs_out);
+        const auto num_runs_out = hip_rocprim::get_value(policy, d_num_runs_out);
 
         return thrust::make_pair(keys_output + num_runs_out, values_output + num_runs_out);
     }
