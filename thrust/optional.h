@@ -1612,11 +1612,11 @@ public:
         using thrust::swap;
         swap(**this, *rhs);
       } else {
-        new (addressof(rhs.m_value)) T(std::move(this->m_value));
+        new (thrust::addressof(rhs.m_value)) T(std::move(this->m_value));
         this->m_value.T::~T();
       }
     } else if (rhs.has_value()) {
-      new (addressof(this->m_value)) T(std::move(rhs.m_value));
+      new (thrust::addressof(this->m_value)) T(std::move(rhs.m_value));
       rhs.m_value.T::~T();
     }
   }
@@ -1628,7 +1628,7 @@ public:
   THRUST_EXEC_CHECK_DISABLE
   THRUST_HOST_DEVICE
   constexpr const T *operator->() const {
-    return addressof(this->m_value);
+    return thrust::addressof(this->m_value);
   }
 
   /// \group pointer
@@ -1636,7 +1636,7 @@ public:
   THRUST_EXEC_CHECK_DISABLE
   THRUST_HOST_DEVICE
   THRUST_OPTIONAL_CPP11_CONSTEXPR T *operator->() {
-    return addressof(this->m_value);
+    return thrust::addressof(this->m_value);
   }
 
   /// \return the stored value
@@ -2682,7 +2682,7 @@ public:
             detail::enable_if_t<!detail::is_optional<detail::decay_t<U>>::value>
                 * = nullptr>
   THRUST_HOST_DEVICE
-  constexpr optional(U &&u) : m_value(addressof(u)) {
+  constexpr optional(U &&u) : m_value(thrust::addressof(u)) {
     static_assert(std::is_lvalue_reference<U>::value, "U must be an lvalue");
   }
 
@@ -2724,7 +2724,7 @@ public:
   THRUST_HOST_DEVICE
   optional &operator=(U &&u) {
     static_assert(std::is_lvalue_reference<U>::value, "U must be an lvalue");
-    m_value = addressof(u);
+    m_value = thrust::addressof(u);
     return *this;
   }
 
@@ -2736,7 +2736,7 @@ public:
   template <class U>
   THRUST_HOST_DEVICE
   optional &operator=(const optional<U> &rhs) {
-    m_value = addressof(rhs.value());
+    m_value = thrust::addressof(rhs.value());
     return *this;
   }
 
@@ -2748,7 +2748,7 @@ public:
   template <class U>
   THRUST_HOST_DEVICE
   T &emplace(U& u) noexcept {
-    m_value = addressof(u);
+    m_value = thrust::addressof(u);
     return *m_value;
   }
 
