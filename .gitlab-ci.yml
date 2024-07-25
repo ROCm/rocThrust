@@ -340,7 +340,7 @@ build:cuda-and-omp:
   tags:
     - build
   variables:
-    CCCL_GIT_BRANCH: v2.3.2
+    CCCL_GIT_BRANCH: v2.4.0
     CCCL_DIR: ${CI_PROJECT_DIR}/cccl
   needs: []
   script:
