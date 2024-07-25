@@ -158,8 +158,11 @@ template<typename BidirectionalIterator>
   public:
     /*! Default constructor does nothing.
      */
-    THRUST_HOST_DEVICE
-    reverse_iterator() {}
+#if THRUST_HOST_COMPILER == THRUST_HOST_COMPILER_MSVC && THRUST_MSVC_VERSION < 1920
+    THRUST_HOST_DEVICE reverse_iterator() {}
+#else
+    reverse_iterator() = default;
+#endif
 
     /*! \p Constructor accepts a \c BidirectionalIterator pointing to a range
      *  for this \p reverse_iterator to reverse.
@@ -167,27 +170,20 @@ template<typename BidirectionalIterator>
      *  \param x A \c BidirectionalIterator pointing to a range to reverse.
      */
     THRUST_HOST_DEVICE
-    explicit reverse_iterator(BidirectionalIterator x);
+    explicit reverse_iterator(BidirectionalIterator x)
+      : super_t(x)
+    {}
 
     /*! \p Copy constructor allows construction from a related compatible
      *  \p reverse_iterator.
      *
-     *  \param r A \p reverse_iterator to copy from.
+     *  \param rhs A \p reverse_iterator to copy from.
      */
-    template<typename OtherBidirectionalIterator>
-    THRUST_HOST_DEVICE
-    reverse_iterator(reverse_iterator<OtherBidirectionalIterator> const &r
-// XXX msvc screws this up
-// XXX remove these guards when we have static_assert
-#if THRUST_HOST_COMPILER != THRUST_HOST_COMPILER_MSVC
-                     , typename thrust::detail::enable_if<
-                         thrust::detail::is_convertible<
-                           OtherBidirectionalIterator,
-                           BidirectionalIterator
-                         >::value
-                       >::type * = 0
-#endif // MSVC
-                     );
+    template <typename OtherBidirectionalIterator,
+              detail::enable_if_convertible_t<OtherBidirectionalIterator, BidirectionalIterator, int> = 0>
+    THRUST_HOST_DEVICE reverse_iterator(reverse_iterator<OtherBidirectionalIterator> const& rhs)
+        : super_t(rhs.base())
+    {}
 
   /*! \cond
    */
