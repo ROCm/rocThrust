@@ -139,7 +139,11 @@ struct is_libcxx_wrap_iter : false_type {};
 #if defined(_LIBCPP_VERSION)
 template <typename Iterator>
 struct is_libcxx_wrap_iter<
+#  if _LIBCPP_VERSION < 14000 || THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HIP
   _VSTD::__wrap_iter<Iterator>
+#  else
+  std::__wrap_iter<Iterator>
+#  endif
 > : true_type {};
 #endif
 
