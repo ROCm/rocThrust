@@ -40,5 +40,7 @@
 #include <thrust/detail/config/device_system.h>
 #include <thrust/detail/config/execution_space.h>
 #include <thrust/detail/config/diagnostic.h>
+#include <thrust/detail/config/host_device.h>
+#include <thrust/detail/config/forceinline.h>
 #include <thrust/detail/config/global_workarounds.h>
 #include <thrust/detail/config/namespace.h>
