@@ -349,11 +349,13 @@ build:cuda-and-omp:
     - rm -R $CCCL_DIR/thrust/thrust
     - cp -r $CI_PROJECT_DIR/thrust $CCCL_DIR/thrust
     # Build tests and examples from CCCL Thrust
+    # CCCL 2.4.0 breaks compilation of tests. Compile examples only until we
+    # match v2.5.0.
     - cmake
       -G Ninja
       -D CMAKE_BUILD_TYPE=Release
       -D CMAKE_CUDA_ARCHITECTURES="$GPU_TARGETS"
-      -D THRUST_ENABLE_TESTING=ON
+      -D THRUST_ENABLE_TESTING=OFF
       -D THRUST_ENABLE_EXAMPLES=ON
       -D THRUST_ENABLE_BENCHMARKS=OFF
       -D THRUST_ENABLE_MULTICONFIG=ON
