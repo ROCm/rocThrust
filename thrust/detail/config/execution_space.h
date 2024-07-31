@@ -26,6 +26,7 @@
 #define THRUST_FORCEINLINE __forceinline__
 #endif
 
+#if !defined(__HIP__)
 #if !defined(THRUST_EXEC_CHECK_DISABLE)
 #  if defined(_CCCL_CUDA_COMPILER_NVCC)
 #    if defined(_CCCL_COMPILER_MSVC)
@@ -37,5 +38,8 @@
 #    define THRUST_EXEC_CHECK_DISABLE
 #  endif // _CCCL_CUDA_COMPILER_NVCC
 #endif // !THRUST_EXEC_CHECK_DISABLE
+#else
+#define THRUST_EXEC_CHECK_DISABLE
+#endif // !HIP
 
 #endif // THRUST_DETAIL_CONFIG_EXECUTION_SPACE_H

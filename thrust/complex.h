@@ -37,10 +37,8 @@
       const typename thrust::detail::remove_reference<decltype(z)>::type::value_type (&)[2] \
     >(z)[0]
 #  define THRUST_STD_COMPLEX_IMAG(z) \
-    reinterpret_cast< \
-      const typename thrust::detail::remove_reference<decltype(z)>::type::value_type (&)[2] \
-    >(z)[1]
-#  define THRUST_STD_COMPLEX_DEVICE __device__
+    reinterpret_cast<const typename thrust::detail::remove_reference<decltype(z)>::type::value_type(&)[2]>(z)[1]
+#  define THRUST_STD_COMPLEX_DEVICE THRUST_DEVICE
 #else
 #  define THRUST_STD_COMPLEX_REAL(z) (z).real()
 #  define THRUST_STD_COMPLEX_IMAG(z) (z).imag()
@@ -223,8 +221,7 @@ public:
    *
    *  \param z The \p complex to copy from.
    */
-  __host__ THRUST_STD_COMPLEX_DEVICE
-  complex(const std::complex<T>& z);
+  THRUST_HOST THRUST_STD_COMPLEX_DEVICE complex(const std::complex<T>& z);
 
   /*! This converting copy constructor copies from a <tt>std::complex</tt> with
    *  a type that is convertible to this \p complex's \c value_type.
@@ -234,10 +231,7 @@ public:
    *  \tparam U is convertible to \c value_type.
    */
   template <typename U>
-  __host__ THRUST_STD_COMPLEX_DEVICE
-  complex(const std::complex<U>& z);
-
-
+  THRUST_HOST THRUST_STD_COMPLEX_DEVICE complex(const std::complex<U>& z);
 
   /* --- Assignment Operators --- */
 
@@ -282,8 +276,7 @@ public:
    *
    *  \param z The \p complex to copy from.
    */
-  __host__ THRUST_STD_COMPLEX_DEVICE
-  complex& operator=(const std::complex<T>& z);
+  THRUST_HOST THRUST_STD_COMPLEX_DEVICE complex& operator=(const std::complex<T>& z);
 
   /*! Assign `z.real()` and `z.imag()` to the real and imaginary parts of this
    *  \p complex respectively.
@@ -293,9 +286,7 @@ public:
    *  \tparam U is convertible to \c value_type.
    */
   template <typename U>
-  __host__ THRUST_STD_COMPLEX_DEVICE
-  complex& operator=(const std::complex<U>& z);
-
+  THRUST_HOST THRUST_STD_COMPLEX_DEVICE complex& operator=(const std::complex<U>& z);
 
   /* --- Compound Assignment Operators --- */
 
@@ -455,8 +446,10 @@ public:
 
   /*! Casts this \p complex to a <tt>std::complex</tt> of the same type.
    */
-  __host__
-  operator std::complex<T>() const { return std::complex<T>(real(), imag()); }
+  THRUST_HOST operator std::complex<T>() const
+  {
+    return std::complex<T>(real(), imag());
+  }
 
 private:
   typename detail::complex_storage<T, sizeof(T) * 2>::type data;
@@ -932,11 +925,7 @@ operator<<(std::basic_ostream<CharT, Traits>& os, const complex<T>& z);
  *  \param z The \p complex number to set.
  */
 template <typename T, typename CharT, typename Traits>
-__host__
-std::basic_istream<CharT, Traits>&
-operator>>(std::basic_istream<CharT, Traits>& is, complex<T>& z);
-
-
+THRUST_HOST std::basic_istream<CharT, Traits>& operator>>(std::basic_istream<CharT, Traits>& is, complex<T>& z);
 
 /* --- Equality Operators --- */
 
@@ -955,8 +944,7 @@ bool operator==(const complex<T0>& x, const complex<T1>& y);
  *  \param y The second \p complex.
  */
 template <typename T0, typename T1>
-__host__ THRUST_STD_COMPLEX_DEVICE
-bool operator==(const complex<T0>& x, const std::complex<T1>& y);
+THRUST_HOST THRUST_STD_COMPLEX_DEVICE bool operator==(const complex<T0>& x, const std::complex<T1>& y);
 
 /*! Returns true if two \p complex numbers are equal and false otherwise.
  *
@@ -964,8 +952,7 @@ bool operator==(const complex<T0>& x, const std::complex<T1>& y);
  *  \param y The second \p complex.
  */
 template <typename T0, typename T1>
-__host__ THRUST_STD_COMPLEX_DEVICE
-bool operator==(const std::complex<T0>& x, const complex<T1>& y);
+THRUST_HOST THRUST_STD_COMPLEX_DEVICE bool operator==(const std::complex<T0>& x, const complex<T1>& y);
 
 /*! Returns true if the imaginary part of the \p complex number is zero and
  *  the real part is equal to the scalar. Returns false otherwise.
@@ -1002,8 +989,7 @@ bool operator!=(const complex<T0>& x, const complex<T1>& y);
  *  \param y The second \p complex.
  */
 template <typename T0, typename T1>
-__host__ THRUST_STD_COMPLEX_DEVICE
-bool operator!=(const complex<T0>& x, const std::complex<T1>& y);
+THRUST_HOST THRUST_STD_COMPLEX_DEVICE bool operator!=(const complex<T0>& x, const std::complex<T1>& y);
 
 /*! Returns true if two \p complex numbers are different and false otherwise.
  *
@@ -1011,8 +997,7 @@ bool operator!=(const complex<T0>& x, const std::complex<T1>& y);
  *  \param y The second \p complex.
  */
 template <typename T0, typename T1>
-__host__ THRUST_STD_COMPLEX_DEVICE
-bool operator!=(const std::complex<T0>& x, const complex<T1>& y);
+THRUST_HOST THRUST_STD_COMPLEX_DEVICE bool operator!=(const std::complex<T0>& x, const complex<T1>& y);
 
 /*! Returns true if the imaginary part of the \p complex number is not zero or
  *  the real part is different from the scalar. Returns false otherwise.

@@ -711,6 +711,23 @@ struct TestComplexStdComplexDeviceInterop
     ASSERT_ALMOST_EQUAL(vec[2].imag(), thrust::complex<T>(device_vec[2]).imag());
   }
 };
-SimpleUnitTest<TestComplexStdComplexDeviceInterop, FloatingPointTypes>
-  TestComplexStdComplexDeviceInteropInstance;
+SimpleUnitTest<TestComplexStdComplexDeviceInterop, FloatingPointTypes> TestComplexStdComplexDeviceInteropInstance;
 #endif
+
+template <typename T>
+struct TestComplexExplicitConstruction
+{
+  struct user_complex
+  {
+    THRUST_HOST_DEVICE user_complex(T, T) {}
+    THRUST_HOST_DEVICE user_complex(const thrust::complex<T>&) {}
+  };
+
+  void operator()()
+  {
+    const thrust::complex<T> input(42.0, 1337.0);
+    const user_complex result = thrust::exp(input);
+    (void) result;
+  }
+};
+SimpleUnitTest<TestComplexExplicitConstruction, FloatingPointTypes> TestComplexExplicitConstructionInstance;
