@@ -33,4 +33,3 @@ doxygen_project = {
     "name": project,
     "path": "doxygen/xml",
 }
-doxysphinx_enabled = True
