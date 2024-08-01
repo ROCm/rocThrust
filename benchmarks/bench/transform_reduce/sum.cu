@@ -38,14 +38,14 @@
 
 struct sum
 {
-    template <typename T, typename Policy = thrust::detail::device_t>
-    float64_t run(thrust::device_vector<T>& input)
+    template <typename T, typename Policy>
+    float64_t run(thrust::device_vector<T>& input, Policy policy)
     {
         bench_utils::gpu_timer d_timer;
 
         d_timer.start(0);
         bench_utils::do_not_optimize(
-            thrust::reduce(Policy {}, input.begin(), input.end(), T {}, thrust::plus<T> {}));
+            thrust::reduce(policy, input.begin(), input.end(), T {}, thrust::plus<T> {}));
         d_timer.stop(0);
 
         return d_timer.get_duration();
@@ -64,9 +64,12 @@ void run_benchmark(benchmark::State& state, const std::size_t elements, const st
     // Generate input
     thrust::device_vector<T> input = bench_utils::generate(elements, seed_type);
 
+    bench_utils::caching_allocator_t alloc {};
+    thrust::detail::device_t         policy {};
+
     for(auto _ : state)
     {
-        float64_t duration = benchmark.template run<T>(input);
+        float64_t duration = benchmark.template run<T>(input, policy(alloc));
         state.SetIterationTime(duration);
         gpu_times.push_back(duration);
     }
