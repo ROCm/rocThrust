@@ -22,7 +22,7 @@ release = version_number
 
 external_toc_path = "./sphinx/_toc.yml"
 
-extensions = ["rocm_docs", "rocm_docs.doxygen", "sphinxcontrib.doxylink"]
+extensions = ["rocm_docs", "rocm_docs.doxygen"]
 html_theme = "rocm_docs_theme"
 html_theme_options = {"flavor": "rocm"}
 
