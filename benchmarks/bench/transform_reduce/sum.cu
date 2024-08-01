@@ -44,7 +44,8 @@ struct sum
         bench_utils::gpu_timer d_timer;
 
         d_timer.start(0);
-        bench_utils::do_not_optimize(thrust::reduce(Policy {}, input.begin(), input.end()));
+        bench_utils::do_not_optimize(
+            thrust::reduce(Policy {}, input.begin(), input.end(), T {}, thrust::plus<T> {}));
         d_timer.stop(0);
 
         return d_timer.get_duration();
