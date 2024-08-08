@@ -44,6 +44,13 @@
 
 namespace bench_utils
 {
+
+template <class DstType, class SrcType>
+bool IsType(const SrcType* src)
+{
+    return dynamic_cast<const DstType*>(src) != nullptr;
+}
+
 /// \brief Custom Google Benchmark reporter for formatting the benchmarks' report matching Thrust's.
 ///
 /// This reporter is a ConsoleReporter that outputs:
@@ -60,7 +67,7 @@ namespace bench_utils
 /// repeated \p repetitions times to measure the stability of results. In this case, the mean,
 /// median, standard deviation (stddev) and coefficient of variation (cv) of the above-described
 /// metrics are also reported after all the \p repetitions have ben run.
-class CustomReporter : public benchmark::ConsoleReporter
+class CustomConsoleReporter : public benchmark::ConsoleReporter
 {
 private:
     enum LogColor
@@ -409,5 +416,35 @@ public:
         }
     }
 };
+
+using CustomJSONReporter = benchmark::JSONReporter;
+
+BENCHMARK_DISABLE_DEPRECATED_WARNING
+
+using CustomCSVReporter = benchmark::CSVReporter;
+
+benchmark::BenchmarkReporter* ChooseCustomReporter()
+{
+    typedef benchmark::BenchmarkReporter* PtrType;
+    PtrType default_display_reporter = benchmark::CreateDefaultDisplayReporter();
+
+    if (IsType<benchmark::CSVReporter>(default_display_reporter))
+    {
+        return PtrType(new CustomCSVReporter);
+    }
+    else if (IsType<benchmark::JSONReporter>(default_display_reporter))
+    {
+        return PtrType(new CustomJSONReporter);
+    }
+    else if (IsType<benchmark::ConsoleReporter>(default_display_reporter))
+    {
+        return PtrType(new CustomConsoleReporter);
+    }
+
+    return nullptr;
+}
+
+BENCHMARK_RESTORE_DEPRECATED_WARNING
+
 } // namespace bench_utils
 #endif // ROCTHRUST_BENCHMARKS_BENCH_UTILS_CUSTOM_REPORTER_HPP_
