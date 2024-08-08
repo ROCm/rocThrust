@@ -29,7 +29,6 @@
 #include "custom_reporter.hpp"
 #include "generation_utils.hpp"
 
-#include <cstddef>
 #include <thrust/execution_policy.h>
 
 // HIP/CUDA
@@ -54,6 +53,7 @@
 #include <string>
 
 #include <cmath>
+#include <cstddef>
 #include <numeric>
 
 namespace bench_utils
