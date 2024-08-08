@@ -64,13 +64,14 @@ cd rocThrust; mkdir build; cd build
 
 # Configure rocThrust, setup options for your system.
 # Build options:
-#   DISABLE_WERROR   - ON  by default, This flag disable the -Werror compiler flag
-#   BUILD_TEST       - OFF by default,
-#   BUILD_EXAMPLES   - OFF by default,
-#   BUILD_BENCHMARKS - OFF by default,
-#   DOWNLOAD_ROCPRIM - OFF by default, when ON rocPRIM will be downloaded to the build folder,
-#   RNG_SEED_COUNT   - 0 by default, controls non-repeatable random dataset count
-#   PRNG_SEEDS       - 1 by default, reproducible seeds to generate random data
+#   DISABLE_WERROR        - ON  by default, This flag disable the -Werror compiler flag
+#   BUILD_TEST            - OFF by default,
+#   BUILD_HIPSTDPAR_TEST  - OFF by default,
+#   BUILD_EXAMPLES        - OFF by default,
+#   BUILD_BENCHMARKS      - OFF by default,
+#   DOWNLOAD_ROCPRIM      - OFF by default, when ON rocPRIM will be downloaded to the build folder,
+#   RNG_SEED_COUNT        - 0 by default, controls non-repeatable random dataset count
+#   PRNG_SEEDS            - 1 by default, reproducible seeds to generate random data
 #
 # ! IMPORTANT !
 # On ROCm platform set C++ compiler to HipCC. You can do it by adding 'CXX=<path-to-hipcc>'

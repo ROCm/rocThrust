@@ -74,6 +74,7 @@ copyright-date:
       -D CMAKE_CXX_COMPILER=hipcc
       -D CMAKE_BUILD_TYPE=Release
       -D BUILD_TEST=OFF
+      -D BUILD_HIPSTDPAR_TEST=OFF
       -D BUILD_EXAMPLE=OFF
       -D ROCM_DEP_ROCMCORE=OFF
       -D CMAKE_C_COMPILER_LAUNCHER=phc_sccache_c
