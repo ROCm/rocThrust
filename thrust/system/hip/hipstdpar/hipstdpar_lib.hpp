@@ -12,7 +12,7 @@
  *  limitations under the License.
  */
 
-/*! \file thrust/system/hip/hipstdpar_lib.hpp
+/*! \file thrust/system/hip/hipstdpar/hipstdpar_lib.hpp
  *  \brief Implementation detail forwarding header for HIPSTDPAR.
  */
 
@@ -1241,7 +1241,7 @@
                 !::hipstd::is_offloadable_iterator<I>() ||
                 !::hipstd::is_offloadable_callable<G>()>* = nullptr>
         inline
-        void generate_n(execution::parallel_unsequenced_policy, I f, I l, G g)
+        void generate(execution::parallel_unsequenced_policy, I f, I l, G g)
         {
             if constexpr (!::hipstd::is_offloadable_iterator<I>()) {
                 ::hipstd::unsupported_iterator_category<
@@ -1252,7 +1252,7 @@
             }
 
             return
-                ::std::generate_n(::std::execution::par, f, l, ::std::move(g));
+                ::std::generate(::std::execution::par, f, l, ::std::move(g));
         }
         // END GENERATE
 
@@ -2487,7 +2487,7 @@
                 hipstd::unsupported_callable_type<CompareOp>();
             }
 
-            std::partial_sort(std::execution::par, first, last, d_first, d_last, std::move(compare_op));
+            std::partial_sort_copy(std::execution::par, first, last, d_first, d_last, std::move(compare_op));
         }
 
         template <typename ForwardIt,
