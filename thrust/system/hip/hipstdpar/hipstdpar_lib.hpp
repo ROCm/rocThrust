@@ -3116,6 +3116,14 @@
         // TODO: UNIMPLEMENTED IN THRUST
         // END ROTATE_COPY
 
+        // BEGIN SEARCH
+        // TODO: UNIMPLEMENTED IN THRUST
+        // END SEARCH
+
+        // BEGIN SEARCH_N
+        // TODO: UNIMPLEMENTED IN THRUST
+        // END SEARCH_N
+
         // BEGIN SET_DIFFERENCE
         template<
             typename I0,
@@ -3511,6 +3519,14 @@
                 ::std::execution::par, fi0, li0, fi1, li1, fo, ::std::move(r));
         }
         // END SET_UNION
+
+        // BEGIN SHIFT_LEFT
+        // TODO: UNIMPLEMENTED IN THRUST
+        // END SHIFT_LEFT
+
+        // BEGIN SHIFT_RIGHT
+        // TODO: UNIMPLEMENTED IN THRUST
+        // END SHIFT_RIGHT
 
         // BEGIN SORT
         template<
