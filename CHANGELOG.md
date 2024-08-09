@@ -3,6 +3,24 @@
 Documentation for rocThrust available at
 [https://rocm.docs.amd.com/projects/rocThrust/en/latest/](https://rocm.docs.amd.com/projects/rocThrust/en/latest/).
 
+## (Unreleased) rocThrust 3.2.0 for ROCm 6.3
+
+### Additions
+
+* Merged changes from upstream CCCL/thrust 2.3.2
+  * Only the NVIDIA backend uses `tuple` and `pair` types from libcu++, other backends continue to
+    use the original Thrust implementations and hence do not require libcu++ (CCCL) as a dependency.
+* Added the `thrust::hip::par_det` execution policy to enable bitwise reproducibility on algorithms that are not bitwise reproducible by default.
+* Fix tests failing when compiling with `-D_GLIBCXX_ASSERTIONS=ON`.
+
+### Changes
+
+* Enabled the upstream (thrust) test suite for execution by default. It can still be disabled by CMake option `-DENABLE_UPSTREAM_TESTS=OFF`.
+
+### Fixes
+
+* Fixed the HIP backend not passing `TestCopyIfNonTrivial` from the upstream (thrust) test suite.
+
 ## (Unreleased) rocThrust 3.1.0 for ROCm 6.2
 
 ### Additions
@@ -17,8 +35,12 @@ Documentation for rocThrust available at
 * Updated internal use of custom iterator in `thrust::detail::unique_by_key` to use rocPRIM's `rocprim::unique_by_key`.
 * Updated `adjecent_difference` to make use of `rocprim:adjecent_difference` when iterators are comparable and not equal otherwise use `rocprim:adjacent_difference_inplace`.
 
+### Fixes
+* Fixed incorrect implementation of `thrust::optional<T&>::emplace()`.
+
 ### Known issues
 * `thrust::reduce_by_key` outputs are not bit-wise reproducible, as run-to-run results for pseudo-associative reduction operators (e.g. floating-point arithmetic operators) are not deterministic on the same device.
+* Note that currently, rocThrust memory allocation is performed in such a way that most algorithmic API functions cannot be called from within hipGraphs.
 
 ## rocThrust 3.0.0 for ROCm 6.0
 
@@ -47,7 +69,7 @@ Documentation for rocThrust available at
 
 ## rocThrust 2.18.0 for ROCm 5.7
 
-### Fixes 
+### Fixes
 * `lower_bound`, `upper_bound`, and `binary_search` failed to compile for certain types.
 * Fixed issue where `transform_iterator` would not compile with `__device__`-only operators.
 
