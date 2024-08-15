@@ -67,11 +67,11 @@ static std::string FormatString(const char* msg, va_list args)
     {
         return {};
     }
-    else if(ret < 0)
-        if(static_cast<size_t>(ret) < size)
-        {
-            return local_buff;
-        }
+    else if(static_cast<size_t>(ret) < size)
+    {
+        return local_buff;
+    }
+
     // we did not provide a long enough buffer on our first attempt.
     size = static_cast<size_t>(ret) + 1; // + 1 for the null byte
     std::unique_ptr<char[]> buff(new char[size]);
@@ -810,8 +810,7 @@ class CustomCSVReporter : public benchmark::CSVReporter
             sout << CsvEscape(result.report_label);
         }
 
-        sout << ",,";
-        sout << '\n';
+        sout << ",,\n";
     }
     
     void ReportRuns(const std::vector<Run>& reports)
@@ -832,6 +831,8 @@ class CustomCSVReporter : public benchmark::CSVReporter
 
 benchmark::BenchmarkReporter* ChooseCustomReporter()
 {
+    // benchmark::BenchmarkReporter is polymorphic as it has a virtual
+    // function which allows us to use dynamic_cast to detect the derived type.
     typedef benchmark::BenchmarkReporter* PtrType;
     PtrType default_display_reporter = benchmark::CreateDefaultDisplayReporter();
 
