@@ -9,6 +9,10 @@ Documentation for rocThrust available at
 
 * Merged changes from upstream CCCL/thrust 2.4.0
 
+### Changes
+
+* Split the contents of HIPSTDPAR's forwarding header into several implementation headers.
+
 ## (Unreleased) rocThrust 3.2.0 for ROCm 6.3
 
 ### Additions
@@ -33,6 +37,7 @@ Documentation for rocThrust available at
 
 * Merged changes from upstream CCCL/thrust 2.2.0
   * Updated the contents of `system/hip` and `test` with the upstream changes to `system/cuda` and `testing`
+* Added HIPSTDPAR library as part of rocThrust.
 
 ### Changes
 
