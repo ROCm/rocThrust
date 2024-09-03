@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
- *  Modifications Copyright© 2019-2023 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2019-2024 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
  */
 
 #include "../testing/unittest/random.h"
+#include "bitwise_repro/bwr_db.hpp"
 
 #include <gtest/gtest.h>
 
@@ -62,22 +63,105 @@
 namespace test
 {
 
-int set_device_from_ctest()
+inline char* get_env(const char* name)
 {
-    static const std::string rg0 = "CTEST_RESOURCE_GROUP_0";
-    if (std::getenv(rg0.c_str()) != nullptr)
+    char* env;
+#ifdef _MSC_VER
+    size_t  len;
+    errno_t err = _dupenv_s(&env, &len, name);
+    if(err)
     {
-        std::string amdgpu_target = std::getenv(rg0.c_str());
-        std::transform(amdgpu_target.cbegin(), amdgpu_target.cend(), amdgpu_target.begin(), ::toupper);
-        std::string reqs = std::getenv((rg0 + "_" + amdgpu_target).c_str());
-        int device_id = std::atoi(reqs.substr(reqs.find(':') + 1, reqs.find(',') - (reqs.find(':') + 1)).c_str());
-        HIP_CHECK(hipSetDevice(device_id));
-        return device_id;
+        return nullptr;
     }
-    else
-        return 0;
+#else
+    env = std::getenv(name);
+#endif
+    return env;
 }
 
+inline void clean_env(char* name)
+{
+#ifdef _MSC_VER
+    if(name != nullptr)
+    {
+        free(name);
+    }
+#endif
+    (void)name;
+}
+
+inline int set_device_from_ctest()
+{
+    static const std::string rg0    = "CTEST_RESOURCE_GROUP_0";
+    char*                    env    = get_env(rg0.c_str());
+    int                      device = 0;
+    if(env != nullptr)
+    {
+        std::string amdgpu_target(env);
+        std::transform(
+            amdgpu_target.cbegin(),
+            amdgpu_target.cend(),
+            amdgpu_target.begin(),
+            // Feeding std::toupper plainly results in implicitly truncating conversions between int and char triggering warnings.
+            [](unsigned char c) { return static_cast<char>(std::toupper(c)); });
+        char*       env_reqs = get_env((rg0 + "_" + amdgpu_target).c_str());
+        std::string reqs(env_reqs);
+        device = std::atoi(
+            reqs.substr(reqs.find(':') + 1, reqs.find(',') - (reqs.find(':') + 1)).c_str());
+        clean_env(env_reqs);
+        HIP_CHECK(hipSetDevice(device));
+    }
+    clean_env(env);
+    return device;
+}
+}
+
+// If enabled, set up the database for inter-run bitwise reproducibility testing.
+// Inter-run testing is enabled through the following environment variables:
+// ROCTHRUST_BWR_PATH - path to the database (or where it should be created)
+// ROCTHRUST_BWR_GENERATE - if set to 1, info about any function calls not
+// found in the database will be inserted. No errors will be reported in this mode.
+namespace inter_run_bwr
+{
+    // Disable this testing by default.
+    bool enabled = false;
+
+    // This code doesn't need to be visible outside this file.
+    namespace
+    {
+        const static std::string path_env = "ROCTHRUST_BWR_PATH";
+        const static std::string generate_env = "ROCTHRUST_BWR_GENERATE";
+
+        // Check the environment variables to see if the database should be
+        // instantiated, and if so, what mode it should be in.
+        std::unique_ptr<BitwiseReproDB> create_db()
+        {
+            // Get the path to the database from an environment variable.
+            const char* db_path = std::getenv(path_env.c_str());
+            const char* db_mode = std::getenv(generate_env.c_str());
+            if (db_path)
+            {
+                // Check if we are allowed to insert rows into the database if
+                // we encounter calls that aren't already recorded.
+                BitwiseReproDB::Mode mode = BitwiseReproDB::Mode::test_mode;
+                if (db_mode && std::stoi(db_mode) > 0)
+                    mode = BitwiseReproDB::Mode::generate_mode;
+
+                enabled = true;
+                return std::make_unique<BitwiseReproDB>(db_path, mode);
+            }
+            else if (db_mode)
+            {
+                throw std::runtime_error("ROCTHRUST_BWR_GENERATE is defined, but no database path was given.\n"
+                    "Please set ROCTHRUST_BWR_PATH to the database path.");
+            }
+
+            return nullptr;
+        }
+    }
+
+    // Create/open the run-to-run bitwise reproducibility database.
+    std::unique_ptr<BitwiseReproDB> db = create_db();
 }
 
 // Input type parameter
@@ -110,23 +194,26 @@ struct Params<thrust::device_vector<T>, ExecutionPolicy>
 // Set of test parameter types
 
 // Host and device vectors of all type as a test parameter
-typedef ::testing::Types<Params<thrust::host_vector<short>>,
-                         Params<thrust::host_vector<int>>,
-                         Params<thrust::host_vector<long long>>,
-                         Params<thrust::host_vector<unsigned short>>,
-                         Params<thrust::host_vector<unsigned int>>,
-                         Params<thrust::host_vector<unsigned long long>>,
-                         Params<thrust::host_vector<float>>,
-                         Params<thrust::host_vector<double>>,
-                         Params<thrust::device_vector<short>>,
-                         Params<thrust::device_vector<int>>,
-                         Params<thrust::device_vector<int>, std::decay_t<decltype(thrust::hip::par_nosync)>>,
-                         Params<thrust::device_vector<long long>>,
-                         Params<thrust::device_vector<unsigned short>>,
-                         Params<thrust::device_vector<unsigned int>>,
-                         Params<thrust::device_vector<unsigned long long>>,
-                         Params<thrust::device_vector<float>>,
-                         Params<thrust::device_vector<double>>>
+typedef ::testing::Types<
+    Params<thrust::host_vector<short>>,
+    Params<thrust::host_vector<int>>,
+    Params<thrust::host_vector<long long>>,
+    Params<thrust::host_vector<unsigned short>>,
+    Params<thrust::host_vector<unsigned int>>,
+    Params<thrust::host_vector<unsigned long long>>,
+    Params<thrust::host_vector<float>>,
+    Params<thrust::host_vector<double>>,
+    Params<thrust::device_vector<short>>,
+    Params<thrust::device_vector<int>>,
+    Params<thrust::device_vector<int>, std::decay_t<decltype(thrust::hip::par_nosync)>>,
+    Params<thrust::device_vector<long long>>,
+    Params<thrust::device_vector<unsigned short>>,
+    Params<thrust::device_vector<unsigned int>>,
+    Params<thrust::device_vector<unsigned long long>>,
+    Params<thrust::device_vector<float>>,
+    Params<thrust::device_vector<float>, std::decay_t<decltype(thrust::hip::par_det)>>,
+    Params<thrust::device_vector<float>, std::decay_t<decltype(thrust::hip::par_det_nosync)>>,
+    Params<thrust::device_vector<double>>>
     FullTestsParams;
 
 // Host and device vectors of signed type

@@ -54,11 +54,14 @@ function(add_rocthrust_test TEST)
     target_include_directories(${TEST_TARGET} SYSTEM BEFORE
         PUBLIC
             $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+            ${sqlite_local_SOURCE_DIR}
     )
     target_link_libraries(${TEST_TARGET}
         PRIVATE
             rocthrust
             roc::rocprim_hip
+        PUBLIC
+            sqlite3
     )
     if (TARGET GTest::GTest)
         target_link_libraries(${TEST_TARGET}
@@ -182,6 +185,7 @@ add_rocthrust_test("reduce")
 add_rocthrust_test("reduce_by_key")
 add_rocthrust_test("remove")
 add_rocthrust_test("replace")
+add_rocthrust_test("reproducibility")
 add_rocthrust_test("reverse_iterator")
 add_rocthrust_test("set_difference")
 add_rocthrust_test("set_difference_by_key")
