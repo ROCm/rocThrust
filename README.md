@@ -269,7 +269,9 @@ make -j4
 ## HIPSTDPAR
 rocThrust also hosts the header files for [HIPSTDPAR](https://rocm.blogs.amd.com/software-tools-optimization/hipstdpar/README.html#c-17-parallel-algorithms-and-hipstdpar).
 Within these headers, a great part of the C++ Standard Library parallel algorithms are overloaded so that rocThrust's and rocPRIM's implementations of those algorithms are used when they are invoked with the `parallel_unsequenced_policy` policy.
-When compiling with the proper flags (see [LLVM (AMD's fork) docs](https://github.com/ROCm/llvm-project/blob/rocm-6.2.x/clang/docs/HIPSupport.rst#implementation-driver) for the complete list), the HIPSTDPAR headers are implicitly included by the compiler, and therefore the execution of these parallel algorithms will be offloaded to AMD devices.
+When compiling with the proper flags (see [LLVM (AMD's fork) docs](https://github.com/ROCm/llvm-project/blob/rocm-6.2.x/clang/docs/HIPSupport.rst#implementation-driver)[^1] for the complete list), the HIPSTDPAR headers are implicitly included by the compiler, and therefore the execution of these parallel algorithms will be offloaded to AMD devices.
+
+[^1]: Altough currently only AMD's fork of LLVM contains the docs for the [C++ Standard Parallelism Offload Support](https://github.com/ROCm/llvm-project/blob/rocm-6.2.x/clang/docs/HIPSupport.rst#c-standard-parallelism-offload-support-compiler-and-runtime), both of them (the upstream LLVM and AMD's fork) do support it.
 
 ### Install
 HIPSTDPAR is currently packaged along rocThrust. The `hipstdpar` package is set up as a virtual package provided by `rocthrust`, so the latter needs to be installed entirely for getting HIPSTDPAR's headers. Conversely, installing the `rocthrust` package will also include HIPSTDPAR's headers in the system.
