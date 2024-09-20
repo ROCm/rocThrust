@@ -31,6 +31,134 @@
 #include <execution>
 #include <utility>
 
+// rocThrust is currently missing some API entries, forward calls to rocPRIM until they are added.
+namespace thrust
+{
+// BEGIN PARTIAL_SORT
+template <typename KeysIt,
+            typename CompareOp,
+            std::enable_if_t<hipstd::is_offloadable_iterator<KeysIt>()
+                          && hipstd::is_offloadable_callable<CompareOp>()>* = nullptr>
+inline void __partial_sort(thrust::hip_rocprim::par_t policy,
+                           KeysIt    first,
+                           KeysIt    middle,
+                           KeysIt    last,
+                           CompareOp compare_op)
+{
+  const size_t count = static_cast<size_t>(thrust::distance(first, last));
+  const size_t n     = static_cast<size_t>(thrust::distance(first, middle));
+
+  if (count == 0 || n == 0)
+  {
+    return;
+  }
+
+  const size_t n_index = n - 1;
+
+  size_t      storage_size = 0;
+  hipStream_t stream       = thrust::hip_rocprim::stream(policy);
+  bool        debug_sync   = THRUST_HIP_DEBUG_SYNC_FLAG;
+
+  hipError_t status;
+
+  status = rocprim::partial_sort(nullptr, storage_size, first, n_index, count, compare_op, stream, debug_sync);
+  thrust::hip_rocprim::throw_on_error(status, "partial_sort: failed on 1st step");
+
+  // Allocate temporary storage.
+  thrust::detail::temporary_array<thrust::detail::uint8_t, decltype(policy)> tmp(policy, storage_size);
+  void*                                                                      ptr = static_cast<void*>(tmp.data().get());
+
+  status = rocprim::partial_sort(ptr, storage_size, first, n_index, count, compare_op, stream, debug_sync);
+  thrust::hip_rocprim::throw_on_error(status, "partial_sort: failed on 2nd step");
+  thrust::hip_rocprim::throw_on_error(
+    thrust::hip_rocprim::synchronize_optional(policy), "partial_sort: failed to synchronize");
+}
+// END PARTIAL_SORT
+
+// BEGIN PARTIAL_SORT_COPY
+template <typename ForwardIt,
+            typename RandomIt,
+            typename CompareOp,
+            std::enable_if_t<hipstd::is_offloadable_iterator<ForwardIt, RandomIt>()
+                          && hipstd::is_offloadable_callable<CompareOp>()>* = nullptr>
+inline void __partial_sort_copy(thrust::hip_rocprim::par_t policy,
+                                ForwardIt first,
+                                ForwardIt last,
+                                RandomIt  d_first,
+                                RandomIt  d_last,
+                                CompareOp compare_op)
+{
+  const size_t count   = static_cast<size_t>(thrust::distance(first, last));
+  const size_t d_count = static_cast<size_t>(thrust::distance(d_first, d_last));
+
+  if (count == 0 || d_count == 0)
+  {
+    return;
+  }
+
+  const size_t d_index = d_count - 1;
+
+  size_t      storage_size = 0;
+  hipStream_t stream       = thrust::hip_rocprim::stream(policy);
+  bool        debug_sync   = THRUST_HIP_DEBUG_SYNC_FLAG;
+
+  hipError_t status;
+
+  status =
+    rocprim::partial_sort_copy(nullptr, storage_size, first, d_first, d_index, count, compare_op, stream, debug_sync);
+  thrust::hip_rocprim::throw_on_error(status, "partial_sort_copy: failed on 1st step");
+
+  // Allocate temporary storage.
+  thrust::detail::temporary_array<thrust::detail::uint8_t, decltype(policy)> tmp(policy, storage_size);
+  void*                                                                      ptr = static_cast<void*>(tmp.data().get());
+
+  status =
+    rocprim::partial_sort_copy(ptr, storage_size, first, d_first, d_index, count, compare_op, stream, debug_sync);
+  thrust::hip_rocprim::throw_on_error(status, "partial_sort_copy: failed on 2nd step");
+  thrust::hip_rocprim::throw_on_error(
+    thrust::hip_rocprim::synchronize_optional(policy), "partial_sort_copy: failed to synchronize");
+}
+// END PARTIAL_SORT_COPY
+
+// BEGIN NTH_ELEMENT
+template <typename KeysIt,
+            typename CompareOp,
+            std::enable_if_t<hipstd::is_offloadable_iterator<KeysIt>()
+                          && hipstd::is_offloadable_callable<CompareOp>()>* = nullptr>
+inline void __nth_element(thrust::hip_rocprim::par_t policy,
+                          KeysIt    first,
+                          KeysIt    nth,
+                          KeysIt    last,
+                          CompareOp compare_op)
+{
+  const size_t count = static_cast<size_t>(thrust::distance(first, last));
+  const size_t n     = static_cast<size_t>(thrust::distance(first, nth));
+
+  if (count == 0)
+  {
+    return;
+  }
+
+  size_t      storage_size = 0;
+  hipStream_t stream       = thrust::hip_rocprim::stream(policy);
+  bool        debug_sync   = THRUST_HIP_DEBUG_SYNC_FLAG;
+
+  hipError_t status;
+
+  status = rocprim::nth_element(nullptr, storage_size, first, n, count, compare_op, stream, debug_sync);
+  thrust::hip_rocprim::throw_on_error(status, "nth_element: failed on 1st step");
+  // Allocate temporary storage.
+  thrust::detail::temporary_array<thrust::detail::uint8_t, decltype(policy)> tmp(policy, storage_size);
+  void*                                                                      ptr = static_cast<void*>(tmp.data().get());
+
+  status = rocprim::nth_element(ptr, storage_size, first, n, count, compare_op, stream, debug_sync);
+  thrust::hip_rocprim::throw_on_error(status, "nth_element: failed on 2nd step");
+  thrust::hip_rocprim::throw_on_error(
+    thrust::hip_rocprim::synchronize_optional(policy), "nth_element: failed to synchronize");
+}
+// END NTH_ELEMENT
+}
+
 namespace std
 {
     // BEGIN SORT
@@ -179,37 +307,7 @@ namespace std
                                 KeysIt    last,
                                 CompareOp compare_op)
     {
-        const size_t count = static_cast<size_t>(thrust::distance(first, last));
-        const size_t n     = static_cast<size_t>(thrust::distance(first, middle));
-
-        if(count == 0 || n == 0)
-        {
-            return;
-        }
-
-        const size_t n_index = n - 1;
-
-        auto        policy       = thrust::device;
-        size_t      storage_size = 0;
-        hipStream_t stream       = thrust::hip_rocprim::stream(policy);
-        bool        debug_sync   = THRUST_HIP_DEBUG_SYNC_FLAG;
-
-        hipError_t status;
-
-        status = rocprim::partial_sort(
-            nullptr, storage_size, first, n_index, count, compare_op, stream, debug_sync);
-        thrust::hip_rocprim::throw_on_error(status, "partial_sort: failed on 1st step");
-
-        // Allocate temporary storage.
-        thrust::detail::temporary_array<thrust::detail::uint8_t, decltype(policy)> tmp(
-            policy, storage_size);
-        void* ptr = static_cast<void*>(tmp.data().get());
-
-        status = rocprim::partial_sort(
-            ptr, storage_size, first, n_index, count, compare_op, stream, debug_sync);
-        thrust::hip_rocprim::throw_on_error(status, "partial_sort: failed on 2nd step");
-        thrust::hip_rocprim::throw_on_error(thrust::hip_rocprim::synchronize_optional(policy),
-                                            "partial_sort: failed to synchronize");
+        ::thrust::__partial_sort(::thrust::device, first, middle, last, compare_op);
     }
 
     template <typename KeysIt,
@@ -280,44 +378,7 @@ namespace std
                                   RandomIt  d_last,
                                   CompareOp compare_op)
     {
-        const size_t count   = static_cast<size_t>(thrust::distance(first, last));
-        const size_t d_count = static_cast<size_t>(thrust::distance(d_first, d_last));
-
-        if(count == 0 || d_count == 0)
-        {
-            return;
-        }
-
-        const size_t d_index = d_count - 1;
-
-        auto        policy       = thrust::device;
-        size_t      storage_size = 0;
-        hipStream_t stream       = thrust::hip_rocprim::stream(policy);
-        bool        debug_sync   = THRUST_HIP_DEBUG_SYNC_FLAG;
-
-        hipError_t status;
-
-        status = rocprim::partial_sort_copy(nullptr,
-                                            storage_size,
-                                            first,
-                                            d_first,
-                                            d_index,
-                                            count,
-                                            compare_op,
-                                            stream,
-                                            debug_sync);
-        thrust::hip_rocprim::throw_on_error(status, "partial_sort_copy: failed on 1st step");
-
-        // Allocate temporary storage.
-        thrust::detail::temporary_array<thrust::detail::uint8_t, decltype(policy)> tmp(
-            policy, storage_size);
-        void* ptr = static_cast<void*>(tmp.data().get());
-
-        status = rocprim::partial_sort_copy(
-            ptr, storage_size, first, d_first, d_index, count, compare_op, stream, debug_sync);
-        thrust::hip_rocprim::throw_on_error(status, "partial_sort_copy: failed on 2nd step");
-        thrust::hip_rocprim::throw_on_error(thrust::hip_rocprim::synchronize_optional(policy),
-                                            "partial_sort_copy: failed to synchronize");
+        ::thrust::__partial_sort_copy(::thrust::device, first, last, d_first, d_last, compare_op);
     }
 
     template <typename ForwardIt,
@@ -500,34 +561,7 @@ namespace std
                             KeysIt    last,
                             CompareOp compare_op)
     {
-        const size_t count = static_cast<size_t>(thrust::distance(first, last));
-        const size_t n     = static_cast<size_t>(thrust::distance(first, nth));
-
-        if(count == 0)
-        {
-            return;
-        }
-
-        auto        policy       = thrust::device;
-        size_t      storage_size = 0;
-        hipStream_t stream       = thrust::hip_rocprim::stream(policy);
-        bool        debug_sync   = THRUST_HIP_DEBUG_SYNC_FLAG;
-
-        hipError_t status;
-
-        status = rocprim::nth_element(
-            nullptr, storage_size, first, n, count, compare_op, stream, debug_sync);
-        thrust::hip_rocprim::throw_on_error(status, "nth_element: failed on 1st step");
-        // Allocate temporary storage.
-        thrust::detail::temporary_array<thrust::detail::uint8_t, decltype(policy)> tmp(
-            policy, storage_size);
-        void* ptr = static_cast<void*>(tmp.data().get());
-
-        status = rocprim::nth_element(
-            ptr, storage_size, first, n, count, compare_op, stream, debug_sync);
-        thrust::hip_rocprim::throw_on_error(status, "nth_element: failed on 2nd step");
-        thrust::hip_rocprim::throw_on_error(thrust::hip_rocprim::synchronize_optional(policy),
-                                            "nth_element: failed to synchronize");
+      ::thrust::__nth_element(::thrust::device, first, nth, last, compare_op);
     }
 
     template <typename KeysIt,
