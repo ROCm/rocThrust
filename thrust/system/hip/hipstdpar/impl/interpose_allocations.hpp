@@ -212,6 +212,11 @@ __hipstdpar_operator_delete_sized(void* p, std::size_t n) noexcept
 {
     return __hipstdpar_operator_delete_aligned_sized(p, n, alignof(std::max_align_t));
 }
-#endif // __HIPSTDPAR_INTERPOSE_ALLOC__
+#  else // __HIPSTDPAR_INTERPOSE_ALLOC__
+#    error "__HIPSTDPAR_INTERPOSE_ALLOC__ should be defined. Please use the '--hipstdpar-interpose-alloc' compile option."
+#  endif // __HIPSTDPAR_INTERPOSE_ALLOC__
+
+#else // __HIPSTDPAR__
+#    error "__HIPSTDPAR__ should be defined. Please use the '--hipstdpar' compile option."
 #endif // __HIPSTDPAR__
 

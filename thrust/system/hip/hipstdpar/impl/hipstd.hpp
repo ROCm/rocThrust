@@ -83,6 +83,8 @@ inline constexpr
 {
 }
 }
+#else // __HIPSTDPAR__
+#    error "__HIPSTDPAR__ should be defined. Please use the '--hipstdpar' compile option."
 #endif // __HIPSTDPAR__
 
 #endif // THRUST_SYSTEM_HIP_HIPSTDPAR_HIPSTD_HPP

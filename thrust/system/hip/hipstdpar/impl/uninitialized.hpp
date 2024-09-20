@@ -386,4 +386,6 @@ namespace std
     }
     // END DESTROY_N
 }
+#else // __HIPSTDPAR__
+#    error "__HIPSTDPAR__ should be defined. Please use the '--hipstdpar' compile option."
 #endif // __HIPSTDPAR__

@@ -36,4 +36,6 @@ namespace std
     // TODO: UNIMPLEMENTED IN THRUST
     // END IS_HEAP_UNTIL
 }
+#else // __HIPSTDPAR__
+#    error "__HIPSTDPAR__ should be defined. Please use the '--hipstdpar' compile option."
 #endif // __HIPSTDPAR__

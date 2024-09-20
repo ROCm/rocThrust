@@ -21,8 +21,9 @@
 #if defined(__HIPSTDPAR__)
 
     // Interposed allocations
+#if defined(__HIPSTDPAR_INTERPOSE_ALLOC__)
     #include "impl/interpose_allocations.hpp"
-
+#endif
     // Parallel STL algorithms
     #include "impl/batch.hpp"
     #include "impl/copy.hpp"

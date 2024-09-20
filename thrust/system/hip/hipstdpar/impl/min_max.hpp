@@ -210,4 +210,6 @@ namespace std
     }
     // END MINMAX_ELEMENT
 }
+#else // __HIPSTDPAR__
+#    error "__HIPSTDPAR__ should be defined. Please use the '--hipstdpar' compile option."
 #endif // __HIPSTDPAR__
