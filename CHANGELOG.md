@@ -5,11 +5,11 @@ Documentation for rocThrust available at
 
 ## (Unreleased) rocThrust 3.1.1 for ROCm 6.2.4
 
-### Additions
+### Added
 
-* GFX1151 Support
+* gfx1151 Support
 
-## (Unreleased) rocThrust 3.1.0 for ROCm 6.2
+## rocThrust 3.1.0 for ROCm 6.2
 
 ### Additions
 
