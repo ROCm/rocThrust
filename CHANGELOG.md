@@ -3,13 +3,13 @@
 Documentation for rocThrust available at
 [https://rocm.docs.amd.com/projects/rocThrust/en/latest/](https://rocm.docs.amd.com/projects/rocThrust/en/latest/).
 
-## (Unreleased) rocThrust 3.1.1 for ROCm 6.2.4
+## rocThrust 3.1.1 for ROCm 6.2.4
 
 ### Additions
 
 * GFX1151 Support
 
-## (Unreleased) rocThrust 3.1.0 for ROCm 6.2
+## rocThrust 3.1.0 for ROCm 6.2
 
 ### Additions
 
