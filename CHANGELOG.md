@@ -5,9 +5,9 @@ Documentation for rocThrust available at
 
 ## rocThrust 3.1.1 for ROCm 6.2.4
 
-### Additions
+### Added
 
-* GFX1151 Support
+* Support for the gfx1034 and gfx1151 architectures
 
 ## rocThrust 3.1.0 for ROCm 6.2
 
