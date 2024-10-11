@@ -13,10 +13,10 @@ def runCI =
 {
     nodeDetails, jobName->
 
-    def prj = new rocProject('rocThrust', 'precheckin')
+    def prj = new rocProject('rocThrust', 'address-sanitizer')
 
     prj.defaults.ccache = true
-    prj.timeout.compile = 420
+    prj.timeout.compile = 480
 
     // Define test architectures, optional rocm version argument is available
     def nodes = new dockerNodes(nodeDetails, jobName, prj)
@@ -25,7 +25,7 @@ def runCI =
 
     def commonGroovy
 
-    def settings = [:]
+    def settings = [addressSanitizer: true]
 
     def compileCommand =
     {
