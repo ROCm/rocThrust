@@ -23,7 +23,7 @@ def runCompileCommand(platform, project, jobName, boolean debug=false, boolean s
 
     def command = """#!/usr/bin/env bash
                 set -x
-                ${getRocPRIM}
+                ${getDependenciesCommand}
                 cd ${project.paths.project_build_prefix}
                 mkdir -p build/${buildTypeDir} && cd build/${buildTypeDir}
                 ${auxiliary.gfxTargetParser()}
