@@ -26,14 +26,16 @@ def runCI =
     boolean formatCheck = false
     boolean staticAnalysis = true
 
+    def settings = [debug: false]
+
     def compileCommand =
     {
         platform, project->
 
-        runCompileCommand(platform, project, jobName, false)
+        runCompileCommand(platform, project, jobName, settings.debug)
     }
 
-    buildProject(prj , formatCheck, nodes.dockerArray, compileCommand, null, null, staticAnalysis)
+    buildProject(prj, formatCheck, nodes.dockerArray, compileCommand, null, null, staticAnalysis)
 }
 
 ci: { 

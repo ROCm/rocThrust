@@ -150,7 +150,7 @@ if(BUILD_TEST)
   endif()
   # We still want the testing to be compiled to catch some errors
   #TODO: Get testing folder working with HIP on Windows
-  if (NOT WIN32)
+  if (NOT WIN32 AND NOT BUILD_ADDRESS_SANITIZER)
     add_subdirectory(testing)
   endif()
   enable_testing()
