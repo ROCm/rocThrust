@@ -17,6 +17,7 @@ def runCI =
 
     prj.defaults.ccache = true
     prj.timeout.compile = 420
+    prj.libraryDependencies = ["rocPRIM"]
 
     // Define test architectures, optional rocm version argument is available
     def nodes = new dockerNodes(nodeDetails, jobName, prj)
@@ -65,6 +66,8 @@ ci: {
                        "rocm-docker":([ubuntu16:['gfx900'],centos7:['gfx906'],sles15sp1:['gfx908']])]
     jobNameList = auxiliary.appendJobNameList(jobNameList)
 
+    registerDependencyBranchParameter(project.libraryDependencies)
+    
     propertyList.each 
     {
         jobName, property->
