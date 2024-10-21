@@ -9,8 +9,6 @@ import com.amd.project.*
 import com.amd.docker.*
 import java.nio.file.Path;
 
-final String[] LIBRARY_DEPENDENCIES = ["rocPRIM"]
-
 def runCI =
 {
     nodeDetails, jobName->
@@ -19,7 +17,7 @@ def runCI =
 
     prj.defaults.ccache = true
     prj.timeout.compile = 420
-    prj.libraryDependencies = LIBRARY_DEPENDENCIES
+    prj.libraryDependencies = ["rocPRIM"]
 
     // Define test architectures, optional rocm version argument is available
     def nodes = new dockerNodes(nodeDetails, jobName, prj)
@@ -68,7 +66,7 @@ ci: {
                        "rocm-docker":([ubuntu16:['gfx900'],centos7:['gfx906'],sles15sp1:['gfx908']])]
     jobNameList = auxiliary.appendJobNameList(jobNameList)
 
-    auxiliary.registerDependencyBranchParameter(LIBRARY_DEPENDENCIES)
+    auxiliary.registerDependencyBranchParameter(["rocPRIM"])
 
     propertyList.each
     {
