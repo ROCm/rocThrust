@@ -3,7 +3,15 @@
 Documentation for rocThrust available at
 [https://rocm.docs.amd.com/projects/rocThrust/en/latest/](https://rocm.docs.amd.com/projects/rocThrust/en/latest/).
 
-## (Unreleased) rocThrust 3.2.0 for ROCm 6.3
+## (Unreleased) rocThrust 3.2.0 for ROCm 6.4
+
+### Changes
+  * Updated the default value for -a argument from rmake.py to `all` instead of `gfx906,gfx1030,gfx1100,gfx1101,gfx1102`
+
+### Fixes
+  * Fixed an issue in rmake.py where the list storing cmake options would contain individual characters instead of full string of option
+
+## rocThrust 3.2.0 for ROCm 6.3
 
 ### Additions
 
