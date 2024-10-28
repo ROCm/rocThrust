@@ -114,8 +114,10 @@ def config_cmd():
     tools = f"-DCMAKE_TOOLCHAIN_FILE={toolchain}"
     cmake_options.append( tools )
 
-    # cmake_options.extend( cmake_platform_opts)
-    cmake_options += cmake_platform_opts.split()
+    if os.name == 'nt':
+        cmake_options.extend( cmake_platform_opts)
+    else:
+        cmake_options += cmake_platform_opts.split()
 
 
   # build type
