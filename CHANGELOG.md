@@ -6,8 +6,7 @@ Documentation for rocThrust available at
 ## (Unreleased) rocThrust 3.2.0 for ROCm 6.4
 
 ### Changes
-  * Updated the default value for -a argument from rmake.py to `gfx906:xnack-,gfx1030,gfx1100,gfx1101,gfx1102,gfx1151,gfx1200,gfx1201,gfx1151`
-
+  * Updated the default value for -a argument from rmake.py to "all"
 ### Fixes
   * Fixed an issue in rmake.py where the list storing cmake options would contain individual characters instead of full string of option
 
