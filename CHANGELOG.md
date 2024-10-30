@@ -21,7 +21,7 @@ Documentation for rocThrust available at
 * Fixed the HIP backend not passing `TestCopyIfNonTrivial` from the upstream (thrust) test suite.
 * Fixed tests failing when compiled with `-D_GLIBCXX_ASSERTIONS=ON`.
 
-## (Unreleased) rocThrust 3.1.0 for ROCm 6.2
+## rocThrust 3.1.0 for ROCm 6.2
 
 ### Additions
 
