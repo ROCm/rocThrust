@@ -12,7 +12,7 @@ Documentation for rocThrust available at
   * Smoke tests can be run using `[--emulation|-e|--test|-t]=smoke`
 * Added `--emulation` option for `rtest.py`
 
-### Changes
+### Changed
 * `--test|-t` is no longer a required flag for `rtest.py`. Instead, the user can use either `--emulation|-e` or `--test|-t`, but not both.
 
 ## (Unreleased) rocThrust 3.2.0 for ROCm 6.3
