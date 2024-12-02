@@ -24,7 +24,7 @@ Create the ``build`` directory inside the ``rocThrust`` directory, then change d
     mkdir build
     cd build
 
-Build rocThrust using the ``cmake`` command: 
+Generate the rocThrust makefile using the ``cmake`` command: 
 
 .. code:: shell
 
@@ -40,6 +40,12 @@ The available build options are:
 * ``RNG_SEED_COUNT``. Set this to the non-repeatable random dataset count. Set to 0 by default.
 * ``PRNG_SEEDS``. Set this to the RNG seeds. The seeds are passed as a semicolon-delimited array of 32-bit unsigned integers. To avoid command line parsing errors, enclose the entire option in quotation marks. For example, ``cmake "-DPRNG_SEEDS=1;2;3;4"``. Set to 1 by default.
 
+Build rocThrust using the generated make file:
+
+.. code:: shell
+
+    make -j4
+    
 After you've built rocThrust, you can optionally generate tar, zip, and deb packages:
 
 .. code:: shell
