@@ -21,7 +21,7 @@ The rocThrust public repository is located at `https://github.com/ROCm/rocThrust
     * :doc:`Installation overview <install/rocThrust-install-overview>`
     * :doc:`Installing on Linux <install/rocThrust-install-script>`
     * :doc:`Installing on Windows <install/rocThrust-rmake-install>`
-    * :doc:`Installing on Linux and Windows with cmake <install/rocThrust-install-with-cmake>`
+    * :doc:`Installing on Linux and Windows with CMake <install/rocThrust-install-with-cmake>`
 
   .. grid-item-card:: API reference
 
