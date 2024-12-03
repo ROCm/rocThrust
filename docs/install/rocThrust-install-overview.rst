@@ -20,4 +20,4 @@ rocThrust can be built and installed with |install|_ on Linux, |rmake|_ on Windo
 .. |rmake| replace:: ``rmake.py`` 
 .. _rmake: ./rocThrust-rmake-install.html
 
-Installing with CMake provides the most flexibility in building and installing options.
+Installing with CMake provides the most flexibility in building and installing rocThrust.
