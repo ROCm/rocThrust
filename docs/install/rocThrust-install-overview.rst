@@ -6,7 +6,7 @@
 rocThrust installation overview 
 *********************************
 
-The rocThrust is available from the `rocThrust GitHub Repository <https://github.com/ROCmSoftwarePlatform/rocThrust>`_. 
+The rocThrust source code is available from the `rocThrust GitHub Repository <https://github.com/ROCmSoftwarePlatform/rocThrust>`_. 
 
 The develop branch is the default branch. The develop branch is intended for users who want to preview new features or contribute to the rocThrust code base.
 
