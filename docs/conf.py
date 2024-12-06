@@ -34,4 +34,4 @@ doxygen_project = {
     "path": "doxygen/xml",
 }
 
-cpp_id_attributes = ["__device__", "__host__"]
+cpp_id_attributes = ["__device__", "__host__", "THRUST_HOST_DEVICE", "THRUST_HOST", "THRUST_DEVICE"]

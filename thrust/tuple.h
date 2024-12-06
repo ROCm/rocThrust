@@ -503,6 +503,9 @@ get(const detail::cons<HT, TT>& t);
 template <class... Ts>
 THRUST_HOST_DEVICE tuple(Ts...) -> tuple<Ts...>;
 
+/*! \cond
+ */
+
 /*! A \p pair is a structure template holding two elements of types \p T1 and \p T2.
  *
  *  \tparam T1 The type of the first element in the \p pair.
@@ -512,6 +515,9 @@ THRUST_HOST_DEVICE tuple(Ts...) -> tuple<Ts...>;
  */
 template <class T1, class T2>
 struct pair;
+
+/*! \endcond
+ */
 
 /*! Constructs a \p tuple from a \p pair<T1,T2>, unpacking its elements to initialize
  *  the tuple as \p tuple<T1,T2>.

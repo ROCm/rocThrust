@@ -118,9 +118,6 @@ inline _CCCL_HOST_DEVICE
 
 using _CUDA_VSTD::get;
 
-/*! \endcond
- */
-
 /*! \} // pair
  */
 
@@ -365,6 +362,9 @@ template <typename T1, typename T2>
     pair<T1,T2> make_pair(T1 x, T2 y);
 
 
+/*! \cond
+ */
+
 /*! This convenience metafunction is included for compatibility with
  *  \p tuple. It returns either the type of a \p pair's
  *  \c first_type or \c second_type in its nested type, \c type.
@@ -382,6 +382,9 @@ template<size_t N, class T> struct tuple_element;
  *  \tparam Pair A \c pair type of interest.
  */
 template<typename Pair> struct tuple_size;
+
+/*! \endcond
+ */
 
 
 /*! This convenience function returns a reference to either the first or
