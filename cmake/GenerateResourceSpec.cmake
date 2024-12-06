@@ -20,7 +20,7 @@ if(ROCMINFO_EXIT_CODE)
   message(FATAL_ERROR ${ROCMINFO_STDERR})
 endif()
 
-string(REGEX MATCHALL [[--(gfx[0-9]+)]]
+string(REGEX MATCHALL [[--(gfx[0-9a-f]+)]]
   ROCMINFO_MATCHES
   ${ROCMINFO_STDOUT}
 )
@@ -37,7 +37,7 @@ string(REGEX MATCHALL [[--(gfx[0-9]+)]]
 #   std::string ip;
 #   int id;
 # };
-# 
+#
 # std::vector<device> GFXIP_AND_ID{ {"gfx900",0},{"gfx803",1},{"gfx900",2} };
 # std::sort(GFXIP_AND_ID.begin(), GFXIP_AND_ID.end(),
 #           [](const device& lhs, const device& rhs)
@@ -109,6 +109,7 @@ while(IT1 LESS COUNT)
   string(REGEX REPLACE [[,$]] "" JSON_PAYLOAD ${JSON_PAYLOAD})
   string(APPEND JSON_PAYLOAD "\n      ],")
   set(IT1 ${IT2})
+  set(IP1 ${IP2})
 endwhile()
 string(REGEX REPLACE [[,$]] "" JSON_PAYLOAD ${JSON_PAYLOAD})
 
