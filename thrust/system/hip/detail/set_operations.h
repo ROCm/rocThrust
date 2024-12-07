@@ -183,31 +183,12 @@ namespace __set_operations
     using set_operations_config = rocprim::kernel_config<BlockSize, ItemsPerThread>;
 
     template <class Key, class Value>
-    struct set_operations_config_803
-    {
-        static constexpr unsigned int item_scale = ::rocprim::detail::ceiling_div<unsigned int>(
-            ::rocprim::max(sizeof(Key), sizeof(Value)), sizeof(int));
-
-        using type = set_operations_config<256, ::rocprim::max(1u, 16u / item_scale)>;
-    };
-
-    template <class Key, class Value>
     struct set_operations_config_900
     {
         static constexpr unsigned int item_scale = ::rocprim::detail::ceiling_div<unsigned int>(
             ::rocprim::max(sizeof(Key), sizeof(Value)), sizeof(int));
 
         using type = set_operations_config<256, ::rocprim::max(1u, 16u / item_scale)>;
-    };
-
-    template <unsigned int TargetArch, class Key, class Value>
-    struct default_set_operations_config
-        : rocprim::detail::select_arch<
-              TargetArch,
-              rocprim::detail::select_arch_case<803, set_operations_config_803<Key, Value>>,
-              rocprim::detail::select_arch_case<900, set_operations_config_900<Key, Value>>,
-              set_operations_config_900<Key, Value>>
-    {
     };
 
     template <class Config,
@@ -906,7 +887,7 @@ namespace __set_operations
         using key_type   = typename std::iterator_traits<KeysIt1>::value_type;
         using value_type = typename std::iterator_traits<ValuesIt1>::value_type;
 
-        using config = default_set_operations_config<ROCPRIM_TARGET_ARCH, key_type, value_type>;
+        using config = typename set_operations_config_900<key_type, value_type>::type;
 
         using block_state_type      = ::rocprim::detail::lookback_scan_state<Size>;
         using ordered_block_id_type = ::rocprim::detail::ordered_block_id<unsigned int>;
