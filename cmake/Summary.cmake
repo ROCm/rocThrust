@@ -21,6 +21,43 @@
 # SOFTWARE.
 
 function (print_configuration_summary)
+    find_package(Git)
+    if(GIT_FOUND)
+    execute_process(
+        COMMAND ${GIT_EXECUTABLE} show --format=%H --no-patch
+        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+        OUTPUT_VARIABLE COMMIT_HASH
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    execute_process(
+        COMMAND ${GIT_EXECUTABLE} show --format=%s --no-patch
+        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+        OUTPUT_VARIABLE COMMIT_SUBJECT
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    endif()
+
+    execute_process(
+    COMMAND ${CMAKE_CXX_COMPILER} --version
+    WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+    OUTPUT_VARIABLE CMAKE_CXX_COMPILER_VERBOSE_DETAILS
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+
+    find_program(UNAME_EXECUTABLE uname)
+    if(UNAME_EXECUTABLE)
+    execute_process(
+        COMMAND ${UNAME_EXECUTABLE} -a
+        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+        OUTPUT_VARIABLE LINUX_KERNEL_DETAILS
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    endif()
+
+    string(REPLACE "\n" ";" CMAKE_CXX_COMPILER_VERBOSE_DETAILS "${CMAKE_CXX_COMPILER_VERBOSE_DETAILS}")
+    list(TRANSFORM CMAKE_CXX_COMPILER_VERBOSE_DETAILS PREPEND "--     ")
+    string(REPLACE ";" "\n" CMAKE_CXX_COMPILER_VERBOSE_DETAILS "${CMAKE_CXX_COMPILER_VERBOSE_DETAILS}")
+
     message(STATUS "")
     message(STATUS "******** Summary ********")
     message(STATUS "General:")
@@ -56,4 +93,14 @@ endif()
     message(STATUS "  BUILD_EXAMPLES                  : ${BUILD_EXAMPLES}")
     message(STATUS "  BUILD_BENCHMARKS                : ${BUILD_BENCHMARKS}")
     message(STATUS "  BUILD_ADDRESS_SANITIZER         : ${BUILD_ADDRESS_SANITIZER}")
+    message(STATUS "")
+    message(STATUS "Detailed:")
+    message(STATUS "  C++ compiler details  : \n${CMAKE_CXX_COMPILER_VERBOSE_DETAILS}")
+if(GIT_FOUND)
+    message(STATUS "  Commit                : ${COMMIT_HASH}")
+    message(STATUS "                          ${COMMIT_SUBJECT}")
+endif()
+if(UNAME_EXECUTABLE)
+    message(STATUS "  Unix name             : ${LINUX_KERNEL_DETAILS}")
+endif()  
 endfunction()
