@@ -21,8 +21,14 @@ The documentation is structured as follows:
 
     * :ref:`install`
 
+  .. grid-item-card:: How Tos
+
+    * :doc:`Adding rocThrust to a project <./how-to/use-rocThrust-in-a-project>`
+    * :doc:`Testing on multiple GPUs <./how-to/run-rocThrust-tests-on-multiple-gpus>`
+
   .. grid-item-card:: API reference
 
+    * :doc:`Using HIPSTDPAR <./reference/rocThrust-hipstdpar>`
     * :ref:`data-type-support`
     * :ref:`bitwise-repro`
     * :ref:`hipgraph-support`

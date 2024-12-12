@@ -9,8 +9,14 @@ subtrees:
   - file: install/installing
     title: Installation guide
 
+- caption: How Tos
+  entries:
+  - file: how-to/use-rocThrust-in-a-project.rst
+  - file: how-to/run-rocThrust-tests-on-multiple-gpus
+
 - caption: API reference
   entries:
+  - file: reference/rocThrust-hipstdpar
   - file: data-type-support
   - file: bitwise-repro
   - file: cpp_api
