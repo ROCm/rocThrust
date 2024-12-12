@@ -23,6 +23,10 @@ stages:
   - test      # Tests if unit tests are passing (CTest)
   - benchmark # Runs the non-internal benchmarks (Google Benchmark)
 
+workflow:
+  rules:
+    - if: $CI_MERGE_REQUEST_LABELS !~ /CI Skip/
+
 variables:
   # Helper variables
   PACKAGE_DIR: $BUILD_DIR/package
@@ -116,7 +120,6 @@ copyright-date:
       -D CMAKE_BUILD_TYPE=$BUILD_TYPE
       -D BUILD_$BUILD_TARGET=ON
       -D GPU_TARGETS=$GPU_TARGETS
-      -D AMDGPU_TEST_TARGETS=$GPU_TARGETS
       -D RNG_SEED_COUNT=$rng_seed_count
       -D PRNG_SEEDS=$prng_seeds
       -D CMAKE_C_COMPILER_LAUNCHER=phc_sccache_c
@@ -269,12 +272,14 @@ test:doc:
     - .build:docs
     - .rules:test
 
-test:
+.test:rocm:
   stage: test
+  tags:
+    - rocm
+    - $GPU
   extends:
     - .cmake-minimum
     - .rules:test
-    - .gpus:rocm
   needs:
     - job: build:cmake-minimum
       parallel:
@@ -294,9 +299,35 @@ test:
     - HSA_ENABLE_SDMA=0 ctest
       --output-on-failure
       --repeat-until-fail 2
-      --tests-regex $GPU_TARGET
       --resource-spec-file ./resources.json
       --parallel $PARALLEL_JOBS
+
+test:rocm-any-gpu:
+  variables:
+    GPU: ""
+    PARALLEL_JOBS: 1
+  extends:
+    - .test:rocm
+  rules:
+    - if: $CI_MERGE_REQUEST_TITLE =~ /Draft:/ &&
+          $CI_MERGE_REQUEST_LABELS !~ /Arch::/
+      when: always
+    - when: never
+
+test:rocm-label-arch:
+  extends:
+    - .gpus:rocm
+    - .test:rocm
+    - .rules:arch-labels
+
+test:rocm-all-gpus:
+  extends:
+    - .gpus:rocm
+    - .test:rocm
+  rules:
+    - if: '$CI_MERGE_REQUEST_TITLE !~ /Draft:/'
+      when: always
+    - when: never
 
 .rocm-windows:test:
   extends:
@@ -404,13 +435,15 @@ build:cuda-and-omp:
       - $CI_PROJECT_DIR/build/.ninja_log
     expire_in: 1 week
 
-test:cuda-and-omp:
+.test:cuda-and-omp:
   stage: test
+  tags:
+    - nvcc
+    - $GPU
   needs:
     - build:cuda-and-omp
   extends:
     - .nvcc
-    - .gpus:nvcc
     - .rules:test
   before_script:
     # This is only needed because of the legacy before_script in .gpus:nvcc would otherwise overwrite before_script
@@ -419,6 +452,26 @@ test:cuda-and-omp:
     - cd $CI_PROJECT_DIR/build
     # These tests are executed on the build stage because they require sources
     - ctest --output-on-failure --exclude-regex "thrust.example.cmake.add_subdir|thrust.test.cmake.check_source_files"
+
+test:cuda-and-omp-any-gpu:
+  variables:
+    GPU: ""
+    PARALLEL_JOBS: 1
+  extends:
+    - .test:cuda-and-omp
+  rules:
+    - if: $CI_MERGE_REQUEST_TITLE =~ /Draft:/
+      when: always
+    - when: never
+
+test:cuda-and-omp-all-gpus:
+  extends:
+    - .gpus:nvcc
+    - .test:cuda-and-omp
+  rules:
+    - if: '$CI_MERGE_REQUEST_TITLE !~ /Draft:/'
+      when: always
+    - when: never
 
 .benchmark-base:
   stage: benchmark
