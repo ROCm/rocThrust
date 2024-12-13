@@ -279,7 +279,6 @@ test:doc:
     - $GPU
   extends:
     - .cmake-minimum
-    - .rules:test
   needs:
     - job: build:cmake-minimum
       parallel:
@@ -309,10 +308,7 @@ test:rocm-any-gpu:
   extends:
     - .test:rocm
   rules:
-    - if: $CI_MERGE_REQUEST_TITLE =~ /Draft:/ &&
-          $CI_MERGE_REQUEST_LABELS !~ /Arch::/
-      when: always
-    - when: never
+    - if: $CI_MERGE_REQUEST_TITLE =~ /Draft:/ && $CI_MERGE_REQUEST_LABELS !~ /Arch::/
 
 test:rocm-label-arch:
   extends:
@@ -321,13 +317,12 @@ test:rocm-label-arch:
     - .rules:arch-labels
 
 test:rocm-all-gpus:
+  variables:
+    SHOULD_BE_UNDRAFTED: "true"
   extends:
     - .gpus:rocm
     - .test:rocm
-  rules:
-    - if: '$CI_MERGE_REQUEST_TITLE !~ /Draft:/'
-      when: always
-    - when: never
+    - .rules:test
 
 .rocm-windows:test:
   extends:
@@ -444,7 +439,6 @@ build:cuda-and-omp:
     - build:cuda-and-omp
   extends:
     - .nvcc
-    - .rules:test
   before_script:
     # This is only needed because of the legacy before_script in .gpus:nvcc would otherwise overwrite before_script
     - !reference [.nvcc, before_script]
@@ -461,17 +455,14 @@ test:cuda-and-omp-any-gpu:
     - .test:cuda-and-omp
   rules:
     - if: $CI_MERGE_REQUEST_TITLE =~ /Draft:/
-      when: always
-    - when: never
 
 test:cuda-and-omp-all-gpus:
+  variables:
+    SHOULD_BE_UNDRAFTED: "true"
   extends:
     - .gpus:nvcc
     - .test:cuda-and-omp
-  rules:
-    - if: '$CI_MERGE_REQUEST_TITLE !~ /Draft:/'
-      when: always
-    - when: never
+    - .rules:test
 
 .benchmark-base:
   stage: benchmark
