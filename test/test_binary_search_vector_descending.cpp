@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
- *  Modifications Copyright© 2019 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2019-2024 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -206,13 +206,13 @@ TYPED_TEST(BinarySearchVectorDescendingIntegerTests, TestVectorLowerBoundDescend
             SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
             thrust::host_vector<T> h_vec = get_random_data<T>(
-                size, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+                size, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
             thrust::sort(h_vec.begin(), h_vec.end(), thrust::greater<T>());
             thrust::device_vector<T> d_vec = h_vec;
 
             thrust::host_vector<T> h_input = get_random_data<T>(
-                2 * size, std::numeric_limits<T>::min(),
-                std::numeric_limits<T>::max(),
+                2 * size, get_default_limits<T>::min(),
+                get_default_limits<T>::max(),
                 seed + seed_value_addition
             );
             thrust::device_vector<T> d_input = h_input;
@@ -253,13 +253,13 @@ TYPED_TEST(BinarySearchVectorDescendingIntegerTests, TestVectorUpperBoundDescend
             SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
             thrust::host_vector<T> h_vec = get_random_data<T>(
-                size, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+                size, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
             thrust::sort(h_vec.begin(), h_vec.end(), thrust::greater<T>());
             thrust::device_vector<T> d_vec = h_vec;
 
             thrust::host_vector<T> h_input = get_random_data<T>(
-                2 * size, std::numeric_limits<T>::min(),
-                std::numeric_limits<T>::max(),
+                2 * size, get_default_limits<T>::min(),
+                get_default_limits<T>::max(),
                 seed + seed_value_addition
             );
             thrust::device_vector<T> d_input = h_input;
@@ -300,13 +300,13 @@ TYPED_TEST(BinarySearchVectorDescendingIntegerTests, TestVectorBinarySearchDesce
             SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
             thrust::host_vector<T> h_vec = get_random_data<T>(
-                size, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+                size, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
             thrust::sort(h_vec.begin(), h_vec.end(), thrust::greater<T>());
             thrust::device_vector<T> d_vec = h_vec;
 
             thrust::host_vector<T> h_input = get_random_data<T>(
-                2 * size, std::numeric_limits<T>::min(),
-                std::numeric_limits<T>::max(),
+                2 * size, get_default_limits<T>::min(),
+                get_default_limits<T>::max(),
                 seed + seed_value_addition
             );
             thrust::device_vector<T> d_input = h_input;

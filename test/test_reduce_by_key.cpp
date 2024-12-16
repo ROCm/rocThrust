@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
- *  Modifications Copyright© 2019-2022 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2019-2024 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -176,8 +176,8 @@ TYPED_TEST(ReduceByKeysIntegralTests, TestReduceByKey)
             );
             thrust::host_vector<V> h_vals = get_random_data<V>(
                 size,
-                std::numeric_limits<V>::min(),
-                std::numeric_limits<V>::max(),
+                get_default_limits<V>::min(),
+                get_default_limits<V>::max(),
                 seed + seed_value_addition
             );
             thrust::device_vector<K> d_keys = h_keys;
@@ -246,8 +246,8 @@ TYPED_TEST(ReduceByKeysIntegralTests, TestReduceByKeyToDiscardIterator)
             );
             thrust::host_vector<V> h_vals = get_random_data<V>(
                 size,
-                std::numeric_limits<V>::min(),
-                std::numeric_limits<V>::max(),
+                get_default_limits<V>::min(),
+                get_default_limits<V>::max(),
                 seed + seed_value_addition
             );
             thrust::device_vector<K> d_keys = h_keys;

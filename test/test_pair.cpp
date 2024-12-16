@@ -259,7 +259,7 @@ TYPED_TEST(PairTests, TestPairGet)
         SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
         thrust::host_vector<T> data = get_random_data<T>(
-            2, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+            2, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
         ;
 
         thrust::pair<T, T> p(data[0], data[1]);

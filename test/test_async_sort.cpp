@@ -134,7 +134,7 @@ TYPED_TEST(AsyncSortTests, AsyncSortInstance)
             SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
             thrust::host_vector<T>   h0_data = get_random_data<T>(
-                size, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+                size, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
             thrust::device_vector<T> d0_data(h0_data);
 
             ASSERT_EQ(h0_data, d0_data);
@@ -165,7 +165,7 @@ TYPED_TEST(AsyncSortTests, AsyncSortWithPolicyInstance)
             SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
             thrust::host_vector<T>   h0_data = get_random_data<T>(
-                size, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+                size, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
             thrust::device_vector<T> d0_data(h0_data);
 
             ASSERT_EQ(h0_data, d0_data);
@@ -198,7 +198,7 @@ void TestAsyncSort()
           SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
           thrust::host_vector<T>   h0_data = get_random_data<T>(
-              size, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+              size, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
           thrust::device_vector<T> d0_data(h0_data);
 
           SortInvoker<T>::sync(

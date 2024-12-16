@@ -64,7 +64,7 @@ void AsyncCopyHostToDevice()
           SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
           thrust::host_vector<T>   h0 = get_random_data<T>(
-              size, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+              size, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
           thrust::device_vector<T> d0(size);
 
           auto f0 = AsyncCopyCallable{}(
@@ -103,7 +103,7 @@ void AsyncCopyDeviceToHost()
           SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
           thrust::host_vector<T>   h0 = get_random_data<T>(
-              size, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+              size, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
           thrust::device_vector<T> h1(size);
           thrust::device_vector<T> d0(size);
 
@@ -148,7 +148,7 @@ TYPED_TEST(AsyncCopyTests, TestAsyncCopyTriviallyRelocatableDeviceToHostPolicies
             SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
             thrust::host_vector<T>   h0_data = get_random_data<T>(
-                size, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+                size, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
             thrust::device_vector<T> d0_data(size);
             thrust::device_vector<T> d1_data(size);
 
@@ -179,7 +179,7 @@ TYPED_TEST(AsyncCopyTests, TestAsyncCopyDevicetoDeviceWithPolicy)
             SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
             thrust::host_vector<T>   h0_data = get_random_data<T>(
-                size, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+                size, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
             thrust::device_vector<T> d0_data(size);
             thrust::device_vector<T> d1_data(size);
 

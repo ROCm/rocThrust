@@ -103,7 +103,7 @@ void TestAsyncScan()
             SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
             thrust::host_vector<T> h0_data = get_random_data<T>(
-                size, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+                size, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
             thrust::device_vector<T> d0_data(h0_data);
             thrust::host_vector<T>   h0_output(h0_data);
             thrust::device_vector<T> d0_output(d0_data);
@@ -115,7 +115,7 @@ void TestAsyncScan()
             THRUST_IF_CONSTEXPR(wait_for_futures == WaitPolicy)
             {
                 f0.wait();
-                ASSERT_EQ(h0_output, d0_output);
+                test_equality(h0_output, d0_output);
             }
         }
     }

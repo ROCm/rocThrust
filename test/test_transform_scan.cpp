@@ -240,7 +240,7 @@ TYPED_TEST(TransformScanVariablesTests, TestTransformScan)
             SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
             thrust::host_vector<T> h_input = get_random_data<T>(
-                size, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+                size, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
             thrust::device_vector<T> d_input = h_input;
 
             thrust::host_vector<T>   h_output(size);
@@ -256,7 +256,7 @@ TYPED_TEST(TransformScanVariablesTests, TestTransformScan)
                                              d_output.begin(),
                                              thrust::negate<T>(),
                                              thrust::plus<T>());
-            ASSERT_EQ(d_output, h_output);
+            test_equality(h_output, d_output);
 
             thrust::transform_exclusive_scan(h_input.begin(),
                                              h_input.end(),
@@ -270,7 +270,7 @@ TYPED_TEST(TransformScanVariablesTests, TestTransformScan)
                                              thrust::negate<T>(),
                                              (T)11,
                                              thrust::plus<T>());
-            ASSERT_EQ(d_output, h_output);
+            test_equality(h_output, d_output);
 
             // in-place scans
             h_output = h_input;
@@ -285,7 +285,7 @@ TYPED_TEST(TransformScanVariablesTests, TestTransformScan)
                                              d_output.begin(),
                                              thrust::negate<T>(),
                                              thrust::plus<T>());
-            ASSERT_EQ(d_output, h_output);
+            test_equality(h_output, d_output);
 
             h_output = h_input;
             d_output = d_input;
@@ -301,7 +301,7 @@ TYPED_TEST(TransformScanVariablesTests, TestTransformScan)
                                              thrust::negate<T>(),
                                              (T)11,
                                              thrust::plus<T>());
-            ASSERT_EQ(d_output, h_output);
+            test_equality(h_output, d_output);
         }
     }
 };
@@ -342,7 +342,7 @@ TYPED_TEST(TransformScanVariablesTests, TestTransformScanToDiscardIterator)
             SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
             thrust::host_vector<T> h_input = get_random_data<T>(
-                size, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+                size, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
             thrust::device_vector<T> d_input = h_input;
 
             thrust::discard_iterator<> reference(size);

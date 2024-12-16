@@ -391,7 +391,7 @@ TYPED_TEST(ReproducibilityTests, TransformScan)
             SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
             thrust::host_vector<T> h_input = get_random_data<T>(
-                size, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+                size, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
             Vector d_input = h_input;
 
             Vector d_output_0(size);

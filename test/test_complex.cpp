@@ -75,7 +75,7 @@ TYPED_TEST(ComplexTests, TestComplexGetters)
         SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
         thrust::host_vector<T> data = get_random_data<T>(
-            2, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+            2, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
 
         thrust::complex<T> z(data[0], data[1]);
 
@@ -218,7 +218,7 @@ TYPED_TEST(ComplexTests, TestComplexUnaryArithmetic)
         SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
         thrust::host_vector<T> data_a = get_random_data<T>(
-            2, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+            2, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
 
         thrust::complex<T> a(data_a[0], data_a[1]);
 

@@ -403,7 +403,7 @@ TYPED_TEST(CopyIntegerTests, TestCopyIf)
             SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
             thrust::host_vector<T> h_data = get_random_data<T>(
-                size, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+                size, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
             thrust::device_vector<T> d_data = h_data;
 
             typename thrust::host_vector<T>::iterator   h_new_end;
@@ -524,10 +524,10 @@ TYPED_TEST(CopyIntegerTests, TestCopyIfStencil)
             SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
             thrust::host_vector<T> h_stencil = get_random_data<T>(
-                size, std::numeric_limits<T>::min(), std::numeric_limits<T>::max(), seed);
+                size, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
             thrust::device_vector<T> d_stencil = get_random_data<T>(
-                size, std::numeric_limits<T>::min(),
-                std::numeric_limits<T>::max(),
+                size, get_default_limits<T>::min(),
+                get_default_limits<T>::max(),
                 seed + seed_value_addition
             );
 
