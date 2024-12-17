@@ -9,17 +9,22 @@ subtrees:
   - file: install/installing
     title: Installation guide
 
-- caption: How Tos
+- caption: How to
   entries:
   - file: how-to/use-rocThrust-in-a-project.rst
+    title: Add rocThrust to a CMake project
   - file: how-to/run-rocThrust-tests-on-multiple-gpus
+    title: Run tests on multiple GPUs
 
 - caption: API reference
   entries:
   - file: reference/rocThrust-hipstdpar
   - file: data-type-support
   - file: bitwise-repro
+  - file: hipgraph-support
+  - file: hip-execution-policies
   - file: cpp_api
+  - file: genindex
 
 - caption: About
   entries:

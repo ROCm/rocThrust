@@ -21,10 +21,10 @@ The documentation is structured as follows:
 
     * :ref:`install`
 
-  .. grid-item-card:: How Tos
+  .. grid-item-card:: How to
 
-    * :doc:`Adding rocThrust to a project <./how-to/use-rocThrust-in-a-project>`
-    * :doc:`Testing on multiple GPUs <./how-to/run-rocThrust-tests-on-multiple-gpus>`
+    * :doc:`Add rocThrust to a CMake project <./how-to/use-rocThrust-in-a-project>`
+    * :doc:`Test on multiple GPUs <./how-to/run-rocThrust-tests-on-multiple-gpus>`
 
   .. grid-item-card:: API reference
 
@@ -32,8 +32,8 @@ The documentation is structured as follows:
     * :ref:`data-type-support`
     * :ref:`bitwise-repro`
     * :ref:`hipgraph-support`
-    * :ref:`api-reference`
     * :ref:`hip-execution-policies`
+    * :ref:`api-reference`
     * :ref:`genindex`
 
 To contribute to the documentation, refer to
