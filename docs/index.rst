@@ -23,13 +23,19 @@ The rocThrust public repository is located at `https://github.com/ROCm/rocThrust
     * :doc:`Installing on Windows <install/rocThrust-rmake-install>`
     * :doc:`Installing on Linux and Windows with CMake <install/rocThrust-install-with-cmake>`
 
+  .. grid-item-card:: How to
+
+    * :doc:`Add rocThrust to a CMake project <./how-to/use-rocThrust-in-a-project>`
+    * :doc:`Test on multiple GPUs <./how-to/run-rocThrust-tests-on-multiple-gpus>`
+
   .. grid-item-card:: API reference
 
+    * :doc:`Using HIPSTDPAR <./reference/rocThrust-hipstdpar>`
     * :ref:`data-type-support`
     * :ref:`bitwise-repro`
     * :ref:`hipgraph-support`
-    * :ref:`api-reference`
     * :ref:`hip-execution-policies`
+    * :ref:`api-reference`
     * :ref:`genindex`
 
 To contribute to the documentation, refer to
