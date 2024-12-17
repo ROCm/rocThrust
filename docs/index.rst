@@ -8,18 +8,20 @@
 rocThrust documentation
 ******************************************
 
-rocThrust is a parallel algorithm library. This library has been ported to :doc:`HIP <hip:index>`/:doc:`ROCm <rocm:index>`, which use the :doc:`rocPRIM <rocprim:index>` library. The HIP ported library works on HIP/ROCm platforms. There is no CUDA backend for rocThrust.
+rocThrust is a parallel algorithm library that has been ported to `HIP <https://rocm.docs.amd.com/projects/HIP/en/latest/index.html>`_ and `ROCm <https://rocm.docs.amd.com/en/latest/>`_. 
 
-You can access rocThrust code on the `GitHub repository <https://github.com/ROCm/rocThrust>`_.
-
-The documentation is structured as follows:
+The rocThrust public repository is located at `https://github.com/ROCm/rocThrust <https://github.com/ROCm/rocThrust>`_.
 
 .. grid:: 2
   :gutter: 3
 
   .. grid-item-card:: Installation
 
-    * :ref:`install`
+    * :doc:`Prerequisites <install/rocThrust-prerequisites>`
+    * :doc:`Installation overview <install/rocThrust-install-overview>`
+    * :doc:`Installing on Linux <install/rocThrust-install-script>`
+    * :doc:`Installing on Windows <install/rocThrust-rmake-install>`
+    * :doc:`Installing on Linux and Windows with CMake <install/rocThrust-install-with-cmake>`
 
   .. grid-item-card:: API reference
 

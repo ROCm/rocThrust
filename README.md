@@ -226,7 +226,7 @@ There are two CMake configuration-time options that control random data fed to u
     reproducibility.
 
 * `PRNG_SEEDS`: 1 by default, controls repeatable dataset seeds.
-  * This is a CMake formatted (semicolon delimited) array of 32-bit unsigned integrals. Note that
+  * This is a CMake formatted (semicolon delimited) array of 32-bit unsigned integers. Note that
     semicolons often collide with shell command parsing. We advise escaping the entire CMake CLI
     argument to avoid having the variable pick up quotation marks. For example, pass
     `cmake "-DPRNG_SEEDS=1;2;3;4"` instead of `cmake -DPRNG_SEEDS="1;2;3;4"` (these cases differ in
