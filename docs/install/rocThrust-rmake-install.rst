@@ -3,7 +3,7 @@
   :keywords: install, building, rocThrust, AMD, ROCm, source code, installation script, Windows
 
 ********************************************************************
-Building and installing rocThrust with rmake.py
+Building and installing rocThrust on Windows with rmake.py
 ********************************************************************
 
 You can use ``rmake.py`` to build and install rocThrust on Windows. You can also use `CMake <./rocThrust-install-with-cmake.html>`_ if you want more build and installation options. 

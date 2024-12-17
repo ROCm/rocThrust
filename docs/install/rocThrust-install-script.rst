@@ -3,7 +3,7 @@
   :keywords: install, building, rocThrust, AMD, ROCm, source code, installation script, Linux
 
 ********************************************************************
-Building and installing rocThrust with the install script
+Building and installing rocThrust on Linux with the install script
 ********************************************************************
 
 You can use the ``install`` script to build and install rocThrust on Linux. You can also use `CMake <./rocThrust-install-with-cmake.html>`_ if you want more build and installation options. 

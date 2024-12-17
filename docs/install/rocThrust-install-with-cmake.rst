@@ -5,7 +5,7 @@
 .. _install-with-cmake:
 
 ********************************************************************
-Building and installing rocThrust with CMake
+Building and installing rocThrust on Windows and Linux with CMake 
 ********************************************************************
 
 You can build and install rocThrust with CMake on either Windows or Linux.
