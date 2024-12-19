@@ -324,6 +324,50 @@ test:rocm-all-gpus:
     - .test:rocm
     - .rules:test
 
+test-bitwise-repro-generate:
+  stage: test
+  extends:
+    - .cmake-minimum
+    - .rules:manual
+    - .gpus:rocm
+  needs:
+    - job: build:cmake-minimum
+      parallel:
+        matrix:
+          - BUILD_TYPE: Release
+            BUILD_TARGET: TEST
+            BUILD_VERSION: 14
+  cache:
+    key: database
+    paths:
+      - $CI_PROJECT_DIR/bitwise.db
+    policy: push
+  script:
+    - cd $CI_PROJECT_DIR/build/test/
+    - ROCTHRUST_BWR_PATH=$CI_PROJECT_DIR/bitwise.db ROCTHRUST_BWR_GENERATE=1 ./reproducibility.hip
+
+test-bitwise-repro:
+  stage: test
+  extends:
+    - .cmake-minimum
+    - .rules:test
+    - .gpus:rocm
+  needs:
+    - job: build:cmake-minimum
+      parallel:
+        matrix:
+          - BUILD_TYPE: Release
+            BUILD_TARGET: TEST
+            BUILD_VERSION: 14
+  cache:
+    key: database
+    paths:
+      - $CI_PROJECT_DIR/bitwise.db
+    policy: pull
+  script:
+    - cd $CI_PROJECT_DIR/build/test/
+    - ROCTHRUST_BWR_PATH=$CI_PROJECT_DIR/bitwise.db ./reproducibility.hip
+
 .rocm-windows:test:
   extends:
     - .gpus:rocm-windows

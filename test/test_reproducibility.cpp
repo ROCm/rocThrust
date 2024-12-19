@@ -112,10 +112,12 @@ TYPED_TEST(ReproducibilityTests, Scan)
             
             if (inter_run_bwr::enabled)
             {
+                thrust::host_vector<T> h_data = d_input;
+
                 token_helper.build_input_token(
                     "thrust::inclusive_scan",
-                    d_input.begin(),
-                    d_input.end(),
+                    h_data.begin(),
+                    h_data.end(),
                     {bwr_utils::get_functor_token<T>("thrust::plus")}
                 );
             }
@@ -125,7 +127,8 @@ TYPED_TEST(ReproducibilityTests, Scan)
 
             if (inter_run_bwr::enabled)
             {
-                token_helper.build_output_token(d_output_1.begin(), d_output_1.size());
+                thrust::host_vector<T> h_data = d_output_1;
+                token_helper.build_output_token(h_data.begin(), h_data.size());
                 check_bwr_match(token_helper);
             }
 
@@ -137,10 +140,12 @@ TYPED_TEST(ReproducibilityTests, Scan)
 
             if (inter_run_bwr::enabled)
             {
+                thrust::host_vector<T> h_data = d_input;
+
                 token_helper.build_input_token(
                     "thrust::exclusive_scan",
-                    d_input.begin(),
-                    d_input.end(),
+                    h_data.begin(),
+                    h_data.end(),
                     {bwr_utils::get_scalar_token(T {42}), bwr_utils::get_functor_token<T>("thrust::plus")}
                 );
             }
@@ -150,7 +155,9 @@ TYPED_TEST(ReproducibilityTests, Scan)
 
             if (inter_run_bwr::enabled)
             {
-                token_helper.build_output_token(d_output_1.begin(), d_output_1.size());
+                thrust::host_vector<T> h_data = d_output_1;
+
+                token_helper.build_output_token(h_data.begin(), h_data.size());
                 check_bwr_match(token_helper);
             }
 
@@ -215,11 +222,14 @@ TYPED_TEST(ReproducibilityTests, ScanByKey)
 
             if (inter_run_bwr::enabled)
             {
+                thrust::host_vector<T> h_keys = d_keys;
+                thrust::host_vector<T> h_input = d_input;
+
                 token_helper.build_input_token(
                     "thrust::inclusive_scan_by_key",
-                    d_keys.begin(),
-                    d_keys.end(),
-                    d_input.begin(),
+                    h_keys.begin(),
+                    h_keys.end(),
+                    h_input.begin(),
                     {bwr_utils::get_functor_token<T>("thrust::equal_to"),
                      bwr_utils::get_functor_token<T>("thrust::plus")}
                 );
@@ -235,7 +245,9 @@ TYPED_TEST(ReproducibilityTests, ScanByKey)
 
             if (inter_run_bwr::enabled)
             {
-                token_helper.build_output_token(d_output_1.begin(), d_output_1.size());
+                thrust::host_vector<T> h_data = d_output_1;
+
+                token_helper.build_output_token(h_data.begin(), h_data.size());
                 check_bwr_match(token_helper);
             }
 
@@ -252,11 +264,14 @@ TYPED_TEST(ReproducibilityTests, ScanByKey)
 
             if (inter_run_bwr::enabled)
             {
+                thrust::host_vector<T> h_keys = d_keys;
+                thrust::host_vector<T> h_input = d_input;
+
                 token_helper.build_input_token(
                     "thrust::exclusive_scan_by_key",
-                    d_keys.begin(),
-                    d_keys.end(),
-                    d_input.begin(),
+                    h_keys.begin(),
+                    h_keys.end(),
+                    h_input.begin(),
                     {bwr_utils::get_scalar_token(T {123}),
                      bwr_utils::get_functor_token<T>("thrust::plus")}
                 );
@@ -272,7 +287,9 @@ TYPED_TEST(ReproducibilityTests, ScanByKey)
 
             if (inter_run_bwr::enabled)
             {
-                token_helper.build_output_token(d_output_1.begin(), d_output_1.size());
+                thrust::host_vector<T> h_data = d_output_1;
+
+                token_helper.build_output_token(h_data.begin(), h_data.size());
                 check_bwr_match(token_helper);
             }
 
@@ -338,11 +355,14 @@ TYPED_TEST(ReproducibilityTests, ReduceByKey)
 
             if (inter_run_bwr::enabled)
             {
+                thrust::host_vector<T> h_keys = d_keys;
+                thrust::host_vector<T> h_vals = d_vals;
+
                 token_helper.build_input_token(
                     "thrust::reduce_by_key",
-                    d_keys.begin(),
-                    d_keys.end(),
-                    d_vals.begin(),
+                    h_keys.begin(),
+                    h_keys.end(),
+                    h_vals.begin(),
                     {bwr_utils::get_functor_token<T>("thrust::equal_to"),
                      bwr_utils::get_functor_token<T>("thrust::plus")}
                 );
@@ -359,7 +379,9 @@ TYPED_TEST(ReproducibilityTests, ReduceByKey)
 
             if (inter_run_bwr::enabled)
             {
-                token_helper.build_output_token(d_keys_output_1.begin(), d_vals_output_1.begin(), d_keys.size());
+                thrust::host_vector<T> h_data = d_keys_output_1;
+
+                token_helper.build_output_token(h_data.begin(), h_data.begin(), d_keys.size());
                 check_bwr_match(token_helper);
             }
 
@@ -406,10 +428,12 @@ TYPED_TEST(ReproducibilityTests, TransformScan)
 
             if (inter_run_bwr::enabled)
             {
+                thrust::host_vector<T> h_data = d_input;
+
                 token_helper.build_input_token(
                     "thrust::transform_inclusive_scan",
-                    d_input.begin(),
-                    d_input.end(),
+                    h_data.begin(),
+                    h_data.end(),
                     {bwr_utils::get_functor_token<T>("thrust::negate"),
                      bwr_utils::get_functor_token<T>("thrust::plus")}
                 );
@@ -424,7 +448,9 @@ TYPED_TEST(ReproducibilityTests, TransformScan)
 
             if (inter_run_bwr::enabled)
             {
-                token_helper.build_output_token(d_output_1.begin(), d_output_1.size());
+                thrust::host_vector<T> h_data = d_output_1;
+
+                token_helper.build_output_token(h_data.begin(), h_data.size());
                 check_bwr_match(token_helper);
             }
 
@@ -440,10 +466,12 @@ TYPED_TEST(ReproducibilityTests, TransformScan)
 
             if (inter_run_bwr::enabled)
             {
+                thrust::host_vector<T> h_data = d_input;
+
                 token_helper.build_input_token(
                     "thrust::transform_exclusive_scan",
-                    d_input.begin(),
-                    d_input.end(),
+                    h_data.begin(),
+                    h_data.end(),
                     {bwr_utils::get_functor_token<T>("thrust::negate"),
                      bwr_utils::get_scalar_token((T) 11),
                      bwr_utils::get_functor_token<T>("thrust::plus")}
@@ -460,7 +488,9 @@ TYPED_TEST(ReproducibilityTests, TransformScan)
 
             if (inter_run_bwr::enabled)
             {
-                token_helper.build_output_token(d_output_1.begin(), d_output_1.size());
+                thrust::host_vector<T> h_data = d_output_1;
+
+                token_helper.build_output_token(h_data.begin(), h_data.size());
                 check_bwr_match(token_helper);
             }
 
@@ -478,10 +508,12 @@ TYPED_TEST(ReproducibilityTests, TransformScan)
 
             if (inter_run_bwr::enabled)
             {
+                thrust::host_vector<T> h_data = d_output_1;
+
                 token_helper.build_input_token(
                     "thrust::transform_inclusive_scan",
-                    d_output_1.begin(),
-                    d_output_1.end(),
+                    h_data.begin(),
+                    h_data.end(),
                     {bwr_utils::get_functor_token<T>("thrust::negate"),
                      bwr_utils::get_functor_token<T>("thrust::plus")}
                 );
@@ -496,7 +528,9 @@ TYPED_TEST(ReproducibilityTests, TransformScan)
 
             if (inter_run_bwr::enabled)
             {
-                token_helper.build_output_token(d_output_1.begin(), d_output_1.size());
+                thrust::host_vector<T> h_data = d_output_1;
+
+                token_helper.build_output_token(h_data.begin(), h_data.size());
                 check_bwr_match(token_helper);
             }
 
@@ -514,10 +548,12 @@ TYPED_TEST(ReproducibilityTests, TransformScan)
 
             if (inter_run_bwr::enabled)
             {
+                thrust::host_vector<T> h_data = d_output_1;
+
                 token_helper.build_input_token(
                     "thrust::transform_exclusive_scan",
-                    d_output_1.begin(),
-                    d_output_1.end(),
+                    h_data.begin(),
+                    h_data.end(),
                     {bwr_utils::get_functor_token<T>("thrust::negate"),
                      bwr_utils::get_scalar_token((T) 11),
                      bwr_utils::get_functor_token<T>("thrust::plus")}
@@ -534,7 +570,9 @@ TYPED_TEST(ReproducibilityTests, TransformScan)
 
             if (inter_run_bwr::enabled)
             {
-                token_helper.build_output_token(d_output_1.begin(), d_output_1.size());
+                thrust::host_vector<T> h_data = d_output_1;
+
+                token_helper.build_output_token(h_data.begin(), h_data.size());
                 check_bwr_match(token_helper);
             }
 
