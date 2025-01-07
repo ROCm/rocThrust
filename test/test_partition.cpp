@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
- *  Modifications Copyright© 2019-2024 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2019-2025 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -1851,7 +1851,7 @@ void PartitionCopyKernel(int const N, int* array, int* true_arr, int* false_arr,
         thrust::device_ptr<int> end(array + N);
         thrust::device_ptr<int> true_begin(true_arr);
         thrust::device_ptr<int> false_begin(false_arr);
-        typedef thrust::device_vector<int>::iterator iter;
+        using iter = thrust::device_vector<int>::iterator;
 
         thrust::pair<iter,iter> end_pair = thrust::partition_copy(thrust::hip::par, begin, end, true_begin, false_begin, is_even<int>());
         size_array[0] = end_pair.first - iter(true_begin);

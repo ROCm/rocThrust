@@ -88,7 +88,7 @@ DECLARE_UNITTEST(TestSetUnionByKeyDispatchImplicit);
 template<typename Vector>
 void TestSetUnionByKeySimple(void)
 {
-  typedef typename Vector::iterator Iterator;
+  using Iterator = typename Vector::iterator;
 
   Vector a_key(3), b_key(4);
   Vector a_val(3), b_val(4);

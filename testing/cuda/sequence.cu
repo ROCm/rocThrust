@@ -85,8 +85,8 @@ DECLARE_UNITTEST(TestSequenceDeviceDevice);
 
 void TestSequenceCudaStreams()
 {
-  typedef thrust::device_vector<int> Vector;
-  
+  using Vector = thrust::device_vector<int>;
+
   Vector v(5);
 
   cudaStream_t s;

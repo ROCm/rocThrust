@@ -3,7 +3,6 @@
 #include <thrust/sort.h>
 #include <thrust/binary_search.h>
 #include <thrust/distance.h>
-#include <thrust/detail/cstdint.h>
 
 #if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
 #include <cuda/std/iterator>
@@ -17,13 +16,15 @@
 #endif // __has_include(<cuda/std/type_traits>)
 #endif // THRUST_DEVICE_SYSTEM
 
+#include <cstdint>
+
 THRUST_DISABLE_MSVC_POSSIBLE_LOSS_OF_DATA_WARNING_BEGIN
 
 #if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
 // ensure that we properly support thrust::counting_iterator from cuda::std
 void test_iterator_traits()
 {
-  typedef cuda::std::iterator_traits<thrust::counting_iterator<int>> It;
+  using It       = cuda::std::iterator_traits<thrust::counting_iterator<int>>;
   using category = thrust::detail::iterator_category_with_system_and_traversal<std::random_access_iterator_tag,
                                                                                thrust::any_system_tag,
                                                                                thrust::random_access_traversal_tag>;
@@ -249,10 +250,10 @@ DECLARE_UNITTEST(TestCountingIteratorLowerBound);
 
 void TestCountingIteratorDifference(void)
 {
-    typedef thrust::counting_iterator<thrust::detail::uint64_t> Iterator;
-    typedef thrust::iterator_difference<Iterator>::type Difference;
+    using Iterator   = thrust::counting_iterator<std::uint64_t>;
+    using Difference = thrust::iterator_difference<Iterator>::type;
 
-    Difference diff = std::numeric_limits<thrust::detail::uint32_t>::max() + 1;
+    Difference diff = std::numeric_limits<std::uint32_t>::max() + 1;
 
     Iterator first(0);
     Iterator last = first + diff;

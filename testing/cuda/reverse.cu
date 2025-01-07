@@ -88,7 +88,7 @@ DECLARE_UNITTEST(TestReverseCopyDeviceDevice);
 
 void TestReverseCudaStreams()
 {
-  typedef thrust::device_vector<int> Vector;
+  using Vector = thrust::device_vector<int>;
   Vector data(5);
   data[0] = 1;
   data[1] = 2;
@@ -119,7 +119,7 @@ DECLARE_UNITTEST(TestReverseCudaStreams);
 
 void TestReverseCopyCudaStreams()
 {
-  typedef thrust::device_vector<int> Vector;
+  using Vector = thrust::device_vector<int>;
   Vector data(5);
   data[0] = 1;
   data[1] = 2;

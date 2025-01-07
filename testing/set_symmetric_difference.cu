@@ -69,7 +69,7 @@ DECLARE_UNITTEST(TestSetSymmetricDifferenceDispatchImplicit);
 template<typename Vector>
 void TestSetSymmetricDifferenceSimple(void)
 {
-  typedef typename Vector::iterator Iterator;
+  using Iterator = typename Vector::iterator;
 
   Vector a(4), b(5);
 
@@ -213,7 +213,7 @@ DECLARE_VARIABLE_UNITTEST(TestSetSymmetricDifferenceMultiset);
 template<typename U>
   void TestSetSymmetricDifferenceKeyValue(size_t n)
 {
-  typedef key_value<U,U> T;
+  using T = key_value<U, U>;
 
   thrust::host_vector<U> h_keys_a   = unittest::random_integers<U>(n);
   thrust::host_vector<U> h_values_a = unittest::random_integers<U>(n);

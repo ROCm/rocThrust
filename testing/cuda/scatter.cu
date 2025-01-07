@@ -121,7 +121,7 @@ DECLARE_UNITTEST(TestScatterIfDeviceDevice);
 
 void TestScatterCudaStreams()
 {
-  typedef thrust::device_vector<int> Vector;
+  using Vector = thrust::device_vector<int>;
 
   Vector map(5);  // scatter indices
   Vector src(5);  // source vector
@@ -154,7 +154,7 @@ DECLARE_UNITTEST(TestScatterCudaStreams);
 
 void TestScatterIfCudaStreams()
 {
-  typedef thrust::device_vector<int> Vector;
+  using Vector = thrust::device_vector<int>;
   
   Vector flg(5);  // predicate array
   Vector map(5);  // scatter indices

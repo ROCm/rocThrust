@@ -14,8 +14,8 @@ void reduce_intervals(InputIterator input,
                       BinaryFunction binary_op,
                       Decomposition decomp)
 {
-  typedef typename thrust::iterator_value<OutputIterator>::type OutputType;
-  typedef typename Decomposition::index_type index_type;
+  using OutputType = typename thrust::iterator_value<OutputIterator>::type;
+  using index_type = typename Decomposition::index_type;
 
   // wrap binary_op
   thrust::detail::wrapped_function<
@@ -48,8 +48,8 @@ void reduce_intervals(InputIterator input,
 
 void TestOmpReduceIntervalsSimple(void)
 {
-  typedef int T;
-  typedef thrust::device_vector<T> Vector;
+  using T      = int;
+  using Vector = thrust::device_vector<T>;
 
   using thrust::system::omp::detail::reduce_intervals;
   using thrust::system::detail::internal::uniform_decomposition;

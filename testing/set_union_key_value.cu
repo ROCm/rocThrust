@@ -6,7 +6,7 @@
 template<typename U>
   void TestSetUnionKeyValue(size_t n)
 {
-  typedef key_value<U,U> T;
+  using T = key_value<U, U>;
 
   thrust::host_vector<U> h_keys_a   = unittest::random_integers<U>(n);
   thrust::host_vector<U> h_values_a = unittest::random_integers<U>(n);
@@ -50,7 +50,7 @@ DECLARE_VARIABLE_UNITTEST(TestSetUnionKeyValue);
 template<typename U>
   void TestSetUnionKeyValueDescending(size_t n)
 {
-  typedef key_value<U,U> T;
+  using T = key_value<U, U>;
 
   thrust::host_vector<U> h_keys_a   = unittest::random_integers<U>(n);
   thrust::host_vector<U> h_values_a = unittest::random_integers<U>(n);

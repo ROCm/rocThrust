@@ -80,7 +80,7 @@ void InitializeSimpleStableKeyValueSortTest(Vector& unsorted_keys, Vector& unsor
 template <class Vector>
 void TestStableSortByKeySimple(void)
 {
-    typedef typename Vector::value_type T;
+    using T = typename Vector::value_type;
 
     Vector unsorted_keys, unsorted_values;
     Vector   sorted_keys,   sorted_values;

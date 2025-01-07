@@ -10,11 +10,11 @@
 template <class Vector>
 void TestTransformInputOutputIterator(void)
 {
-    typedef typename Vector::value_type T;
+    using T = typename Vector::value_type;
 
-    typedef thrust::negate<T> InputFunction;
-    typedef thrust::square<T> OutputFunction;
-    typedef typename Vector::iterator Iterator;
+    using InputFunction = thrust::negate<T>;
+    using OutputFunction = thrust::square<T>;
+    using Iterator = typename Vector::iterator;
 
     Vector input(4);
     Vector squared(4);
@@ -55,10 +55,10 @@ DECLARE_VECTOR_UNITTEST(TestTransformInputOutputIterator);
 template <class Vector>
 void TestMakeTransformInputOutputIterator(void)
 {
-    typedef typename Vector::value_type T;
+    using T = typename Vector::value_type;
 
-    typedef thrust::negate<T> InputFunction;
-    typedef thrust::square<T> OutputFunction;
+    using InputFunction  = thrust::negate<T>;
+    using OutputFunction = thrust::square<T>;
 
     Vector input(4);
     Vector negated(4);

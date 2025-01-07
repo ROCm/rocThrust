@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
- *  Modifications Copyright (c) 2024, Advanced Micro Devices, Inc.  All rights reserved.
+ *  Modifications Copyright (c) 2024-2025, Advanced Micro Devices, Inc.  All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -191,11 +191,11 @@ template <typename T1, typename T2>
 {
   /*! \p first_type is the type of \p pair's first object type.
    */
-  typedef T1 first_type;
+  using first_type = T1;
 
   /*! \p second_type is the type of \p pair's second object type.
    */
-  typedef T2 second_type;
+  using second_type = T2;
 
   /*! The \p pair's first object.
    */

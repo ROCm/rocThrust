@@ -51,7 +51,7 @@ DECLARE_UNITTEST(TestDevicePointerManipulation);
 
 void TestMakeDevicePointer(void)
 {
-    typedef int T;
+    using T = int;
 
     T *raw_ptr = 0;
 
@@ -69,7 +69,7 @@ DECLARE_UNITTEST(TestMakeDevicePointer);
 template<typename Vector>
 void TestRawPointerCast(void)
 {
-    typedef typename Vector::value_type T;
+    using T = typename Vector::value_type;
 
     Vector vec(3);
 

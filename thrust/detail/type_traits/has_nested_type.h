@@ -22,11 +22,11 @@
 template<typename T> \
   struct trait_name  \
 {                    \
-  typedef char yes_type; \
-  typedef int  no_type;  \
+  using yes_type = char; \
+  using no_type = int ;  \
   template<typename S> static yes_type test(typename S::nested_type_name *); \
   template<typename S> static no_type  test(...); \
   static bool const value = sizeof(test<T>(0)) == sizeof(yes_type);\
-  typedef thrust::detail::integral_constant<bool, value> type;\
+  using type = thrust::detail::integral_constant<bool, value>;\
 };
 

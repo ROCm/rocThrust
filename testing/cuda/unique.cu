@@ -33,8 +33,8 @@ void unique_kernel(ExecutionPolicy exec, Iterator1 first, Iterator1 last, Binary
 template<typename ExecutionPolicy>
 void TestUniqueDevice(ExecutionPolicy exec)
 {
-  typedef thrust::device_vector<int> Vector;
-  typedef Vector::value_type T;
+  using Vector = thrust::device_vector<int>;
+  using T      = Vector::value_type;
 
   Vector data(10);
   data[0] = 11; 
@@ -108,8 +108,8 @@ DECLARE_UNITTEST(TestUniqueDeviceNoSync);
 template<typename ExecutionPolicy>
 void TestUniqueCudaStreams(ExecutionPolicy policy)
 {
-  typedef thrust::device_vector<int> Vector;
-  typedef Vector::value_type T;
+  using Vector = thrust::device_vector<int>;
+  using T      = Vector::value_type;
 
   Vector data(10);
   data[0] = 11; 
@@ -188,8 +188,8 @@ void unique_copy_kernel(ExecutionPolicy exec, Iterator1 first, Iterator1 last, I
 template<typename ExecutionPolicy>
 void TestUniqueCopyDevice(ExecutionPolicy exec)
 {
-  typedef thrust::device_vector<int> Vector;
-  typedef Vector::value_type T;
+  using Vector = thrust::device_vector<int>;
+  using T      = Vector::value_type;
 
   Vector data(10);
   data[0] = 11; 
@@ -265,8 +265,8 @@ DECLARE_UNITTEST(TestUniqueCopyDeviceNoSync);
 template<typename ExecutionPolicy>
 void TestUniqueCopyCudaStreams(ExecutionPolicy policy)
 {
-  typedef thrust::device_vector<int> Vector;
-  typedef Vector::value_type T;
+  using Vector = thrust::device_vector<int>;
+  using T      = Vector::value_type;
 
   Vector data(10);
   data[0] = 11; 
@@ -347,8 +347,8 @@ void unique_count_kernel(ExecutionPolicy exec, Iterator1 first, Iterator1 last, 
 template<typename ExecutionPolicy>
 void TestUniqueCountDevice(ExecutionPolicy exec)
 {
-  typedef thrust::device_vector<int> Vector;
-  typedef Vector::value_type T;
+  using Vector = thrust::device_vector<int>;
+  using T      = Vector::value_type;
 
   Vector data(10);
   data[0] = 11; 
@@ -407,8 +407,8 @@ DECLARE_UNITTEST(TestUniqueCountDeviceNoSync);
 template<typename ExecutionPolicy>
 void TestUniqueCountCudaStreams(ExecutionPolicy policy)
 {
-  typedef thrust::device_vector<int> Vector;
-  typedef Vector::value_type T;
+  using Vector = thrust::device_vector<int>;
+  using T      = Vector::value_type;
 
   Vector data(10);
   data[0] = 11; 

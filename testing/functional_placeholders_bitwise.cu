@@ -12,23 +12,22 @@ template<typename Vector, typename U> struct rebind_vector;
 template<typename T, typename U, typename Allocator>
   struct rebind_vector<thrust::host_vector<T, Allocator>, U>
 {
-  typedef typename thrust::detail::allocator_traits<Allocator> alloc_traits;
-  typedef typename alloc_traits::template rebind_alloc<U> new_alloc;
-  typedef thrust::host_vector<U, new_alloc> type;
+  using alloc_traits = typename thrust::detail::allocator_traits<Allocator>;
+  using new_alloc    = typename alloc_traits::template rebind_alloc<U>;
+  using type         = thrust::host_vector<U, new_alloc>;
 };
 
 template<typename T, typename U, typename Allocator>
   struct rebind_vector<thrust::device_vector<T, Allocator>, U>
 {
-  typedef thrust::device_vector<U,
-    typename Allocator::template rebind<U>::other> type;
+  using type = thrust::device_vector<U, typename Allocator::template rebind<U>::other>;
 };
 
 template<typename T, typename U, typename Allocator>
   struct rebind_vector<thrust::universal_vector<T, Allocator>, U>
 {
-  typedef thrust::universal_vector<U,
-    typename Allocator::template rebind<U>::other> type;
+  using type = thrust::universal_vector<U,
+    typename Allocator::template rebind<U>::other>;
 };
 
 #define BINARY_FUNCTIONAL_PLACEHOLDERS_TEST(name, op, reference_functor, type_list) \
@@ -39,7 +38,7 @@ template<typename Vector> \
   { \
     constexpr size_t NUM_SAMPLES = 10000; \
     constexpr size_t ZERO = 0; \
-    typedef typename Vector::value_type T; \
+    using T = typename Vector::value_type; \
     Vector lhs = unittest::random_samples<T>(NUM_SAMPLES); \
     Vector rhs = unittest::random_samples<T>(NUM_SAMPLES); \
     thrust::replace(rhs.begin(), rhs.end(), T(0), T(1)); \
@@ -80,8 +79,8 @@ template<typename T>
 template<typename Vector>
   void TestFunctionalPlaceholdersBitNegate(void)
 {
-  typedef typename Vector::value_type T;
-  typedef typename rebind_vector<Vector,bool>::type bool_vector;
+  using T = typename Vector::value_type;
+  using bool_vector = typename rebind_vector<Vector,bool>::type;
   Vector input = unittest::random_samples<T>(num_samples);
 
   bool_vector reference(input.size());

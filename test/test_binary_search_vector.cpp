@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
- *  Modifications Copyright© 2019-2024 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2019-2025 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -181,9 +181,9 @@ TESTS_DEFINE(BinarySearchVectorIntegerTests, SignedIntegerTestsParams);
 template <class ExampleVector, typename NewType>
 struct vector_like
 {
-    typedef typename ExampleVector::allocator_type          alloc;
-    typedef typename alloc::template rebind<NewType>::other new_alloc;
-    typedef thrust::detail::vector_base<NewType, new_alloc> type;
+    using alloc = typename ExampleVector::allocator_type         ;
+    using new_alloc = typename alloc::template rebind<NewType>::other;
+    using type = thrust::detail::vector_base<NewType, new_alloc>;
 };
 
 TYPED_TEST(BinarySearchVectorTests, TestScalarLowerBoundSimple)
@@ -204,7 +204,7 @@ TYPED_TEST(BinarySearchVectorTests, TestScalarLowerBoundSimple)
     Vector input(10);
     thrust::sequence(Policy{}, input.begin(), input.end());
 
-    typedef typename vector_like<Vector, int>::type IntVector;
+    using IntVector = typename vector_like<Vector, int>::type;
 
     // test with integral output type
     IntVector integral_output(10);
@@ -228,7 +228,7 @@ TYPED_TEST(BinarySearchVectorTests, TestScalarLowerBoundSimple)
     ASSERT_EQ(integral_output[9], 5);
 
     //// test with iterator output type
-    //typedef typename vector_like<Vector, typename Vector::iterator>::type IteratorVector;
+    //using IteratorVector = typename vector_like<Vector, typename Vector::iterator>::type;
     //IteratorVector iterator_output(10);
     //thrust::lower_bound(vec.begin(), vec.end(), input.begin(), input.end(), iterator_output.begin());
 
@@ -309,7 +309,7 @@ TYPED_TEST(BinarySearchVectorTests, TestVectorUpperBoundSimple)
     Vector input(10);
     thrust::sequence(Policy{}, input.begin(), input.end());
 
-    typedef typename vector_like<Vector, int>::type IntVector;
+    using IntVector = typename vector_like<Vector, int>::type;
 
     // test with integral output type
     IntVector                    integral_output(10);
@@ -330,7 +330,7 @@ TYPED_TEST(BinarySearchVectorTests, TestVectorUpperBoundSimple)
     ASSERT_EQ(integral_output[9], 5);
 
     //// test with iterator output type
-    //typedef typename vector_like<Vector, typename Vector::iterator>::type IteratorVector;
+    //using IteratorVector = typename vector_like<Vector, typename Vector::iterator>::type;
     //IteratorVector iterator_output(10);
     //thrust::upper_bound(vec.begin(), vec.end(), input.begin(), input.end(), iterator_output.begin());
 
@@ -411,8 +411,8 @@ TYPED_TEST(BinarySearchVectorTests, TestVectorBinarySearchSimple)
     Vector input(10);
     thrust::sequence(Policy{}, input.begin(), input.end());
 
-    typedef typename vector_like<Vector, bool>::type BoolVector;
-    typedef typename vector_like<Vector, int>::type  IntVector;
+    using BoolVector = typename vector_like<Vector, bool>::type;
+    using IntVector = typename vector_like<Vector, int>::type ;
 
     // test with boolean output type
     BoolVector                    bool_output(10);

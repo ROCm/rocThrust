@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
- *  Modifications Copyright© 2019-2024 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2019-2025 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,11 +24,11 @@
 
 #include "test_header.hpp"
 
-typedef ::testing::Types<Params<unsigned short>,
-                         Params<unsigned int>,
-                         Params<unsigned long>,
-                         Params<unsigned long long>>
-    UnsignedIntegralTypesParams;
+using UnsignedIntegralTypesParams = ::testing::Types<
+    Params<unsigned short>,
+    Params<unsigned int>,
+    Params<unsigned long>,
+    Params<unsigned long long>>;
 
 TESTS_DEFINE(ZipIteratorReduceByKeyTests, UnsignedIntegralTypesParams);
 
@@ -75,7 +75,7 @@ TYPED_TEST(ZipIteratorReduceByKeyTests, TestZipIteratorReduceByKey)
             thrust::device_vector<T> d_data1 = h_data1;
             thrust::device_vector<T> d_data2 = h_data2;
 
-            typedef thrust::tuple<T, T> Tuple;
+            using Tuple = thrust::tuple<T, T>;
 
             // integer key, tuple value
             {

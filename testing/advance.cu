@@ -7,8 +7,8 @@
 template <typename Vector>
 void TestAdvance()
 {
-    typedef typename Vector::value_type T;
-    typedef typename Vector::iterator Iterator;
+    using T        = typename Vector::value_type;
+    using Iterator = typename Vector::iterator;
 
     Vector v(10);
     thrust::sequence(v.begin(), v.end());
@@ -32,8 +32,8 @@ DECLARE_VECTOR_UNITTEST(TestAdvance);
 template <typename Vector>
 void TestNext()
 {
-    typedef typename Vector::value_type T;
-    typedef typename Vector::iterator Iterator;
+    using T        = typename Vector::value_type;
+    using Iterator = typename Vector::iterator;
 
     Vector v(10);
     thrust::sequence(v.begin(), v.end());
@@ -63,8 +63,8 @@ DECLARE_VECTOR_UNITTEST(TestNext);
 template <typename Vector>
 void TestPrev()
 {
-    typedef typename Vector::value_type T;
-    typedef typename Vector::iterator Iterator;
+    using T        = typename Vector::value_type;
+    using Iterator = typename Vector::iterator;
 
     Vector v(10);
     thrust::sequence(v.begin(), v.end());

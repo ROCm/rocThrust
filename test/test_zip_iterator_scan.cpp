@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
- *  Modifications Copyright© 2019-2024 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2019-2025 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ TYPED_TEST(ZipIteratorScanVariablesTests, TestZipIteratorScan)
             thrust::device_vector<T> d_data0 = h_data0;
             thrust::device_vector<T> d_data1 = h_data1;
 
-            typedef thrust::tuple<T, T> Tuple;
+            using Tuple = thrust::tuple<T, T>;
 
             thrust::host_vector<Tuple>   h_result(size);
             thrust::device_vector<Tuple> d_result(size);

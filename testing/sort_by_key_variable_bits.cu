@@ -5,15 +5,14 @@
 
 using namespace unittest;
 
-typedef unittest::type_list<
+using UnsignedIntegerTypes = unittest::type_list<
 #if !(defined(__GNUC__) && (__GNUC__ <= 4) && (__GNUC_MINOR__ <= 1))
 // XXX GCC 4.1 miscompiles the char sorts with -O2 for some reason
                             unittest::uint8_t,
 #endif
                             unittest::uint16_t,
                             unittest::uint32_t,
-                            unittest::uint64_t> UnsignedIntegerTypes;
-
+                            unittest::uint64_t>;
 
 template <typename T>
 struct TestSortByKeyVariableBits

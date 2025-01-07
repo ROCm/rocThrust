@@ -70,7 +70,7 @@ VariableUnitTest<TestReduceDeviceNoSync, IntegralTypes> TestReduceDeviceNoSyncIn
 template<typename ExecutionPolicy>
 void TestReduceCudaStreams(ExecutionPolicy policy)
 {
-  typedef thrust::device_vector<int> Vector;
+  using Vector = thrust::device_vector<int>;
 
   Vector v(3);
   v[0] = 1; v[1] = -2; v[2] = 3;

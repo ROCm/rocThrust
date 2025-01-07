@@ -6,8 +6,8 @@
 template<typename Vector>
 void TestSetUnionByKeyDescendingSimple(void)
 {
-  typedef typename Vector::value_type T;
-  typedef typename Vector::iterator Iterator;
+  using T        = typename Vector::value_type;
+  using Iterator = typename Vector::iterator;
 
   Vector a_key(3), b_key(4);
   Vector a_val(3), b_val(4);

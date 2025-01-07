@@ -1,6 +1,6 @@
 /*
- *  Copyright 20011-2021 NVIDIA Corporation
- *  Modifications Copyright© 2020-2024 Advanced Micro Devices, Inc. All rights reserved.
+ *  Copyright 2011-2021 NVIDIA Corporation
+ *  Modifications Copyright© 2020-2025 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -188,7 +188,7 @@ template <typename InputIt>
 typename thrust::iterator_traits<InputIt>::value_type
 arithmetic_mean(InputIt first, InputIt last)
 {
-  typedef typename thrust::iterator_traits<InputIt>::value_type T;
+  using T = typename thrust::iterator_traits<InputIt>::value_type;
   return arithmetic_mean(first, last, T());
 }
 
@@ -374,7 +374,7 @@ template <
 >
 struct experiment_driver
 {
-  typedef typename ElementMetaType::type element_type;
+  using element_type = typename ElementMetaType::type;
 
   static char const* const test_name;
   static char const* const element_type_name; // Element type name as a string.
@@ -1287,7 +1287,7 @@ void run_core_primitives_experiments_for_type()
 #define DEFINE_ELEMENT_META_TYPE(T)                       \
   struct PP_CAT(T, _meta)                                 \
   {                                                       \
-    typedef T type;                                       \
+    using type = T;                                       \
                                                           \
     static char const* name() { return PP_STRINGIZE(T); } \
   };                                                      \
@@ -1426,14 +1426,14 @@ private:
 
 struct command_line_processor
 {
-  typedef std::vector<std::string> positional_options_type;
+  using positional_options_type = std::vector<std::string>;
 
-  typedef std::multimap<std::string, std::string> keyword_options_type;
+  using keyword_options_type = std::multimap<std::string, std::string>;
 
-  typedef std::pair<
-    keyword_options_type::const_iterator
-  , keyword_options_type::const_iterator
-  > keyword_option_values;
+  using keyword_option_values = std::pair<
+                                  keyword_options_type::const_iterator
+                                , keyword_options_type::const_iterator
+                                >;
 
   command_line_processor(int argc, char** argv)
     : pos_args(), kw_args()

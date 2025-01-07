@@ -28,7 +28,7 @@ void TestPartitionPointDevice(ExecutionPolicy exec)
 {
   size_t n = 1000;
   thrust::device_vector<int> v = unittest::random_integers<int>(n);
-  typedef typename thrust::device_vector<int>::iterator iterator;
+  using iterator               = typename thrust::device_vector<int>::iterator;
 
   iterator ref = thrust::stable_partition(v.begin(), v.end(), is_even<int>());
 
@@ -58,9 +58,9 @@ DECLARE_UNITTEST(TestPartitionPointDeviceDevice);
 
 void TestPartitionPointCudaStreams()
 {
-  typedef thrust::device_vector<int> Vector;
-  typedef Vector::value_type T;
-  typedef Vector::iterator Iterator;
+  using Vector   = thrust::device_vector<int>;
+  using T        = Vector::value_type;
+  using Iterator = Vector::iterator;
 
   Vector v(4);
   v[0] = 1; v[1] = 1; v[2] = 1; v[3] = 0;

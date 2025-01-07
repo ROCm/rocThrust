@@ -22,8 +22,8 @@ void set_symmetric_difference_by_key_kernel(ExecutionPolicy exec,
 template<typename ExecutionPolicy>
 void TestSetSymmetricDifferenceByKeyDevice(ExecutionPolicy exec)
 {
-  typedef thrust::device_vector<int> Vector;
-  typedef typename Vector::iterator Iterator;
+  using Vector   = thrust::device_vector<int>;
+  using Iterator = typename Vector::iterator;
 
   Vector a_key(4), b_key(5);
   Vector a_val(4), b_val(5);
@@ -40,7 +40,7 @@ void TestSetSymmetricDifferenceByKeyDevice(ExecutionPolicy exec)
 
   Vector result_key(5), result_val(5);
 
-  typedef thrust::pair<Iterator,Iterator> iter_pair;
+  using iter_pair = thrust::pair<Iterator, Iterator>;
   thrust::device_vector<iter_pair> end_vec(1);
 
   set_symmetric_difference_by_key_kernel<<<1,1>>>(exec,
@@ -80,8 +80,8 @@ DECLARE_UNITTEST(TestSetSymmetricDifferenceByKeyDeviceDevice);
 
 void TestSetSymmetricDifferenceByKeyCudaStreams()
 {
-  typedef thrust::device_vector<int> Vector;
-  typedef Vector::iterator Iterator;
+  using Vector   = thrust::device_vector<int>;
+  using Iterator = Vector::iterator;
 
   Vector a_key(4), b_key(5);
   Vector a_val(4), b_val(5);

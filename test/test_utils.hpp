@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
- *  Modifications Copyright© 2019-2024 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2019-2025 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -423,8 +423,8 @@ struct FixedVector
 template <typename Key, typename Value>
 struct key_value
 {
-    typedef Key   key_type;
-    typedef Value value_type;
+    using key_type = Key  ;
+    using value_type = Value;
 
     __host__ __device__ key_value(void)
         : key()

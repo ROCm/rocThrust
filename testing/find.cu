@@ -101,7 +101,7 @@ DECLARE_UNITTEST(TestFindDispatchImplicit);
 template <class Vector>
 void TestFindIfSimple(void)
 {
-    typedef typename Vector::value_type T;
+    using T = typename Vector::value_type;
 
     Vector vec(5);
     vec[0] = 1;
@@ -164,7 +164,7 @@ DECLARE_UNITTEST(TestFindIfDispatchImplicit);
 template <class Vector>
 void TestFindIfNotSimple(void)
 {
-    typedef typename Vector::value_type T;
+    using T = typename Vector::value_type;
 
     Vector vec(5);
     vec[0] = 0;

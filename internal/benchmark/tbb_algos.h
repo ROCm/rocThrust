@@ -24,7 +24,7 @@ struct NegateBody
 template <typename Vector>
 struct ForBody
 { 
-  typedef typename Vector::value_type T;
+  using T = typename Vector::value_type;
 
 private:
   Vector& v;
@@ -42,7 +42,7 @@ public:
 template <typename Vector>
 struct ReduceBody
 { 
-  typedef typename Vector::value_type T;
+  using T = typename Vector::value_type;
 
 private:
   Vector& v;
@@ -66,7 +66,7 @@ public:
 template <typename Vector>
 struct ScanBody
 { 
-  typedef typename Vector::value_type T;
+  using T = typename Vector::value_type;
 
 private:
   Vector& v; 
@@ -101,7 +101,7 @@ public:
 template <typename Vector>
 struct CopyBody
 { 
-  typedef typename Vector::value_type T;
+  using T = typename Vector::value_type;
 
 private:
   Vector &v;

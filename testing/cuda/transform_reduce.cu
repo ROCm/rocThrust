@@ -15,9 +15,9 @@ void transform_reduce_kernel(ExecutionPolicy exec, Iterator1 first, Iterator1 la
 template<typename ExecutionPolicy>
 void TestTransformReduceDevice(ExecutionPolicy exec)
 {
-  typedef thrust::device_vector<int> Vector;
-  typedef typename Vector::value_type T;
-  
+  using Vector = thrust::device_vector<int>;
+  using T      = typename Vector::value_type;
+
   Vector data(3);
   data[0] = 1; data[1] = -2; data[2] = 3;
   
@@ -50,9 +50,9 @@ DECLARE_UNITTEST(TestTransformReduceDeviceDevice);
 
 void TestTransformReduceCudaStreams()
 {
-  typedef thrust::device_vector<int> Vector;
-  typedef Vector::value_type T;
-  
+  using Vector = thrust::device_vector<int>;
+  using T      = Vector::value_type;
+
   Vector data(3);
   data[0] = 1; data[1] = -2; data[2] = 3;
   

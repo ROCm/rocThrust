@@ -23,7 +23,7 @@ template<typename Vector>
   void operator()(const size_t)
   {
     const size_t n = 10000;
-    typedef typename Vector::value_type T;
+    using T        = typename Vector::value_type;
 
     T a(13);
 
@@ -48,7 +48,7 @@ template<typename Vector>
   void operator()(const size_t)
   {
     const size_t n = 10000;
-    typedef typename Vector::value_type T;
+    using T        = typename Vector::value_type;
 
     T a(13);
 

@@ -5,7 +5,7 @@
 template <class Vector>
 void TestMinElementSimple(void)
 {
-    typedef typename Vector::value_type T;
+    using T = typename Vector::value_type;
 
     Vector data(6);
     data[0] = 3;
@@ -26,7 +26,7 @@ DECLARE_VECTOR_UNITTEST(TestMinElementSimple);
 template <class Vector>
 void TestMinElementWithTransform(void)
 {
-    typedef typename Vector::value_type T;
+    using T = typename Vector::value_type;
 
     Vector data(6);
     data[0] = 3;

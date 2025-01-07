@@ -1,6 +1,6 @@
 /******************************************************************************
  * Copyright (c) 2016, NVIDIA CORPORATION.  All rights reserved.
- * Modifications Copyright© 2019-2024 Advanced Micro Devices, Inc. All rights reserved.
+ * Modifications Copyright© 2019-2025 Advanced Micro Devices, Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,12 +31,13 @@
 
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HIP
 
-#include <thrust/detail/cstdint.h>
 #include <thrust/detail/temporary_array.h>
 #include <thrust/distance.h>
 #include <thrust/sort.h>
 #include <thrust/system/hip/detail/execution_policy.h>
 #include <thrust/system/hip/detail/par_to_seq.h>
+
+#include <cstdint>
 
 // rocPRIM includes
 #include <rocprim/rocprim.hpp>
@@ -115,7 +116,7 @@ namespace __merge_sort
                     ItemsIt                    items_first,
                     CompareOp                  compare_op)
     {
-        typedef typename iterator_traits<KeysIt>::difference_type size_type;
+        using size_type = typename iterator_traits<KeysIt>::difference_type;
 
         const size_type count = static_cast<size_type>(thrust::distance(keys_first, keys_last));
 
@@ -128,7 +129,7 @@ namespace __merge_sort
 
         hipError_t status;
 
-        status = dispatch<SORT_ITEMS>::doit(NULL,
+        status = dispatch<SORT_ITEMS>::doit(nullptr,
                                             storage_size,
                                             keys_first,
                                             items_first,
@@ -139,7 +140,7 @@ namespace __merge_sort
         hip_rocprim::throw_on_error(status, "merge_sort: failed on 1st step");
 
         // Allocate temporary storage.
-        thrust::detail::temporary_array<thrust::detail::uint8_t, Derived>
+        thrust::detail::temporary_array<std::uint8_t, Derived>
             tmp(policy, storage_size);
         void *ptr = static_cast<void*>(tmp.data().get());
 
@@ -285,7 +286,7 @@ namespace __radix_sort
                     ItemsIt                    items_first,
                     CompareOp )
     {
-        typedef typename iterator_traits<KeysIt>::difference_type size_type;
+        using size_type = typename iterator_traits<KeysIt>::difference_type;
 
         const size_type count = static_cast<size_type>(thrust::distance(keys_first, keys_last));
 
@@ -298,7 +299,7 @@ namespace __radix_sort
 
         hipError_t status;
 
-        status = dispatch<SORT_ITEMS, CompareOp>::doit(NULL,
+        status = dispatch<SORT_ITEMS, CompareOp>::doit(nullptr,
                                                        storage_size,
                                                        keys_first,
                                                        items_first,
@@ -308,7 +309,7 @@ namespace __radix_sort
         hip_rocprim::throw_on_error(status, "radix_sort: failed on 1st step");
 
         // Allocate temporary storage.
-        thrust::detail::temporary_array<thrust::detail::uint8_t, Derived>
+        thrust::detail::temporary_array<std::uint8_t, Derived>
             tmp(policy, storage_size);
         void *ptr = static_cast<void*>(tmp.data().get());
 
@@ -405,9 +406,9 @@ stable_sort(execution_policy<Derived>& policy,
                         ItemsIt                    last,
                         CompareOp                  compare_op)
         {
-            typedef typename thrust::iterator_value<ItemsIt>::type item_type;
+            using item_type = typename thrust::iterator_value<ItemsIt>::type;
             __smart_sort::smart_sort<detail::false_type>(
-                policy, first, last, (item_type*)NULL, compare_op);
+                policy, first, last, (item_type*)nullptr, compare_op);
         }
         THRUST_DEVICE
         static void seq(execution_policy<Derived>& policy,
@@ -499,7 +500,7 @@ template <class Derived, class ItemsIt>
 void THRUST_HIP_FUNCTION
 sort(execution_policy<Derived>& policy, ItemsIt first, ItemsIt last)
 {
-    typedef typename thrust::iterator_value<ItemsIt>::type item_type;
+    using item_type = typename thrust::iterator_value<ItemsIt>::type;
     hip_rocprim::sort(policy, first, last, less<item_type>());
 }
 
@@ -509,7 +510,7 @@ stable_sort(execution_policy<Derived>& policy,
             ItemsIt                    first,
             ItemsIt                    last)
 {
-    typedef typename thrust::iterator_value<ItemsIt>::type item_type;
+    using item_type = typename thrust::iterator_value<ItemsIt>::type;
     hip_rocprim::stable_sort(policy, first, last, less<item_type>());
 }
 
@@ -520,7 +521,7 @@ sort_by_key(execution_policy<Derived>& policy,
             KeysIt                     keys_last,
             ValuesIt                   values)
 {
-    typedef typename thrust::iterator_value<KeysIt>::type key_type;
+    using key_type = typename thrust::iterator_value<KeysIt>::type;
     hip_rocprim::sort_by_key(policy, keys_first, keys_last, values, less<key_type>());
 }
 
@@ -531,7 +532,7 @@ stable_sort_by_key(execution_policy<Derived>& policy,
                    KeysIt                     keys_last,
                    ValuesIt                   values)
 {
-    typedef typename thrust::iterator_value<KeysIt>::type key_type;
+    using key_type = typename thrust::iterator_value<KeysIt>::type;
     hip_rocprim::stable_sort_by_key(policy, keys_first, keys_last, values, less<key_type>());
 }
 

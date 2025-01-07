@@ -12,7 +12,8 @@
 
 #include <unittest/unittest.h>
 #include <thrust/device_vector.h>
-#include <thrust/detail/cstdint.h>
+
+#include <cstdint>
 
 struct non_trivial
 {
@@ -26,7 +27,7 @@ void test_out_of_memory_recovery()
   {
     thrust::device_vector<non_trivial> x(1);
 
-    thrust::device_vector<thrust::detail::uint32_t> y(0x00ffffffffffffff);
+    thrust::device_vector<std::uint32_t> y(0x00ffffffffffffff);
   }
   catch (...) { }
 }

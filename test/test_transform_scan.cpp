@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
- *  Modifications Copyright© 2019-2024 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2019-2025 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -313,7 +313,7 @@ TYPED_TEST(TransformScanVectorTests, TestTransformScanCountingIterator)
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    typedef typename thrust::iterator_system<typename Vector::iterator>::type space;
+    using space = typename thrust::iterator_system<typename Vector::iterator>::type;
 
     thrust::counting_iterator<T, space> first(1);
 
@@ -434,8 +434,8 @@ TYPED_TEST(TransformScanVariablesTests, TestValueCategoryDeduction)
 
 TEST(TransformScanTests, TestTransformScanConstAccumulator)
 {
-    typedef thrust::device_vector<int> Vector;
-    typedef Vector::value_type         T;
+    using Vector = thrust::device_vector<int>;
+    using T = Vector::value_type        ;
 
     Vector::iterator iter;
 

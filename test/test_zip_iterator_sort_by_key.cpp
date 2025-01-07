@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
- *  Modifications Copyright© 2019-2024 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2019-2025 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@
 #include "test_header.hpp"
 
 #if defined(_WIN32) && defined(__HIP__)
-typedef ::testing::Types<Params<int16_t>, Params<int32_t>> TestParams;
+using TestParams = ::testing::Types<Params<int16_t>, Params<int32_t>>;
 #else
-typedef ::testing::Types<Params<int8_t>, Params<int16_t>, Params<int32_t>> TestParams;
+using TestParams = ::testing::Types<Params<int8_t>, Params<int16_t>, Params<int32_t>>;
 #endif
 
 TESTS_DEFINE(ZipIteratorStableSortByKeyTests, TestParams);

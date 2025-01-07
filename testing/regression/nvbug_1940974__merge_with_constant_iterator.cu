@@ -16,7 +16,7 @@ struct comp
 
 int main()
 {
-    typedef thrust::device_vector<int> Vector;
+    using Vector = thrust::device_vector<int>;
 
     Vector second(10), third(5), fourth(5), indices(15);
 

@@ -18,7 +18,7 @@ struct greater_than_5
  
 int main()
 {
-  typedef thrust::complex<float> T;
+  using T = thrust::complex<float>;
 
   thrust::device_vector<T> d(10);
   thrust::sequence(d.begin(), d.end());

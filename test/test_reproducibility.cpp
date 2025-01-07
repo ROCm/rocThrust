@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
- *  Modifications Copyright© 2024 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2024-2025 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,14 +24,13 @@
 #include "test_header.hpp"
 #include "bitwise_repro/bwr_utils.hpp"
 
-typedef ::testing::Types<
+using ReproducibilityTestParams = ::testing::Types<
     Params<thrust::device_vector<int>, std::decay_t<decltype(thrust::hip::par_det)>>,
     Params<thrust::device_vector<float>, std::decay_t<decltype(thrust::hip::par_det)>>,
     Params<thrust::device_vector<double>, std::decay_t<decltype(thrust::hip::par_det)>>,
     Params<thrust::device_vector<int>, std::decay_t<decltype(thrust::hip::par_det_nosync)>>,
     Params<thrust::device_vector<float>, std::decay_t<decltype(thrust::hip::par_det_nosync)>>,
-    Params<thrust::device_vector<double>, std::decay_t<decltype(thrust::hip::par_det_nosync)>>>
-    ReproducibilityTestParams;
+    Params<thrust::device_vector<double>, std::decay_t<decltype(thrust::hip::par_det_nosync)>>>;
 
 TESTS_DEFINE(ReproducibilityTests, ReproducibilityTestParams);
 

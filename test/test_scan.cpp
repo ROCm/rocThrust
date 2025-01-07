@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
- *  Modifications Copyright© 2019-2024 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2019-2025 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -30,10 +30,9 @@ TESTS_DEFINE(ScanVariablesTests, NumericalTestsParams);
 
 TESTS_DEFINE(ScanVectorTests, VectorSignedIntegerTestsParams);
 
-typedef ::testing::Types<
+using MixedParams = ::testing::Types<
     Params<std::tuple<thrust::host_vector<int>, thrust::host_vector<float>>>,
-    Params<std::tuple<thrust::device_vector<int>, thrust::device_vector<float>>>>
-    MixedParams;
+    Params<std::tuple<thrust::device_vector<int>, thrust::device_vector<float>>>>;
 
 TESTS_DEFINE(ScanMixedTests, MixedParams);
 

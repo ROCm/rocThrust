@@ -206,7 +206,7 @@ struct TestComplexArithmeticTransform
 {
   void operator()(const size_t n)
   {
-    typedef thrust::complex<T> type;
+    using type                     = thrust::complex<T>;
     thrust::host_vector<type> h_p1 = random_complex_samples<T>(n);
     thrust::host_vector<type> h_p2 = random_complex_samples<T>(n);
     thrust::host_vector<type>   h_result(n);
@@ -227,7 +227,7 @@ struct TestComplexPlaneTransform
 {
   void operator()(const size_t n)
   {
-    typedef thrust::complex<T> type;
+    using type                     = thrust::complex<T>;
     thrust::host_vector<type> h_p1 = random_complex_samples<T>(n);
     thrust::host_vector<type>   h_result(n);
 
@@ -247,7 +247,7 @@ struct TestComplexPowerTransform
 {
   void operator()(const size_t n)
   {
-    typedef thrust::complex<T> type;
+    using type                     = thrust::complex<T>;
     thrust::host_vector<type> h_p1 = random_complex_samples<T>(n);
     thrust::host_vector<type> h_p2 = random_complex_samples<T>(n);
     thrust::host_vector<type>   h_result(n);
@@ -274,7 +274,7 @@ struct TestComplexExponentialTransform
 {
   void operator()(const size_t n)
   {
-    typedef thrust::complex<T> type;
+    using type                     = thrust::complex<T>;
     thrust::host_vector<type> h_p1 = random_complex_samples<T>(n);
     thrust::host_vector<type>   h_result(n);
 
@@ -301,7 +301,7 @@ struct TestComplexTrigonometricTransform
 {
   void operator()(const size_t n)
   {
-    typedef thrust::complex<T> type;
+    using type                     = thrust::complex<T>;
     thrust::host_vector<type> h_p1 = random_complex_samples<T>(n);
     thrust::host_vector<type>   h_result(n);
 

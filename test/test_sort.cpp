@@ -1,6 +1,6 @@
 /*
  *  Copyright 2008-2013 NVIDIA Corporation
- *  Modifications Copyright© 2019-2024 Advanced Micro Devices, Inc. All rights reserved.
+ *  Modifications Copyright© 2019-2025 Advanced Micro Devices, Inc. All rights reserved.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -41,12 +41,11 @@ public:
     using compare_function = typename ParamsSort::compare_function;
 };
 
-typedef ::testing::Types<ParamsSort<unsigned short, int, thrust::less<unsigned short>>,
+using SortTestsParams = ::testing::Types<ParamsSort<unsigned short, int, thrust::less<unsigned short>>,
                          ParamsSort<unsigned short, int, thrust::greater<unsigned short>>,
                          ParamsSort<unsigned short, int, custom_compare_less<unsigned short>>,
                          ParamsSort<unsigned short, double>,
-                         ParamsSort<int, long long>>
-    SortTestsParams;
+                         ParamsSort<int, long long>>;
 
 TYPED_TEST_SUITE(SortTests, SortTestsParams);
 

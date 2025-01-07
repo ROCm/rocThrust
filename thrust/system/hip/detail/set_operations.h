@@ -1,6 +1,6 @@
 /******************************************************************************
  * Copyright (c) 2016, NVIDIA CORPORATION.  All rights reserved.
- * Modifications Copyright (c) 2019-2024, Advanced Micro Devices, Inc.  All rights reserved.
+ * Modifications Copyright (c) 2019-2025, Advanced Micro Devices, Inc.  All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -31,7 +31,6 @@
 
 #if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_HIP
 
-#include <thrust/detail/cstdint.h>
 #include <thrust/detail/mpl/math.h>
 #include <thrust/detail/temporary_array.h>
 #include <thrust/distance.h>
@@ -43,6 +42,8 @@
 #include <thrust/system/hip/detail/general/temp_storage.h>
 #include <thrust/system/hip/detail/par_to_seq.h>
 #include <thrust/system/hip/detail/util.h>
+
+#include <cstdint>
 
 // rocprim include
 #include <rocprim/rocprim.hpp>
@@ -105,7 +106,7 @@ namespace __set_operations
     THRUST_HIP_DEVICE_FUNCTION Size
     merge_path(It1 a, Size aCount, It2 b, Size bCount, Size diag, Comp comp)
     {
-        typedef typename thrust::iterator_traits<It1>::value_type T;
+        using T = typename thrust::iterator_traits<It1>::value_type;
 
         Size begin = thrust::max((Size)0, diag - bCount);
         Size end   = thrust::min(diag, aCount);
@@ -134,7 +135,7 @@ namespace __set_operations
                   Size2     levels,
                   CompareOp compare_op)
     {
-        typedef typename iterator_traits<It1>::value_type T;
+        using T = typename iterator_traits<It1>::value_type;
 
         Size index1 = merge_path<false>(keys1, num_keys1, keys2, num_keys2, diag, compare_op);
         Size index2 = diag - index1;
@@ -1024,7 +1025,7 @@ namespace __set_operations
     {
         using namespace thrust::system::hip_rocprim::temp_storage;
 
-        typedef typename iterator_traits<KeysIt1>::difference_type size_type;
+        using size_type = typename iterator_traits<KeysIt1>::difference_type;
         size_type num_keys1 = static_cast<size_type>(thrust::distance(keys1_first, keys1_last));
         size_type num_keys2 = static_cast<size_type>(thrust::distance(keys2_first, keys2_last));
 
@@ -1035,7 +1036,7 @@ namespace __set_operations
         hipStream_t stream             = hip_rocprim::stream(policy);
         bool        debug_sync         = THRUST_HIP_DEBUG_SYNC_FLAG;
 
-        hip_rocprim::throw_on_error(doit_step<HAS_VALUES>(NULL,
+        hip_rocprim::throw_on_error(doit_step<HAS_VALUES>(nullptr,
                                                           temp_storage_bytes,
                                                           keys1_first,
                                                           keys2_first,
@@ -1045,7 +1046,7 @@ namespace __set_operations
                                                           num_keys2,
                                                           keys_output,
                                                           values_output,
-                                                          reinterpret_cast<size_type*>(NULL),
+                                                          static_cast<size_type*>(nullptr),
                                                           compare_op,
                                                           set_op,
                                                           stream,
@@ -1066,7 +1067,7 @@ namespace __set_operations
         hip_rocprim::throw_on_error(partition(ptr, storage_size, l_part));
 
         // Allocate temporary storage.
-        thrust::detail::temporary_array<thrust::detail::uint8_t, Derived> tmp(policy, storage_size);
+        thrust::detail::temporary_array<std::uint8_t, Derived> tmp(policy, storage_size);
         ptr = static_cast<void*>(tmp.data().get());
 
         // Create pointers with alignment
@@ -1123,7 +1124,7 @@ set_difference(execution_policy<Derived>& policy,
                                                                              CompareOp,
                                                                              set_op_type>));
 #if __THRUST_HAS_HIPRT__
-    dummy_type* null_ = NULL;
+    dummy_type* null_ = nullptr;
     return __set_operations::set_operations<false>(policy,
                                                    items1_first,
                                                    items1_last,
@@ -1156,7 +1157,7 @@ set_difference(execution_policy<Derived>& policy,
                ItemsIt2                   items2_last,
                OutputIt                   result)
 {
-    typedef typename thrust::iterator_value<ItemsIt1>::type value_type;
+    using value_type = typename thrust::iterator_value<ItemsIt1>::type;
     return hip_rocprim::set_difference(
         policy, items1_first, items1_last, items2_first, items2_last, result, less<value_type>());
 }
@@ -1187,7 +1188,7 @@ set_intersection(execution_policy<Derived>& policy,
                                                                              CompareOp,
                                                                              set_op_type>));
 #if __THRUST_HAS_HIPRT__
-    dummy_type* null_ = NULL;
+    dummy_type* null_ = nullptr;
     return __set_operations::set_operations<false>(policy,
                                                    items1_first,
                                                    items1_last,
@@ -1220,7 +1221,7 @@ set_intersection(execution_policy<Derived>& policy,
                  ItemsIt2                   items2_last,
                  OutputIt                   result)
 {
-    typedef typename thrust::iterator_value<ItemsIt1>::type value_type;
+    using value_type = typename thrust::iterator_value<ItemsIt1>::type;
     return hip_rocprim::set_intersection(
         policy, items1_first, items1_last, items2_first, items2_last, result, less<value_type>());
 }
@@ -1251,7 +1252,7 @@ set_symmetric_difference(execution_policy<Derived>& policy,
                                                                              CompareOp,
                                                                              set_op_type>));
 #if __THRUST_HAS_HIPRT__
-    dummy_type* null_ = NULL;
+    dummy_type* null_ = nullptr;
     return __set_operations::set_operations<false>(policy,
                                                    items1_first,
                                                    items1_last,
@@ -1284,7 +1285,7 @@ set_symmetric_difference(execution_policy<Derived>& policy,
                          ItemsIt2                   items2_last,
                          OutputIt                   result)
 {
-    typedef typename thrust::iterator_value<ItemsIt1>::type value_type;
+    using value_type = typename thrust::iterator_value<ItemsIt1>::type;
     return hip_rocprim::set_symmetric_difference(
         policy, items1_first, items1_last, items2_first, items2_last, result, less<value_type>());
 }
@@ -1315,7 +1316,7 @@ set_union(execution_policy<Derived>& policy,
                                                                              CompareOp,
                                                                              set_op_type>));
 #if __THRUST_HAS_HIPRT__
-    dummy_type* null_ = NULL;
+    dummy_type* null_ = nullptr;
     return __set_operations::set_operations<false>(policy,
                                                    items1_first,
                                                    items1_last,
@@ -1348,7 +1349,7 @@ set_union(execution_policy<Derived>& policy,
           ItemsIt2                   items2_last,
           OutputIt                   result)
 {
-    typedef typename thrust::iterator_value<ItemsIt1>::type value_type;
+    using value_type = typename thrust::iterator_value<ItemsIt1>::type;
     return hip_rocprim::set_union(
         policy, items1_first, items1_last, items2_first, items2_last, result, less<value_type>());
 }
@@ -1437,7 +1438,7 @@ set_difference_by_key(execution_policy<Derived>& policy,
                       KeysOutputIt               keys_result,
                       ItemsOutputIt              items_result)
 {
-    typedef typename thrust::iterator_value<KeysIt1>::type value_type;
+    using value_type = typename thrust::iterator_value<KeysIt1>::type;
     return hip_rocprim::set_difference_by_key(policy,
                                               keys1_first,
                                               keys1_last,
@@ -1525,7 +1526,7 @@ set_intersection_by_key(execution_policy<Derived>& policy,
                         KeysOutputIt               keys_result,
                         ItemsOutputIt              items_result)
 {
-    typedef typename thrust::iterator_value<KeysIt1>::type value_type;
+    using value_type = typename thrust::iterator_value<KeysIt1>::type;
     return hip_rocprim::set_intersection_by_key(policy,
                                                 keys1_first,
                                                 keys1_last,
@@ -1615,7 +1616,7 @@ set_symmetric_difference_by_key(execution_policy<Derived>& policy,
                                 KeysOutputIt               keys_result,
                                 ItemsOutputIt              items_result)
 {
-    typedef typename thrust::iterator_value<KeysIt1>::type value_type;
+    using value_type = typename thrust::iterator_value<KeysIt1>::type;
     return hip_rocprim::set_symmetric_difference_by_key(policy,
                                                         keys1_first,
                                                         keys1_last,
@@ -1706,7 +1707,7 @@ set_union_by_key(execution_policy<Derived>& policy,
                  KeysOutputIt               keys_result,
                  ItemsOutputIt              items_result)
 {
-    typedef typename thrust::iterator_value<KeysIt1>::type value_type;
+    using value_type = typename thrust::iterator_value<KeysIt1>::type;
     return hip_rocprim::set_union_by_key(policy,
                                          keys1_first,
                                          keys1_last,

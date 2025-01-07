@@ -1,5 +1,5 @@
 # ########################################################################
-# Copyright 2019-2024 Advanced Micro Devices, Inc.
+# Copyright 2019-2025 Advanced Micro Devices, Inc.
 # ########################################################################
 
 include:
@@ -428,7 +428,7 @@ build:cuda-and-omp:
   tags:
     - build
   variables:
-    CCCL_GIT_BRANCH: v2.5.0
+    CCCL_GIT_BRANCH: v2.6.0
     CCCL_DIR: ${CI_PROJECT_DIR}/cccl
   needs: []
   script:

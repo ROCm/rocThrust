@@ -10,7 +10,7 @@ template<typename Vector> \
   void operator()(const size_t) \
   { \
     const size_t num_samples = 10000; \
-    typedef typename Vector::value_type T; \
+    using T = typename Vector::value_type; \
     Vector lhs = unittest::random_samples<T>(num_samples); \
     Vector rhs = unittest::random_samples<T>(num_samples); \
     thrust::replace(rhs.begin(), rhs.end(), T(0), T(1)); \
@@ -147,7 +147,7 @@ template<typename Vector> \
   void TestFunctionalPlaceholdersPrefix##name(void) \
 { \
   const size_t num_samples = 10000; \
-  typedef typename Vector::value_type T; \
+  using T = typename Vector::value_type; \
   Vector input = unittest::random_samples<T>(num_samples); \
 \
   Vector input_reference = input; \
@@ -171,7 +171,7 @@ template<typename Vector> \
   void TestFunctionalPlaceholdersSuffix##name(void) \
 { \
   const size_t num_samples = 10000; \
-  typedef typename Vector::value_type T; \
+  using T = typename Vector::value_type; \
   Vector input = unittest::random_samples<T>(num_samples); \
 \
   Vector input_reference = input; \
