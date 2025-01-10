@@ -1,5 +1,5 @@
 # ########################################################################
-# Copyright 2024 Advanced Micro Devices, Inc.
+# Copyright 2024-2025 Advanced Micro Devices, Inc.
 # ########################################################################
 
 # ###########################
@@ -50,6 +50,7 @@ function(add_thrust_benchmark BENCHMARK_NAME BENCHMARK_SOURCE NOT_INTERNAL)
     endif()
     add_executable(${BENCHMARK_TARGET} ${BENCHMARK_SOURCE})
 
+    target_compile_options(${BENCHMARK_TARGET} PRIVATE ${COMPILE_OPTIONS})
     target_link_libraries(${BENCHMARK_TARGET}
         PRIVATE
             rocthrust

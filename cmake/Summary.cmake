@@ -1,6 +1,6 @@
 # MIT License
 #
-# Copyright (c) 2019-2024 Advanced Micro Devices, Inc. All rights reserved.
+# Copyright (c) 2019-2025 Advanced Micro Devices, Inc. All rights reserved.
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -58,6 +58,12 @@ function (print_configuration_summary)
     list(TRANSFORM CMAKE_CXX_COMPILER_VERBOSE_DETAILS PREPEND "--     ")
     string(REPLACE ";" "\n" CMAKE_CXX_COMPILER_VERBOSE_DETAILS "${CMAKE_CXX_COMPILER_VERBOSE_DETAILS}")
 
+    # Joins CMAKE_CXX_FLAGS and COMPILE_OPTIONS
+    string(STRIP "${CMAKE_CXX_FLAGS}" CMAKE_CXX_FLAGS_STRIP)
+    string(REPLACE " " ";" CMAKE_CXX_FLAGS_AND_OPTIONS_LIST "${CMAKE_CXX_FLAGS_STRIP}")
+    list(APPEND CMAKE_CXX_FLAGS_AND_OPTIONS_LIST "${COMPILE_OPTIONS}")
+    list(JOIN CMAKE_CXX_FLAGS_AND_OPTIONS_LIST " " CMAKE_CXX_FLAGS_AND_OPTIONS)
+
     message(STATUS "")
     message(STATUS "******** Summary ********")
     message(STATUS "General:")
@@ -71,8 +77,7 @@ if(USE_HIPCXX)
 else()
     message(STATUS "  C++ compiler          : ${CMAKE_CXX_COMPILER}")
     message(STATUS "  C++ compiler version  : ${CMAKE_CXX_COMPILER_VERSION}")
-    string(STRIP "${CMAKE_CXX_FLAGS}" CMAKE_CXX_FLAGS_STRIP)
-    message(STATUS "  CXX flags             : ${CMAKE_CXX_FLAGS_STRIP}")
+    message(STATUS "  CXX flags             : ${CMAKE_CXX_FLAGS_AND_OPTIONS}")
 endif()
     message(STATUS "  Build type            : ${CMAKE_BUILD_TYPE}")
     message(STATUS "  Install prefix        : ${CMAKE_INSTALL_PREFIX}")

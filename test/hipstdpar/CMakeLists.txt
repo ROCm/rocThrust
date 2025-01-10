@@ -1,5 +1,5 @@
 # ########################################################################
-# Copyright 2024 Advanced Micro Devices, Inc.
+# Copyright 2024-2025 Advanced Micro Devices, Inc.
 # ########################################################################
 
 function(add_hipstdpar_test TEST TEST_TYPE INTERPOSE_ALLOC)
@@ -10,6 +10,7 @@ function(add_hipstdpar_test TEST TEST_TYPE INTERPOSE_ALLOC)
     set(TEST_TARGET "${TEST}_${TEST_TYPE}.hip")
 
     add_executable(${TEST_TARGET} ${TEST_SOURCE})
+    target_compile_options(${TEST_TARGET} PRIVATE ${COMPILE_OPTIONS})
     target_compile_options(${TEST_TARGET}
         PRIVATE
             --hipstdpar

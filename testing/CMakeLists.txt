@@ -49,6 +49,7 @@ if(NOT CMAKE_VERSION VERSION_LESS 3.13)
 else() # Workaround
     add_library(testframework STATIC unittest/testframework.cu)
 endif()
+target_compile_options(testframework PRIVATE ${COMPILE_OPTIONS})
 
 if(HIP_COMPILER STREQUAL "nvcc")
     set_source_files_properties(unittest/cuda/testframework.cu
@@ -112,6 +113,7 @@ function(add_thrust_test TEST)
                 testframework
         )
     endif()
+    target_compile_options(${TEST_TARGET} PRIVATE ${COMPILE_OPTIONS})
     set_target_properties(${TEST_TARGET}
         PROPERTIES
             RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/testing/"
