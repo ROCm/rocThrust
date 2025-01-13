@@ -140,7 +140,7 @@ copyright-date:
     - $CI_PROJECT_DIR/build/.ninja_log
     exclude:
     - $CI_PROJECT_DIR/build/**/*.o
-    expire_in: 2 weeks
+    expire_in: 1 day
 
 build:cmake-latest:
   stage: build
@@ -186,7 +186,7 @@ build:package:
     paths:
       - $PACKAGE_DIR/rocthrust*.deb
       - $PACKAGE_DIR/rocthrust*.zip
-    expire_in: 2 weeks
+    expire_in: 1 day
 
 build:windows:
   stage: build
@@ -234,7 +234,7 @@ build:windows:
     paths:
       - $CI_PROJECT_DIR/build/
       - $ROCPRIM_DIR/build/install
-    expire_in: 2 weeks
+    expire_in: 1 day
 
 test:package:
   stage: test
@@ -472,7 +472,7 @@ build:cuda-and-omp:
       - $CCCL_DIR/thrust/cmake/ThrustRunTest.cmake
       - $CCCL_DIR/thrust/cmake/ThrustRunExample.cmake
       - $CI_PROJECT_DIR/build/.ninja_log
-    expire_in: 1 week
+    expire_in: 1 day
 
 .test:cuda-and-omp:
   stage: test
@@ -518,7 +518,12 @@ test:cuda-and-omp-all-gpus:
 
 benchmark:
   needs:
-    - build:cmake-minimum
+    - job: build:cmake-minimum
+      parallel:
+        matrix:
+          - BUILD_TYPE: Release
+            BUILD_TARGET: BENCHMARKS
+            BUILD_VERSION: 14
   extends:
     - .cmake-minimum
     - .gpus:rocm
@@ -541,4 +546,4 @@ benchmark:
   artifacts:
     paths:
       - ${BENCHMARK_RESULT_DIR}
-    expire_in: 1 week
+    expire_in: 1 day
