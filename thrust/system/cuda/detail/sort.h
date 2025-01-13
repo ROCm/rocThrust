@@ -211,8 +211,8 @@ namespace __radix_sort {
   struct dispatch;
 
   // sort keys in ascending order
-  template <class K>
-  struct dispatch<thrust::detail::false_type, thrust::less<K> >
+  template <class KeyOrVoid>
+  struct dispatch<thrust::detail::false_type, thrust::less<KeyOrVoid> >
   {
     template <class Key, class Item, class Size>
     THRUST_RUNTIME_FUNCTION static cudaError_t
@@ -234,8 +234,8 @@ namespace __radix_sort {
   }; // struct dispatch -- sort keys in ascending order;
 
   // sort keys in descending order
-  template <class K>
-  struct dispatch<thrust::detail::false_type, thrust::greater<K> >
+  template <class KeyOrVoid>
+  struct dispatch<thrust::detail::false_type, thrust::greater<KeyOrVoid> >
   {
     template <class Key, class Item, class Size>
     THRUST_RUNTIME_FUNCTION static cudaError_t
@@ -257,8 +257,8 @@ namespace __radix_sort {
   }; // struct dispatch -- sort keys in descending order;
 
   // sort pairs in ascending order
-  template <class K>
-  struct dispatch<thrust::detail::true_type, thrust::less<K> >
+  template <class KeyOrVoid>
+  struct dispatch<thrust::detail::true_type, thrust::less<KeyOrVoid> >
   {
     template <class Key, class Item, class Size>
     THRUST_RUNTIME_FUNCTION static cudaError_t
@@ -281,8 +281,8 @@ namespace __radix_sort {
   }; // struct dispatch -- sort pairs in ascending order;
 
   // sort pairs in descending order
-  template <class K>
-  struct dispatch<thrust::detail::true_type, thrust::greater<K> >
+  template <class KeyOrVoid>
+  struct dispatch<thrust::detail::true_type, thrust::greater<KeyOrVoid> >
   {
     template <class Key, class Item, class Size>
     THRUST_RUNTIME_FUNCTION static cudaError_t
@@ -303,6 +303,15 @@ namespace __radix_sort {
                                                        stream);
     }
   }; // struct dispatch -- sort pairs in descending order;
+
+
+  template <class SORT_ITEMS, class KeyOrVoid>
+  struct dispatch<SORT_ITEMS, ::cuda::std::less<KeyOrVoid>> : dispatch<SORT_ITEMS, thrust::less<KeyOrVoid>>
+  {};
+
+  template <class SORT_ITEMS, class KeyOrVoid>
+  struct dispatch<SORT_ITEMS, ::cuda::std::greater<KeyOrVoid>> : dispatch<SORT_ITEMS, thrust::greater<KeyOrVoid>>
+  {};
 
   template <typename SORT_ITEMS,
             typename Derived,

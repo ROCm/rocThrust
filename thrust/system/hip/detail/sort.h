@@ -167,8 +167,8 @@ namespace __radix_sort
     struct dispatch;
 
     // sort keys in ascending order
-    template <class K>
-    struct dispatch<detail::false_type, thrust::less<K>>
+    template <class KeyOrVoid>
+    struct dispatch<detail::false_type, thrust::less<KeyOrVoid>>
     {
         template <class KeysIt, class ItemsIt, class Size>
         static hipError_t THRUST_HIP_RUNTIME_FUNCTION
@@ -180,21 +180,22 @@ namespace __radix_sort
              hipStream_t stream,
              bool        debug_sync)
         {
+            using KeysType = typename std::iterator_traits<KeysIt>::value_type;
             return rocprim::radix_sort_keys(d_temp_storage,
                                             temp_storage_bytes,
                                             keys,
                                             keys,
                                             static_cast<unsigned int>(count),
                                             0,
-                                            sizeof(K) * 8,
+                                            sizeof(KeysType) * 8,
                                             stream,
                                             debug_sync);
         }
     }; // struct dispatch -- sort keys in ascending order;
 
     // sort keys in descending order
-    template <class K>
-    struct dispatch<detail::false_type, thrust::greater<K>>
+    template <class KeyOrVoid>
+    struct dispatch<detail::false_type, thrust::greater<KeyOrVoid>>
     {
         template <class KeysIt, class ItemsIt, class Size>
         static hipError_t THRUST_HIP_RUNTIME_FUNCTION
@@ -206,21 +207,22 @@ namespace __radix_sort
              hipStream_t stream,
              bool        debug_sync)
         {
+            using KeysType = typename std::iterator_traits<KeysIt>::value_type;
             return rocprim::radix_sort_keys_desc(d_temp_storage,
                                                  temp_storage_bytes,
                                                  keys,
                                                  keys,
                                                  static_cast<unsigned int>(count),
                                                  0,
-                                                 sizeof(K) * 8,
+                                                 sizeof(KeysType) * 8,
                                                  stream,
                                                  debug_sync);
         }
     }; // struct dispatch -- sort keys in descending order;
 
     // sort pairs in ascending order
-    template <class K>
-    struct dispatch<detail::true_type, thrust::less<K>>
+    template <class KeyOrVoid>
+    struct dispatch<detail::true_type, thrust::less<KeyOrVoid>>
     {
         template <class KeysIt, class ItemsIt, class Size>
         static hipError_t THRUST_HIP_RUNTIME_FUNCTION
@@ -232,6 +234,7 @@ namespace __radix_sort
              hipStream_t stream,
              bool        debug_sync)
         {
+            using KeysType = typename std::iterator_traits<KeysIt>::value_type;
             return rocprim::radix_sort_pairs(d_temp_storage,
                                              temp_storage_bytes,
                                              keys,
@@ -240,15 +243,15 @@ namespace __radix_sort
                                              items,
                                              static_cast<unsigned int>(count),
                                              0,
-                                             sizeof(K) * 8,
+                                             sizeof(KeysType) * 8,
                                              stream,
                                              debug_sync);
         }
     }; // struct dispatch -- sort pairs in ascending order;
 
     // sort pairs in descending order
-    template <class K>
-    struct dispatch<detail::true_type, thrust::greater<K>>
+    template <class KeyOrVoid>
+    struct dispatch<detail::true_type, thrust::greater<KeyOrVoid>>
     {
         template <class KeysIt, class ItemsIt, class Size>
          static hipError_t THRUST_HIP_RUNTIME_FUNCTION
@@ -260,6 +263,7 @@ namespace __radix_sort
               hipStream_t stream,
               bool        debug_sync)
         {
+            using KeysType = typename std::iterator_traits<KeysIt>::value_type;
             return rocprim::radix_sort_pairs_desc(d_temp_storage,
                                                   temp_storage_bytes,
                                                   keys,
@@ -268,11 +272,19 @@ namespace __radix_sort
                                                   items,
                                                   static_cast<unsigned int>(count),
                                                   0,
-                                                  sizeof(K) * 8,
+                                                  sizeof(KeysType) * 8,
                                                   stream,
                                                   debug_sync);
         }
     }; // struct dispatch -- sort pairs in descending order;
+
+  template <class SORT_ITEMS, class KeyOrVoid>
+  struct dispatch<SORT_ITEMS, std::less<KeyOrVoid>> : dispatch<SORT_ITEMS, thrust::less<KeyOrVoid>>
+  {};
+
+  template <class SORT_ITEMS, class KeyOrVoid>
+  struct dispatch<SORT_ITEMS, std::greater<KeyOrVoid>> : dispatch<SORT_ITEMS, thrust::greater<KeyOrVoid>>
+  {};
 
     template <typename SORT_ITEMS,
               typename Derived,
@@ -334,32 +346,23 @@ namespace __radix_sort
 
 namespace __smart_sort
 {
-    template <class Key, class CompareOp>
-    struct can_use_primitive_sort
-        : thrust::detail::and_<
-              thrust::detail::is_arithmetic<Key>,
-              thrust::detail::or_<thrust::detail::is_same<CompareOp, thrust::less<Key>>,
-                                  thrust::detail::is_same<CompareOp, thrust::greater<Key>>>>
-    {
-    };
 
-    template <class Iterator, class CompareOp>
-    struct enable_if_primitive_sort
-        : thrust::detail::enable_if<
-              can_use_primitive_sort<typename iterator_value<Iterator>::type, CompareOp>::value>
-    {
-    };
+  template <class Key, class CompareOp>
+  using can_use_primitive_sort = std::integral_constant<
+    bool,
+    std::is_arithmetic<Key>::value
+      && (std::is_same<CompareOp, thrust::less<Key>>::value
+          || std::is_same<CompareOp, std::less<Key>>::value
+          || std::is_same<CompareOp, thrust::less<void>>::value
+          || std::is_same<CompareOp, std::less<void>>::value
+          || std::is_same<CompareOp, thrust::greater<Key>>::value
+          || std::is_same<CompareOp, std::greater<Key>>::value
+          || std::is_same<CompareOp, thrust::greater<void>>::value
+          || std::is_same<CompareOp, std::greater<void>>::value)>;
 
-    template <class Iterator, class CompareOp>
-    struct enable_if_comparison_sort
-        : thrust::detail::disable_if<
-              can_use_primitive_sort<typename iterator_value<Iterator>::type, CompareOp>::value>
-    {
-    };
-
-    template <class SORT_ITEMS, class Derived, class KeysIt, class ItemsIt, class CompareOp>
-    typename enable_if_comparison_sort<KeysIt, CompareOp>::type
-    THRUST_HIP_RUNTIME_FUNCTION
+    template <class SORT_ITEMS, class Derived, class KeysIt, class ItemsIt, class CompareOp,
+              std::enable_if_t<!can_use_primitive_sort<typename iterator_value<KeysIt>::type, CompareOp>::value, int> = 0>
+    THRUST_HIP_RUNTIME_FUNCTION void
     smart_sort(execution_policy<Derived>& policy,
                KeysIt                     keys_first,
                KeysIt                     keys_last,
@@ -371,9 +374,9 @@ namespace __smart_sort
         );
     }
 
-    template <class SORT_ITEMS, class Derived, class KeysIt, class ItemsIt, class CompareOp>
-    typename enable_if_primitive_sort<KeysIt, CompareOp>::type
-    THRUST_HIP_RUNTIME_FUNCTION
+    template <class SORT_ITEMS, class Derived, class KeysIt, class ItemsIt, class CompareOp,
+              std::enable_if_t<can_use_primitive_sort<typename iterator_value<KeysIt>::type, CompareOp>::value, int> = 0>
+    THRUST_HIP_RUNTIME_FUNCTION void
     smart_sort(execution_policy<Derived>& policy,
                KeysIt                     keys_first,
                KeysIt                     keys_last,

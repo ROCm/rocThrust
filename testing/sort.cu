@@ -150,4 +150,33 @@ void TestSortBoolDescending(void)
 }
 DECLARE_UNITTEST(TestSortBoolDescending);
 
+template <typename T>
+struct TestRadixSortDispatch
+{
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+  static_assert(thrust::cuda_cub::__smart_sort::can_use_primitive_sort<T, thrust::less<T>>::value, "");
+  static_assert(thrust::cuda_cub::__smart_sort::can_use_primitive_sort<T, thrust::greater<T>>::value, "");
+  static_assert(thrust::cuda_cub::__smart_sort::can_use_primitive_sort<T, ::cuda::std::less<T>>::value, "");
+  static_assert(thrust::cuda_cub::__smart_sort::can_use_primitive_sort<T, ::cuda::std::greater<T>>::value, "");
 
+  static_assert(thrust::cuda_cub::__smart_sort::can_use_primitive_sort<T, thrust::less<>>::value, "");
+  static_assert(thrust::cuda_cub::__smart_sort::can_use_primitive_sort<T, thrust::greater<>>::value, "");
+  static_assert(thrust::cuda_cub::__smart_sort::can_use_primitive_sort<T, ::cuda::std::less<>>::value, "");
+  static_assert(thrust::cuda_cub::__smart_sort::can_use_primitive_sort<T, ::cuda::std::greater<>>::value, "");
+#endif
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
+  static_assert(thrust::hip_rocprim::__smart_sort::can_use_primitive_sort<T, thrust::less<T>>::value, "");
+  static_assert(thrust::hip_rocprim::__smart_sort::can_use_primitive_sort<T, thrust::greater<T>>::value, "");
+  static_assert(thrust::hip_rocprim::__smart_sort::can_use_primitive_sort<T, std::less<T>>::value, "");
+  static_assert(thrust::hip_rocprim::__smart_sort::can_use_primitive_sort<T, std::greater<T>>::value, "");
+
+  static_assert(thrust::hip_rocprim::__smart_sort::can_use_primitive_sort<T, thrust::less<>>::value, "");
+  static_assert(thrust::hip_rocprim::__smart_sort::can_use_primitive_sort<T, thrust::greater<>>::value, "");
+  static_assert(thrust::hip_rocprim::__smart_sort::can_use_primitive_sort<T, std::less<>>::value, "");
+  static_assert(thrust::hip_rocprim::__smart_sort::can_use_primitive_sort<T, std::greater<>>::value, "");
+#endif
+  void operator()() const {}
+};
+
+SimpleUnitTest<TestRadixSortDispatch, IntegralTypes> TestRadixSortDispatchIntegralInstance;
+SimpleUnitTest<TestRadixSortDispatch, FloatingPointTypes> TestRadixSortDispatchFPInstance;

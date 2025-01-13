@@ -30,11 +30,11 @@ THRUST_NAMESPACE_BEGIN
 /*! \addtogroup function_objects Function Objects
  */
 
-//! deprecated [Since 2.6]
+//! deprecated [Since 3.4.0]
 template <typename Operation>
 struct THRUST_DEPRECATED unary_traits;
 
-//! deprecated [Since 2.6]
+//! deprecated [Since 3.4.0]
 template <typename Operation>
 struct THRUST_DEPRECATED binary_traits;
 
@@ -50,7 +50,7 @@ struct THRUST_DEPRECATED binary_traits;
  *  Unary Function must define nested aliases. Those are
  *  provided by the base class \p unary_function.
  *
- *  deprecated [Since 2.6]
+ *  deprecated [Since 3.4.0]
  *
  *  The following code snippet demonstrates how to construct an
  *  Adaptable Unary Function using \p unary_function.
@@ -92,7 +92,7 @@ struct THRUST_DEPRECATED unary_function
  *  Binary Function must define nested aliases. Those are
  *  provided by the base class \p binary_function.
  *
- *  deprecated [Since 2.6]
+ *  deprecated [Since 3.4.0]
  *
  *  The following code snippet demonstrates how to construct an
  *  Adaptable Binary Function using \p binary_function.
@@ -1325,18 +1325,21 @@ struct maximum
 {
   /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
+   *  deprecated [Since 3.4.0]
    */
-  using first_argument_type = T;
+  using first_argument_type THRUST_ALIAS_ATTRIBUTE(THRUST_DEPRECATED) = T;
 
   /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
+   *  deprecated [Since 3.4.0]
    */
-  using second_argument_type = T;
+  using second_argument_type THRUST_ALIAS_ATTRIBUTE(THRUST_DEPRECATED) = T;
 
   /*! \typedef result_type
    *  \brief The type of the function object's result;
+   *  deprecated [Since 3.4.0]
    */
-  using result_type = T;
+  using result_type THRUST_ALIAS_ATTRIBUTE(THRUST_DEPRECATED) = T;
 
   /*! Function call operator. The return value is <tt>rhs < lhs ? lhs : rhs</tt>.
    */
@@ -1383,18 +1386,21 @@ struct minimum
 {
   /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
+   *  deprecated [Since 3.4.0]
    */
-  using first_argument_type = T;
+  using first_argument_type THRUST_ALIAS_ATTRIBUTE(THRUST_DEPRECATED) = T;
 
   /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
+   *  deprecated [Since 3.4.0]
    */
-  using second_argument_type = T;
+  using second_argument_type THRUST_ALIAS_ATTRIBUTE(THRUST_DEPRECATED) = T;
 
   /*! \typedef result_type
    *  \brief The type of the function object's result;
+   *  deprecated [Since 3.4.0]
    */
-  using result_type = T;
+  using result_type THRUST_ALIAS_ATTRIBUTE(THRUST_DEPRECATED) = T;
 
   /*! Function call operator. The return value is <tt>lhs < rhs ? lhs : rhs</tt>.
    */
@@ -1435,18 +1441,21 @@ struct project1st
 {
   /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
+   *  deprecated [Since 3.4.0]
    */
-  using first_argument_type = T1;
+  using first_argument_type THRUST_ALIAS_ATTRIBUTE(THRUST_DEPRECATED) = T1;
 
   /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
+   *  deprecated [Since 3.4.0]
    */
-  using second_argument_type = T2;
+  using second_argument_type THRUST_ALIAS_ATTRIBUTE(THRUST_DEPRECATED) = T2;
 
   /*! \typedef result_type
    *  \brief The type of the function object's result;
+   *  deprecated [Since 3.4.0]
    */
-  using result_type = T1;
+  using result_type THRUST_ALIAS_ATTRIBUTE(THRUST_DEPRECATED) = T1;
 
   /*! Function call operator. The return value is <tt>lhs</tt>.
    */
@@ -1500,18 +1509,21 @@ struct project2nd
 {
   /*! \typedef first_argument_type
    *  \brief The type of the function object's first argument.
+   *  deprecated [Since 3.4.0]
    */
-  using first_argument_type = T1;
+  using first_argument_type THRUST_ALIAS_ATTRIBUTE(THRUST_DEPRECATED) = T1;
 
   /*! \typedef second_argument_type
    *  \brief The type of the function object's second argument.
+   *  deprecated [Since 3.4.0]
    */
-  using second_argument_type = T2;
+  using second_argument_type THRUST_ALIAS_ATTRIBUTE(THRUST_DEPRECATED) = T2;
 
   /*! \typedef result_type
    *  \brief The type of the function object's result;
+   *  deprecated [Since 3.4.0]
    */
-  using result_type = T2;
+  using result_type THRUST_ALIAS_ATTRIBUTE(THRUST_DEPRECATED) = T2;
 
   /*! Function call operator. The return value is <tt>rhs</tt>.
    */
@@ -1559,7 +1571,7 @@ struct project2nd<void, void>
  *  There is rarely any reason to construct a <tt>unary_negate</tt> directly;
  *  it is almost always easier to use the helper function not1.
  *
- *  deprecated [Since 2.6]
+ *  deprecated [Since 3.4.0]
  *
  *  \see https://en.cppreference.com/w/cpp/utility/functional/unary_negate
  *  \see not1
@@ -1604,7 +1616,7 @@ THRUST_SUPPRESS_DEPRECATED_PUSH
  *  \c npred of <tt>not1(pred)</tt> is also a model of Adaptable Predicate and
  *  <tt>npred(x)</tt> always returns the same value as <tt>!pred(x)</tt>.
  *
- *  deprecated [Since 2.6]
+ *  deprecated [Since 3.4.0]
  *
  *  \param pred The Adaptable Predicate to negate.
  *  \return A new object, <tt>npred</tt> such that <tt>npred(x)</tt> always returns
@@ -1616,7 +1628,7 @@ THRUST_SUPPRESS_DEPRECATED_PUSH
  */
 template <typename Predicate>
   THRUST_HOST_DEVICE
-  THRUST_DEPRECATED unary_negate<Predicate> not1(const Predicate& pred);
+  THRUST_DEPRECATED_BECAUSE("Use thrust::not_fn instead") unary_negate<Predicate> not1(const Predicate& pred);
 THRUST_SUPPRESS_DEPRECATED_POP
 
 /*! \p binary_negate is a function object adaptor: it is an Adaptable Binary
@@ -1627,7 +1639,7 @@ THRUST_SUPPRESS_DEPRECATED_POP
  *  There is rarely any reason to construct a <tt>binary_negate</tt> directly;
  *  it is almost always easier to use the helper function not2.
  *
- *  deprecated [Since 2.6]
+ *  deprecated [Since 3.4.0]
  *
  *  \see https://en.cppreference.com/w/cpp/utility/functional/binary_negate
  */
@@ -1679,7 +1691,7 @@ THRUST_SUPPRESS_DEPRECATED_PUSH
  *  \c npred of <tt>not2(pred)</tt> is also a model of Adaptable Binary Predicate and
  *  <tt>npred(x,y)</tt> always returns the same value as <tt>!pred(x,y)</tt>.
  *
- *  deprecated [Since 2.6]
+ *  deprecated [Since 3.4.0]
  *
  *  \param pred The Adaptable Binary Predicate to negate.
  *  \return A new object, <tt>npred</tt> such that <tt>npred(x,y)</tt> always returns
@@ -1691,7 +1703,7 @@ THRUST_SUPPRESS_DEPRECATED_PUSH
  *  \see not1
  */
 template <typename BinaryPredicate>
-  THRUST_HOST_DEVICE THRUST_DEPRECATED
+  THRUST_HOST_DEVICE THRUST_DEPRECATED_BECAUSE("Use thrust::not_fn instead")
   binary_negate<BinaryPredicate> not2(const BinaryPredicate& pred);
 THRUST_SUPPRESS_DEPRECATED_POP
 

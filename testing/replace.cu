@@ -20,6 +20,11 @@
 #include <thrust/iterator/discard_iterator.h>
 #include <thrust/iterator/retag.h>
 
+// New GCC, new miscompile. 13 + TBB this time.
+#if defined(THRUST_HOST_COMPILER_GCC) && __GNUC__ == 13 && \
+    THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_TBB
+#define THRUST_GCC13_TBB_MISCOMPILE
+#endif
 
 template <class Vector>
 void TestReplaceSimple(void)
@@ -112,7 +117,7 @@ void TestReplace(const size_t n)
 }
 DECLARE_VARIABLE_UNITTEST(TestReplace);
 
-
+#ifndef THRUST_GCC13_TBB_MISCOMPILE
 template <class Vector>
 void TestReplaceCopySimple(void)
 {
@@ -140,7 +145,7 @@ void TestReplaceCopySimple(void)
     ASSERT_EQUAL(dest, result);
 }
 DECLARE_VECTOR_UNITTEST(TestReplaceCopySimple);
-
+#endif
 
 template<typename InputIterator, typename OutputIterator, typename T>
 THRUST_HOST_DEVICE

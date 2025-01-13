@@ -196,7 +196,6 @@ endif()
 # Benchmarks
 if(BUILD_BENCHMARKS)
   add_subdirectory(benchmarks)
-  add_subdirectory(internal/benchmark)
 endif()
 
 #Create header wrapper for backward compatibility
