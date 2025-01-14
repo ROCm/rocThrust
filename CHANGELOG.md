@@ -28,7 +28,7 @@ Documentation for rocThrust available at
 * Fixed `copy_if` to work with large data types (512 bytes)
 
 ### Known Issues
-* `thrust::inclusive_scan_by_key` on occasion will produce the incorrect output when -O2 or -O3 optimization is utilized.
+*  `thrust::inclusive_scan_by_key` might produce incorrect results when it's used with -O2 or -O3 optimization.  
 
 ## rocThrust 3.2.0 for ROCm 6.3
 
@@ -49,7 +49,6 @@ Documentation for rocThrust available at
 * Fixed an issue in `rmake.py` where the list storing cmake options would contain individual characters instead of a full string of options.
 * Fixed the HIP backend not passing `TestCopyIfNonTrivial` from the upstream (thrust) test suite.
 * Fixed tests failing when compiled with `-D_GLIBCXX_ASSERTIONS=ON`.
-
 
 ## rocThrust 3.1.0 for ROCm 6.2
 
