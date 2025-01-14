@@ -29,6 +29,7 @@ Documentation for rocThrust available at
 
 ### Known Issues
 *  `thrust::inclusive_scan_by_key` might produce incorrect results when it's used with -O2 or -O3 optimization.  
+  - The error is caused by a recent compiler change. There is a fix available that will be released at a later date. 
 
 ## rocThrust 3.2.0 for ROCm 6.3
 
