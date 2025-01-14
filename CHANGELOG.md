@@ -47,6 +47,9 @@ Documentation for rocThrust available at
 * Fixed the HIP backend not passing `TestCopyIfNonTrivial` from the upstream (thrust) test suite.
 * Fixed tests failing when compiled with `-D_GLIBCXX_ASSERTIONS=ON`.
 
+### Known Issues
+* `thrust::inclusive_scan_by_key` on occasion will produce the incorrect output when -O2 or -O3 optimization is utilized.  
+
 ## rocThrust 3.1.0 for ROCm 6.2
 
 ### Additions
