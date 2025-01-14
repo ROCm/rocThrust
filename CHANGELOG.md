@@ -27,6 +27,9 @@ Documentation for rocThrust available at
 * Split the contents of HIPSTDPAR's forwarding header into several implementation headers.
 * Fixed `copy_if` to work with large data types (512 bytes)
 
+### Known Issues
+* `thrust::inclusive_scan_by_key` on occasion will produce the incorrect output when -O2 or -O3 optimization is utilized.
+
 ## rocThrust 3.2.0 for ROCm 6.3
 
 ### Added
@@ -47,8 +50,6 @@ Documentation for rocThrust available at
 * Fixed the HIP backend not passing `TestCopyIfNonTrivial` from the upstream (thrust) test suite.
 * Fixed tests failing when compiled with `-D_GLIBCXX_ASSERTIONS=ON`.
 
-### Known Issues
-* `thrust::inclusive_scan_by_key` on occasion will produce the incorrect output when -O2 or -O3 optimization is utilized.  
 
 ## rocThrust 3.1.0 for ROCm 6.2
 
