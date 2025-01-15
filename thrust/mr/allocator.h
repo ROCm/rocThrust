@@ -171,8 +171,8 @@ bool operator!=(const allocator<T, MR> & lhs, const allocator<T, MR> & rhs) noex
 
 /*! An allocator whose memory resource we can dynamically configure at runtime.
  *
- * \tparam T - the type that will be allocated by this allocator
- * \tparam Pointer - the pointer type that will be used to create the memory resource
+ * \tparam T the type that will be allocated by this allocator
+ * \tparam Pointer the pointer type that will be used to create the memory resource
  */
 template<typename T, typename Pointer>
 using polymorphic_allocator = allocator<T, polymorphic_adaptor_resource<Pointer> >;

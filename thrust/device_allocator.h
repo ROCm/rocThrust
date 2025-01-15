@@ -69,8 +69,8 @@ public:
 
     /*! Allocates space using the upstream resource.
      *
-     *  \param bytes - the size of the requested allocation, in bytes
-     *  \param alignment - alignment size, in bytes
+     *  \param bytes the size of the requested allocation, in bytes
+     *  \param alignment alignment size, in bytes
      *  \return a pointer to the newly allocated storage.
      */
     THRUST_NODISCARD THRUST_HOST
@@ -80,9 +80,9 @@ public:
     }
 
     /*! Deallocates space that was previously allocated using this allocator.
-     * \param p - the pointer that was previously returned by \p do_allocate
-    *  \param bytes - size of the allocation, in bytes
-    *  \param alignment - alignment size, in bytes
+     * \param p the pointer that was previously returned by \p do_allocate
+    *  \param bytes size of the allocation, in bytes
+    *  \param alignment alignment size, in bytes
      */
     THRUST_HOST
     virtual void do_deallocate(pointer p, std::size_t bytes, std::size_t alignment) override
