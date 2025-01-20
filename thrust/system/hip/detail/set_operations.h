@@ -774,7 +774,7 @@ namespace __set_operations
               class CompareOp,
               class SetOp,
               class LookBackScanState>
-    __global__
+    ROCPRIM_KERNEL
     THRUST_HIP_LAUNCH_BOUNDS_DEFAULT
     void lookback_set_op_kernel(KeysIt1                                         keys1,
                                 KeysIt2                                         keys2,

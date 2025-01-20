@@ -155,6 +155,7 @@ endif()
 
 # Setup VERSION
 rocm_setup_version(VERSION "3.3.0")
+math(EXPR rocthrust_VERSION_NUMBER "${rocthrust_VERSION_MAJOR} * 100000 + ${rocthrust_VERSION_MINOR} * 100 + ${rocthrust_VERSION_PATCH}")
 
 # Print configuration summary
 include(cmake/Summary.cmake)

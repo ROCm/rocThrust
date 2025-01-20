@@ -78,7 +78,7 @@ namespace hip_rocprim
 namespace __copy_if
 {
     template <unsigned int ItemsPerThread, typename InputIt, typename BoolIt, typename IntIt, typename OutputIt>
-    __global__ void copy_if_kernel(InputIt first, BoolIt flagsFirst, IntIt posFirst, const size_t size, OutputIt output)
+    ROCPRIM_KERNEL void copy_if_kernel(InputIt first, BoolIt flagsFirst, IntIt posFirst, const size_t size, OutputIt output)
     {
         const size_t baseIdx = (blockIdx.x * blockDim.x + threadIdx.x) * ItemsPerThread;
 

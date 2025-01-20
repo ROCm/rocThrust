@@ -11,6 +11,7 @@
 
 # For downloading, building, and installing required dependencies
 include(cmake/DownloadProject.cmake)
+include(FetchContent)
 
 # rocPRIM (https://github.com/ROCmSoftwarePlatform/rocPRIM)
 if(NOT DOWNLOAD_ROCPRIM)
@@ -92,8 +93,6 @@ if(BUILD_TEST OR BUILD_HIPSTDPAR_TEST)
   # for cache serialization.  We also want to use a static SQLite,
   # and distro static libraries aren't typically built
   # position-independent.
-  include( FetchContent )
-
   if(DEFINED ENV{SQLITE_3_43_2_SRC_URL})
     set(SQLITE_3_43_2_SRC_URL_INIT $ENV{SQLITE_3_43_2_SRC_URL})
   else()
