@@ -20,46 +20,34 @@
 
 #if defined(__HIPSTDPAR__)
 
-#include "hipstd.hpp"
+#  include <thrust/execution_policy.h>
+#  include <thrust/swap.h>
 
-#include <thrust/execution_policy.h>
-#include <thrust/swap.h>
+#  include <algorithm>
+#  include <execution>
+#  include <utility>
 
-#include <algorithm>
-#include <execution>
-#include <utility>
+#  include "hipstd.hpp"
 
 namespace std
 {
-    // BEGIN SWAP_RANGES
-    template<
-        typename I0,
-        typename I1,
-        enable_if_t<::hipstd::is_offloadable_iterator<I0, I1>()>* = nullptr>
-    inline
-    I1 swap_ranges(
-        execution::parallel_unsequenced_policy, I0 f0, I0 l0, I1 f1)
-    {
-        return ::thrust::swap_ranges(::thrust::device, f0, l0, f1);
-    }
-
-    template<
-        typename I0,
-        typename I1,
-        enable_if_t<
-            !::hipstd::is_offloadable_iterator<I0, I1>()>* = nullptr>
-    inline
-    I1 swap_ranges(
-        execution::parallel_unsequenced_policy, I0 f0, I0 l0, I1 f1)
-    {
-        ::hipstd::unsupported_iterator_category<
-            typename iterator_traits<I0>::iterator_category,
-            typename iterator_traits<I0>::iterator_category>();
-
-        return ::std::swap_ranges(::std::execution::par, f0, l0, f1);
-    }
-    // END SWAP_RANGES
+// BEGIN SWAP_RANGES
+template <typename I0, typename I1, enable_if_t<::hipstd::is_offloadable_iterator<I0, I1>()>* = nullptr>
+inline I1 swap_ranges(execution::parallel_unsequenced_policy, I0 f0, I0 l0, I1 f1)
+{
+  return ::thrust::swap_ranges(::thrust::device, f0, l0, f1);
 }
+
+template <typename I0, typename I1, enable_if_t<!::hipstd::is_offloadable_iterator<I0, I1>()>* = nullptr>
+inline I1 swap_ranges(execution::parallel_unsequenced_policy, I0 f0, I0 l0, I1 f1)
+{
+  ::hipstd::unsupported_iterator_category<typename iterator_traits<I0>::iterator_category,
+                                          typename iterator_traits<I0>::iterator_category>();
+
+  return ::std::swap_ranges(::std::execution::par, f0, l0, f1);
+}
+// END SWAP_RANGES
+} // namespace std
 #else // __HIPSTDPAR__
-#    error "__HIPSTDPAR__ should be defined. Please use the '--hipstdpar' compile option."
+#  error "__HIPSTDPAR__ should be defined. Please use the '--hipstdpar' compile option."
 #endif // __HIPSTDPAR__

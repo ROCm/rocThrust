@@ -20,7 +20,7 @@
 
 #if defined(__HIPSTDPAR__)
 
-#include "hipstd.hpp"
+#  include "hipstd.hpp"
 
 // rocThrust includes
 
@@ -28,14 +28,14 @@
 
 namespace std
 {
-    // BEGIN IS_HEAP
-    // TODO: UNIMPLEMENTED IN THRUST
-    // END IS_HEAP
+// BEGIN IS_HEAP
+// TODO: UNIMPLEMENTED IN THRUST
+// END IS_HEAP
 
-    // BEGIN IS_HEAP_UNTIL
-    // TODO: UNIMPLEMENTED IN THRUST
-    // END IS_HEAP_UNTIL
-}
+// BEGIN IS_HEAP_UNTIL
+// TODO: UNIMPLEMENTED IN THRUST
+// END IS_HEAP_UNTIL
+} // namespace std
 #else // __HIPSTDPAR__
-#    error "__HIPSTDPAR__ should be defined. Please use the '--hipstdpar' compile option."
+#  error "__HIPSTDPAR__ should be defined. Please use the '--hipstdpar' compile option."
 #endif // __HIPSTDPAR__

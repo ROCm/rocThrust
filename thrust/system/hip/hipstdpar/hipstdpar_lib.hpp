@@ -20,27 +20,27 @@
 
 #if defined(__HIPSTDPAR__)
 
-    // Interposed allocations
-#if defined(__HIPSTDPAR_INTERPOSE_ALLOC__)
-    #include "impl/interpose_allocations.hpp"
-#endif
-    // Parallel STL algorithms
-    #include "impl/batch.hpp"
-    #include "impl/copy.hpp"
-    #include "impl/generation.hpp"
-    #include "impl/heap.hpp"
-    #include "impl/lexicographical_comparison.hpp"
-    #include "impl/merge.hpp"
-    #include "impl/min_max.hpp"
-    #include "impl/numeric.hpp"
-    #include "impl/order_changing.hpp"
-    #include "impl/partitioning.hpp"
-    #include "impl/removing.hpp"
-    #include "impl/search.hpp"
-    #include "impl/set.hpp"
-    #include "impl/sorting.hpp"
-    #include "impl/swap.hpp"
-    #include "impl/transformation.hpp"
-    #include "impl/uninitialized.hpp"
-    
+// Interposed allocations
+#  if defined(__HIPSTDPAR_INTERPOSE_ALLOC__)
+#    include "impl/interpose_allocations.hpp"
+#  endif
+// Parallel STL algorithms
+#  include "impl/batch.hpp"
+#  include "impl/copy.hpp"
+#  include "impl/generation.hpp"
+#  include "impl/heap.hpp"
+#  include "impl/lexicographical_comparison.hpp"
+#  include "impl/merge.hpp"
+#  include "impl/min_max.hpp"
+#  include "impl/numeric.hpp"
+#  include "impl/order_changing.hpp"
+#  include "impl/partitioning.hpp"
+#  include "impl/removing.hpp"
+#  include "impl/search.hpp"
+#  include "impl/set.hpp"
+#  include "impl/sorting.hpp"
+#  include "impl/swap.hpp"
+#  include "impl/transformation.hpp"
+#  include "impl/uninitialized.hpp"
+
 #endif

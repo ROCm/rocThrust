@@ -20,90 +20,73 @@
 
 #if defined(__HIPSTDPAR__)
 
-#include "hipstd.hpp"
+#  include <thrust/execution_policy.h>
+#  include <thrust/for_each.h>
 
-#include <thrust/execution_policy.h>
-#include <thrust/for_each.h>
+#  include <algorithm>
+#  include <execution>
+#  include <utility>
 
-#include <algorithm>
-#include <execution>
-#include <utility>
+#  include "hipstd.hpp"
 
 namespace std
 {
-    // BEGIN FOR_EACH
-    template<
-        typename I,
-        typename F,
-        enable_if_t<
-            ::hipstd::is_offloadable_iterator<I>() &&
-            ::hipstd::is_offloadable_callable<F>()>* = nullptr>
-    inline
-    void for_each(execution::parallel_unsequenced_policy, I f, I l, F fn)
-    {
-        ::thrust::for_each(::thrust::device, f, l, ::std::move(fn));
-    }
-
-    template<
-        typename I,
-        typename F,
-        enable_if_t<
-            !::hipstd::is_offloadable_iterator<I>() ||
-            !::hipstd::is_offloadable_callable<F>()>* = nullptr>
-    inline
-    void for_each(execution::parallel_unsequenced_policy, I f, I l, F fn)
-    {
-        if constexpr (!::hipstd::is_offloadable_iterator<I>()) {
-            ::hipstd::unsupported_iterator_category<
-                typename iterator_traits<I>::iterator_category>();
-        }
-        if constexpr (!::hipstd::is_offloadable_callable<F>()) {
-            ::hipstd::unsupported_callable_type<F>();
-        }
-
-        return
-            ::std::for_each(::std::execution::par, f, l, ::std::move(fn));
-    }
-    // END FOR_EACH
-
-    // BEGIN FOR_EACH_N
-    template<
-        typename I,
-        typename N,
-        typename F,
-        enable_if_t<
-            ::hipstd::is_offloadable_iterator<I>() &&
-            ::hipstd::is_offloadable_callable<F>()>* = nullptr>
-    inline
-    I for_each_n(execution::parallel_unsequenced_policy, I f, N n, F fn)
-    {
-        return
-            ::thrust::for_each_n(::thrust::device, f, n, ::std::move(fn));
-    }
-
-    template<
-        typename I,
-        typename N,
-        typename F,
-        enable_if_t<
-            !::hipstd::is_offloadable_iterator<I>() ||
-            !::hipstd::is_offloadable_callable<F>()>* = nullptr>
-    inline
-    I for_each_n(execution::parallel_unsequenced_policy, I f, N n, F fn)
-    {
-        if constexpr (!::hipstd::is_offloadable_iterator<I>()) {
-            ::hipstd::unsupported_iterator_category<
-                typename iterator_traits<I>::iterator_category>();
-        }
-        if constexpr (!::hipstd::is_offloadable_callable<F>()) {
-            ::hipstd::unsupported_callable_type<F>();
-        }
-
-        return
-            ::std::for_each_n(::std::execution::par, f, n, ::std::move(fn));
-    }
-    // END FOR_EACH_N
+// BEGIN FOR_EACH
+template <typename I,
+          typename F,
+          enable_if_t<::hipstd::is_offloadable_iterator<I>() && ::hipstd::is_offloadable_callable<F>()>* = nullptr>
+inline void for_each(execution::parallel_unsequenced_policy, I f, I l, F fn)
+{
+  ::thrust::for_each(::thrust::device, f, l, ::std::move(fn));
 }
+
+template <typename I,
+          typename F,
+          enable_if_t<!::hipstd::is_offloadable_iterator<I>() || !::hipstd::is_offloadable_callable<F>()>* = nullptr>
+inline void for_each(execution::parallel_unsequenced_policy, I f, I l, F fn)
+{
+  if constexpr (!::hipstd::is_offloadable_iterator<I>())
+  {
+    ::hipstd::unsupported_iterator_category<typename iterator_traits<I>::iterator_category>();
+  }
+  if constexpr (!::hipstd::is_offloadable_callable<F>())
+  {
+    ::hipstd::unsupported_callable_type<F>();
+  }
+
+  return ::std::for_each(::std::execution::par, f, l, ::std::move(fn));
+}
+// END FOR_EACH
+
+// BEGIN FOR_EACH_N
+template <typename I,
+          typename N,
+          typename F,
+          enable_if_t<::hipstd::is_offloadable_iterator<I>() && ::hipstd::is_offloadable_callable<F>()>* = nullptr>
+inline I for_each_n(execution::parallel_unsequenced_policy, I f, N n, F fn)
+{
+  return ::thrust::for_each_n(::thrust::device, f, n, ::std::move(fn));
+}
+
+template <typename I,
+          typename N,
+          typename F,
+          enable_if_t<!::hipstd::is_offloadable_iterator<I>() || !::hipstd::is_offloadable_callable<F>()>* = nullptr>
+inline I for_each_n(execution::parallel_unsequenced_policy, I f, N n, F fn)
+{
+  if constexpr (!::hipstd::is_offloadable_iterator<I>())
+  {
+    ::hipstd::unsupported_iterator_category<typename iterator_traits<I>::iterator_category>();
+  }
+  if constexpr (!::hipstd::is_offloadable_callable<F>())
+  {
+    ::hipstd::unsupported_callable_type<F>();
+  }
+
+  return ::std::for_each_n(::std::execution::par, f, n, ::std::move(fn));
+}
+// END FOR_EACH_N
+} // namespace std
 #else // __HIPSTDPAR__
-#    error "__HIPSTDPAR__ should be defined. Please use the '--hipstdpar' compile option."
+#  error "__HIPSTDPAR__ should be defined. Please use the '--hipstdpar' compile option."
 #endif // __HIPSTDPAR__

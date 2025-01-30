@@ -1,9 +1,8 @@
-#include <thrust/device_ptr.h>
-#include <thrust/device_malloc.h>
 #include <thrust/device_free.h>
-
-#include <thrust/sequence.h>
+#include <thrust/device_malloc.h>
+#include <thrust/device_ptr.h>
 #include <thrust/reduce.h>
+#include <thrust/sequence.h>
 
 #include <cassert>
 #include <iostream>
@@ -28,7 +27,7 @@ int main(void)
   d_ptr[2] = d_ptr[0] + d_ptr[1];
 
   // device_ptr can be converted to a "raw" pointer for use in other APIs and kernels, etc.
-  int * raw_ptr = thrust::raw_pointer_cast(d_ptr);
+  int* raw_ptr = thrust::raw_pointer_cast(d_ptr);
 
   // note: raw_ptr cannot necessarily be accessed by the host!
 
@@ -37,7 +36,7 @@ int main(void)
 
   // back to where we started
   assert(wrapped_ptr == d_ptr);
-  (void)wrapped_ptr; // for when NDEBUG is defined
+  (void) wrapped_ptr; // for when NDEBUG is defined
 
   // Avoid warning
   THRUST_UNUSED_VAR(wrapped_ptr);

@@ -9,6 +9,7 @@ include:
       - /defaults.yaml
       - /deps-cmake.yaml
       - /deps-docs.yaml
+      - /deps-format.yaml
       - /deps-rocm.yaml
       - /deps-windows.yaml
       - /deps-nvcc.yaml
@@ -32,6 +33,10 @@ variables:
   PACKAGE_DIR: $BUILD_DIR/package
   ROCPRIM_GIT_BRANCH: develop_stream
   ROCPRIM_DIR: ${CI_PROJECT_DIR}/rocPRIM
+
+clang-format:
+  extends:
+    - .lint:clang-format
 
 copyright-date:
   extends:

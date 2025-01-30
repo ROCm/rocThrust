@@ -19,9 +19,8 @@
 
 #if THRUST_CPP_DIALECT >= 2014
 
-#include <async/test_policy_overloads.h>
-
-#include <async/inclusive_scan/mixin.h>
+#  include <async/inclusive_scan/mixin.h>
+#  include <async/test_policy_overloads.h>
 
 template <typename input_value_type,
           typename output_value_type   = input_value_type,
@@ -29,10 +28,8 @@ template <typename input_value_type,
 struct simple_invoker
     : testing::async::mixin::input::device_vector<input_value_type>
     , testing::async::mixin::output::device_vector<output_value_type>
-    , testing::async::inclusive_scan::mixin::postfix_args::
-        all_overloads<alternate_binary_op>
-    , testing::async::inclusive_scan::mixin::invoke_reference::
-        host_synchronous<input_value_type, output_value_type>
+    , testing::async::inclusive_scan::mixin::postfix_args::all_overloads<alternate_binary_op>
+    , testing::async::inclusive_scan::mixin::invoke_reference::host_synchronous<input_value_type, output_value_type>
     , testing::async::inclusive_scan::mixin::invoke_async::simple
     , testing::async::mixin::compare_outputs::assert_almost_equal_if_fp_quiet
 {
@@ -55,15 +52,12 @@ DECLARE_GENERIC_SIZED_UNITTEST_WITH_TYPES(test_simple, NumericTypes);
 // Testing the in-place algorithm uses the exact same instantiations of the
 // underlying scan implementation as above. Test them here to avoid compiling
 // them twice.
-template <typename input_value_type,
-          typename alternate_binary_op = thrust::maximum<>>
+template <typename input_value_type, typename alternate_binary_op = thrust::maximum<>>
 struct simple_inplace_invoker
     : testing::async::mixin::input::device_vector<input_value_type>
     , testing::async::mixin::output::device_vector_reuse_input<input_value_type>
-    , testing::async::inclusive_scan::mixin::postfix_args::
-        all_overloads<alternate_binary_op>
-    , testing::async::inclusive_scan::mixin::invoke_reference::host_synchronous<
-        input_value_type>
+    , testing::async::inclusive_scan::mixin::postfix_args::all_overloads<alternate_binary_op>
+    , testing::async::inclusive_scan::mixin::invoke_reference::host_synchronous<input_value_type>
     , testing::async::inclusive_scan::mixin::invoke_async::simple
     , testing::async::mixin::compare_outputs::assert_almost_equal_if_fp_quiet
 {

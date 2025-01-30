@@ -22,8 +22,8 @@
 
 #include <thrust/detail/config.h>
 
-#include <thrust/detail/type_traits.h>
 #include <thrust/detail/execution_policy.h>
+#include <thrust/detail/type_traits.h>
 
 THRUST_NAMESPACE_BEGIN
 
@@ -40,8 +40,7 @@ THRUST_NAMESPACE_BEGIN
  *  otherwise.
  */
 template <typename T>
-using is_execution_policy =
-  detail::is_base_of<detail::execution_policy_marker, T>;
+using is_execution_policy = detail::is_base_of<detail::execution_policy_marker, T>;
 
 #if THRUST_CPP_DIALECT >= 2014
 /*! \brief <tt>constexpr bool</tt> that is \c true if \c T is an
