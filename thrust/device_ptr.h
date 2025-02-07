@@ -43,9 +43,8 @@ class device_reference;
  *  arithmetic.
  *
  *  \c device_ptr can be created with \ref device_new, \ref device_malloc,
- *  \ref device_malloc_allocator, \ref device_allocator, or
- *  \ref device_pointer_cast, or by explicitly calling its constructor with a
- *  raw pointer.
+ *  \ref device_allocator, or \ref device_pointer_cast, or by explicitly
+ *  calling its constructor with a raw pointer.
  *
  *  The raw pointer contained in a \c device_ptr may be obtained via \c get
  *  member function or the \ref raw_pointer_cast free function.
@@ -58,7 +57,6 @@ class device_reference;
  *
  *  \see device_new
  *  \see device_malloc
- *  \see device_malloc_allocator
  *  \see device_allocator
  *  \see device_pointer_cast
  *  \see raw_pointer_cast

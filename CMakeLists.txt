@@ -142,7 +142,11 @@ set(COMPILE_OPTIONS -Wall -Wextra)
 if(NOT DISABLE_WERROR)
   list(APPEND COMPILE_OPTIONS -Werror)
 endif()
-  
+
+if(NOT CMAKE_CXX_STANDARD EQUAL 17)
+  message(FATAL_ERROR "Only C++17 is supported")
+endif()
+
 if (WIN32)
   add_compile_options(-xhip)
   add_compile_definitions(THRUST_IGNORE_DEPRECATED_CPP_DIALECT)

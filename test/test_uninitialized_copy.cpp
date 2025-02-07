@@ -15,7 +15,6 @@
  *  limitations under the License.
  */
 
-#include <thrust/device_malloc_allocator.h>
 #include <thrust/device_vector.h>
 #include <thrust/iterator/retag.h>
 #include <thrust/scatter.h>

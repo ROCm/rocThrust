@@ -19,7 +19,7 @@
 
 #include <thrust/detail/config.h>
 
-#if THRUST_CPP_DIALECT >= 2014
+#if THRUST_CPP_DIALECT >= 2017
 
 #  include <thrust/async/scan.h>
 #  include <thrust/scan.h>

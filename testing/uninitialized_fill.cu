@@ -16,6 +16,8 @@
  */
 
 #include <thrust/detail/nv_target.h>
+#include <thrust/device_free.h>
+#include <thrust/device_malloc.h>
 #include <thrust/device_malloc_allocator.h>
 #include <thrust/iterator/retag.h>
 #include <thrust/uninitialized_fill.h>

@@ -21,7 +21,7 @@
 
 #include <unittest/unittest.h>
 
-#if THRUST_CPP_DIALECT >= 2014
+#if THRUST_CPP_DIALECT >= 2017
 THRUST_STATIC_ASSERT((thrust::is_operator_less_function_object<std::less<>>::value));
 
 THRUST_STATIC_ASSERT((thrust::is_operator_greater_function_object<std::greater<>>::value));

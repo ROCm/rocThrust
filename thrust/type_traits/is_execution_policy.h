@@ -42,7 +42,7 @@ THRUST_NAMESPACE_BEGIN
 template <typename T>
 using is_execution_policy = detail::is_base_of<detail::execution_policy_marker, T>;
 
-#if THRUST_CPP_DIALECT >= 2014
+#if THRUST_CPP_DIALECT >= 2017
 /*! \brief <tt>constexpr bool</tt> that is \c true if \c T is an
  *  \a ExecutionPolicy and \c false otherwise.
  */

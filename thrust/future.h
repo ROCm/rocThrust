@@ -22,9 +22,9 @@
 
 #include <thrust/detail/config.h>
 
-#include <thrust/detail/cpp14_required.h>
+#include <thrust/detail/cpp_version_check.h>
 
-#if THRUST_CPP_DIALECT >= 2014
+#if THRUST_CPP_DIALECT >= 2017
 
 #  include <thrust/detail/static_assert.h>
 #  include <thrust/execution_policy.h>

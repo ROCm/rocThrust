@@ -52,7 +52,7 @@ namespace zip_detail
 {
 
 // Add workaround for decltype(auto) on C++11-only compilers:
-#  if THRUST_CPP_DIALECT >= 2014
+#  if THRUST_CPP_DIALECT >= 2017
 
 THRUST_EXEC_CHECK_DISABLE
 template <typename Function, typename Tuple, std::size_t... Is>
@@ -161,7 +161,7 @@ public:
 
   /*! Applies the N-ary function object to elements of the tuple \p args. */
 // Add workaround for decltype(auto) on C++11-only compilers:
-#  if THRUST_CPP_DIALECT >= 2014
+#  if THRUST_CPP_DIALECT >= 2017
 
   template <typename Tuple>
   THRUST_HOST_DEVICE decltype(auto) operator()(Tuple&& args) const

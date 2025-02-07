@@ -49,7 +49,7 @@ THRUST_NAMESPACE_BEGIN
  * integer_sequence_push_back \see <a
  * href="https://en.cppreference.com/w/cpp/utility/integer_sequence"><tt>std::integer_sequence</tt></a>
  */
-#if THRUST_CPP_DIALECT >= 2014
+#if THRUST_CPP_DIALECT >= 2017
 template <typename T, T... Is>
 using integer_sequence = std::integer_sequence<T, Is...>;
 #else
@@ -82,7 +82,7 @@ struct integer_sequence
  *  \see integer_sequence_push_back
  *  \see <a href="https://en.cppreference.com/w/cpp/utility/integer_sequence"><tt>std::index_sequence</tt></a>
  */
-#if THRUST_CPP_DIALECT >= 2014
+#if THRUST_CPP_DIALECT >= 2017
 template <std::size_t... Is>
 using index_sequence = std::index_sequence<Is...>;
 #else
@@ -90,7 +90,7 @@ template <std::size_t... Is>
 using index_sequence = integer_sequence<std::size_t, Is...>;
 #endif
 
-#if THRUST_CPP_DIALECT < 2014
+#if THRUST_CPP_DIALECT < 2017
 /*! \cond
  */
 
@@ -133,7 +133,7 @@ struct make_integer_sequence_impl;
  *  \see make_reversed_index_sequence
  *  \see <a href="https://en.cppreference.com/w/cpp/utility/integer_sequence"><tt>std::make_integer_sequence</tt></a>
  */
-#if THRUST_CPP_DIALECT >= 2014
+#if THRUST_CPP_DIALECT >= 2017
 template <typename T, std::size_t N>
 using make_integer_sequence = std::make_integer_sequence<T, N>;
 #else
@@ -190,7 +190,7 @@ struct make_integer_sequence_impl<T, 1>
  *  \see make_reversed_index_sequence
  *  \see <a href="https://en.cppreference.com/w/cpp/utility/integer_sequence"><tt>std::make_index_sequence</tt></a>
  */
-#if THRUST_CPP_DIALECT >= 2014
+#if THRUST_CPP_DIALECT >= 2017
 template <std::size_t N>
 using make_index_sequence = std::make_index_sequence<N>;
 #else

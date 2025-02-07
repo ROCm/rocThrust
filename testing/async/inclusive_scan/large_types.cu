@@ -17,7 +17,7 @@
 
 #include <thrust/detail/config.h>
 
-#if THRUST_CPP_DIALECT >= 2014
+#if THRUST_CPP_DIALECT >= 2017
 
 #  include <async/inclusive_scan/mixin.h>
 #  include <async/test_policy_overloads.h>

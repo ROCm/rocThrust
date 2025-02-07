@@ -19,7 +19,7 @@
 
 #include <thrust/detail/config.h>
 
-#if THRUST_CPP_DIALECT >= 2014
+#if THRUST_CPP_DIALECT >= 2017
 
 #  include <thrust/device_allocator.h>
 #  include <thrust/future.h>

@@ -31,9 +31,9 @@
 
 #include <thrust/detail/config.h>
 
-#include <thrust/detail/cpp14_required.h>
+#include <thrust/detail/cpp_version_check.h>
 
-#if THRUST_CPP_DIALECT >= 2014
+#if THRUST_CPP_DIALECT >= 2017
 
 #  if THRUST_DEVICE_COMPILER == THRUST_DEVICE_COMPILER_NVCC
 

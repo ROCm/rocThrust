@@ -79,7 +79,7 @@ struct is_contiguous_iterator_impl;
 template <typename Iterator>
 using is_contiguous_iterator = detail::is_contiguous_iterator_impl<Iterator>;
 
-#if THRUST_CPP_DIALECT >= 2014
+#if THRUST_CPP_DIALECT >= 2017
 /*! \brief <tt>constexpr bool</tt> that is \c true if \c Iterator satisfies
  *  <a href="https://en.cppreference.com/w/cpp/named_req/ContiguousIterator">ContiguousIterator</a>,
  *  aka it points to elements that are contiguous in memory, and \c false
