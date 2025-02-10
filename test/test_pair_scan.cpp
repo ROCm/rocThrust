@@ -89,18 +89,18 @@ TYPED_TEST(PairScanVariablesTests, TestPairScan)
       // scan with plus
       thrust::inclusive_scan(h_pairs.begin(), h_pairs.end(), h_output.begin(), add_pairs());
       thrust::inclusive_scan(d_pairs.begin(), d_pairs.end(), d_output.begin(), add_pairs());
-      test_equality(h_output, d_output);
+      test_equality_pair_scan(h_output, d_output);
 
       // scan with maximum
       // TODO: Workaround
       thrust::inclusive_scan(h_pairs.begin(), h_pairs.end(), h_output.begin(), maximum_pairs() /*thrust::maximum<P>()*/);
       thrust::inclusive_scan(d_pairs.begin(), d_pairs.end(), d_output.begin(), maximum_pairs() /*thrust::maximum<P>()*/);
-      test_equality(h_output, d_output);
+      test_equality_pair_scan(h_output, d_output);
 
       // scan with plus
       thrust::exclusive_scan(h_pairs.begin(), h_pairs.end(), h_output.begin(), init, add_pairs());
       thrust::exclusive_scan(d_pairs.begin(), d_pairs.end(), d_output.begin(), init, add_pairs());
-      test_equality(h_output, d_output);
+      test_equality_pair_scan(h_output, d_output);
 
       // scan with maximum
       // TODO: Workaround
@@ -108,7 +108,7 @@ TYPED_TEST(PairScanVariablesTests, TestPairScan)
         h_pairs.begin(), h_pairs.end(), h_output.begin(), init, maximum_pairs() /*thrust::maximum<P>()*/);
       thrust::exclusive_scan(
         d_pairs.begin(), d_pairs.end(), d_output.begin(), init, maximum_pairs() /*thrust::maximum<P>()*/);
-      test_equality(h_output, d_output);
+      test_equality_pair_scan(h_output, d_output);
     }
   }
 }

@@ -79,8 +79,8 @@ TYPED_TEST(PairReduceTests, TestPairReduce)
       // reduce on the device
       P d_result = thrust::reduce(d_pairs.begin(), d_pairs.end(), init, add_pairs());
 
-      test_equality(h_result.first, d_result.first);
-      test_equality(h_result.second, d_result.second);
+      test_equality(h_result.first, d_result.first, size - 1);
+      test_equality(h_result.second, d_result.second, size - 1);
     }
   }
 }

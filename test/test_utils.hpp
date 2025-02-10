@@ -685,20 +685,31 @@ __host__ void test_future_value_retrieval(Future&& f, decltype(f.extract())& ret
   return_value = r2;
 }
 
+// Values of relative error for non-assotiative operations
+// (+, -, *) and type conversions for floats
+// They are doubled from 1 / (1 << mantissa_bits) as we compare in tests
+// the results of _two_ sequences of operations with different order
+// For all other operations (i.e. integer arithmetics) default 0 is used
 template <class T>
-struct precision_threshold
-{
-  static constexpr float percentage = 0.01f;
-};
+static constexpr float precision = 0;
 
 template <>
-struct precision_threshold<rocprim::half>
-{
-  static constexpr float percentage = 0.075f;
-};
+static constexpr float precision<double> = 2.0f / (1ll << 52);
+
+template <>
+static constexpr float precision<float> = 2.0f / (1ll << 23);
+
+template <>
+static constexpr float precision<rocprim::half> = 2.0f / (1ll << 10);
+
+template <>
+static constexpr float precision<rocprim::bfloat16> = 2.0f / (1ll << 7);
+
+template <class T>
+static constexpr float precision<const T> = precision<T>;
 
 template <class T, typename std::enable_if_t<std::is_floating_point<T>::value>* = nullptr>
-inline void test_equality(const T& hvalue, const T& dvalue)
+inline void test_equality(const T& hvalue, const T& dvalue, const size_t ops = 1)
 {
   // Check bitwise equality for +NaN, -NaN, +0.0, -0.0, +inf, -inf.
   if (std::memcmp(&hvalue, &dvalue, sizeof(T)) == 0)
@@ -708,13 +719,12 @@ inline void test_equality(const T& hvalue, const T& dvalue)
 
   // Check value difference based on precision threshold
   // relative difference or absolute difference with small values
-  auto tolerance =
-    std::max<T>(std::abs(T(precision_threshold<T>::percentage) * hvalue), T(precision_threshold<T>::percentage));
+  auto tolerance = double(ops) * std::max<T>(std::abs(T(precision<T>) * hvalue), T(precision<T>));
   ASSERT_NEAR(hvalue, dvalue, tolerance);
 }
 
 template <class T, typename std::enable_if_t<std::is_integral<T>::value>* = nullptr>
-inline void test_equality(const T& hvalue, const T& dvalue)
+inline void test_equality(const T& hvalue, const T& dvalue, const size_t)
 {
   ASSERT_EQ(hvalue, dvalue);
 }
@@ -723,13 +733,24 @@ inline void test_equality(const T& hvalue, const T& dvalue)
 // If type is integral check for equality, if floating
 // check absolute or relative difference
 template <class T>
-void test_equality(const thrust::host_vector<T>& hvalue, const thrust::device_vector<T>& dvalue)
+void test_equality(const thrust::host_vector<T>& hvalue, const thrust::device_vector<T>& dvalue, const size_t ops = 1)
 {
   thrust::host_vector<T> hvalue_d(dvalue);
   ASSERT_EQ(hvalue.size(), hvalue_d.size());
   for (size_t i = 0; i < hvalue.size(); i++)
   {
-    test_equality(hvalue[i], hvalue_d[i]);
+    test_equality(hvalue[i], hvalue_d[i], ops);
+  }
+}
+
+template <class T>
+void test_equality_scan(const thrust::host_vector<T>& hvalue, const thrust::device_vector<T>& dvalue)
+{
+  thrust::host_vector<T> hvalue_d(dvalue);
+  ASSERT_EQ(hvalue.size(), hvalue_d.size());
+  for (size_t i = 0; i < hvalue.size(); i++)
+  {
+    test_equality(hvalue[i], hvalue_d[i], i);
   }
 }
 
@@ -737,13 +758,27 @@ void test_equality(const thrust::host_vector<T>& hvalue, const thrust::device_ve
 // If type is integral check for equality, if floating
 // check absolute or relative difference
 template <typename X, typename Y, template <typename, typename> class Pair>
-void test_equality(const thrust::host_vector<Pair<X, Y>>& hvalue, const thrust::device_vector<Pair<X, Y>>& dvalue)
+void test_equality(
+  const thrust::host_vector<Pair<X, Y>>& hvalue, const thrust::device_vector<Pair<X, Y>>& dvalue, const size_t ops = 1)
 {
   thrust::host_vector<Pair<X, Y>> hvalue_d(dvalue);
   ASSERT_EQ(hvalue.size(), hvalue_d.size());
   for (size_t i = 0; i < hvalue.size(); i++)
   {
-    test_equality(hvalue[i].first, hvalue_d[i].first);
-    test_equality(hvalue[i].second, hvalue_d[i].second);
+    test_equality(hvalue[i].first, hvalue_d[i].first, ops);
+    test_equality(hvalue[i].second, hvalue_d[i].second, ops);
+  }
+}
+
+template <typename X, typename Y, template <typename, typename> class Pair>
+void test_equality_pair_scan(const thrust::host_vector<Pair<X, Y>>& hvalue,
+                             const thrust::device_vector<Pair<X, Y>>& dvalue)
+{
+  thrust::host_vector<Pair<X, Y>> hvalue_d(dvalue);
+  ASSERT_EQ(hvalue.size(), hvalue_d.size());
+  for (size_t i = 0; i < hvalue.size(); i++)
+  {
+    test_equality(hvalue[i].first, hvalue_d[i].first, i);
+    test_equality(hvalue[i].second, hvalue_d[i].second, i);
   }
 }

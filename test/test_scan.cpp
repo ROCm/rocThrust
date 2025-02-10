@@ -455,28 +455,28 @@ TYPED_TEST(ScanVariablesTests, TestScan)
 
       thrust::inclusive_scan(h_input.begin(), h_input.end(), h_output.begin());
       thrust::inclusive_scan(d_input.begin(), d_input.end(), d_output.begin());
-      test_equality(h_output, d_output);
+      test_equality_scan(h_output, d_output);
 
       thrust::exclusive_scan(h_input.begin(), h_input.end(), h_output.begin());
       thrust::exclusive_scan(d_input.begin(), d_input.end(), d_output.begin());
-      test_equality(h_output, d_output);
+      test_equality_scan(h_output, d_output);
 
       thrust::exclusive_scan(h_input.begin(), h_input.end(), h_output.begin(), (T) 11);
       thrust::exclusive_scan(d_input.begin(), d_input.end(), d_output.begin(), (T) 11);
-      test_equality(h_output, d_output);
+      test_equality_scan(h_output, d_output);
 
       // in-place scans
       h_output = h_input;
       d_output = d_input;
       thrust::inclusive_scan(h_output.begin(), h_output.end(), h_output.begin());
       thrust::inclusive_scan(d_output.begin(), d_output.end(), d_output.begin());
-      test_equality(h_output, d_output);
+      test_equality_scan(h_output, d_output);
 
       h_output = h_input;
       d_output = d_input;
       thrust::exclusive_scan(h_output.begin(), h_output.end(), h_output.begin());
       thrust::exclusive_scan(d_output.begin(), d_output.end(), d_output.begin());
-      test_equality(h_output, d_output);
+      test_equality_scan(h_output, d_output);
     }
   }
 }

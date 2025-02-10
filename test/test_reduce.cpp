@@ -114,7 +114,7 @@ TYPED_TEST(ReducePrimitiveTests, TestReduce)
       T h_result = thrust::reduce(h_data.begin(), h_data.end(), init);
       T d_result = thrust::reduce(d_data.begin(), d_data.end(), init);
 
-      test_equality(h_result, d_result);
+      test_equality(h_result, d_result, size - 1);
     }
   }
 }
@@ -175,7 +175,7 @@ TYPED_TEST(ReduceIntegerTests, TestReduceWithOperator)
       T cpu_result = thrust::reduce(h_data.begin(), h_data.end(), init, plus_mod_10<T>());
       T gpu_result = thrust::reduce(d_data.begin(), d_data.end(), init, plus_mod_10<T>());
 
-      test_equality(cpu_result, gpu_result);
+      test_equality(cpu_result, gpu_result, size - 1);
     }
   }
 }

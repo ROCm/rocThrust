@@ -543,7 +543,7 @@ TYPED_TEST(ScanByKeyVariablesTests, TestInclusiveScanByKeyInPlace)
       d_output = d_vals;
       thrust::inclusive_scan_by_key(h_keys.begin(), h_keys.end(), h_output.begin(), h_output.begin());
       thrust::inclusive_scan_by_key(d_keys.begin(), d_keys.end(), d_output.begin(), d_output.begin());
-      test_equality(h_output, d_output);
+      test_equality_scan(h_output, d_output);
     }
   }
 }
@@ -586,7 +586,7 @@ TYPED_TEST(ScanByKeyVariablesTests, TestExclusiveScanByKeyInPlace)
       thrust::device_vector<T> d_output = d_vals;
       thrust::exclusive_scan_by_key(h_keys.begin(), h_keys.end(), h_output.begin(), h_output.begin(), (T) 11);
       thrust::exclusive_scan_by_key(d_keys.begin(), d_keys.end(), d_output.begin(), d_output.begin(), (T) 11);
-      test_equality(h_output, d_output);
+      test_equality_scan(h_output, d_output);
     }
   }
 }

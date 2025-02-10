@@ -198,7 +198,7 @@ void test_async_transform_unary()
 
       TEST_EVENT_WAIT(thrust::when_all(f0a, f0b, f0c, f0d));
 
-      auto tolerance = T(precision_threshold<T>::percentage);
+      auto tolerance = T(precision<T>);
 
       thrust::host_vector<T> r1a = d1a;
       thrust::host_vector<T> r1b = d1b;
@@ -307,7 +307,7 @@ void test_async_transform_unary_inplace()
 
       TEST_EVENT_WAIT(thrust::when_all(f0a, f0b, f0c, f0d));
 
-      auto tolerance = T(precision_threshold<T>::percentage);
+      auto tolerance = T(precision<T>);
 
       thrust::host_vector<T> ra = d0a;
       thrust::host_vector<T> rb = d0b;

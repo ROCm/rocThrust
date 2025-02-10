@@ -117,7 +117,7 @@ void TestAsyncScan()
       THRUST_IF_CONSTEXPR (wait_for_futures == WaitPolicy)
       {
         f0.wait();
-        test_equality(h0_output, d0_output);
+        test_equality_scan(h0_output, d0_output);
       }
     }
   }

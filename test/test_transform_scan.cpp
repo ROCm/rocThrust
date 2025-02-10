@@ -215,13 +215,13 @@ TYPED_TEST(TransformScanVariablesTests, TestTransformScan)
         h_input.begin(), h_input.end(), h_output.begin(), thrust::negate<T>(), thrust::plus<T>());
       thrust::transform_inclusive_scan(
         d_input.begin(), d_input.end(), d_output.begin(), thrust::negate<T>(), thrust::plus<T>());
-      test_equality(h_output, d_output);
+      test_equality_scan(h_output, d_output);
 
       thrust::transform_exclusive_scan(
         h_input.begin(), h_input.end(), h_output.begin(), thrust::negate<T>(), (T) 11, thrust::plus<T>());
       thrust::transform_exclusive_scan(
         d_input.begin(), d_input.end(), d_output.begin(), thrust::negate<T>(), (T) 11, thrust::plus<T>());
-      test_equality(h_output, d_output);
+      test_equality_scan(h_output, d_output);
 
       // in-place scans
       h_output = h_input;
@@ -230,7 +230,7 @@ TYPED_TEST(TransformScanVariablesTests, TestTransformScan)
         h_output.begin(), h_output.end(), h_output.begin(), thrust::negate<T>(), thrust::plus<T>());
       thrust::transform_inclusive_scan(
         d_output.begin(), d_output.end(), d_output.begin(), thrust::negate<T>(), thrust::plus<T>());
-      test_equality(h_output, d_output);
+      test_equality_scan(h_output, d_output);
 
       h_output = h_input;
       d_output = d_input;
@@ -238,7 +238,7 @@ TYPED_TEST(TransformScanVariablesTests, TestTransformScan)
         h_output.begin(), h_output.end(), h_output.begin(), thrust::negate<T>(), (T) 11, thrust::plus<T>());
       thrust::transform_exclusive_scan(
         d_output.begin(), d_output.end(), d_output.begin(), thrust::negate<T>(), (T) 11, thrust::plus<T>());
-      test_equality(h_output, d_output);
+      test_equality_scan(h_output, d_output);
     }
   }
 };

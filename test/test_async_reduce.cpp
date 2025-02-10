@@ -352,7 +352,7 @@ void testAsyncReduce()
       test_future_value_retrieval(f0c, r1c);
       test_future_value_retrieval(f0d, r1d);
 
-      auto tolerance = std::max<T>(std::abs(0.1f * r0), T(precision_threshold<T>::percentage));
+      auto tolerance = std::max<T>(std::abs(0.1f * r0), T(precision<T>));
 
       ASSERT_NEAR(r0, r1a, tolerance);
       ASSERT_NEAR(r0, r1b, tolerance);
@@ -540,7 +540,7 @@ void testAsyncReduceCountingIterator()
   test_future_value_retrieval(f0c, r1c);
   test_future_value_retrieval(f0d, r1d);
 
-  auto tolerance = std::max<T>(std::abs(0.1f * r0), T(precision_threshold<T>::percentage));
+  auto tolerance = std::max<T>(std::abs(0.1f * r0), T(precision<T>));
 
   ASSERT_NEAR(r0, r1a, tolerance);
   ASSERT_NEAR(r0, r1b, tolerance);
@@ -649,7 +649,7 @@ TYPED_TEST(AsyncReduceTests, TestAsyncReduceUsing)
       test_future_value_retrieval(f0a, r1a);
       test_future_value_retrieval(f0b, r1b);
 
-      auto tolerance = std::max<T>(std::abs(0.1f * r0), T(precision_threshold<T>::percentage));
+      auto tolerance = std::max<T>(std::abs(0.1f * r0), T(precision<T>));
 
       ASSERT_NEAR(r0, r1a, tolerance);
       ASSERT_NEAR(r0, r1b, tolerance);
@@ -707,7 +707,7 @@ TYPED_TEST(AsyncReduceTests, TestAsyncReduceAfter)
 
       test_future_value_retrieval(f2, r1);
 
-      auto tolerance = std::max<T>(std::abs(0.1f * r0), T(precision_threshold<T>::percentage));
+      auto tolerance = std::max<T>(std::abs(0.1f * r0), T(precision<T>));
 
       ASSERT_NEAR(r0, r1, tolerance);
     }
@@ -765,7 +765,7 @@ TYPED_TEST(AsyncReduceTests, TestAsyncReduceOnThenAfter)
 
       test_future_value_retrieval(f2, r1);
 
-      auto tolerance = std::max<T>(std::abs(0.1f * r0), T(precision_threshold<T>::percentage));
+      auto tolerance = std::max<T>(std::abs(0.1f * r0), T(precision<T>));
 
       ASSERT_NEAR(r0, r1, tolerance);
 
@@ -991,7 +991,7 @@ TYPED_TEST(AsyncReduceTests, TestAsyncCopyThenReduce)
       test_future_value_retrieval(f1c, r1c);
       test_future_value_retrieval(f1d, r1d);
 
-      auto tolerance = std::max<T>(std::abs(0.1f * r0), T(precision_threshold<T>::percentage));
+      auto tolerance = std::max<T>(std::abs(0.1f * r0), T(precision<T>));
 
       ASSERT_NEAR(r0, r1a, tolerance);
       ASSERT_NEAR(r0, r1b, tolerance);

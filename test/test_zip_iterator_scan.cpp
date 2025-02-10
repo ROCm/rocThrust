@@ -73,8 +73,8 @@ TYPED_TEST(ZipIteratorScanVariablesTests, TestZipIteratorScan)
       thrust::host_vector<Tuple> h_result_d(d_result);
       for (size_t i = 0; i < h_result.size(); i++)
       {
-        test_equality(thrust::get<0>(h_result[i]), thrust::get<0>(h_result_d[i]));
-        test_equality(thrust::get<1>(h_result[i]), thrust::get<1>(h_result_d[i]));
+        test_equality(thrust::get<0>(h_result[i]), thrust::get<0>(h_result_d[i]), i);
+        test_equality(thrust::get<1>(h_result[i]), thrust::get<1>(h_result_d[i]), i);
       }
 
       // exclusive_scan (tuple output)
@@ -93,8 +93,8 @@ TYPED_TEST(ZipIteratorScanVariablesTests, TestZipIteratorScan)
       h_result_d = d_result;
       for (size_t i = 0; i < h_result.size(); i++)
       {
-        test_equality(thrust::get<0>(h_result[i]), thrust::get<0>(h_result_d[i]));
-        test_equality(thrust::get<1>(h_result[i]), thrust::get<1>(h_result_d[i]));
+        test_equality(thrust::get<0>(h_result[i]), thrust::get<0>(h_result_d[i]), i);
+        test_equality(thrust::get<1>(h_result[i]), thrust::get<1>(h_result_d[i]), i);
       }
 
       thrust::host_vector<T> h_result0(size);
@@ -113,8 +113,8 @@ TYPED_TEST(ZipIteratorScanVariablesTests, TestZipIteratorScan)
         thrust::make_zip_iterator(thrust::make_tuple(d_data0.end(), d_data1.end())),
         thrust::make_zip_iterator(thrust::make_tuple(d_result0.begin(), d_result1.begin())),
         TuplePlus<Tuple>());
-      test_equality(h_result0, d_result0);
-      test_equality(h_result1, d_result1);
+      test_equality_scan(h_result0, d_result0);
+      test_equality_scan(h_result1, d_result1);
 
       // exclusive_scan (zip_iterator output)
       thrust::exclusive_scan(
@@ -129,8 +129,8 @@ TYPED_TEST(ZipIteratorScanVariablesTests, TestZipIteratorScan)
         thrust::make_zip_iterator(thrust::make_tuple(d_result0.begin(), d_result1.begin())),
         thrust::make_tuple<T, T>(0, 0),
         TuplePlus<Tuple>());
-      test_equality(h_result0, d_result0);
-      test_equality(h_result1, d_result1);
+      test_equality_scan(h_result0, d_result0);
+      test_equality_scan(h_result1, d_result1);
     }
   }
 }
