@@ -3,6 +3,12 @@
 Documentation for rocThrust available at
 [https://rocm.docs.amd.com/projects/rocThrust/en/latest/](https://rocm.docs.amd.com/projects/rocThrust/en/latest/).
 
+## rocThrust 3.4.0 for ROCm 6.5
+
+### Added
+
+* gfx950 support
+
 ## rocThrust 3.3.0 for ROCm 6.4
 
 ### Added
