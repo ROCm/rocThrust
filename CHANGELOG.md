@@ -31,7 +31,7 @@ Documentation for rocThrust available at
 * Split the contents of HIPSTDPAR's forwarding header into several implementation headers.
 * Fixed `copy_if` to work with large data types (512 bytes)
 
-## rocThrust 3.2.0 for ROCm 6.3
+## rocThrust 3.3.0 for ROCm 6.3
 
 ### Added
 
@@ -50,6 +50,12 @@ Documentation for rocThrust available at
 * Fixed an issue in `rmake.py` where the list storing cmake options would contain individual characters instead of a full string of options.
 * Fixed the HIP backend not passing `TestCopyIfNonTrivial` from the upstream (thrust) test suite.
 * Fixed tests failing when compiled with `-D_GLIBCXX_ASSERTIONS=ON`.
+
+## rocThrust 3.1.1 for ROCm 6.2.4
+
+### Added
+
+* gfx1151 support
 
 ## rocThrust 3.1.0 for ROCm 6.2
 
