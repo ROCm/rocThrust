@@ -169,10 +169,10 @@ template <typename T>
 
 #if 0
     // test host types
-    using Iterator1 = typename host_vector<T>::iterator         ;
-    using Iterator2 = typename host_vector<T>::const_iterator   ;
-    using IteratorTuple1 = tuple<Iterator1,Iterator2>                ;
-    using ZipIterator1 = zip_iterator<IteratorTuple1>;
+    using Iterator1      = typename host_vector<T>::iterator;
+    using Iterator2      = typename host_vector<T>::const_iterator;
+    using IteratorTuple1 = tuple<Iterator1,Iterator2>
+    using ZipIterator1   = zip_iterator<IteratorTuple1>;
 
     using zip_iterator_traversal_type1 = typename iterator_traversal<ZipIterator1>::type;
 #endif
@@ -182,10 +182,10 @@ template <typename T>
 
 #if 0
     // test device types
-    using Iterator3 = typename device_vector<T>::iterator       ;
-    using Iterator4 = typename device_vector<T>::const_iterator ;
-    using IteratorTuple2 = tuple<Iterator3,Iterator4>                ;
-    using ZipIterator2 = zip_iterator<IteratorTuple2>;
+    using Iterator3      = typename device_vector<T>::iterator;
+    using Iterator4      = typename device_vector<T>::const_iterator;
+    using IteratorTuple2 = tuple<Iterator3,Iterator4>;
+    using ZipIterator2   = zip_iterator<IteratorTuple2>;
 
     using zip_iterator_traversal_type2 = typename iterator_traversal<ZipIterator2>::type;
 #endif
@@ -207,10 +207,10 @@ template <typename T>
 
 #if 0
     // test host types
-    using Iterator1 = typename host_vector<T>::iterator         ;
-    using Iterator2 = typename host_vector<T>::const_iterator   ;
-    using IteratorTuple1 = tuple<Iterator1,Iterator2>                ;
-    using ZipIterator1 = zip_iterator<IteratorTuple1>;
+    using Iterator1      = typename host_vector<T>::iterator;
+    using Iterator2      = typename host_vector<T>::const_iterator;
+    using IteratorTuple1 = tuple<Iterator1,Iterator2>;
+    using ZipIterator1   = zip_iterator<IteratorTuple1>;
 
     using zip_iterator_system_type1 = typename iterator_system<ZipIterator1>::type;
 #endif
@@ -220,10 +220,10 @@ template <typename T>
 
 #if 0
     // test device types
-    using Iterator3 = typename device_vector<T>::iterator       ;
-    using Iterator4 = typename device_vector<T>::const_iterator ;
-    using IteratorTuple2 = tuple<Iterator3,Iterator4>                ;
-    using ZipIterator2 = zip_iterator<IteratorTuple1>;
+    using Iterator3      = typename device_vector<T>::iterator;
+    using Iterator4      = typename device_vector<T>::const_iterator;
+    using IteratorTuple2 = tuple<Iterator3,Iterator4>;
+    using ZipIterator2   = zip_iterator<IteratorTuple1>;
 
     using zip_iterator_system_type2 = typename iterator_system<ZipIterator2>::type;
 #endif
@@ -233,10 +233,10 @@ template <typename T>
 
 #if 0
     // test any
-    using Iterator5 = counting_iterator<T>        ;
-    using Iterator6 = counting_iterator<const T>  ;
-    using IteratorTuple3 = tuple<Iterator5, Iterator6>               ;
-    using ZipIterator3 = zip_iterator<IteratorTuple3>;
+    using Iterator5      = counting_iterator<T>;
+    using Iterator6      = counting_iterator<const T>;
+    using IteratorTuple3 = tuple<Iterator5, Iterator6>;
+    using ZipIterator3   = zip_iterator<IteratorTuple3>;
 
     using zip_iterator_system_type3 = typename iterator_system<ZipIterator3>::type;
 #endif
@@ -246,8 +246,8 @@ template <typename T>
 
 #if 0
     // test host/any
-    using IteratorTuple4 = tuple<Iterator1, Iterator5>               ;
-    using ZipIterator4 = zip_iterator<IteratorTuple4>;
+    using IteratorTuple4 = tuple<Iterator1, Iterator5>;
+    using ZipIterator4   = zip_iterator<IteratorTuple4>;
 
     using zip_iterator_system_type4 = typename iterator_system<ZipIterator4>::type;
 #endif
@@ -257,8 +257,8 @@ template <typename T>
 
 #if 0
     // test any/host
-    using IteratorTuple5 = tuple<Iterator5, Iterator1>               ;
-    using ZipIterator5 = zip_iterator<IteratorTuple5>;
+    using IteratorTuple5 = tuple<Iterator5, Iterator1>;
+    using ZipIterator5   = zip_iterator<IteratorTuple5>;
 
     using zip_iterator_system_type5 = typename iterator_system<ZipIterator5>::type;
 #endif
@@ -268,8 +268,8 @@ template <typename T>
 
 #if 0
     // test device/any
-    using IteratorTuple6 = tuple<Iterator3, Iterator5>               ;
-    using ZipIterator6 = zip_iterator<IteratorTuple6>;
+    using IteratorTuple6 = tuple<Iterator3, Iterator5>;
+    using ZipIterator6   = zip_iterator<IteratorTuple6>;
 
     using zip_iterator_system_type6 = typename iterator_system<ZipIterator6>::type;
 #endif
@@ -279,8 +279,8 @@ template <typename T>
 
 #if 0
     // test any/device
-    using IteratorTuple7 = tuple<Iterator5, Iterator3>               ;
-    using ZipIterator7 = zip_iterator<IteratorTuple7>;
+    using IteratorTuple7 = tuple<Iterator5, Iterator3>;
+    using ZipIterator7   = zip_iterator<IteratorTuple7>;
 
     using zip_iterator_system_type7 = typename iterator_system<ZipIterator7>::type;
 #endif

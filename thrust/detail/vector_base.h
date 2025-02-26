@@ -46,19 +46,19 @@ template<typename T, typename Alloc>
 
   public:
     // typedefs
-    using value_type = typename storage_type::value_type     ;
-    using pointer = typename storage_type::pointer        ;
-    using const_pointer = typename storage_type::const_pointer  ;
-    using reference = typename storage_type::reference      ;
+    using value_type      = typename storage_type::value_type;
+    using pointer         = typename storage_type::pointer;
+    using const_pointer   = typename storage_type::const_pointer;
+    using reference       = typename storage_type::reference;
     using const_reference = typename storage_type::const_reference;
-    using size_type = typename storage_type::size_type      ;
+    using size_type       = typename storage_type::size_type;
     using difference_type = typename storage_type::difference_type;
-    using allocator_type = typename storage_type::allocator_type ;
+    using allocator_type  = typename storage_type::allocator_type;
 
-    using iterator = typename storage_type::iterator       ;
-    using const_iterator = typename storage_type::const_iterator ;
+    using iterator       = typename storage_type::iterator;
+    using const_iterator = typename storage_type::const_iterator;
 
-    using reverse_iterator = thrust::reverse_iterator<iterator>      ;
+    using reverse_iterator       = thrust::reverse_iterator<iterator>;
     using const_reverse_iterator = thrust::reverse_iterator<const_iterator>;
 
     /*! This constructor creates an empty vector_base.

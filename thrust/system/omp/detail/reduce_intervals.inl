@@ -26,7 +26,6 @@
 #include <thrust/iterator/iterator_traits.h>
 #include <thrust/detail/function.h>
 
-
 #include <cstdint>
 
 THRUST_NAMESPACE_BEGIN

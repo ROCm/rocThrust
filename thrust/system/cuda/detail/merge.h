@@ -295,12 +295,12 @@ namespace __merge {
             class MERGE_ITEMS>
   struct MergeAgent
   {
-    using key1_type = typename iterator_traits<KeysIt1>::value_type ;
-    using key2_type = typename iterator_traits<KeysIt2>::value_type ;
+    using key1_type  = typename iterator_traits<KeysIt1>::value_type;
+    using key2_type  = typename iterator_traits<KeysIt2>::value_type;
     using item1_type = typename iterator_traits<ItemsIt1>::value_type;
     using item2_type = typename iterator_traits<ItemsIt2>::value_type;
 
-    using key_type = key1_type ;
+    using key_type  = key1_type;
     using item_type = item1_type;
 
     using tuning_type = typename thrust::detail::conditional<
@@ -313,13 +313,13 @@ namespace __merge {
     {
       using tuning = Tuning<Arch,tuning_type>;
 
-      using KeysLoadIt1 = typename core::LoadIterator<PtxPlan, KeysIt1>::type ;
-      using KeysLoadIt2 = typename core::LoadIterator<PtxPlan, KeysIt2>::type ;
+      using KeysLoadIt1  = typename core::LoadIterator<PtxPlan, KeysIt1>::type;
+      using KeysLoadIt2  = typename core::LoadIterator<PtxPlan, KeysIt2>::type;
       using ItemsLoadIt1 = typename core::LoadIterator<PtxPlan, ItemsIt1>::type;
       using ItemsLoadIt2 = typename core::LoadIterator<PtxPlan, ItemsIt2>::type;
 
-      using BlockLoadKeys1 = typename core::BlockLoad<PtxPlan, KeysLoadIt1>::type ;
-      using BlockLoadKeys2 = typename core::BlockLoad<PtxPlan, KeysLoadIt2>::type ;
+      using BlockLoadKeys1  = typename core::BlockLoad<PtxPlan, KeysLoadIt1>::type;
+      using BlockLoadKeys2  = typename core::BlockLoad<PtxPlan, KeysLoadIt2>::type;
       using BlockLoadItems1 = typename core::BlockLoad<PtxPlan, ItemsLoadIt1>::type;
       using BlockLoadItems2 = typename core::BlockLoad<PtxPlan, ItemsLoadIt2>::type;
 
@@ -348,17 +348,17 @@ namespace __merge {
 
     using ptx_plan = typename core::specialize_plan_msvc10_war<PtxPlan>::type::type;
 
-    using KeysLoadIt1 = typename ptx_plan::KeysLoadIt1    ;
-    using KeysLoadIt2 = typename ptx_plan::KeysLoadIt2    ;
-    using ItemsLoadIt1 = typename ptx_plan::ItemsLoadIt1   ;
-    using ItemsLoadIt2 = typename ptx_plan::ItemsLoadIt2   ;
-    using BlockLoadKeys1 = typename ptx_plan::BlockLoadKeys1 ;
-    using BlockLoadKeys2 = typename ptx_plan::BlockLoadKeys2 ;
+    using KeysLoadIt1     = typename ptx_plan::KeysLoadIt1;
+    using KeysLoadIt2     = typename ptx_plan::KeysLoadIt2;
+    using ItemsLoadIt1    = typename ptx_plan::ItemsLoadIt1;
+    using ItemsLoadIt2    = typename ptx_plan::ItemsLoadIt2;
+    using BlockLoadKeys1  = typename ptx_plan::BlockLoadKeys1;
+    using BlockLoadKeys2  = typename ptx_plan::BlockLoadKeys2;
     using BlockLoadItems1 = typename ptx_plan::BlockLoadItems1;
     using BlockLoadItems2 = typename ptx_plan::BlockLoadItems2;
-    using BlockStoreKeys = typename ptx_plan::BlockStoreKeys ;
+    using BlockStoreKeys  = typename ptx_plan::BlockStoreKeys;
     using BlockStoreItems = typename ptx_plan::BlockStoreItems;
-    using TempStorage = typename ptx_plan::TempStorage    ;
+    using TempStorage     = typename ptx_plan::TempStorage;
 
     enum
     {

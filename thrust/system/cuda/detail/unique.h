@@ -240,13 +240,13 @@ namespace __unique {
     using ptx_plan = typename core::specialize_plan_msvc10_war<PtxPlan>::type::type;
 
     using ItemsLoadIt = typename ptx_plan::ItemsLoadIt;
-    
-    using BlockLoadItems = typename ptx_plan::BlockLoadItems         ;
+
+    using BlockLoadItems          = typename ptx_plan::BlockLoadItems;
     using BlockDiscontinuityItems = typename ptx_plan::BlockDiscontinuityItems;
-    using TilePrefixCallback = typename ptx_plan::TilePrefixCallback     ;
-    using BlockScan = typename ptx_plan::BlockScan              ;
-    using shared_items_t = typename ptx_plan::shared_items_t         ;
-    using TempStorage = typename ptx_plan::TempStorage            ;
+    using TilePrefixCallback      = typename ptx_plan::TilePrefixCallback;
+    using BlockScan               = typename ptx_plan::BlockScan;
+    using shared_items_t          = typename ptx_plan::shared_items_t;
+    using TempStorage             = typename ptx_plan::TempStorage;
 
     enum
     {

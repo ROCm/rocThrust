@@ -36,9 +36,9 @@ template<typename System>
 {
   // XXX value_type should actually be void
   //     but this interferes with zip_iterator<discard_iterator>
-  using value_type = any_assign        ;
-  using reference = any_assign&       ;
-  using incrementable = std::ptrdiff_t    ;
+  using value_type    = any_assign;
+  using reference     = any_assign&;
+  using incrementable = std::ptrdiff_t;
 
   using base_iterator = typename thrust::counting_iterator<
                                   incrementable,

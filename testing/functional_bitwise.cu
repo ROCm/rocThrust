@@ -60,7 +60,7 @@ template<typename T>
 template <class InputVector, class OutputVector, class Operator, class ReferenceOperator>
 void TestBinaryFunctional(void)
 {
-    using InputType = typename InputVector::value_type ;
+    using InputType  = typename InputVector::value_type;
     using OutputType = typename OutputVector::value_type;
     
     thrust::host_vector<InputType>  std_input1 = unittest::random_samples<InputType>(NUM_SAMPLES);

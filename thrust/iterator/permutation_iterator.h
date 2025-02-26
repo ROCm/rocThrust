@@ -91,7 +91,7 @@ THRUST_NAMESPACE_BEGIN
  *  indices[3] = 3;
  *
  *  using ElementIterator = thrust::device_vector<float>::iterator;
- *  using IndexIterator = thrust::device_vector<int>::iterator  ;
+ *  using IndexIterator = thrust::device_vector<int>::iterator;
  *
  *  thrust::permutation_iterator<ElementIterator,IndexIterator> iter(values.begin(), indices.begin());
  *

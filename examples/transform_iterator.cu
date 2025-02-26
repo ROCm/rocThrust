@@ -59,8 +59,8 @@ int main(void)
     int hi = 5;
 
     // define some types
-    using Vector = thrust::device_vector<int>;
-    using VectorIterator = Vector::iterator          ;
+    using Vector         = thrust::device_vector<int>;
+    using VectorIterator = Vector::iterator;
 
     // initialize values
     Vector values(8);
@@ -96,7 +96,7 @@ int main(void)
 
     ////
     // combine transform_iterator with other fancy iterators like counting_iterator
-    using CountingIterator = thrust::counting_iterator<int>                          ;
+    using CountingIterator        = thrust::counting_iterator<int>;
     using ClampedCountingIterator = thrust::transform_iterator<clamp<int>, CountingIterator>;
 
     CountingIterator count_begin(0);

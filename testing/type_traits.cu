@@ -84,7 +84,7 @@ DECLARE_UNITTEST(TestIsPlainOldData);
 
 void TestIsContiguousIterator(void)
 {
-    using HostVector = thrust::host_vector<int>  ;
+    using HostVector  = thrust::host_vector<int>;
     using DeviceVector = thrust::device_vector<int>;
     
     ASSERT_EQUAL((bool) thrust::is_contiguous_iterator< int * >::value, true);
@@ -99,12 +99,12 @@ void TestIsContiguousIterator(void)
 
     ASSERT_EQUAL((bool) thrust::is_contiguous_iterator< thrust::device_ptr<int> >::value, true);
 
-    using HostIteratorTuple = thrust::tuple< HostVector::iterator,   HostVector::iterator   >;
+    using HostIteratorTuple = thrust::tuple<HostVector::iterator, HostVector::iterator>;
 
-    using ConstantIterator = thrust::constant_iterator<int>;
-    using CountingIterator = thrust::counting_iterator<int>;
-    using TransformIterator = thrust::transform_iterator<thrust::identity<int>, HostVector::iterator >;
-    using ZipIterator = thrust::zip_iterator< HostIteratorTuple > ;
+    using ConstantIterator  = thrust::constant_iterator<int>;
+    using CountingIterator  = thrust::counting_iterator<int>;
+    using TransformIterator = thrust::transform_iterator<thrust::identity<int>, HostVector::iterator>;
+    using ZipIterator       = thrust::zip_iterator<HostIteratorTuple>;
 
     ASSERT_EQUAL((bool) thrust::is_contiguous_iterator<ConstantIterator>::value,  false);
     ASSERT_EQUAL((bool) thrust::is_contiguous_iterator<CountingIterator>::value,  false);

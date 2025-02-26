@@ -132,7 +132,7 @@ template<typename Element, typename Tag, typename Reference, typename Derived>
     : public thrust::detail::pointer_base<Element,Tag,Reference,Derived>::type
 {
   private:
-    using super_t = typename thrust::detail::pointer_base<Element,Tag,Reference,Derived>::type        ;
+    using super_t = typename thrust::detail::pointer_base<Element,Tag,Reference,Derived>::type;
 
     using derived_type = typename thrust::detail::pointer_base<Element,Tag,Reference,Derived>::derived_type;
 

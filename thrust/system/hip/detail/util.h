@@ -289,12 +289,12 @@ inline void THRUST_HOST_DEVICE throw_on_error(hipError_t status)
 template <class ValueType, class InputIt, class UnaryOp>
 struct transform_input_iterator_t
 {
-    using self_t = transform_input_iterator_t                        ;
-    using difference_type = typename iterator_traits<InputIt>::difference_type;
-    using value_type = ValueType                                         ;
-    using pointer = void                                              ;
-    using reference = value_type                                        ;
-    using iterator_category = std::random_access_iterator_tag                   ;
+    using self_t            = transform_input_iterator_t;
+    using difference_type   = typename iterator_traits<InputIt>::difference_type;
+    using value_type        = ValueType;
+    using pointer           = void;
+    using reference         = value_type;
+    using iterator_category = std::random_access_iterator_tag;
 
     InputIt         input;
     mutable UnaryOp op;
@@ -398,12 +398,12 @@ struct transform_input_iterator_t
 template <class ValueType, class InputIt1, class InputIt2, class BinaryOp>
 struct transform_pair_of_input_iterators_t
 {
-    using self_t = transform_pair_of_input_iterators_t                ;
-    using difference_type = typename iterator_traits<InputIt1>::difference_type;
-    using value_type = ValueType                                          ;
-    using pointer = void                                               ;
-    using reference = value_type                                         ;
-    using iterator_category = std::random_access_iterator_tag                    ;
+    using self_t            = transform_pair_of_input_iterators_t;
+    using difference_type   = typename iterator_traits<InputIt1>::difference_type;
+    using value_type        = ValueType;
+    using pointer           = void;
+    using reference         = value_type;
+    using iterator_category = std::random_access_iterator_tag;
 
     InputIt1         input1;
     InputIt2         input2;
@@ -529,11 +529,11 @@ struct identity
 template <class T>
 struct counting_iterator_t
 {
-    using self_t = counting_iterator_t            ;
-    using difference_type = T                              ;
-    using value_type = T                              ;
-    using pointer = void                           ;
-    using reference = T                              ;
+    using self_t            = counting_iterator_t;
+    using difference_type   = T;
+    using value_type        = T;
+    using pointer           = void;
+    using reference         = T;
     using iterator_category = std::random_access_iterator_tag;
 
     T count;

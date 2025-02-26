@@ -160,7 +160,7 @@ namespace __merge
     {
         using size_type = size_t;
 
-        using KeyType = typename iterator_traits<KeysIt1>::value_type ;
+        using KeyType   = typename iterator_traits<KeysIt1>::value_type;
         using ValueType = typename iterator_traits<ItemsIt1>::value_type;
 
         predicate_wrapper<KeyType, ValueType, CompareOp> wrapped_binary_pred(compare_op);

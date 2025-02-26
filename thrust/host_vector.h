@@ -59,7 +59,7 @@ template<typename T, typename Alloc = std::allocator<T> >
   public:
     /*! \cond
      */
-    using size_type = typename Parent::size_type ;
+    using size_type  = typename Parent::size_type;
     using value_type = typename Parent::value_type;
     /*! \endcond
      */

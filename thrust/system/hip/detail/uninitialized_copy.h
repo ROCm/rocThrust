@@ -49,7 +49,7 @@ namespace __uninitialized_copy
         InputIt  input;
         OutputIt output;
 
-        using InputType = typename iterator_traits<InputIt>::value_type ;
+        using InputType  = typename iterator_traits<InputIt>::value_type;
         using OutputType = typename iterator_traits<OutputIt>::value_type;
 
         THRUST_HIP_FUNCTION

@@ -317,12 +317,12 @@ namespace __set_operations {
             class HAS_VALUES>
   struct SetOpAgent
   {
-    using key1_type = typename iterator_traits<KeysIt1>::value_type ;
-    using key2_type = typename iterator_traits<KeysIt2>::value_type ;
+    using key1_type   = typename iterator_traits<KeysIt1>::value_type;
+    using key2_type   = typename iterator_traits<KeysIt2>::value_type;
     using value1_type = typename iterator_traits<ValuesIt1>::value_type;
     using value2_type = typename iterator_traits<ValuesIt2>::value_type;
 
-    using key_type = key1_type ;
+    using key_type   = key1_type;
     using value_type = value1_type;
 
     using ScanTileState = cub::ScanTileState<Size>;
@@ -332,27 +332,19 @@ namespace __set_operations {
     {
       using tuning = Tuning<Arch, key_type, value_type>;
 
-      using KeysLoadIt1 = typename core::LoadIterator<PtxPlan, KeysIt1>::type  ;
-      using KeysLoadIt2 = typename core::LoadIterator<PtxPlan, KeysIt2>::type  ;
+      using KeysLoadIt1   = typename core::LoadIterator<PtxPlan, KeysIt1>::type;
+      using KeysLoadIt2   = typename core::LoadIterator<PtxPlan, KeysIt2>::type;
       using ValuesLoadIt1 = typename core::LoadIterator<PtxPlan, ValuesIt1>::type;
       using ValuesLoadIt2 = typename core::LoadIterator<PtxPlan, ValuesIt2>::type;
 
-      using BlockLoadKeys1 = typename core::BlockLoad<PtxPlan, KeysLoadIt1>::type  ;
-      using BlockLoadKeys2 = typename core::BlockLoad<PtxPlan, KeysLoadIt2>::type  ;
+      using BlockLoadKeys1   = typename core::BlockLoad<PtxPlan, KeysLoadIt1>::type;
+      using BlockLoadKeys2   = typename core::BlockLoad<PtxPlan, KeysLoadIt2>::type;
       using BlockLoadValues1 = typename core::BlockLoad<PtxPlan, ValuesLoadIt1>::type;
       using BlockLoadValues2 = typename core::BlockLoad<PtxPlan, ValuesLoadIt2>::type;
 
-      using TilePrefixCallback = cub::TilePrefixCallbackOp<Size,
-                                                           cub::Sum,
-                                                           ScanTileState,
-                                                           Arch::ver>;
+      using TilePrefixCallback = cub::TilePrefixCallbackOp<Size, cub::Sum, ScanTileState, Arch::ver>;
 
-      using BlockScan = cub::BlockScan<Size,
-                                       PtxPlan::BLOCK_THREADS,
-                                       PtxPlan::SCAN_ALGORITHM,
-                                       1,
-                                       1,
-                                       Arch::ver>;
+      using BlockScan = cub::BlockScan<Size, PtxPlan::BLOCK_THREADS, PtxPlan::SCAN_ALGORITHM, 1, 1, Arch::ver>;
 
       // gather required temporary storage in a union
       //
@@ -394,18 +386,18 @@ namespace __set_operations {
 
     using ptx_plan = typename core::specialize_plan_msvc10_war<PtxPlan>::type::type;
 
-    using KeysLoadIt1 = typename ptx_plan::KeysLoadIt1  ;
-    using KeysLoadIt2 = typename ptx_plan::KeysLoadIt2  ;
+    using KeysLoadIt1   = typename ptx_plan::KeysLoadIt1;
+    using KeysLoadIt2   = typename ptx_plan::KeysLoadIt2;
     using ValuesLoadIt1 = typename ptx_plan::ValuesLoadIt1;
     using ValuesLoadIt2 = typename ptx_plan::ValuesLoadIt2;
 
-    using BlockLoadKeys1 = typename ptx_plan::BlockLoadKeys1  ;
-    using BlockLoadKeys2 = typename ptx_plan::BlockLoadKeys2  ;
+    using BlockLoadKeys1   = typename ptx_plan::BlockLoadKeys1;
+    using BlockLoadKeys2   = typename ptx_plan::BlockLoadKeys2;
     using BlockLoadValues1 = typename ptx_plan::BlockLoadValues1;
     using BlockLoadValues2 = typename ptx_plan::BlockLoadValues2;
 
     using TilePrefixCallback = typename ptx_plan::TilePrefixCallback;
-    using BlockScan = typename ptx_plan::BlockScan;
+    using BlockScan          = typename ptx_plan::BlockScan;
 
     using TempStorage = typename ptx_plan::TempStorage;
 

@@ -77,7 +77,6 @@ TYPED_TEST(ZipIteratorScanVariablesTests, TestZipIteratorScan)
             thrust::host_vector<Tuple> h_result_d(d_result);
             for(size_t i = 0; i < h_result.size(); i++)
             {
-
                 test_equality(thrust::get<0>(h_result[i]), thrust::get<0>(h_result_d[i]));
                 test_equality(thrust::get<1>(h_result[i]), thrust::get<1>(h_result_d[i]));
             }
@@ -98,7 +97,6 @@ TYPED_TEST(ZipIteratorScanVariablesTests, TestZipIteratorScan)
             h_result_d = d_result;
             for(size_t i = 0; i < h_result.size(); i++)
             {
-
                 test_equality(thrust::get<0>(h_result[i]), thrust::get<0>(h_result_d[i]));
                 test_equality(thrust::get<1>(h_result[i]), thrust::get<1>(h_result_d[i]));
             }

@@ -37,9 +37,9 @@ public:
         }
     };
 
-    using CountingIterator = typename thrust::counting_iterator<difference_type>                  ;
-    using TransformIterator = typename thrust::transform_iterator<repeat_functor, CountingIterator>;
-    using PermutationIterator = typename thrust::permutation_iterator<Iterator,TransformIterator>    ;
+    using CountingIterator    = typename thrust::counting_iterator<difference_type>;
+    using TransformIterator   = typename thrust::transform_iterator<repeat_functor, CountingIterator>;
+    using PermutationIterator = typename thrust::permutation_iterator<Iterator, TransformIterator>;
 
     // type of the repeated_range iterator
     using iterator = PermutationIterator;

@@ -38,8 +38,8 @@ int main(void)
     size_t N = 10;
 
     // define some types
-    using Vector = thrust::device_vector<int>;
-    using Iterator = Vector::iterator          ;
+    using Vector   = thrust::device_vector<int>;
+    using Iterator = Vector::iterator;
 
     // allocate storage for array
     Vector values(N);

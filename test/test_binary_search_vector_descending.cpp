@@ -29,9 +29,9 @@ TESTS_DEFINE(BinarySearchVectorDescendingIntegerTests, SignedIntegerTestsParams)
 template <class ExampleVector, typename NewType>
 struct vector_like
 {
-    using alloc = typename ExampleVector::allocator_type         ;
+    using alloc     = typename ExampleVector::allocator_type;
     using new_alloc = typename alloc::template rebind<NewType>::other;
-    using type = thrust::detail::vector_base<NewType, new_alloc>;
+    using type      = thrust::detail::vector_base<NewType, new_alloc>;
 };
 
 TYPED_TEST(BinarySearchVectorDescendingTests, TestVectorLowerBoundDescendingSimple)

@@ -138,7 +138,7 @@ template<typename Incrementable,
     friend class thrust::iterator_core_access;
 
   public:
-    using reference = typename super_t::reference      ;
+    using reference       = typename super_t::reference;
     using difference_type = typename super_t::difference_type;
 
     /*! \endcond

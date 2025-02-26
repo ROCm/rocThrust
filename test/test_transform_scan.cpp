@@ -435,7 +435,7 @@ TYPED_TEST(TransformScanVariablesTests, TestValueCategoryDeduction)
 TEST(TransformScanTests, TestTransformScanConstAccumulator)
 {
     using Vector = thrust::device_vector<int>;
-    using T = Vector::value_type        ;
+    using T      = Vector::value_type;
 
     Vector::iterator iter;
 

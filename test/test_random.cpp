@@ -820,7 +820,7 @@ void TestDistributionSaveRestore(void)
 
 TEST(RandomTests, TestUniformIntDistributionMin)
 {
-    using int_dist = thrust::random::uniform_int_distribution<int>         ;
+    using int_dist  = thrust::random::uniform_int_distribution<int>;
     using uint_dist = thrust::random::uniform_int_distribution<unsigned int>;
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
@@ -833,7 +833,7 @@ TEST(RandomTests, TestUniformIntDistributionMin)
 
 TEST(RandomTests, TestUniformIntDistributionMax)
 {
-    using int_dist = thrust::random::uniform_int_distribution<int>         ;
+    using int_dist  = thrust::random::uniform_int_distribution<int>;
     using uint_dist = thrust::random::uniform_int_distribution<unsigned int>;
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
@@ -846,7 +846,7 @@ TEST(RandomTests, TestUniformIntDistributionMax)
 
 TEST(RandomTests, TestUniformIntDistributionSaveRestore)
 {
-    using int_dist = thrust::random::uniform_int_distribution<int>         ;
+    using int_dist  = thrust::random::uniform_int_distribution<int>;
     using uint_dist = thrust::random::uniform_int_distribution<unsigned int>;
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
@@ -857,7 +857,7 @@ TEST(RandomTests, TestUniformIntDistributionSaveRestore)
 
 TEST(RandomTests, TestUniformRealDistributionMin)
 {
-    using float_dist = thrust::random::uniform_real_distribution<float> ;
+    using float_dist  = thrust::random::uniform_real_distribution<float>;
     using double_dist = thrust::random::uniform_real_distribution<double>;
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
@@ -870,7 +870,7 @@ TEST(RandomTests, TestUniformRealDistributionMin)
 
 TEST(RandomTests, TestUniformRealDistributionMax)
 {
-    using float_dist = thrust::random::uniform_real_distribution<float> ;
+    using float_dist  = thrust::random::uniform_real_distribution<float>;
     using double_dist = thrust::random::uniform_real_distribution<double>;
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
@@ -883,7 +883,7 @@ TEST(RandomTests, TestUniformRealDistributionMax)
 
 TEST(RandomTests, TestUniformRealDistributionSaveRestore)
 {
-    using float_dist = thrust::random::uniform_real_distribution<float> ;
+    using float_dist  = thrust::random::uniform_real_distribution<float>;
     using double_dist = thrust::random::uniform_real_distribution<double>;
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
@@ -894,7 +894,7 @@ TEST(RandomTests, TestUniformRealDistributionSaveRestore)
 
 TEST(RandomTests, TestNormalDistributionMin)
 {
-    using float_dist = thrust::random::normal_distribution<float> ;
+    using float_dist  = thrust::random::normal_distribution<float>;
     using double_dist = thrust::random::normal_distribution<double>;
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
@@ -907,7 +907,7 @@ TEST(RandomTests, TestNormalDistributionMin)
 
 TEST(RandomTests, TestNormalDistributionMax)
 {
-    using float_dist = thrust::random::normal_distribution<float> ;
+    using float_dist  = thrust::random::normal_distribution<float>;
     using double_dist = thrust::random::normal_distribution<double>;
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
@@ -920,7 +920,7 @@ TEST(RandomTests, TestNormalDistributionMax)
 
 TEST(RandomTests, TestNormalDistributionSaveRestore)
 {
-    using float_dist = thrust::random::normal_distribution<float> ;
+    using float_dist  = thrust::random::normal_distribution<float>;
     using double_dist = thrust::random::normal_distribution<double>;
 
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());

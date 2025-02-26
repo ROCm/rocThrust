@@ -56,16 +56,11 @@ TYPED_TEST(PairReduceTests, TestPairReduce)
         {
             SCOPED_TRACE(testing::Message() << "with seed= " << seed);
 
-            thrust::host_vector<T> h_p1 = get_random_data<T>(
-                size, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
-            ;
+            thrust::host_vector<T> h_p1 =
+              get_random_data<T>(size, get_default_limits<T>::min(), get_default_limits<T>::max(), seed);
 
             thrust::host_vector<T> h_p2 = get_random_data<T>(
-                size,
-                get_default_limits<T>::min(),
-                get_default_limits<T>::max(),
-                seed + seed_value_addition);
-            ;
+              size, get_default_limits<T>::min(), get_default_limits<T>::max(), seed + seed_value_addition);
 
             thrust::host_vector<P> h_pairs(size);
 

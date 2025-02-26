@@ -197,10 +197,10 @@ DECLARE_INTEGRAL_VECTOR_UNITTEST(TestPermutationIteratorReduce);
 
 void TestPermutationIteratorHostDeviceGather(void)
 {
-    using T = int;
-    using HostVector = thrust::host_vector<T>;
-    using DeviceVector = thrust::host_vector<T>;
-    using HostIterator = HostVector::iterator  ;
+    using T              = int;
+    using HostVector     = thrust::host_vector<T>;
+    using DeviceVector   = thrust::host_vector<T>;
+    using HostIterator   = HostVector::iterator;
     using DeviceIterator = DeviceVector::iterator;
 
     HostVector h_source(8);
@@ -243,10 +243,10 @@ DECLARE_UNITTEST(TestPermutationIteratorHostDeviceGather);
 
 void TestPermutationIteratorHostDeviceScatter(void)
 {
-    using T = int;
-    using HostVector = thrust::host_vector<T>;
-    using DeviceVector = thrust::host_vector<T>;
-    using HostIterator = HostVector::iterator  ;
+    using T              = int;
+    using HostVector     = thrust::host_vector<T>;
+    using DeviceVector   = thrust::host_vector<T>;
+    using HostIterator   = HostVector::iterator;
     using DeviceIterator = DeviceVector::iterator;
 
     HostVector h_source(4,10);

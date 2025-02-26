@@ -423,7 +423,7 @@ struct FixedVector
 template <typename Key, typename Value>
 struct key_value
 {
-    using key_type = Key  ;
+    using key_type  = Key;
     using value_type = Value;
 
     __host__ __device__ key_value(void)

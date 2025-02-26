@@ -188,12 +188,12 @@ TYPED_TEST(ReduceByKeysIntegralTests, TestReduceByKey)
             thrust::device_vector<K> d_keys_output(size);
             thrust::device_vector<V> d_vals_output(size);
 
-            using HostKeyIterator = typename thrust::host_vector<K>::iterator  ;
-            using HostValIterator = typename thrust::host_vector<V>::iterator  ;
+            using HostKeyIterator   = typename thrust::host_vector<K>::iterator;
+            using HostValIterator   = typename thrust::host_vector<V>::iterator;
             using DeviceKeyIterator = typename thrust::device_vector<K>::iterator;
             using DeviceValIterator = typename thrust::device_vector<V>::iterator;
 
-            using HostIteratorPair = typename thrust::pair<HostKeyIterator, HostValIterator>    ;
+            using HostIteratorPair   = typename thrust::pair<HostKeyIterator, HostValIterator>;
             using DeviceIteratorPair = typename thrust::pair<DeviceKeyIterator, DeviceValIterator>;
 
             HostIteratorPair   h_last = thrust::reduce_by_key(h_keys.begin(),

@@ -149,7 +149,7 @@ template<typename Derived,
 
     /*! The type of iterator this \p iterator_adaptor's \p adapts.
      */
-    using base_type = Base      ;
+    using base_type = Base;
 
     /*! \cond
      */

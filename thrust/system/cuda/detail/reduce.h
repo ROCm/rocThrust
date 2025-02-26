@@ -160,17 +160,10 @@ namespace __reduce {
       //
       using tuning = Tuning<Arch,T>;
 
-      using Vector = typename cub::CubVector<T, PtxPlan::VECTOR_LOAD_LENGTH>;
-      using LoadIt = typename core::LoadIterator<PtxPlan, InputIt>::type    ;
-      using BlockReduce = cub::BlockReduce<T,
-                                           PtxPlan::BLOCK_THREADS,
-                                           PtxPlan::BLOCK_ALGORITHM,
-                                           1,
-                                           1,
-                                           Arch::ver>;
-      using VectorLoadIt = cub::CacheModifiedInputIterator<PtxPlan::LOAD_MODIFIER,
-                                                           Vector,
-                                                           Size>;
+      using Vector       = typename cub::CubVector<T, PtxPlan::VECTOR_LOAD_LENGTH>;
+      using LoadIt       = typename core::LoadIterator<PtxPlan, InputIt>::type;
+      using BlockReduce  = cub::BlockReduce<T, PtxPlan::BLOCK_THREADS, PtxPlan::BLOCK_ALGORITHM, 1, 1, Arch::ver>;
+      using VectorLoadIt = cub::CacheModifiedInputIterator<PtxPlan::LOAD_MODIFIER, Vector, Size>;
 
       struct TempStorage
       {
@@ -209,10 +202,10 @@ namespace __reduce {
     //
     using ptx_plan = typename core::specialize_plan_msvc10_war<PtxPlan>::type::type;
 
-    using TempStorage = typename ptx_plan::TempStorage ;
-    using Vector = typename ptx_plan::Vector      ;
-    using LoadIt = typename ptx_plan::LoadIt      ;
-    using BlockReduce = typename ptx_plan::BlockReduce ;
+    using TempStorage  = typename ptx_plan::TempStorage;
+    using Vector       = typename ptx_plan::Vector;
+    using LoadIt       = typename ptx_plan::LoadIt;
+    using BlockReduce  = typename ptx_plan::BlockReduce;
     using VectorLoadIt = typename ptx_plan::VectorLoadIt;
 
     enum
@@ -446,9 +439,9 @@ namespace __reduce {
       THRUST_DEVICE_FUNCTION T consume_range(Size block_offset,
                                              Size block_end)
       {
-        using attempt_vec = is_true<ATTEMPT_VECTORIZATION>         ;
-        using path_a = is_true<true && ATTEMPT_VECTORIZATION> ;
-        using path_b = is_true<false && ATTEMPT_VECTORIZATION>;
+        using attempt_vec = is_true<ATTEMPT_VECTORIZATION>;
+        using path_a      = is_true<true && ATTEMPT_VECTORIZATION>;
+        using path_b      = is_true<false && ATTEMPT_VECTORIZATION>;
 
         return is_aligned(input_it + block_offset, attempt_vec())
                    ? consume_range_impl(block_offset, block_end, path_a())
@@ -463,9 +456,9 @@ namespace __reduce {
                     cub::GridQueue<UnsignedSize> & /*queue*/,
                     thrust::detail::integral_constant<cub::GridMappingStrategy, cub::GRID_MAPPING_RAKE> /*is_rake*/)
       {
-        using attempt_vec = is_true<ATTEMPT_VECTORIZATION>         ;
-        using path_a = is_true<true && ATTEMPT_VECTORIZATION> ;
-        using path_b = is_true<false && ATTEMPT_VECTORIZATION>;
+        using attempt_vec = is_true<ATTEMPT_VECTORIZATION>;
+        using path_a      = is_true<true && ATTEMPT_VECTORIZATION>;
+        using path_b      = is_true<false && ATTEMPT_VECTORIZATION>;
 
         // Initialize even-share descriptor for this thread block
         even_share
@@ -581,9 +574,9 @@ namespace __reduce {
           cub::GridQueue<UnsignedSize> &    queue,
           thrust::detail::integral_constant<cub::GridMappingStrategy, cub::GRID_MAPPING_DYNAMIC>)
       {
-        using attempt_vec = is_true<ATTEMPT_VECTORIZATION>        ;
-        using path_a = is_true<true && ATTEMPT_VECTORIZATION>;
-        using path_b = is_true<false && ATTEMPT_VECTORIZATION>;
+        using attempt_vec = is_true<ATTEMPT_VECTORIZATION>;
+        using path_a      = is_true<true && ATTEMPT_VECTORIZATION>;
+        using path_b      = is_true<false && ATTEMPT_VECTORIZATION>;
 
         return is_aligned(input_it, attempt_vec())
                    ? consume_tiles_impl(num_items, queue, path_a())

@@ -201,14 +201,14 @@ namespace __reduce_by_key {
             class Size>
   struct ReduceByKeyAgent
   {
-    using key_type = typename iterator_traits<KeysInputIt>::value_type  ;
+    using key_type   = typename iterator_traits<KeysInputIt>::value_type;
     using value_type = typename iterator_traits<ValuesInputIt>::value_type;
-    using size_type = Size                                               ;
+    using size_type  = Size;
 
     using size_value_pair_t = cub::KeyValuePair<size_type, value_type>;
-    using key_value_pair_t = cub::KeyValuePair<key_type, value_type> ;
+    using key_value_pair_t  = cub::KeyValuePair<key_type, value_type>;
 
-    using ScanTileState = cub::ReduceByKeyScanTileState<value_type, size_type>;
+    using ScanTileState     = cub::ReduceByKeyScanTileState<value_type, size_type>;
     using ReduceBySegmentOp = cub::ReduceBySegmentOp<ReductionOp>;
 
     template<class Arch>
@@ -216,28 +216,18 @@ namespace __reduce_by_key {
     {
       using tuning = Tuning<Arch, key_type, value_type>;
 
-      using KeysLoadIt = typename core::LoadIterator<PtxPlan, KeysInputIt>::type   ;
-      using ValuesLoadIt = typename core::LoadIterator<PtxPlan, ValuesInputIt>::type ;
+      using KeysLoadIt   = typename core::LoadIterator<PtxPlan, KeysInputIt>::type;
+      using ValuesLoadIt = typename core::LoadIterator<PtxPlan, ValuesInputIt>::type;
 
-      using BlockLoadKeys = typename core::BlockLoad<PtxPlan, KeysLoadIt>::type  ;
+      using BlockLoadKeys   = typename core::BlockLoad<PtxPlan, KeysLoadIt>::type;
       using BlockLoadValues = typename core::BlockLoad<PtxPlan, ValuesLoadIt>::type;
 
-      using BlockDiscontinuityKeys = cub::BlockDiscontinuity<key_type,
-                                                             PtxPlan::BLOCK_THREADS,
-                                                             1,
-                                                             1,
-                                                             Arch::ver>;
+      using BlockDiscontinuityKeys = cub::BlockDiscontinuity<key_type, PtxPlan::BLOCK_THREADS, 1, 1, Arch::ver>;
 
-      using TilePrefixCallback = cub::TilePrefixCallbackOp<size_value_pair_t,
-                                                           ReduceBySegmentOp,
-                                                           ScanTileState,
-                                                           Arch::ver>;
-      using BlockScan = cub::BlockScan<size_value_pair_t,
-                                       PtxPlan::BLOCK_THREADS,
-                                       PtxPlan::SCAN_ALGORITHM,
-                                       1,
-                                       1,
-                                       Arch::ver>;
+      using TilePrefixCallback =
+        cub::TilePrefixCallbackOp<size_value_pair_t, ReduceBySegmentOp, ScanTileState, Arch::ver>;
+      using BlockScan =
+        cub::BlockScan<size_value_pair_t, PtxPlan::BLOCK_THREADS, PtxPlan::SCAN_ALGORITHM, 1, 1, Arch::ver>;
 
       union TempStorage
       {
@@ -258,14 +248,14 @@ namespace __reduce_by_key {
 
     using ptx_plan = typename core::specialize_plan_msvc10_war<PtxPlan>::type::type;
 
-    using KeysLoadIt = typename ptx_plan::KeysLoadIt            ;
-    using ValuesLoadIt = typename ptx_plan::ValuesLoadIt          ;
-    using BlockLoadKeys = typename ptx_plan::BlockLoadKeys         ;
-    using BlockLoadValues = typename ptx_plan::BlockLoadValues       ;
+    using KeysLoadIt             = typename ptx_plan::KeysLoadIt;
+    using ValuesLoadIt           = typename ptx_plan::ValuesLoadIt;
+    using BlockLoadKeys          = typename ptx_plan::BlockLoadKeys;
+    using BlockLoadValues        = typename ptx_plan::BlockLoadValues;
     using BlockDiscontinuityKeys = typename ptx_plan::BlockDiscontinuityKeys;
-    using TilePrefixCallback = typename ptx_plan::TilePrefixCallback    ;
-    using BlockScan = typename ptx_plan::BlockScan             ;
-    using TempStorage = typename ptx_plan::TempStorage           ;
+    using TilePrefixCallback     = typename ptx_plan::TilePrefixCallback;
+    using BlockScan              = typename ptx_plan::BlockScan;
+    using TempStorage            = typename ptx_plan::TempStorage;
 
     enum
     {

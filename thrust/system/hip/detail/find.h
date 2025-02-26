@@ -118,9 +118,9 @@ find_if_n(execution_policy<Derived>& policy,
     const Size interval_size      = (thrust::min)(interval_threshold, num_items);
 
     // force transform_iterator output to bool
-    using XfrmIterator = transform_input_iterator_t<bool, InputIt, Predicate>  ;
+    using XfrmIterator  = transform_input_iterator_t<bool, InputIt, Predicate>;
     using IteratorTuple = thrust::tuple<XfrmIterator, counting_iterator_t<Size>>;
-    using ZipIterator = thrust::zip_iterator<IteratorTuple>                   ;
+    using ZipIterator   = thrust::zip_iterator<IteratorTuple>;
 
     IteratorTuple iter_tuple
         = thrust::make_tuple(XfrmIterator(first, predicate), counting_iterator_t<Size>(0));

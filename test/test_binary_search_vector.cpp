@@ -181,9 +181,9 @@ TESTS_DEFINE(BinarySearchVectorIntegerTests, SignedIntegerTestsParams);
 template <class ExampleVector, typename NewType>
 struct vector_like
 {
-    using alloc = typename ExampleVector::allocator_type         ;
+    using alloc     = typename ExampleVector::allocator_type;
     using new_alloc = typename alloc::template rebind<NewType>::other;
-    using type = thrust::detail::vector_base<NewType, new_alloc>;
+    using type      = thrust::detail::vector_base<NewType, new_alloc>;
 };
 
 TYPED_TEST(BinarySearchVectorTests, TestScalarLowerBoundSimple)
@@ -412,7 +412,7 @@ TYPED_TEST(BinarySearchVectorTests, TestVectorBinarySearchSimple)
     thrust::sequence(Policy{}, input.begin(), input.end());
 
     using BoolVector = typename vector_like<Vector, bool>::type;
-    using IntVector = typename vector_like<Vector, int>::type ;
+    using IntVector  = typename vector_like<Vector, int>::type;
 
     // test with boolean output type
     BoolVector                    bool_output(10);

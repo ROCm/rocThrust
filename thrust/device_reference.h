@@ -201,7 +201,7 @@ template<typename T>
 
     /*! The type of the expression <tt>&ref</tt>, where <tt>ref</tt> is a \p device_reference.
      */
-    using pointer = typename super_t::pointer   ;
+    using pointer = typename super_t::pointer;
 
     /*! This copy constructor accepts a const reference to another
      *  \p device_reference. After this \p device_reference is constructed,

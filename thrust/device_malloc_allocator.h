@@ -56,22 +56,22 @@ template<typename T>
 {
   public:
     /*! Type of element allocated, \c T. */
-    using value_type = T                                ;
+    using value_type = T;
 
     /*! Pointer to allocation, \c device_ptr<T>. */
-    using pointer = device_ptr<T>                    ;
+    using pointer = device_ptr<T>;
 
     /*! \c const pointer to allocation, \c device_ptr<const T>. */
-    using const_pointer = device_ptr<const T>              ;
+    using const_pointer = device_ptr<const T>;
 
     /*! Reference to allocated element, \c device_reference<T>. */
-    using reference = device_reference<T>              ;
+    using reference = device_reference<T>;
 
     /*! \c const reference to allocated element, \c device_reference<const T>. */
-    using const_reference = device_reference<const T>        ;
+    using const_reference = device_reference<const T>;
 
     /*! Type of allocation size, \c std::size_t. */
-    using size_type = std::size_t                      ;
+    using size_type = std::size_t;
 
     /*! Type of allocation difference, \c pointer::difference_type. */
     using difference_type = typename pointer::difference_type;

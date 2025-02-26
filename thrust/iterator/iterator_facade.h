@@ -278,7 +278,7 @@ template<typename Derived,
 
     /*! The return type of \p iterator_facade::operator*().
      */
-    using reference = Reference                                         ;
+    using reference = Reference;
 
     /*! The return type of \p iterator_facade's non-existent \c operator->()
      *  member function. Unlike \c boost::iterator_facade, \p iterator_facade
@@ -287,12 +287,12 @@ template<typename Derived,
      *  that these expressions are not allowed. This limitation may be relaxed in a
      *  future version of Thrust.
      */
-    using pointer = void                                              ;
+    using pointer = void;
 
     /*! The type of expressions of the form <tt>x - y</tt> where <tt>x</tt> and <tt>y</tt>
      *  are of type \p iterator_facade.
      */
-    using difference_type = Difference                                        ;
+    using difference_type = Difference;
 
     /*! The type of iterator category of \p iterator_facade.
      */

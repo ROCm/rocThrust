@@ -56,8 +56,8 @@ template<typename T, T v>
   {
     THRUST_INLINE_INTEGRAL_MEMBER_CONSTANT T value = v;
 
-    using value_type = T                      ;
-    using type = integral_constant<T, v>;
+    using value_type = T;
+    using type       = integral_constant<T, v>;
 
     // We don't want to switch to std::integral_constant, because we want access
     // to the C++14 operator(), but we'd like standard traits to interoperate
@@ -76,7 +76,7 @@ template<typename T, T v>
   };
 
 /// typedef for true_type
-using true_type = integral_constant<bool, true> ;
+using true_type = integral_constant<bool, true>;
 
 /// typedef for true_type
 using false_type = integral_constant<bool, false>;
@@ -268,13 +268,17 @@ template<typename T> struct is_device_reference< thrust::device_reference<T> > :
 
 
 // NB: Careful with reference to void.
-template<typename _Tp, bool = (is_void<_Tp>::value || is_reference<_Tp>::value)>
-  struct __add_reference_helper
-  { using type = _Tp&   ; };
+template <typename _Tp, bool = (is_void<_Tp>::value || is_reference<_Tp>::value)>
+struct __add_reference_helper
+{
+  using type = _Tp&;
+};
 
-template<typename _Tp>
-  struct __add_reference_helper<_Tp, true>
-  { using type = _Tp    ; };
+template <typename _Tp>
+struct __add_reference_helper<_Tp, true>
+{
+  using type = _Tp;
+};
 
 template<typename _Tp>
   struct add_reference
@@ -476,15 +480,15 @@ namespace tt_detail
 
 template<typename T> struct make_unsigned_simple;
 
-template<> struct make_unsigned_simple<char>                   { using type = unsigned char         ; };
-template<> struct make_unsigned_simple<signed char>            { using type = unsigned char         ; };
-template<> struct make_unsigned_simple<unsigned char>          { using type = unsigned char         ; };
-template<> struct make_unsigned_simple<short>                  { using type = unsigned short        ; };
-template<> struct make_unsigned_simple<unsigned short>         { using type = unsigned short        ; };
-template<> struct make_unsigned_simple<int>                    { using type = unsigned int          ; };
-template<> struct make_unsigned_simple<unsigned int>           { using type = unsigned int          ; };
-template<> struct make_unsigned_simple<long int>               { using type = unsigned long int     ; };
-template<> struct make_unsigned_simple<unsigned long int>      { using type = unsigned long int     ; };
+template<> struct make_unsigned_simple<char>                   { using type = unsigned char;          };
+template<> struct make_unsigned_simple<signed char>            { using type = unsigned char;          };
+template<> struct make_unsigned_simple<unsigned char>          { using type = unsigned char;          };
+template<> struct make_unsigned_simple<short>                  { using type = unsigned short;         };
+template<> struct make_unsigned_simple<unsigned short>         { using type = unsigned short;         };
+template<> struct make_unsigned_simple<int>                    { using type = unsigned int;           };
+template<> struct make_unsigned_simple<unsigned int>           { using type = unsigned int;           };
+template<> struct make_unsigned_simple<long int>               { using type = unsigned long int;      };
+template<> struct make_unsigned_simple<unsigned long int>      { using type = unsigned long int;      };
 template<> struct make_unsigned_simple<long long int>          { using type = unsigned long long int; };
 template<> struct make_unsigned_simple<unsigned long long int> { using type = unsigned long long int; };
 
@@ -565,8 +569,11 @@ namespace is_assignable_ns
 template<typename T1, typename T2>
   class is_assignable
 {
-  using yes_type = char                     ;
-  using no_type = struct { char array[2]; };
+  using yes_type = char;
+  using no_type  = struct
+  {
+    char array[2];
+  };
 
   template<typename T> static typename add_reference<T>::type declval();
 

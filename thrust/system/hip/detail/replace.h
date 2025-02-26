@@ -137,7 +137,7 @@ replace_copy_if(execution_policy<Derived>& policy,
                 Predicate                  predicate,
                 T const&                   new_value)
 {
-    using output_type = typename iterator_traits<OutputIt>::value_type      ;
+    using output_type    = typename iterator_traits<OutputIt>::value_type;
     using new_value_if_t = __replace::new_value_if_f<Predicate, T, output_type>;
     return hip_rocprim::transform(
         policy, first, last, result, new_value_if_t(predicate, new_value)
@@ -159,7 +159,7 @@ replace_copy_if(execution_policy<Derived>& policy,
                 Predicate                  predicate,
                 T const&                   new_value)
 {
-    using output_type = typename iterator_traits<OutputIt>::value_type      ;
+    using output_type    = typename iterator_traits<OutputIt>::value_type;
     using new_value_if_t = __replace::new_value_if_f<Predicate, T, output_type>;
     return hip_rocprim::transform(
         policy, first, last, stencil, result, new_value_if_t(predicate, new_value)

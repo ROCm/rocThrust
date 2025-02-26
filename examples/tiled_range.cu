@@ -37,9 +37,9 @@ class tiled_range
         }
     };
 
-    using CountingIterator = typename thrust::counting_iterator<difference_type>                  ;
-    using TransformIterator = typename thrust::transform_iterator<tile_functor, CountingIterator>  ;
-    using PermutationIterator = typename thrust::permutation_iterator<Iterator,TransformIterator>    ;
+    using CountingIterator    = typename thrust::counting_iterator<difference_type>;
+    using TransformIterator   = typename thrust::transform_iterator<tile_functor, CountingIterator>;
+    using PermutationIterator = typename thrust::permutation_iterator<Iterator, TransformIterator>;
 
     // type of the tiled_range iterator
     using iterator = PermutationIterator;

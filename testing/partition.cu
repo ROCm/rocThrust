@@ -191,8 +191,8 @@ DECLARE_INTEGRAL_VECTOR_UNITTEST(TestPartitionCopyStencilSimple);
 template<typename Vector>
 void TestStablePartitionSimple(void)
 {
-    using T = typename Vector::value_type;
-    using Iterator = typename Vector::iterator  ;
+    using T        = typename Vector::value_type;
+    using Iterator = typename Vector::iterator;
 
     Vector data(5);
     data[0] =  1; 
@@ -219,8 +219,8 @@ DECLARE_INTEGRAL_VECTOR_UNITTEST(TestStablePartitionSimple);
 template<typename Vector>
 void TestStablePartitionStencilSimple(void)
 {
-    using T = typename Vector::value_type;
-    using Iterator = typename Vector::iterator  ;
+    using T        = typename Vector::value_type;
+    using Iterator = typename Vector::iterator;
 
     Vector data(5);
     data[0] =  1; 
@@ -1054,9 +1054,9 @@ void TestPartitionZipIterator(void)
     data1[3] = 1;  data2[3] = 2;
     data1[4] = 2;  data2[4] = 1;
 
-    using Iterator = typename Vector::iterator          ;
-    using IteratorTuple = thrust::tuple<Iterator,Iterator>   ;
-    using ZipIterator = thrust::zip_iterator<IteratorTuple>;
+    using Iterator      = typename Vector::iterator;
+    using IteratorTuple = thrust::tuple<Iterator, Iterator>;
+    using ZipIterator   = thrust::zip_iterator<IteratorTuple>;
 
     ZipIterator begin = thrust::make_zip_iterator(thrust::make_tuple(data1.begin(), data2.begin()));
     ZipIterator end   = thrust::make_zip_iterator(thrust::make_tuple(data1.end(),   data2.end()));
@@ -1098,9 +1098,9 @@ void TestPartitionStencilZipIterator(void)
     stencil1[3] = 1;  stencil2[3] = 2;
     stencil1[4] = 2;  stencil2[4] = 1;
 
-    using Iterator = typename Vector::iterator          ;
-    using IteratorTuple = thrust::tuple<Iterator,Iterator>   ;
-    using ZipIterator = thrust::zip_iterator<IteratorTuple>;
+    using Iterator      = typename Vector::iterator;
+    using IteratorTuple = thrust::tuple<Iterator, Iterator>;
+    using ZipIterator   = thrust::zip_iterator<IteratorTuple>;
 
     ZipIterator stencil_begin = thrust::make_zip_iterator(thrust::make_tuple(stencil1.begin(), stencil2.begin()));
 
@@ -1132,9 +1132,9 @@ void TestStablePartitionZipIterator(void)
     data1[3] = 1;  data2[3] = 2;
     data1[4] = 2;  data2[4] = 1;
 
-    using Iterator = typename Vector::iterator          ;
-    using IteratorTuple = thrust::tuple<Iterator,Iterator>   ;
-    using ZipIterator = thrust::zip_iterator<IteratorTuple>;
+    using Iterator      = typename Vector::iterator;
+    using IteratorTuple = thrust::tuple<Iterator, Iterator>;
+    using ZipIterator   = thrust::zip_iterator<IteratorTuple>;
 
     ZipIterator begin = thrust::make_zip_iterator(thrust::make_tuple(data1.begin(), data2.begin()));
     ZipIterator end   = thrust::make_zip_iterator(thrust::make_tuple(data1.end(),   data2.end()));
@@ -1176,9 +1176,9 @@ void TestStablePartitionStencilZipIterator(void)
     stencil1[3] = 1;  stencil2[3] = 2;
     stencil1[4] = 2;  stencil2[4] = 1;
 
-    using Iterator = typename Vector::iterator          ;
-    using IteratorTuple = thrust::tuple<Iterator,Iterator>   ;
-    using ZipIterator = thrust::zip_iterator<IteratorTuple>;
+    using Iterator      = typename Vector::iterator;
+    using IteratorTuple = thrust::tuple<Iterator, Iterator>;
+    using ZipIterator   = thrust::zip_iterator<IteratorTuple>;
 
     ZipIterator stencil_begin = thrust::make_zip_iterator(thrust::make_tuple(stencil1.begin(), stencil2.begin()));
 
