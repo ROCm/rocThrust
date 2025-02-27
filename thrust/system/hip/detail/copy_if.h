@@ -164,8 +164,8 @@ namespace __copy_if
     {
         using namespace thrust::system::hip_rocprim::temp_storage;
         using size_type = typename iterator_traits<InputIt>::difference_type;
-        using pos_type = thrust::detail::uint32_t;
-        using flag_type = thrust::detail::uint8_t;
+        using pos_type  = std::uint32_t;
+        using flag_type = std::uint8_t;
 
         size_type   num_items  = thrust::distance(first, last);
         hipStream_t stream     = hip_rocprim::stream(policy);
@@ -199,7 +199,7 @@ namespace __copy_if
             "copy_if failed while determining inclusive scan storage size");
 
         // Allocate temporary storage.
-        thrust::detail::temporary_array<thrust::detail::uint8_t, Derived> tmp(policy, storage_size);
+        thrust::detail::temporary_array<std::uint8_t, Derived> tmp(policy, storage_size);
         void *ptr = static_cast<void*>(tmp.data().get());
 
         // Perform a scan on the positions.
