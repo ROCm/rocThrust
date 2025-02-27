@@ -93,11 +93,7 @@ set(CMAKE_CXX_STANDARD 17)
 # Dependencies
 find_package(Threads REQUIRED)
 
-<<<<<<< HEAD
-# Define where to find rocThrust, hipstdpar and rocPRIM headers
-=======
 # Define where to find rocThrust, rocPRIM and hipstdpar headers
->>>>>>> Adopt symbol visibility rules in rocThrust
 set(THRUST_LOCATION ${PROJECT_SOURCE_DIR})
 set(THRUST_BINARY_LOCATION ${PROJECT_BINARY_DIR}/thrust/include)
 set(ROCPRIM_LOCATION ${rocprim_INCLUDE_DIR})
