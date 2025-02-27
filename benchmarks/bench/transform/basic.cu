@@ -26,11 +26,14 @@
 // rocThrust
 #include <thrust/device_vector.h>
 #include <thrust/execution_policy.h>
+#include <thrust/fill.h>
 #include <thrust/host_vector.h>
 #include <thrust/transform.h>
+#include <thrust/zip_function.h>
 
 // Google Benchmark
 #include <benchmark/benchmark.h>
+#include <benchmarks/bench_utils/common/types.hpp>
 
 // STL
 #include <cstdlib>
@@ -83,6 +86,186 @@ struct basic
   }
 };
 
+namespace babelstream
+{
+// This namespace contains benchmarks inspired by the BabelStream Thrust benchmarks.
+constexpr auto aFill = 1;
+constexpr auto bFill = 2;
+constexpr auto cFill = 3;
+constexpr auto sVal  = 4;
+
+struct mul
+{
+  static constexpr size_t reads_per_item  = 1;
+  static constexpr size_t writes_per_item = 1;
+
+  template <typename T>
+  struct op
+  {
+    const T scalar;
+    __device__ __host__ op(T scalar)
+        : scalar(scalar)
+    {}
+    __device__ __host__ T operator()(const T& a)
+    {
+      return a * scalar;
+    }
+  };
+
+  template <typename T>
+  static float64_t run(thrust::device_vector<T>, thrust::device_vector<T> b, thrust::device_vector<T> c)
+  {
+    bench_utils::gpu_timer d_timer;
+    d_timer.start(0);
+    thrust::transform(c.begin(), c.end(), b.begin(), op<T>{sVal});
+    d_timer.stop(0);
+    return d_timer.get_duration();
+  }
+};
+struct add
+{
+  static constexpr size_t reads_per_item  = 2;
+  static constexpr size_t writes_per_item = 1;
+
+  template <typename T>
+  struct op
+  {
+    __device__ __host__ T operator()(const T& a, const T& b)
+    {
+      return a + b;
+    }
+  };
+
+  template <typename T>
+  static float64_t run(thrust::device_vector<T> a, thrust::device_vector<T> b, thrust::device_vector<T> c)
+  {
+    bench_utils::gpu_timer d_timer;
+    d_timer.start(0);
+    thrust::transform(a.begin(), a.end(), b.begin(), c.begin(), op<T>{});
+    d_timer.stop(0);
+    return d_timer.get_duration();
+  }
+};
+
+struct triad
+{
+  static constexpr size_t reads_per_item  = 2;
+  static constexpr size_t writes_per_item = 1;
+
+  template <typename T>
+  struct op
+  {
+    const T scalar;
+    __device__ __host__ op(T scalar)
+        : scalar(scalar)
+    {}
+    __device__ __host__ T operator()(const T& a, const T& b)
+    {
+      return a + scalar * b;
+    }
+  };
+
+  template <typename T>
+  static float64_t run(thrust::device_vector<T> a, thrust::device_vector<T> b, thrust::device_vector<T> c)
+  {
+    bench_utils::gpu_timer d_timer;
+    d_timer.start(0);
+    thrust::transform(a.begin(), a.end(), b.begin(), c.begin(), op<T>{sVal});
+    d_timer.stop(0);
+    return d_timer.get_duration();
+  }
+};
+
+struct nstream
+{
+  static constexpr size_t reads_per_item  = 3;
+  static constexpr size_t writes_per_item = 1;
+
+  template <typename T>
+  struct op
+  {
+    const T scalar;
+    __device__ __host__ op(T scalar)
+        : scalar(scalar)
+    {}
+    __device__ __host__ T operator()(T& a, T& b, T& c)
+    {
+      return a + b + scalar * c;
+    }
+  };
+
+  template <typename T>
+  static float64_t run(thrust::device_vector<T> a, thrust::device_vector<T> b, thrust::device_vector<T> c)
+  {
+    bench_utils::gpu_timer d_timer;
+    d_timer.start(0);
+    thrust::transform(thrust::make_zip_iterator(a.begin(), b.begin(), c.begin()),
+                      thrust::make_zip_iterator(a.end(), b.end(), c.end()),
+                      a.begin(),
+                      thrust::make_zip_function(op<T>{sVal}));
+    d_timer.stop(0);
+    return d_timer.get_duration();
+  }
+};
+
+template <typename Benchmark, class T>
+void run_babelstream(benchmark::State& state, const std::size_t n)
+{
+  thrust::device_vector<T> a = thrust::device_vector<T>(n);
+  thrust::device_vector<T> b = thrust::device_vector<T>(n);
+  thrust::device_vector<T> c = thrust::device_vector<T>(n);
+
+  std::vector<double> gpu_times;
+  for (auto _ : state)
+  {
+    thrust::fill(a.begin(), a.end(), aFill);
+    thrust::fill(b.begin(), b.end(), bFill);
+    thrust::fill(c.begin(), c.end(), cFill);
+
+    auto duration = Benchmark::template run<T>(a, b, c);
+    state.SetIterationTime(duration);
+    gpu_times.push_back(duration);
+  }
+  size_t transfers_per_item = Benchmark::reads_per_item + Benchmark::writes_per_item;
+  state.SetBytesProcessed(state.iterations() * n * sizeof(T) * transfers_per_item);
+  state.SetItemsProcessed(state.iterations() * n);
+
+  const double gpu_cv         = bench_utils::StatisticsCV(gpu_times);
+  state.counters["gpu_noise"] = gpu_cv;
+}
+
+#define CREATE_BABELSTREAM_BENCHMARK(T, Elements, Benchmark)                                             \
+  benchmark::RegisterBenchmark(                                                                          \
+    bench_utils::bench_naming::format_name(                                                              \
+      "{algo:transform,subalgo:" + name + "." + #Benchmark + ",input_type:" #T + ",elements:" #Elements) \
+      .c_str(),                                                                                          \
+    run_babelstream<Benchmark, T>,                                                                       \
+    Elements)
+
+// clang-format off
+#define BENCHMARK_BABELSTREAM_TYPE(type)              \
+  CREATE_BABELSTREAM_BENCHMARK(type, 1 << 25, mul),   \
+  CREATE_BABELSTREAM_BENCHMARK(type, 1 << 25, add),   \
+  CREATE_BABELSTREAM_BENCHMARK(type, 1 << 25, triad), \
+  CREATE_BABELSTREAM_BENCHMARK(type, 1 << 25, nstream)
+// clang-format on
+
+void add_benchmarks(const std::string& name, std::vector<benchmark::internal::Benchmark*>& benchmarks)
+{
+  std::vector<benchmark::internal::Benchmark*> bs = {
+    BENCHMARK_BABELSTREAM_TYPE(int8_t),
+    BENCHMARK_BABELSTREAM_TYPE(int16_t),
+    BENCHMARK_BABELSTREAM_TYPE(float),
+    BENCHMARK_BABELSTREAM_TYPE(double),
+    BENCHMARK_BABELSTREAM_TYPE(int128_t),
+  };
+
+  benchmarks.insert(benchmarks.end(), bs.begin(), bs.end());
+}
+#undef CREATE_BABELSTREAM_BENCHMARK
+#undef BENCHMARK_BABELSTREAM_TYPE
+}; // namespace babelstream
+
 template <class Benchmark, class T>
 void run_benchmark(benchmark::State& state, const std::size_t elements, const std::string seed_type)
 {
@@ -129,9 +312,13 @@ void run_benchmark(benchmark::State& state, const std::size_t elements, const st
     Elements,                                                                         \
     seed_type)
 
-#define BENCHMARK_TYPE(type)                                                                         \
-  CREATE_BENCHMARK(type, 1 << 16), CREATE_BENCHMARK(type, 1 << 20), CREATE_BENCHMARK(type, 1 << 24), \
-    CREATE_BENCHMARK(type, 1 << 28)
+// clang-format off
+#define BENCHMARK_TYPE(type)       \
+  CREATE_BENCHMARK(type, 1 << 16), \
+  CREATE_BENCHMARK(type, 1 << 20), \
+  CREATE_BENCHMARK(type, 1 << 24), \
+  CREATE_BENCHMARK(type, 1 << 28)
+// clang-format on
 
 template <class Benchmark>
 void add_benchmarks(
@@ -158,16 +345,17 @@ int main(int argc, char* argv[])
   bench_utils::add_common_benchmark_info();
   benchmark::AddCustomContext("seed", seed_type);
 
-  // Add benchmark
+  // Add benchmarks
   std::vector<benchmark::internal::Benchmark*> benchmarks;
   add_benchmarks<basic>("basic", benchmarks, seed_type);
+  babelstream::add_benchmarks("babelstream", benchmarks);
 
   // Use manual timing
   for (auto& b : benchmarks)
   {
     b->UseManualTime();
     b->Unit(benchmark::kMicrosecond);
-    b->MinTime(0.4); // in seconds
+    b->MinTime(0.2); // in seconds
   }
 
   // Run benchmarks
