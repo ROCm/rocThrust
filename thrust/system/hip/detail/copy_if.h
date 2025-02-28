@@ -190,7 +190,7 @@ copy_if(execution_policy<Derived>& policy, InputIt first, InputIt last, OutputIt
   copy_if_kernel<items_per_thread>
     <<<block_size, threads_per_block>>>(first, flags.begin(), pos.begin(), num_items, output);
 
-  return output + pos[num_items - 1];
+  return output + get_value(policy, &pos[num_items - 1]);
 }
 
 template <typename Derived, typename InputIt, typename StencilIt, typename OutputIt, typename Predicate>
