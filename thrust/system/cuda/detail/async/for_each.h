@@ -31,6 +31,7 @@
 #pragma once
 
 #include <thrust/detail/config.h>
+
 #include <thrust/detail/cpp_version_check.h>
 
 #if THRUST_CPP_DIALECT >= 2017
