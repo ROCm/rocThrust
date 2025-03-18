@@ -30,6 +30,9 @@ target_include_directories(rocthrust
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/>
 )
 
+target_compile_options(rocthrust PRIVATE -fgpu-rdc)
+target_link_options(rocthrust PRIVATE -fgpu-rdc)
+
 target_link_libraries(rocthrust
   INTERFACE
     roc::rocprim_hip
