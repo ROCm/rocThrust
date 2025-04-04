@@ -41,7 +41,7 @@
 #  include <thrust/system/hip/future.h>
 #  include <thrust/type_traits/remove_cvref.h>
 
-#  include <type_traits>
+#  include <type_traits> // IWYU pragma: export
 
 // TODO specialize for thrust::plus to use e.g. ExclusiveSum instead of ExcScan
 //  - Note that thrust::plus<> is transparent, cub::Sum is not. This should be

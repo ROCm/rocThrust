@@ -33,14 +33,14 @@
 #  include <thrust/distance.h>
 #  include <thrust/system/hip/detail/scan.h>
 
-#  include <iterator>
+#  include <iterator> // IWYU pragma: export
 
 // rocprim include
 #  include <rocprim/rocprim.hpp>
 
 #  include <thrust/detail/alignment.h>
 
-#  include <cstdint>
+#  include <cstdint> // IWYU pragma: export
 
 THRUST_NAMESPACE_BEGIN
 

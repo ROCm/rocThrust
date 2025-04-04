@@ -42,7 +42,7 @@
 #  include <thrust/system/hip/detail/parallel_for.h>
 #  include <thrust/system/hip/future.h>
 
-#  include <type_traits>
+#  include <type_traits> // IWYU pragma: export
 
 THRUST_NAMESPACE_BEGIN
 

@@ -43,7 +43,7 @@
 #  include <thrust/system/hip/detail/reduce.h>
 #  include <thrust/system/hip/future.h>
 
-#  include <type_traits>
+#  include <type_traits> // IWYU pragma: export
 
 // rocprim include
 #  include <rocprim/rocprim.hpp>

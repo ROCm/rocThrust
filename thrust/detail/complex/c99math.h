@@ -23,7 +23,7 @@
 
 #include <cmath>
 
-#include <math.h>
+#include <math.h> // IWYU pragma: export
 
 THRUST_NAMESPACE_BEGIN
 namespace detail
