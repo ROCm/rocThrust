@@ -166,7 +166,7 @@ if(BUILD_TEST OR BUILD_BENCHMARKS OR BUILD_HIPSTDPAR_TEST)
 endif()
 
 if(CODE_COVERAGE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -fprofile-instr-generate -fcoverage-mapping")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -fprofile-instr-generate -fcoverage-mapping")
 endif()
   
 # Tests
@@ -197,13 +197,13 @@ endif()
 
 #Create header wrapper for backward compatibility
 if(BUILD_FILE_REORG_BACKWARD_COMPATIBILITY AND NOT WIN32)
-rocm_wrap_header_dir(
-  ${CMAKE_SOURCE_DIR}/thrust
-  PATTERNS "*.h" "*.inl" "*.cuh" "*.hpp"
-  HEADER_LOCATION include/thrust
-  GUARDS SYMLINK WRAPPER
-  WRAPPER_LOCATIONS rocthrust/${CMAKE_INSTALL_INCLUDEDIR}/thrust
-  OUTPUT_LOCATIONS rocthrust/wrapper/include/thrust
+  rocm_wrap_header_dir(
+    ${CMAKE_SOURCE_DIR}/thrust
+    PATTERNS "*.h" "*.inl" "*.cuh" "*.hpp"
+    HEADER_LOCATION include/thrust
+    GUARDS SYMLINK WRAPPER
+    WRAPPER_LOCATIONS rocthrust/${CMAKE_INSTALL_INCLUDEDIR}/thrust
+    OUTPUT_LOCATIONS rocthrust/wrapper/include/thrust
   )
 endif( )
   
