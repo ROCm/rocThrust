@@ -135,7 +135,7 @@ if (NOT THRUST_HOST_SYSTEM IN_LIST THRUST_HOST_SYSTEM_OPTIONS)
   message(
     FATAL_ERROR
     "THRUST_HOST_SYSTEM must be one of ${THRUST_HOST_SYSTEM_OPTIONS}"
-    )
+  )
 endif ()
   
 set(COMPILE_OPTIONS -Wall -Wextra)
