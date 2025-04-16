@@ -29,6 +29,14 @@
 #include <thrust/iterator/iterator_traits.h>
 #include <thrust/system/detail/sequential/execution_policy.h>
 
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+#  include <cuda/std/__functional/invoke.h>
+#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
+#  include <rocprim/type_traits_functions.hpp>
+
+#  include <iterator>
+#endif
+
 THRUST_NAMESPACE_BEGIN
 namespace system
 {
@@ -63,6 +71,51 @@ THRUST_HOST_DEVICE OutputIterator inclusive_scan(
     for (++first, ++result; first != last; ++first, ++result)
     {
       *result = sum = wrapped_binary_op(sum, *first);
+    }
+  }
+
+  return result;
+}
+
+THRUST_EXEC_CHECK_DISABLE
+template <typename DerivedPolicy,
+          typename InputIterator,
+          typename OutputIterator,
+          typename InitialValueType,
+          typename BinaryFunction>
+THRUST_HOST_DEVICE OutputIterator inclusive_scan(
+  sequential::execution_policy<DerivedPolicy>&,
+  InputIterator first,
+  InputIterator last,
+  OutputIterator result,
+  InitialValueType init,
+  BinaryFunction binary_op)
+{
+  using namespace thrust::detail;
+
+#if THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_CUDA
+  using ValueType = typename ::cuda::std::
+    __accumulator_t<BinaryFunction, typename ::cuda::std::iterator_traits<InputIterator>::value_type, InitialValueType>;
+#elif THRUST_DEVICE_SYSTEM == THRUST_DEVICE_SYSTEM_HIP
+  using ValueType = ::rocprim::
+    accumulator_t<BinaryFunction, typename ::std::iterator_traits<InputIterator>::value_type, InitialValueType>;
+#endif
+
+  // wrap binary_op
+  thrust::detail::wrapped_function<BinaryFunction, ValueType> wrapped_binary_op{binary_op};
+
+  if (first != last)
+  {
+    ValueType sum = wrapped_binary_op(init, *first);
+    *result       = sum;
+    ++first;
+    ++result;
+
+    while (first != last)
+    {
+      *result = sum = wrapped_binary_op(sum, *first);
+      ++first;
+      ++result;
     }
   }
 

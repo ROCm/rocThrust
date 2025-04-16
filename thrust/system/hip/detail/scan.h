@@ -44,6 +44,7 @@
 #  include <thrust/system/hip/detail/util.h>
 
 #  include <cstdint>
+#  include <iterator>
 
 // rocprim include
 #  include <rocprim/rocprim.hpp>
@@ -55,6 +56,19 @@ THRUST_HIP_FUNCTION OutputIterator inclusive_scan(
   InputIterator first,
   InputIterator last,
   OutputIterator result,
+  AssociativeOperator binary_op);
+
+template <typename DerivedPolicy,
+          typename InputIterator,
+          typename OutputIterator,
+          typename InitValueT,
+          typename AssociativeOperator>
+THRUST_HIP_FUNCTION OutputIterator inclusive_scan(
+  const thrust::detail::execution_policy_base<DerivedPolicy>& exec,
+  InputIterator first,
+  InputIterator last,
+  OutputIterator result,
+  InitValueT init,
   AssociativeOperator binary_op);
 
 template <typename DerivedPolicy, typename InputIterator, typename OutputIterator, typename T, typename AssociativeOperator>
@@ -83,7 +97,27 @@ THRUST_HIP_RUNTIME_FUNCTION auto invoke_inclusive_scan(
   const hipStream_t stream,
   bool debug_sync) -> std::enable_if_t<decltype(nondeterministic(policy))::value, hipError_t>
 {
-  return rocprim::inclusive_scan(temporary_storage, storage_size, input, output, num_items, scan_op, stream, debug_sync);
+  using acc_type = typename ::std::iterator_traits<InputIt>::value_type;
+  return ::rocprim::inclusive_scan<::rocprim::default_config, InputIt, OutputIt, ScanOp, acc_type>(
+    temporary_storage, storage_size, input, output, num_items, scan_op, stream, debug_sync);
+}
+
+template <typename Derived, typename InputIt, typename OutputIt, typename Size, typename InitValueT, typename ScanOp>
+THRUST_HIP_RUNTIME_FUNCTION auto invoke_inclusive_scan(
+  execution_policy<Derived>& policy,
+  void* temporary_storage,
+  size_t& storage_size,
+  InputIt input,
+  OutputIt output,
+  const Size num_items,
+  InitValueT init,
+  ScanOp scan_op,
+  const hipStream_t stream,
+  bool debug_sync) -> std::enable_if_t<decltype(nondeterministic(policy))::value, hipError_t>
+{
+  using acc_type = typename ::std::iterator_traits<InputIt>::value_type;
+  return ::rocprim::inclusive_scan<::rocprim::default_config, InputIt, OutputIt, InitValueT, ScanOp, acc_type>(
+    temporary_storage, storage_size, input, output, init, num_items, scan_op, stream, debug_sync);
 }
 
 template <typename Derived, typename InputIt, typename OutputIt, typename Size, typename ScanOp>
@@ -98,8 +132,28 @@ THRUST_HIP_RUNTIME_FUNCTION auto invoke_inclusive_scan(
   const hipStream_t stream,
   bool debug_sync) -> std::enable_if_t<!decltype(nondeterministic(policy))::value, hipError_t>
 {
-  return rocprim::deterministic_inclusive_scan(
+  using acc_type = typename ::std::iterator_traits<InputIt>::value_type;
+  return ::rocprim::deterministic_inclusive_scan<::rocprim::default_config, InputIt, OutputIt, ScanOp, acc_type>(
     temporary_storage, storage_size, input, output, num_items, scan_op, stream, debug_sync);
+}
+
+template <typename Derived, typename InputIt, typename OutputIt, typename Size, typename InitValueT, typename ScanOp>
+THRUST_HIP_RUNTIME_FUNCTION auto invoke_inclusive_scan(
+  execution_policy<Derived>& policy,
+  void* temporary_storage,
+  size_t& storage_size,
+  InputIt input,
+  OutputIt output,
+  const Size num_items,
+  InitValueT init,
+  ScanOp scan_op,
+  const hipStream_t stream,
+  bool debug_sync) -> std::enable_if_t<!decltype(nondeterministic(policy))::value, hipError_t>
+{
+  using acc_type = typename ::std::iterator_traits<InputIt>::value_type;
+  return ::rocprim::
+    deterministic_inclusive_scan<::rocprim::default_config, InputIt, OutputIt, InitValueT, ScanOp, acc_type>(
+      temporary_storage, storage_size, input, output, init, num_items, scan_op, stream, debug_sync);
 }
 
 template <typename Derived, typename InputIt, typename OutputIt, typename Size, typename ScanOp>
@@ -134,6 +188,44 @@ inclusive_scan(execution_policy<Derived>& policy, InputIt input_it, OutputIt out
   return output_it + num_items;
 }
 
+template <typename Derived, typename InputIt, typename OutputIt, typename Size, typename InitValueT, typename ScanOp>
+THRUST_HIP_RUNTIME_FUNCTION OutputIt inclusive_scan(
+  execution_policy<Derived>& policy,
+  InputIt input_it,
+  OutputIt output_it,
+  Size num_items,
+  InitValueT init,
+  ScanOp scan_op)
+{
+  if (num_items == 0)
+  {
+    return output_it;
+  }
+
+  size_t storage_size = 0;
+  hipStream_t stream  = hip_rocprim::stream(policy);
+  bool debug_sync     = THRUST_HIP_DEBUG_SYNC_FLAG;
+
+  // Determine temporary device storage requirements.
+  hip_rocprim::throw_on_error(
+    invoke_inclusive_scan(
+      policy, nullptr, storage_size, input_it, output_it, num_items, init, scan_op, stream, debug_sync),
+    "scan failed on 1st step");
+
+  // Allocate temporary storage.
+  thrust::detail::temporary_array<std::uint8_t, Derived> tmp(policy, storage_size);
+  void* ptr = static_cast<void*>(tmp.data().get());
+
+  // Run scan.
+  hip_rocprim::throw_on_error(
+    invoke_inclusive_scan(policy, ptr, storage_size, input_it, output_it, num_items, init, scan_op, stream, debug_sync),
+    "scan failed on 2nd step");
+
+  hip_rocprim::throw_on_error(hip_rocprim::synchronize_optional(policy), "inclusive_scan: failed to synchronize");
+
+  return output_it + num_items;
+}
+
 template <typename Derived, typename InputIt, typename OutputIt, typename T, typename Size, typename ScanOp>
 THRUST_HIP_RUNTIME_FUNCTION auto invoke_exclusive_scan(
   execution_policy<Derived>& policy,
@@ -147,7 +239,8 @@ THRUST_HIP_RUNTIME_FUNCTION auto invoke_exclusive_scan(
   const hipStream_t stream,
   bool debug_sync) -> std::enable_if_t<decltype(nondeterministic(policy))::value, hipError_t>
 {
-  return rocprim::exclusive_scan(
+  using acc_type = ::rocprim::detail::input_type_t<T>;
+  return ::rocprim::exclusive_scan<::rocprim::default_config, InputIt, OutputIt, T, ScanOp, acc_type>(
     temporary_storage, storage_size, input, output, init, num_items, scan_op, stream, debug_sync);
 }
 
@@ -164,7 +257,8 @@ THRUST_HIP_RUNTIME_FUNCTION auto invoke_exclusive_scan(
   const hipStream_t stream,
   bool debug_sync) -> std::enable_if_t<!decltype(nondeterministic(policy))::value, hipError_t>
 {
-  return rocprim::deterministic_exclusive_scan(
+  using acc_type = ::rocprim::detail::input_type_t<T>;
+  return ::rocprim::deterministic_exclusive_scan<::rocprim::default_config, InputIt, OutputIt, T, ScanOp, acc_type>(
     temporary_storage, storage_size, input, output, init, num_items, scan_op, stream, debug_sync);
 }
 
@@ -232,6 +326,42 @@ inclusive_scan_n(execution_policy<Derived>& policy, InputIt input_it, Size num_i
 #  endif
 }
 
+template <class Derived, class InputIt, class Size, class OutputIt, class InitValueT, class ScanOp>
+THRUST_HIP_FUNCTION OutputIt inclusive_scan_n(
+  execution_policy<Derived>& policy, InputIt input_it, Size num_items, OutputIt result, InitValueT init, ScanOp scan_op)
+{
+  // struct workaround is required for HIP-clang
+  struct workaround
+  {
+    THRUST_HOST static OutputIt
+    par(execution_policy<Derived>& policy,
+        InputIt input_it,
+        Size num_items,
+        OutputIt result,
+        InitValueT init,
+        ScanOp scan_op)
+    {
+      return __scan::inclusive_scan(policy, input_it, result, num_items, init, scan_op);
+    }
+    THRUST_DEVICE static OutputIt
+    seq(execution_policy<Derived>& policy,
+        InputIt input_it,
+        Size num_items,
+        OutputIt result,
+        InitValueT init,
+        ScanOp scan_op)
+    {
+      return thrust::inclusive_scan(
+        cvt_to_seq(derived_cast(policy)), input_it, input_it + num_items, result, init, scan_op);
+    }
+  };
+#  if __THRUST_HAS_HIPRT__
+  return workaround::par(policy, input_it, num_items, result, init, scan_op);
+#  else
+  return workaround::seq(policy, input_it, num_items, result, init, scan_op);
+#  endif
+}
+
 template <class Derived, class InputIt, class OutputIt, class ScanOp>
 OutputIt THRUST_HIP_FUNCTION
 inclusive_scan(execution_policy<Derived>& policy, InputIt first, InputIt last, OutputIt result, ScanOp scan_op)
@@ -239,6 +369,15 @@ inclusive_scan(execution_policy<Derived>& policy, InputIt first, InputIt last, O
   using diff_t           = typename thrust::iterator_traits<InputIt>::difference_type;
   diff_t const num_items = thrust::distance(first, last);
   return thrust::hip_rocprim::inclusive_scan_n(policy, first, num_items, result, scan_op);
+}
+
+template <class Derived, class InputIt, class OutputIt, class InitValueT, class ScanOp>
+OutputIt THRUST_HIP_FUNCTION inclusive_scan(
+  execution_policy<Derived>& policy, InputIt first, InputIt last, OutputIt result, InitValueT init, ScanOp scan_op)
+{
+  using diff_t           = typename thrust::iterator_traits<InputIt>::difference_type;
+  diff_t const num_items = thrust::distance(first, last);
+  return thrust::hip_rocprim::inclusive_scan_n(policy, first, num_items, result, init, scan_op);
 }
 
 template <class Derived, class InputIt, class OutputIt>
