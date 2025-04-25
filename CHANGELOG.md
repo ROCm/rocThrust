@@ -10,6 +10,9 @@ Documentation for rocThrust available at
 * Added gfx950 support.
 * Merged changes from upstream CCCL/thrust 2.6.0
 
+### Known Issues
+* `thrust::exclusive_scan_by_key` might produce incorrect results for integers.
+
 ## rocThrust 3.3.0 for ROCm 6.4
 
 ### Added

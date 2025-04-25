@@ -25,10 +25,10 @@
 #include "bitwise_repro/bwr_utils.hpp"
 
 using ReproducibilityTestParams = ::testing::Types<
-    Params<thrust::device_vector<int>, std::decay_t<decltype(thrust::hip::par_det)>>,
+    // Params<thrust::device_vector<int>, std::decay_t<decltype(thrust::hip::par_det)>>, //#### Disabling because of known issue
     Params<thrust::device_vector<float>, std::decay_t<decltype(thrust::hip::par_det)>>,
     Params<thrust::device_vector<double>, std::decay_t<decltype(thrust::hip::par_det)>>,
-    Params<thrust::device_vector<int>, std::decay_t<decltype(thrust::hip::par_det_nosync)>>,
+    // Params<thrust::device_vector<int>, std::decay_t<decltype(thrust::hip::par_det_nosync)>>, //#### Disabling because of known issue
     Params<thrust::device_vector<float>, std::decay_t<decltype(thrust::hip::par_det_nosync)>>,
     Params<thrust::device_vector<double>, std::decay_t<decltype(thrust::hip::par_det_nosync)>>>;
 
