@@ -45,7 +45,7 @@ struct init_tuple
 };
 
 template <typename T, size_t items_per_thread, size_t block_size, class LowerBoundFunc>
-__global__ THRUST_HIP_LAUNCH_BOUNDS_DEFAULT void bound_kernel(T * device_input, size_t * device_output, const size_t N, LowerBoundFunc f){
+__global__ THRUST_HIP_LAUNCH_BOUNDS_DEFAULT void single_value_kernel(T * device_input, size_t * device_output, const size_t N, LowerBoundFunc f){
     constexpr size_t items_per_block = items_per_thread * block_size;
     const size_t offset = (blockIdx.x * items_per_block) + (threadIdx.x * items_per_thread);
 
@@ -54,7 +54,7 @@ __global__ THRUST_HIP_LAUNCH_BOUNDS_DEFAULT void bound_kernel(T * device_input, 
 }
 
 template <typename T, class ExpectedFunction, class ThrustDeviceFunction, class ThrustHostFunction>
-void RunBoundTest(const ExpectedFunction & ef, const ThrustDeviceFunction & df, const ThrustHostFunction & hf){
+void RunSingleValueTest(const ExpectedFunction & ef, const ThrustDeviceFunction & df, const ThrustHostFunction & hf){
     constexpr size_t grid_size = 1234;
     constexpr size_t items_per_thread = 8;
     constexpr size_t block_size = 3;
@@ -83,7 +83,7 @@ void RunBoundTest(const ExpectedFunction & ef, const ThrustDeviceFunction & df, 
     size_t * device_output;
     HIP_CHECK(hipMalloc(&device_output, sizeof(size_t) * size));
 
-    hipLaunchKernelGGL(HIP_KERNEL_NAME(bound_kernel<T, items_per_thread, block_size>),
+    hipLaunchKernelGGL(HIP_KERNEL_NAME(single_value_kernel<T, items_per_thread, block_size>),
         dim3(grid_size), dim3(block_size), 0 , 0,
         device_input, device_output, size, df
     );
@@ -104,11 +104,11 @@ void RunBoundTest(const ExpectedFunction & ef, const ThrustDeviceFunction & df, 
     HIP_CHECK(hipFree(device_output));
 }
 
-TYPED_TEST(BinarySearchTestsInKernel, TestLowerBoundFirstLastValue){
+TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueLowerBound){
     using T = typename TestFixture::input_type;
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    RunBoundTest<T>(
+    RunSingleValueTest<T>(
         [=] (T * begin, T * end, const T & value){
             return std::lower_bound(begin, end, value) - begin;
         },
@@ -121,11 +121,11 @@ TYPED_TEST(BinarySearchTestsInKernel, TestLowerBoundFirstLastValue){
     );
 }
 
-TYPED_TEST(BinarySearchTestsInKernel, TestLowerBoundFirstLastValueComp){
+TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueLowerBoundWithCustomComp){
     using T = typename TestFixture::input_type;
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    RunBoundTest<T>(
+    RunSingleValueTest<T>(
         [=] (T * begin, T * end, const T & value){
             return std::lower_bound(begin, end, value, 
                 [] (const T & a, const T & b){
@@ -147,11 +147,11 @@ TYPED_TEST(BinarySearchTestsInKernel, TestLowerBoundFirstLastValueComp){
     );
 }
 
-TYPED_TEST(BinarySearchTestsInKernel, TestUpperBoundFirstLastValue){
+TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueUpperBound){
     using T = typename TestFixture::input_type;
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    RunBoundTest<T>(
+    RunSingleValueTest<T>(
         [=] (T * begin, T * end, const T & value){
             return std::upper_bound(begin, end, value) - begin;
         },
@@ -164,11 +164,11 @@ TYPED_TEST(BinarySearchTestsInKernel, TestUpperBoundFirstLastValue){
     );
 }
 
-TYPED_TEST(BinarySearchTestsInKernel, TestUpperBoundFirstLastValueComp){
+TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueUpperBoundWithCustomComp){
     using T = typename TestFixture::input_type;
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    RunBoundTest<T>(
+    RunSingleValueTest<T>(
         [=] (T * begin, T * end, const T & value){
             return std::upper_bound(begin, end, value, 
                 [] (const T & a, const T & b){
@@ -190,58 +190,47 @@ TYPED_TEST(BinarySearchTestsInKernel, TestUpperBoundFirstLastValueComp){
     );
 }
 
-template <class T>
-__global__
-THRUST_HIP_LAUNCH_BOUNDS_DEFAULT
-void binary_search_kernel(size_t n, T* input, bool* output)
-{
-    output[0] = thrust::binary_search(thrust::device, input, input + n, T(0));
-    output[1] = thrust::binary_search(thrust::device, input, input + n, T(1));
-    output[2] = thrust::binary_search(thrust::device, input, input + n, T(2));
-    output[3] = thrust::binary_search(thrust::device, input, input + n, T(3));
-    output[4] = thrust::binary_search(thrust::device, input, input + n, T(4));
-    output[5] = thrust::binary_search(thrust::device, input, input + n, T(5));
-    output[6] = thrust::binary_search(thrust::device, input, input + n, T(6));
-    output[7] = thrust::binary_search(thrust::device, input, input + n, T(7));
-    output[8] = thrust::binary_search(thrust::device, input, input + n, T(8));
-    output[9] = thrust::binary_search(thrust::device, input, input + n, T(9));
-}
-
-TYPED_TEST(BinarySearchTestsInKernel, TestBinarySearch)
-{
+TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueBinarySearch){
     using T = typename TestFixture::input_type;
-
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    thrust::device_vector<T> d_input(5);
-    d_input[0] = 0;
-    d_input[1] = 2;
-    d_input[2] = 5;
-    d_input[3] = 7;
-    d_input[4] = 8;
+    RunSingleValueTest<T>(
+        [=] (T * begin, T * end, const T & value){
+            return std::binary_search(begin, end, value);
+        },
+        [=] __device__ (T * begin, T * end, const T & value){
+            return thrust::binary_search(thrust::device, begin, end, value);
+        },
+        [=] (T * begin, T * end, const T & value){
+            return thrust::binary_search(begin, end, value);
+        }
+    );
+}
 
-    thrust::device_vector<bool> d_output(10);
+TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueBinarySearchWithCustomComp){
+    using T = typename TestFixture::input_type;
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    hipLaunchKernelGGL(HIP_KERNEL_NAME(binary_search_kernel),
-                       dim3(1),
-                       dim3(1),
-                       0,
-                       0,
-                       size_t(d_input.size()),
-                       thrust::raw_pointer_cast(d_input.data()),
-                       thrust::raw_pointer_cast(d_output.data()));
-
-    thrust::host_vector<bool> output = d_output;
-    ASSERT_EQ(output[0], true);
-    ASSERT_EQ(output[1], false);
-    ASSERT_EQ(output[2], true);
-    ASSERT_EQ(output[3], false);
-    ASSERT_EQ(output[4], false);
-    ASSERT_EQ(output[5], true);
-    ASSERT_EQ(output[6], false);
-    ASSERT_EQ(output[7], true);
-    ASSERT_EQ(output[8], true);
-    ASSERT_EQ(output[9], false);
+    RunSingleValueTest<T>(
+        [=] (T * begin, T * end, const T & value){
+            return std::binary_search(begin, end, value, 
+                [] (const T & a, const T & b){
+                    return a < b;
+            });
+        },
+        [=] __device__ (T * begin, T * end, const T & value){
+            return thrust::binary_search(thrust::device, begin, end, value, 
+                [] __device__ (const T & a, const T & b){
+                    return a < b;
+                });
+        },
+        [=] (T * begin, T * end, const T & value){
+            return thrust::binary_search(begin, end, value, 
+                [] (const T & a, const T & b){
+                    return a < b;
+            });
+        }
+    );
 }
 
 TESTS_DEFINE(BinarySearchTests, FullTestsParams);
