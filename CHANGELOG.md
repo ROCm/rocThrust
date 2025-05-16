@@ -3,12 +3,15 @@
 Documentation for rocThrust available at
 [https://rocm.docs.amd.com/projects/rocThrust/en/latest/](https://rocm.docs.amd.com/projects/rocThrust/en/latest/).
 
-## rocThrust 3.4.0 for ROCm 6.5
+## rocThrust 3.4.0 for ROCm 7.0
 
 ### Added
 
 * Added gfx950 support.
 * Merged changes from upstream CCCL/thrust 2.6.0
+
+### Changed
+* Changed build option `BUILD_BENCHMARKS` to `BUILD_BENCHMARK` for consistency with other primitives library
 
 ### Known Issues
 * The order of the values being compared by thrust::exclusive_scan_by_key and thrust::inclusive_scan_by_key can change between runs when integers are being compared. This can cause incorrect output when a non-commutative operator such as division is being used.
@@ -35,7 +38,6 @@ Documentation for rocThrust available at
 * `--test|-t` is no longer a required flag for `rtest.py`. Instead, the user can use either `--emulation|-e` or `--test|-t`, but not both.
 * Split the contents of HIPSTDPAR's forwarding header into several implementation headers.
 * Fixed `copy_if` to work with large data types (512 bytes)
-* Changed build option `BUILD_BENCHMARKS` to `BUILD_BENCHMARK` for consistency with other primitives library
 
 ### Known Issues
 *  `thrust::inclusive_scan_by_key` might produce incorrect results when it's used with -O2 or -O3 optimization.  
