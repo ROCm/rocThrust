@@ -24,7 +24,7 @@
 
 #include "test_header.hpp"
 
-TESTS_DEFINE(BinarySearchTestsInKernel, NumericalTestsParams);
+TESTS_DEFINE(SingleValueTests, NumericalTestsParams);
 
 template <typename T>
 struct init_scalar
@@ -104,7 +104,7 @@ void RunSingleValueTest(const ExpectedFunction & ef, const ThrustDeviceFunction 
     HIP_CHECK(hipFree(device_output));
 }
 
-TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueLowerBound){
+TYPED_TEST(SingleValueTests, LowerBound){
     using T = typename TestFixture::input_type;
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
@@ -121,7 +121,7 @@ TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueLowerBound){
     );
 }
 
-TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueLowerBoundWithCustomComp){
+TYPED_TEST(SingleValueTests, LowerBoundWithCustomComp){
     using T = typename TestFixture::input_type;
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
@@ -136,7 +136,7 @@ TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueLowerBoundWithCustomComp){
             return thrust::lower_bound(thrust::device, begin, end, value, 
                 [] __device__ (const T & a, const T & b){
                     return a < b;
-                }) - begin;
+            }) - begin;
         },
         [=] (T * begin, T * end, const T & value){
             return thrust::lower_bound(begin, end, value, 
@@ -147,7 +147,7 @@ TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueLowerBoundWithCustomComp){
     );
 }
 
-TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueUpperBound){
+TYPED_TEST(SingleValueTests, UpperBound){
     using T = typename TestFixture::input_type;
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
@@ -164,7 +164,7 @@ TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueUpperBound){
     );
 }
 
-TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueUpperBoundWithCustomComp){
+TYPED_TEST(SingleValueTests, UpperBoundWithCustomComp){
     using T = typename TestFixture::input_type;
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
@@ -179,7 +179,7 @@ TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueUpperBoundWithCustomComp){
             return thrust::upper_bound(thrust::device, begin, end, value, 
                 [] __device__ (const T & a, const T & b){
                     return a < b;
-                }) - begin;
+            }) - begin;
         },
         [=] (T * begin, T * end, const T & value){
             return thrust::upper_bound(begin, end, value, 
@@ -190,7 +190,7 @@ TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueUpperBoundWithCustomComp){
     );
 }
 
-TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueBinarySearch){
+TYPED_TEST(SingleValueTests, TestSingleValueBinarySearch){
     using T = typename TestFixture::input_type;
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
@@ -207,7 +207,7 @@ TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueBinarySearch){
     );
 }
 
-TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueBinarySearchWithCustomComp){
+TYPED_TEST(SingleValueTests, TestSingleValueBinarySearchWithCustomComp){
     using T = typename TestFixture::input_type;
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
@@ -229,6 +229,55 @@ TYPED_TEST(BinarySearchTestsInKernel, TestSingleValueBinarySearchWithCustomComp)
                 [] (const T & a, const T & b){
                     return a < b;
             });
+        }
+    );
+}
+
+TYPED_TEST(SingleValueTests, EqualRange){
+    using T = typename TestFixture::input_type;
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
+
+    RunSingleValueTest<T>(
+        [=] (T * begin, T * end, const T & value){
+            auto out = std::equal_range(begin, end, value);
+            return out.second - out.first;
+        },
+        [=] __device__ (T * begin, T * end, const T & value){
+            auto out = thrust::equal_range(thrust::device, begin, end, value);
+            return out.second - out.first;
+        },
+        [=] (T * begin, T * end, const T & value){
+            auto out = thrust::equal_range(begin, end, value);
+            return out.second - out.first;
+        }
+    );
+}
+
+TYPED_TEST(SingleValueTests, EqualRangeWithCustomComp){
+    using T = typename TestFixture::input_type;
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
+
+    RunSingleValueTest<T>(
+        [=] (T * begin, T * end, const T & value){
+            auto out = std::equal_range(begin, end, value, 
+                [] (const T & a, const T & b){
+                    return a < b;
+            });
+            return out.second - out.first;
+        },
+        [=] __device__ (T * begin, T * end, const T & value){
+            auto out = thrust::equal_range(thrust::device, begin, end, value, 
+                [] __device__ (const T & a, const T & b){
+                    return a < b;
+            });
+            return out.second - out.first;
+        },
+        [=] (T * begin, T * end, const T & value){
+            auto out = thrust::equal_range(begin, end, value, 
+                [] (const T & a, const T & b){
+                    return a < b;
+            });
+            return out.second - out.first;
         }
     );
 }
