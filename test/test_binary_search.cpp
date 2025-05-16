@@ -45,17 +45,16 @@ struct init_tuple
 };
 
 template <typename T, size_t items_per_thread, size_t block_size, class LowerBoundFunc>
-__global__ THRUST_HIP_LAUNCH_BOUNDS_DEFAULT void lower_bound_kernel(T * device_input, size_t * device_output, const size_t N, LowerBoundFunc f){
+__global__ THRUST_HIP_LAUNCH_BOUNDS_DEFAULT void bound_kernel(T * device_input, size_t * device_output, const size_t N, LowerBoundFunc f){
     constexpr size_t items_per_block = items_per_thread * block_size;
     const size_t offset = (blockIdx.x * items_per_block) + (threadIdx.x * items_per_thread);
 
     for(size_t i = 0; i < items_per_thread; i++)
         device_output[offset + i] = f(device_input, device_input + N, static_cast<T>(i + offset));
-    
 }
 
 template <typename T, class ExpectedFunction, class ThrustDeviceFunction, class ThrustHostFunction>
-void RunLowerBoundTest(const ExpectedFunction & ef, const ThrustDeviceFunction & df, const ThrustHostFunction & hf){
+void RunBoundTest(const ExpectedFunction & ef, const ThrustDeviceFunction & df, const ThrustHostFunction & hf){
     constexpr size_t grid_size = 1234;
     constexpr size_t items_per_thread = 8;
     constexpr size_t block_size = 3;
@@ -84,7 +83,7 @@ void RunLowerBoundTest(const ExpectedFunction & ef, const ThrustDeviceFunction &
     size_t * device_output;
     HIP_CHECK(hipMalloc(&device_output, sizeof(size_t) * size));
 
-    hipLaunchKernelGGL(HIP_KERNEL_NAME(lower_bound_kernel<T, items_per_thread, block_size>),
+    hipLaunchKernelGGL(HIP_KERNEL_NAME(bound_kernel<T, items_per_thread, block_size>),
         dim3(grid_size), dim3(block_size), 0 , 0,
         device_input, device_output, size, df
     );
@@ -109,7 +108,7 @@ TYPED_TEST(BinarySearchTestsInKernel, TestLowerBoundFirstLastValue){
     using T = typename TestFixture::input_type;
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    RunLowerBoundTest<T>(
+    RunBoundTest<T>(
         [=] (T * begin, T * end, const T & value){
             return std::lower_bound(begin, end, value) - begin;
         },
@@ -126,7 +125,7 @@ TYPED_TEST(BinarySearchTestsInKernel, TestLowerBoundFirstLastValueComp){
     using T = typename TestFixture::input_type;
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    RunLowerBoundTest<T>(
+    RunBoundTest<T>(
         [=] (T * begin, T * end, const T & value){
             return std::lower_bound(begin, end, value, 
                 [] (const T & a, const T & b){
@@ -148,56 +147,47 @@ TYPED_TEST(BinarySearchTestsInKernel, TestLowerBoundFirstLastValueComp){
     );
 }
 
-template <class T>
-__global__
-THRUST_HIP_LAUNCH_BOUNDS_DEFAULT
-void upper_bound_kernel(size_t n, T* input, ptrdiff_t* output)
-{
-    output[0] = thrust::upper_bound(thrust::device, input, input + n, T(0)) - input;
-    output[1] = thrust::upper_bound(thrust::device, input, input + n, T(1)) - input;
-    output[2] = thrust::upper_bound(thrust::device, input, input + n, T(2)) - input;
-    output[3] = thrust::upper_bound(thrust::device, input, input + n, T(3)) - input;
-    output[4] = thrust::upper_bound(thrust::device, input, input + n, T(4)) - input;
-    output[5] = thrust::upper_bound(thrust::device, input, input + n, T(5)) - input;
-    output[6] = thrust::upper_bound(thrust::device, input, input + n, T(6)) - input;
-    output[7] = thrust::upper_bound(thrust::device, input, input + n, T(7)) - input;
-    output[8] = thrust::upper_bound(thrust::device, input, input + n, T(8)) - input;
-    output[9] = thrust::upper_bound(thrust::device, input, input + n, T(9)) - input;
+TYPED_TEST(BinarySearchTestsInKernel, TestUpperBoundFirstLastValue){
+    using T = typename TestFixture::input_type;
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
+
+    RunBoundTest<T>(
+        [=] (T * begin, T * end, const T & value){
+            return std::upper_bound(begin, end, value) - begin;
+        },
+        [=] __device__ (T * begin, T * end, const T & value){
+            return thrust::upper_bound(thrust::device, begin, end, value) - begin;
+        },
+        [=] (T * begin, T * end, const T & value){
+            return thrust::upper_bound(begin, end, value) - begin;
+        }
+    );
 }
 
-TYPED_TEST(BinarySearchTestsInKernel, TestUpperBound)
-{
+TYPED_TEST(BinarySearchTestsInKernel, TestUpperBoundFirstLastValueComp){
     using T = typename TestFixture::input_type;
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    thrust::device_vector<T> d_input(5);
-    d_input[0] = 0;
-    d_input[1] = 2;
-    d_input[2] = 5;
-    d_input[3] = 7;
-    d_input[4] = 8;
-
-    thrust::device_vector<ptrdiff_t> d_output(10);
-
-    hipLaunchKernelGGL(HIP_KERNEL_NAME(upper_bound_kernel),
-                       dim3(1),
-                       dim3(1),
-                       0,
-                       0,
-                       size_t(d_input.size()),
-                       thrust::raw_pointer_cast(d_input.data()),
-                       thrust::raw_pointer_cast(d_output.data()));
-
-    thrust::host_vector<ptrdiff_t> output = d_output;
-    ASSERT_EQ(output[0], 1);
-    ASSERT_EQ(output[1], 1);
-    ASSERT_EQ(output[2], 2);
-    ASSERT_EQ(output[3], 2);
-    ASSERT_EQ(output[4], 2);
-    ASSERT_EQ(output[5], 3);
-    ASSERT_EQ(output[6], 3);
-    ASSERT_EQ(output[7], 4);
-    ASSERT_EQ(output[8], 5);
-    ASSERT_EQ(output[9], 5);
+    RunBoundTest<T>(
+        [=] (T * begin, T * end, const T & value){
+            return std::upper_bound(begin, end, value, 
+                [] (const T & a, const T & b){
+                    return a < b;
+            }) - begin;
+        },
+        [=] __device__ (T * begin, T * end, const T & value){
+            return thrust::upper_bound(thrust::device, begin, end, value, 
+                [] __device__ (const T & a, const T & b){
+                    return a < b;
+                }) - begin;
+        },
+        [=] (T * begin, T * end, const T & value){
+            return thrust::upper_bound(begin, end, value, 
+                [] (const T & a, const T & b){
+                    return a < b;
+            }) - begin;
+        }
+    );
 }
 
 template <class T>
