@@ -35,6 +35,7 @@ Documentation for rocThrust available at
 * `--test|-t` is no longer a required flag for `rtest.py`. Instead, the user can use either `--emulation|-e` or `--test|-t`, but not both.
 * Split the contents of HIPSTDPAR's forwarding header into several implementation headers.
 * Fixed `copy_if` to work with large data types (512 bytes)
+* Changed build option `BUILD_BENCHMARKS` to `BUILD_BENCHMARK` for consistency with other primitives library
 
 ### Known Issues
 *  `thrust::inclusive_scan_by_key` might produce incorrect results when it's used with -O2 or -O3 optimization.  
