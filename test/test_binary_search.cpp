@@ -44,67 +44,108 @@ struct init_tuple
     }
 };
 
-struct custom_less
-{
-    template <class T>
-    __device__ inline bool operator()(T a, T b)
-    {
-        return a < b;
-    }
-};
+template <typename T, size_t items_per_thread, size_t block_size, class LowerBoundFunc>
+__global__ THRUST_HIP_LAUNCH_BOUNDS_DEFAULT void lower_bound_kernel(T * device_input, size_t * device_output, const size_t N, LowerBoundFunc f){
+    constexpr size_t items_per_block = items_per_thread * block_size;
+    const size_t offset = (blockIdx.x * items_per_block) + (threadIdx.x * items_per_thread);
 
-template <class T>
-__global__
-THRUST_HIP_LAUNCH_BOUNDS_DEFAULT
-void lower_bound_kernel(size_t n, T* input, ptrdiff_t* output)
-{
-    output[0] = thrust::lower_bound(thrust::device, input, input + n, T(0), custom_less()) - input;
-    output[1] = thrust::lower_bound(thrust::device, input, input + n, T(1)) - input;
-    output[2] = thrust::lower_bound(thrust::device, input, input + n, T(2)) - input;
-    output[3] = thrust::lower_bound(thrust::device, input, input + n, T(3)) - input;
-    output[4] = thrust::lower_bound(thrust::device, input, input + n, T(4), custom_less()) - input;
-    output[5] = thrust::lower_bound(thrust::device, input, input + n, T(5)) - input;
-    output[6] = thrust::lower_bound(thrust::device, input, input + n, T(6)) - input;
-    output[7] = thrust::lower_bound(thrust::device, input, input + n, T(7)) - input;
-    output[8] = thrust::lower_bound(thrust::device, input, input + n, T(8)) - input;
-    output[9] = thrust::lower_bound(thrust::device, input, input + n, T(9), custom_less()) - input;
+    for(size_t i = 0; i < items_per_thread; i++)
+        device_output[offset + i] = f(device_input, device_input + N, static_cast<T>(i + offset));
+    
 }
 
-TYPED_TEST(BinarySearchTestsInKernel, TestLowerBound)
-{
-    using T = typename TestFixture::input_type;
+template <typename T, class ExpectedFunction, class ThrustDeviceFunction, class ThrustHostFunction>
+void RunLowerBoundTest(const ExpectedFunction & ef, const ThrustDeviceFunction & df, const ThrustHostFunction & hf){
+    constexpr size_t grid_size = 1234;
+    constexpr size_t items_per_thread = 8;
+    constexpr size_t block_size = 3;
+    constexpr size_t items_per_block = items_per_thread * block_size;
+    constexpr size_t size = items_per_block * grid_size; 
 
+    T * host_input = new T[size];
+    T count = static_cast<T>(0);
+    for(size_t i = 0; i < size; i++){
+        host_input[i] = static_cast<T>(count);
+        count += static_cast<T>(2);
+    }
+
+    T * host_expected = new T[size];
+    for(size_t i = 0; i < size; i++)
+        host_expected[i] = ef(host_input, host_input + size, static_cast<T>(i));
+
+    T * host_thrust_expected = new T[size];
+    for(size_t i = 0; i < size; i++)
+        host_thrust_expected[i] = hf(host_input, host_input + size, static_cast<T>(i));
+
+    T * device_input;
+    HIP_CHECK(hipMalloc(&device_input, sizeof(T) * size));
+    HIP_CHECK(hipMemcpy(device_input, host_input, sizeof(T) * size, hipMemcpyHostToDevice));
+
+    size_t * device_output;
+    HIP_CHECK(hipMalloc(&device_output, sizeof(size_t) * size));
+
+    hipLaunchKernelGGL(HIP_KERNEL_NAME(lower_bound_kernel<T, items_per_thread, block_size>),
+        dim3(grid_size), dim3(block_size), 0 , 0,
+        device_input, device_output, size, df
+    );
+
+    size_t * host_output = new size_t[size];
+    HIP_CHECK(hipMemcpy(host_output, device_output, sizeof(size_t) * size, hipMemcpyDeviceToHost));
+    
+    for(size_t i = 0; i < size; i++){
+        ASSERT_EQ(host_expected[i], host_output[i]);
+        ASSERT_EQ(host_expected[i], host_thrust_expected[i]);
+    }
+
+    delete [] host_input;
+    delete [] host_expected;
+    delete [] host_thrust_expected;
+    delete [] host_output;
+    HIP_CHECK(hipFree(device_input));
+    HIP_CHECK(hipFree(device_output));
+}
+
+TYPED_TEST(BinarySearchTestsInKernel, TestLowerBoundFirstLastValue){
+    using T = typename TestFixture::input_type;
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    thrust::device_vector<T> d_input(5);
-    d_input[0] = 0;
-    d_input[1] = 2;
-    d_input[2] = 5;
-    d_input[3] = 7;
-    d_input[4] = 8;
+    RunLowerBoundTest<T>(
+        [=] (T * begin, T * end, const T & value){
+            return std::lower_bound(begin, end, value) - begin;
+        },
+        [=] __device__ (T * begin, T * end, const T & value){
+            return thrust::lower_bound(thrust::device, begin, end, value) - begin;
+        },
+        [=] (T * begin, T * end, const T & value){
+            return thrust::lower_bound(begin, end, value) - begin;
+        }
+    );
+}
 
-    thrust::device_vector<ptrdiff_t> d_output(10);
+TYPED_TEST(BinarySearchTestsInKernel, TestLowerBoundFirstLastValueComp){
+    using T = typename TestFixture::input_type;
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
-    hipLaunchKernelGGL(HIP_KERNEL_NAME(lower_bound_kernel),
-                       dim3(1),
-                       dim3(1),
-                       0,
-                       0,
-                       size_t(d_input.size()),
-                       thrust::raw_pointer_cast(d_input.data()),
-                       thrust::raw_pointer_cast(d_output.data()));
-
-    thrust::host_vector<ptrdiff_t> output = d_output;
-    ASSERT_EQ(output[0], 0);
-    ASSERT_EQ(output[1], 1);
-    ASSERT_EQ(output[2], 1);
-    ASSERT_EQ(output[3], 2);
-    ASSERT_EQ(output[4], 2);
-    ASSERT_EQ(output[5], 2);
-    ASSERT_EQ(output[6], 3);
-    ASSERT_EQ(output[7], 3);
-    ASSERT_EQ(output[8], 4);
-    ASSERT_EQ(output[9], 5);
+    RunLowerBoundTest<T>(
+        [=] (T * begin, T * end, const T & value){
+            return std::lower_bound(begin, end, value, 
+                [] (const T & a, const T & b){
+                    return a < b;
+            }) - begin;
+        },
+        [=] __device__ (T * begin, T * end, const T & value){
+            return thrust::lower_bound(thrust::device, begin, end, value, 
+                [] __device__ (const T & a, const T & b){
+                    return a < b;
+                }) - begin;
+        },
+        [=] (T * begin, T * end, const T & value){
+            return thrust::lower_bound(begin, end, value, 
+                [] (const T & a, const T & b){
+                    return a < b;
+            }) - begin;
+        }
+    );
 }
 
 template <class T>
