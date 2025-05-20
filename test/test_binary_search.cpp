@@ -44,40 +44,52 @@ struct init_tuple
     }
 };
 
-template <typename T, size_t items_per_thread, size_t block_size, class LowerBoundFunc>
-__global__ THRUST_HIP_LAUNCH_BOUNDS_DEFAULT void single_value_kernel(T * device_input, size_t * device_output, const size_t N, LowerBoundFunc f){
+template <typename T, size_t items_per_thread, size_t block_size, class DeviceFunc>
+__global__ THRUST_HIP_LAUNCH_BOUNDS_DEFAULT void single_value_kernel(T * device_search, T * device_input, size_t * device_output, const size_t N, DeviceFunc f){
     constexpr size_t items_per_block = items_per_thread * block_size;
     const size_t offset = (blockIdx.x * items_per_block) + (threadIdx.x * items_per_thread);
 
     for(size_t i = 0; i < items_per_thread; i++)
-        device_output[offset + i] = f(device_input, device_input + N, static_cast<T>(i + offset));
+        device_output[offset + i] = f(device_search, device_search + N, device_input[offset + i]);
 }
 
 template <typename T, class ExpectedFunction, class ThrustDeviceFunction, class ThrustHostFunction>
 void RunSingleValueTest(const ExpectedFunction & ef, const ThrustDeviceFunction & df, const ThrustHostFunction & hf){
-    constexpr size_t grid_size = 1234;
-    constexpr size_t items_per_thread = 8;
-    constexpr size_t block_size = 3;
+    constexpr size_t grid_size = 1024;
+    constexpr size_t items_per_thread = 12;
+    constexpr size_t block_size = 32;
     constexpr size_t items_per_block = items_per_thread * block_size;
     constexpr size_t size = items_per_block * grid_size; 
 
+    double maxi = static_cast<double>(std::numeric_limits<T>::max());
+    double mini = static_cast<double>(std::numeric_limits<T>::min());
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> dis(mini, maxi);
+
+    T * host_search = new T[size];
     T * host_input = new T[size];
-    T count = static_cast<T>(0);
     for(size_t i = 0; i < size; i++){
-        host_input[i] = static_cast<T>(count);
-        count += static_cast<T>(2);
+        host_search[i] = static_cast<T>(dis(gen));
+        host_input[i] = static_cast<T>(dis(gen));
     }
 
-    T * host_expected = new T[size];
-    for(size_t i = 0; i < size; i++)
-        host_expected[i] = ef(host_input, host_input + size, static_cast<T>(i));
+    std::sort(host_search, host_search + size);
 
-    T * host_thrust_expected = new T[size];
+    size_t * host_expected = new size_t[size];
     for(size_t i = 0; i < size; i++)
-        host_thrust_expected[i] = hf(host_input, host_input + size, static_cast<T>(i));
+        host_expected[i] = ef(host_search, host_search + size, host_input[i]);
 
+    size_t * host_thrust_output = new size_t[size];
+    for(size_t i = 0; i < size; i++)
+        host_thrust_output[i] = hf(host_search, host_search + size, host_input[i]);
+
+    T * device_search;
     T * device_input;
-    HIP_CHECK(hipMalloc(&device_input, sizeof(T) * size));
+    HIP_CHECK(hipMalloc(&device_search, sizeof(T) * size));
+    HIP_CHECK(hipMalloc(&device_input, sizeof(size_t) * size));
+    HIP_CHECK(hipMemcpy(device_search, host_search, sizeof(T) * size, hipMemcpyHostToDevice));
     HIP_CHECK(hipMemcpy(device_input, host_input, sizeof(T) * size, hipMemcpyHostToDevice));
 
     size_t * device_output;
@@ -85,21 +97,23 @@ void RunSingleValueTest(const ExpectedFunction & ef, const ThrustDeviceFunction 
 
     hipLaunchKernelGGL(HIP_KERNEL_NAME(single_value_kernel<T, items_per_thread, block_size>),
         dim3(grid_size), dim3(block_size), 0 , 0,
-        device_input, device_output, size, df
+        device_search, device_input, device_output, size, df
     );
 
-    size_t * host_output = new size_t[size];
-    HIP_CHECK(hipMemcpy(host_output, device_output, sizeof(size_t) * size, hipMemcpyDeviceToHost));
+    size_t * device_thrust_output = new size_t[size];
+    HIP_CHECK(hipMemcpy(device_thrust_output, device_output, sizeof(size_t) * size, hipMemcpyDeviceToHost));
     
     for(size_t i = 0; i < size; i++){
-        ASSERT_EQ(host_expected[i], host_output[i]);
-        ASSERT_EQ(host_expected[i], host_thrust_expected[i]);
+        ASSERT_EQ(host_expected[i], device_thrust_output[i]);
+        ASSERT_EQ(host_expected[i], host_thrust_output[i]);
     }
 
-    delete [] host_input;
+    delete [] host_search;
     delete [] host_expected;
-    delete [] host_thrust_expected;
-    delete [] host_output;
+    delete [] host_thrust_output;
+    delete [] device_thrust_output;
+
+    HIP_CHECK(hipFree(device_search));
     HIP_CHECK(hipFree(device_input));
     HIP_CHECK(hipFree(device_output));
 }
@@ -278,6 +292,119 @@ TYPED_TEST(SingleValueTests, EqualRangeWithCustomComp){
                     return a < b;
             });
             return out.second - out.first;
+        }
+    );
+}
+
+TESTS_DEFINE(VectorTests, NumericalTestsParams);
+
+template <typename T, size_t items_per_thread, size_t block_size, class DeviceFunc>
+__global__ THRUST_HIP_LAUNCH_BOUNDS_DEFAULT void multiple_value_kernel(T * device_search_arr, T * device_input, size_t * device_output, const DeviceFunc & f){
+    constexpr size_t items_per_block = items_per_thread * block_size;
+    const size_t offset = (items_per_block * blockIdx.x) + (items_per_thread * threadIdx.x);
+    
+    f(
+        device_search_arr, 
+        device_search_arr + items_per_block, 
+        device_input + offset,
+        device_input + offset + items_per_thread,
+        device_output + offset);
+
+}
+
+template <typename T, class ExpectedFunction, class ThrustDeviceFunction, class ThrustHostFunction>
+void RunVectorTest(const ExpectedFunction & ef, const ThrustDeviceFunction & df, const ThrustHostFunction & hf){
+    constexpr size_t grid_size = 1024;
+    constexpr size_t items_per_thread = 12;
+    constexpr size_t block_size = 32;
+    constexpr size_t items_per_block = items_per_thread * block_size;
+    constexpr size_t size = items_per_block * grid_size; 
+
+    double maxi = static_cast<double>(std::numeric_limits<T>::max());
+    double mini = static_cast<double>(std::numeric_limits<T>::min());
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> dis(mini, maxi);
+    
+    T * host_search_arr = new T[items_per_block];
+    for(size_t i = 0; i < items_per_block; i++)
+        host_search_arr[i] = static_cast<T>(dis(gen));
+
+    std::sort(host_search_arr, host_search_arr + items_per_block);
+
+    T * host_input = new T[size];
+    for(size_t grid_idx = 0; grid_idx < grid_size; grid_idx++){
+        size_t offset = grid_idx * items_per_block;
+        for(size_t i = 0; i < items_per_block; i++)
+            host_input[offset + i] = static_cast<T>(dis(gen));
+    }
+
+    size_t * thrust_host_output = new size_t[size];
+    size_t * thrust_device_output = new size_t[size];
+    size_t * expected_output = new size_t[size];
+    
+    for (size_t bIdx = 0; bIdx < grid_size; bIdx++){
+        size_t offset = bIdx * items_per_block;
+        
+        // getting thrust host output
+        hf(
+            host_search_arr, 
+            host_search_arr + items_per_block, 
+            host_input + offset, 
+            host_input + offset + items_per_block,
+            thrust_host_output + offset);
+        // getting expected output
+        for(size_t i = 0; i < items_per_block; i++)
+            expected_output[offset + i] = ef(host_search_arr,  host_search_arr +  items_per_block, host_input[offset + i]);
+        
+    }
+
+    //getting thrust device output
+    T * device_search_arr, * device_input;
+    size_t * device_output;
+    HIP_CHECK(hipMalloc(&device_search_arr, sizeof(T) * items_per_block));
+    HIP_CHECK(hipMalloc(&device_input, sizeof(T) * size));
+    HIP_CHECK(hipMalloc(&device_output, sizeof(size_t) * size));
+
+    HIP_CHECK(hipMemcpy(device_search_arr, host_search_arr, sizeof(T) * items_per_block, hipMemcpyHostToDevice));
+    HIP_CHECK(hipMemcpy(device_input, host_input, sizeof(T) * size, hipMemcpyHostToDevice));
+
+    hipLaunchKernelGGL(HIP_KERNEL_NAME(multiple_value_kernel<T, items_per_thread, block_size>),
+        dim3(grid_size), dim3(block_size), 0 , 0,
+        device_search_arr, device_input, device_output, df
+    );
+    HIP_CHECK(hipMemcpy(thrust_device_output, device_output, sizeof(size_t) * size, hipMemcpyDeviceToHost));
+
+    for(size_t i = 0; i < size; i++){
+        ASSERT_EQ(expected_output[i], thrust_host_output[i]);
+        ASSERT_EQ(expected_output[i], thrust_device_output[i]);
+    }
+
+    delete [] host_search_arr;
+    delete [] host_input;
+    delete [] thrust_host_output;
+    delete [] thrust_device_output;
+    delete [] expected_output;
+
+    HIP_CHECK(hipFree(device_search_arr));
+    HIP_CHECK(hipFree(device_input));
+    HIP_CHECK(hipFree(device_output));
+}
+
+TYPED_TEST(VectorTests, LowerBound){
+    using T = typename TestFixture::input_type;
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
+
+    RunVectorTest<T>(
+        [=] (T * begin, T * end, const T & value){
+            return std::lower_bound(begin, end, value) - begin;
+        },
+        [=] __device__ (T * s_begin, T * s_end, T * i_begin, T * i_end, size_t * out){
+            thrust::lower_bound(thrust::device, s_begin, s_end, i_begin, i_end, out);
+        },
+        [=] (T * s_begin, T * s_end, T * i_begin, T * i_end, size_t * out){
+            thrust::lower_bound(s_begin, s_end, i_begin, i_end, out);
         }
     );
 }
