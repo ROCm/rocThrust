@@ -44,6 +44,16 @@ struct init_tuple
     }
 };
 
+template<typename T>
+bool host_compare(const T & lhs, const T & rhs){
+    return lhs < rhs;
+}
+
+template<typename T>
+__device__ bool device_compare(const T & lhs, const T & rhs){
+    return lhs < rhs;
+}
+
 template <typename T, size_t items_per_thread, size_t block_size, class DeviceFunc>
 __global__ THRUST_HIP_LAUNCH_BOUNDS_DEFAULT void single_value_kernel(T * device_search, T * device_input, size_t * device_output, const size_t N, DeviceFunc f){
     constexpr size_t items_per_block = items_per_thread * block_size;
@@ -141,22 +151,13 @@ TYPED_TEST(SingleValueTests, LowerBoundWithCustomComp){
 
     RunSingleValueTest<T>(
         [=] (T * begin, T * end, const T & value){
-            return std::lower_bound(begin, end, value, 
-                [] (const T & a, const T & b){
-                    return a < b;
-            }) - begin;
+            return std::lower_bound(begin, end, value, host_compare<T>) - begin;
         },
         [=] __device__ (T * begin, T * end, const T & value){
-            return thrust::lower_bound(thrust::device, begin, end, value, 
-                [] __device__ (const T & a, const T & b){
-                    return a < b;
-            }) - begin;
+            return thrust::lower_bound(thrust::device, begin, end, value, device_compare<T>) - begin;
         },
         [=] (T * begin, T * end, const T & value){
-            return thrust::lower_bound(begin, end, value, 
-                [] (const T & a, const T & b){
-                    return a < b;
-            }) - begin;
+            return thrust::lower_bound(begin, end, value, host_compare<T>) - begin;
         }
     );
 }
@@ -184,22 +185,13 @@ TYPED_TEST(SingleValueTests, UpperBoundWithCustomComp){
 
     RunSingleValueTest<T>(
         [=] (T * begin, T * end, const T & value){
-            return std::upper_bound(begin, end, value, 
-                [] (const T & a, const T & b){
-                    return a < b;
-            }) - begin;
+            return std::upper_bound(begin, end, value, host_compare<T>) - begin;
         },
         [=] __device__ (T * begin, T * end, const T & value){
-            return thrust::upper_bound(thrust::device, begin, end, value, 
-                [] __device__ (const T & a, const T & b){
-                    return a < b;
-            }) - begin;
+            return thrust::upper_bound(thrust::device, begin, end, value, device_compare<T>) - begin;
         },
         [=] (T * begin, T * end, const T & value){
-            return thrust::upper_bound(begin, end, value, 
-                [] (const T & a, const T & b){
-                    return a < b;
-            }) - begin;
+            return thrust::upper_bound(begin, end, value, host_compare<T>) - begin;
         }
     );
 }
@@ -227,22 +219,13 @@ TYPED_TEST(SingleValueTests, TestSingleValueBinarySearchWithCustomComp){
 
     RunSingleValueTest<T>(
         [=] (T * begin, T * end, const T & value){
-            return std::binary_search(begin, end, value, 
-                [] (const T & a, const T & b){
-                    return a < b;
-            });
+            return std::binary_search(begin, end, value, host_compare<T>);
         },
         [=] __device__ (T * begin, T * end, const T & value){
-            return thrust::binary_search(thrust::device, begin, end, value, 
-                [] __device__ (const T & a, const T & b){
-                    return a < b;
-                });
+            return thrust::binary_search(thrust::device, begin, end, value, device_compare<T>);
         },
         [=] (T * begin, T * end, const T & value){
-            return thrust::binary_search(begin, end, value, 
-                [] (const T & a, const T & b){
-                    return a < b;
-            });
+            return thrust::binary_search(begin, end, value, host_compare<T>);
         }
     );
 }
@@ -273,24 +256,15 @@ TYPED_TEST(SingleValueTests, EqualRangeWithCustomComp){
 
     RunSingleValueTest<T>(
         [=] (T * begin, T * end, const T & value){
-            auto out = std::equal_range(begin, end, value, 
-                [] (const T & a, const T & b){
-                    return a < b;
-            });
+            auto out = std::equal_range(begin, end, value, host_compare<T>);
             return out.second - out.first;
         },
         [=] __device__ (T * begin, T * end, const T & value){
-            auto out = thrust::equal_range(thrust::device, begin, end, value, 
-                [] __device__ (const T & a, const T & b){
-                    return a < b;
-            });
+            auto out = thrust::equal_range(thrust::device, begin, end, value, device_compare<T>);
             return out.second - out.first;
         },
         [=] (T * begin, T * end, const T & value){
-            auto out = thrust::equal_range(begin, end, value, 
-                [] (const T & a, const T & b){
-                    return a < b;
-            });
+            auto out = thrust::equal_range(begin, end, value, host_compare<T>);
             return out.second - out.first;
         }
     );
@@ -405,6 +379,23 @@ TYPED_TEST(VectorTests, LowerBound){
         },
         [=] (T * s_begin, T * s_end, T * i_begin, T * i_end, size_t * out){
             thrust::lower_bound(s_begin, s_end, i_begin, i_end, out);
+        }
+    );
+}
+
+TYPED_TEST(VectorTests, LowerBoundWithCustomComp){
+    using T = typename TestFixture::input_type;
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
+
+    RunVectorTest<T>(
+        [=] (T * begin, T * end, const T & value){
+            return std::lower_bound(begin, end, value, host_compare<T>) - begin;
+        },
+        [=] __device__ (T * s_begin, T * s_end, T * i_begin, T * i_end, size_t * out){
+            thrust::lower_bound(thrust::device, s_begin, s_end, i_begin, i_end, out, device_compare<T>);
+        },
+        [=] (T * s_begin, T * s_end, T * i_begin, T * i_end, size_t * out){
+            thrust::lower_bound(s_begin, s_end, i_begin, i_end, out, host_compare<T>);
         }
     );
 }
