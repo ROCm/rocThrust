@@ -434,6 +434,40 @@ TYPED_TEST(VectorTests, UpperBoundWithCustomComp){
     );
 }
 
+TYPED_TEST(VectorTests, BinarySearch){
+    using T = typename TestFixture::input_type;
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
+
+    RunVectorTest<T>(
+        [=] (T * begin, T * end, const T & value){
+            return std::binary_search(begin, end, value);
+        },
+        [=] __device__ (T * s_begin, T * s_end, T * i_begin, T * i_end, size_t * out){
+            thrust::binary_search(thrust::device, s_begin, s_end, i_begin, i_end, out);
+        },
+        [=] (T * s_begin, T * s_end, T * i_begin, T * i_end, size_t * out){
+            thrust::binary_search(s_begin, s_end, i_begin, i_end, out);
+        }
+    );
+}
+
+TYPED_TEST(VectorTests, BinarySearchWithCustomComp){
+    using T = typename TestFixture::input_type;
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
+
+    RunVectorTest<T>(
+        [=] (T * begin, T * end, const T & value){
+            return std::binary_search(begin, end, value, host_compare<T>);
+        },
+        [=] __device__ (T * s_begin, T * s_end, T * i_begin, T * i_end, size_t * out){
+            thrust::binary_search(thrust::device, s_begin, s_end, i_begin, i_end, out, device_compare<T>);
+        },
+        [=] (T * s_begin, T * s_end, T * i_begin, T * i_end, size_t * out){
+            thrust::binary_search(s_begin, s_end, i_begin, i_end, out, host_compare<T>);
+        }
+    );
+}
+
 TESTS_DEFINE(BinarySearchTests, FullTestsParams);
 
 THRUST_DISABLE_MSVC_POSSIBLE_LOSS_OF_DATA_WARNING_BEGIN
