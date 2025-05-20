@@ -3,7 +3,7 @@
 Documentation for rocThrust available at
 [https://rocm.docs.amd.com/projects/rocThrust/en/latest/](https://rocm.docs.amd.com/projects/rocThrust/en/latest/).
 
-## rocThrust 3.5.0 for ROCm 7.0
+## rocThrust 4.0.0 for ROCm 7.0
 
 ### Changed
 

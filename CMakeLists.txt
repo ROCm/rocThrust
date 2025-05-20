@@ -159,7 +159,7 @@ if(BUILD_ADDRESS_SANITIZER)
 endif()
   
 # Setup VERSION
-rocm_setup_version(VERSION "3.4.0")
+rocm_setup_version(VERSION "4.0.0")
 math(EXPR rocthrust_VERSION_NUMBER "${rocthrust_VERSION_MAJOR} * 100000 + ${rocthrust_VERSION_MINOR} * 100 + ${rocthrust_VERSION_PATCH}")
   
 # Thrust (with HIP backend)
