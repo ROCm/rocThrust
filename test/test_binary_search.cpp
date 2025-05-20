@@ -400,6 +400,40 @@ TYPED_TEST(VectorTests, LowerBoundWithCustomComp){
     );
 }
 
+TYPED_TEST(VectorTests, UpperBound){
+    using T = typename TestFixture::input_type;
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
+
+    RunVectorTest<T>(
+        [=] (T * begin, T * end, const T & value){
+            return std::upper_bound(begin, end, value) - begin;
+        },
+        [=] __device__ (T * s_begin, T * s_end, T * i_begin, T * i_end, size_t * out){
+            thrust::upper_bound(thrust::device, s_begin, s_end, i_begin, i_end, out);
+        },
+        [=] (T * s_begin, T * s_end, T * i_begin, T * i_end, size_t * out){
+            thrust::upper_bound(s_begin, s_end, i_begin, i_end, out);
+        }
+    );
+}
+
+TYPED_TEST(VectorTests, UpperBoundWithCustomComp){
+    using T = typename TestFixture::input_type;
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
+
+    RunVectorTest<T>(
+        [=] (T * begin, T * end, const T & value){
+            return std::upper_bound(begin, end, value, host_compare<T>) - begin;
+        },
+        [=] __device__ (T * s_begin, T * s_end, T * i_begin, T * i_end, size_t * out){
+            thrust::upper_bound(thrust::device, s_begin, s_end, i_begin, i_end, out, device_compare<T>);
+        },
+        [=] (T * s_begin, T * s_end, T * i_begin, T * i_end, size_t * out){
+            thrust::upper_bound(s_begin, s_end, i_begin, i_end, out, host_compare<T>);
+        }
+    );
+}
+
 TESTS_DEFINE(BinarySearchTests, FullTestsParams);
 
 THRUST_DISABLE_MSVC_POSSIBLE_LOSS_OF_DATA_WARNING_BEGIN
