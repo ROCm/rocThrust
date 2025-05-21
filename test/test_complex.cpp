@@ -390,12 +390,8 @@ TYPED_TEST(ComplexPairsTests, TestAsignOperator)
     }
 }
 
-TYPED_TEST(ComplexPairsTests, TestCompundPlusOperator){
-    using T = typename TestFixture::first_type;
-    using U = typename TestFixture::second_type;
-
-    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
-    
+template <typename T, typename U, class Op, class ComplexOp, class ScalarOp>
+void run_compound_tests(const Op & o, const ComplexOp & co, const ScalarOp & so){
     constexpr size_t test_it = 123456;
 
     const double tmini = static_cast<double>(std::numeric_limits<T>::min());
@@ -417,20 +413,58 @@ TYPED_TEST(ComplexPairsTests, TestCompundPlusOperator){
         U ureal = udis(gen);
         U uimag = udis(gen);
 
-        T real_ans = treal + static_cast<T>(ureal);
-        T imag_ans = timag + static_cast<T>(uimag);
+        T real_ans = o(treal, ureal);
+        T imag_ans = o(timag, uimag);
 
         thrust::complex<T> tComplex(treal, timag);
         thrust::complex<U> uComplex(ureal, uimag);
 
-        tComplex += uComplex;
+        co(tComplex, uComplex);
 
         ASSERT_EQ(tComplex.real(), real_ans);
         ASSERT_EQ(tComplex.imag(), imag_ans);
 
         tComplex = thrust::complex<T>(treal, timag);
-        tComplex += ureal;
+        so(tComplex, ureal);
 
         ASSERT_EQ(tComplex.real(), real_ans);
     }    
+}
+
+TYPED_TEST(ComplexPairsTests, TestCompoundPlusOperator){
+    using T = typename TestFixture::first_type;
+    using U = typename TestFixture::second_type;
+
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());   
+
+    run_compound_tests<T, U>(
+        [=] (const T & lhs, const U & rhs){
+            return lhs + static_cast<U>(rhs);
+        },
+        [=] (thrust::complex<T> & lhs, const thrust::complex<U> & rhs){
+            lhs += rhs;
+        },
+        [=] (thrust::complex<T> & lhs, const U & rhs){
+            lhs += rhs;
+        }
+    );
+}
+
+TYPED_TEST(ComplexPairsTests, TestCompoundMinusOperator){
+    using T = typename TestFixture::first_type;
+    using U = typename TestFixture::second_type;
+
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());   
+
+    run_compound_tests<T, U>(
+        [=] (const T & lhs, const U & rhs){
+            return lhs - static_cast<U>(rhs);
+        },
+        [=] (thrust::complex<T> & lhs, const thrust::complex<U> & rhs){
+            lhs -= rhs;
+        },
+        [=] (thrust::complex<T> & lhs, const U & rhs){
+            lhs -= rhs;
+        }
+    );
 }

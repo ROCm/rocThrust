@@ -446,5 +446,7 @@ struct ParamsPairs
                                                                \
 
 using PairsTestsParams = ::testing::Types<
+                                          ParamsPairs<float, float>,
+                                          ParamsPairs<double, double>,
                                           ParamsPairs<float, double>,
                                           ParamsPairs<double, float>>;
