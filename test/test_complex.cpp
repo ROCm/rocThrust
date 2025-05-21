@@ -326,3 +326,66 @@ TYPED_TEST(ComplexTests, TestComplexStreamOperators)
         ASSERT_NEAR_COMPLEX(a, b);
     }
 }
+
+TESTS_PAIRS_DEFINE(ComplexPairsTests, PairsTestsParams)
+
+TYPED_TEST(ComplexPairsTests, TestAsignOperator)
+{
+    using T = typename TestFixture::first_type;
+    using U = typename TestFixture::second_type;
+
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
+    
+    constexpr size_t test_it = 123456;
+
+    const double tmini = static_cast<double>(std::numeric_limits<T>::min());
+    const double tmaxi = static_cast<double>(std::numeric_limits<T>::max());
+    
+    const double umini = static_cast<double>(std::numeric_limits<U>::min());
+    const double umaxi = static_cast<double>(std::numeric_limits<U>::max());
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> tdis(tmini, tmaxi);
+    std::uniform_real_distribution<double> udis(umini, umaxi);
+
+    for(size_t i = 0; i < test_it; i++){
+        thrust::complex<T> thrustNum;
+        std::complex<T> expectedNum;
+        T treal = tdis(gen);
+        
+        thrustNum = treal;
+        expectedNum = treal;
+
+        ASSERT_EQ(thrustNum.imag(), expectedNum.imag());
+        ASSERT_EQ(thrustNum.real(), expectedNum.real());
+    
+        U ureal = static_cast<T>(udis(gen));
+        U uimag = static_cast<T>(udis(gen));
+        thrust::complex<U> thrustOrigin(static_cast<U>(ureal), static_cast<U>(uimag));
+
+        thrustNum = thrustOrigin;
+        ASSERT_EQ(thrustNum.imag(), static_cast<T>(thrustOrigin.imag()));
+        ASSERT_EQ(thrustNum.real(), static_cast<T>(thrustOrigin.real()));
+
+        ureal = static_cast<T>(udis(gen));
+        uimag = static_cast<T>(udis(gen));
+        std::complex<U> stdOriginU(static_cast<U>(ureal), static_cast<U>(uimag));
+
+        thrustNum = stdOriginU;
+        expectedNum = stdOriginU;
+
+        ASSERT_EQ(thrustNum.imag(), expectedNum.imag());
+        ASSERT_EQ(thrustNum.real(), expectedNum.real());
+
+        treal = tdis(gen);
+        T timag = tdis(gen);
+        std::complex<T> stdOriginT(static_cast<T>(treal), static_cast<T>(timag));
+
+        thrustNum = stdOriginT;
+        expectedNum = stdOriginT;
+
+        ASSERT_EQ(thrustNum.imag(), expectedNum.imag());
+        ASSERT_EQ(thrustNum.real(), expectedNum.real());
+    }
+}

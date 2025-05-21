@@ -423,3 +423,57 @@ using AllInOutTestsParams = ::testing::Types<ParamsInOut<short>,
                                              ParamsInOut<int, long long>,
                                              ParamsInOut<unsigned int, unsigned long long>,
                                              ParamsInOut<float, double>>;
+
+
+// --------------------Pairs test parameters--------
+template <class T, class U>
+
+struct ParamsPairs
+{
+    using first_type  = T;
+    using second_type = U;
+};
+
+#define TESTS_PAIRS_DEFINE(x, y)                               \
+    template <class ParamsPairs>                               \
+    class x : public ::testing::Test                           \
+    {                                                          \
+    public:                                                    \
+        using first_type  = typename ParamsPairs::first_type;  \
+        using second_type = typename ParamsPairs::second_type; \
+    };                                                         \
+    TYPED_TEST_SUITE(x, y);                                    \
+                                                               \
+
+using PairsTestsParams = ::testing::Types<ParamsPairs<short, int>,
+                                          ParamsPairs<int, short>,
+                                          ParamsPairs<short, long long>,
+                                          ParamsPairs<long long, short>,
+                                          ParamsPairs<short, unsigned short>,
+                                          ParamsPairs<unsigned short, short>,
+                                          ParamsPairs<short, unsigned int>,
+                                          ParamsPairs<unsigned int, short>,
+                                          ParamsPairs<short, unsigned long long>,
+                                          ParamsPairs<unsigned long long, short>,
+                                          ParamsPairs<int, long long>,
+                                          ParamsPairs<long long, int>,
+                                          ParamsPairs<int, unsigned short>,
+                                          ParamsPairs<unsigned short, int>,
+                                          ParamsPairs<int, unsigned int>,
+                                          ParamsPairs<unsigned int, int>,
+                                          ParamsPairs<int, unsigned long long>,
+                                          ParamsPairs<unsigned long long, int>,
+                                          ParamsPairs<long long, unsigned short>,
+                                          ParamsPairs<unsigned short, long long>,
+                                          ParamsPairs<long long, unsigned int>,
+                                          ParamsPairs<unsigned int, long long>,
+                                          ParamsPairs<long long, unsigned long long>,
+                                          ParamsPairs<unsigned long long, long long>,
+                                          ParamsPairs<unsigned short, unsigned int>,
+                                          ParamsPairs<unsigned int, unsigned short>,
+                                          ParamsPairs<unsigned short, unsigned long long>,
+                                          ParamsPairs<unsigned long long, unsigned short>,
+                                          ParamsPairs<unsigned int, unsigned long long>,
+                                          ParamsPairs<unsigned long long, unsigned int>,
+                                          ParamsPairs<float, double>,
+                                          ParamsPairs<double, float>>;
