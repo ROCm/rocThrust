@@ -520,3 +520,25 @@ TYPED_TEST(ComplexPairsTests, TestCompoundMultiplyOperator){
         }
     );
 }
+
+TYPED_TEST(ComplexPairsTests, TestCompoundDivisionOperator){
+    using T = typename TestFixture::first_type;
+    using U = typename TestFixture::second_type;
+
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());   
+
+    run_compound_tests<T, U>(
+        [=] (std::complex<T> & lhs, const std::complex<U> & rhs){
+            lhs /= rhs;
+        },
+        [=] (std::complex<T> & lhs, const U & rhs){
+            lhs /= rhs;
+        },
+        [=] (thrust::complex<T> & lhs, const thrust::complex<U> & rhs){
+            lhs /= rhs;
+        },
+        [=] (thrust::complex<T> & lhs, const U & rhs){
+            lhs /= rhs;
+        }
+    );
+}
