@@ -389,3 +389,48 @@ TYPED_TEST(ComplexPairsTests, TestAsignOperator)
         ASSERT_EQ(thrustNum.real(), expectedNum.real());
     }
 }
+
+TYPED_TEST(ComplexPairsTests, TestCompundPlusOperator){
+    using T = typename TestFixture::first_type;
+    using U = typename TestFixture::second_type;
+
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
+    
+    constexpr size_t test_it = 123456;
+
+    const double tmini = static_cast<double>(std::numeric_limits<T>::min());
+    const double tmaxi = static_cast<double>(std::numeric_limits<T>::max());
+    
+    const double umini = static_cast<double>(std::numeric_limits<U>::min());
+    const double umaxi = static_cast<double>(std::numeric_limits<U>::max());
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> tdis(tmini, tmaxi);
+    std::uniform_real_distribution<double> udis(umini, umaxi);
+
+    for(size_t i = 0; i < test_it; i++){
+
+        T treal = tdis(gen);
+        T timag = tdis(gen);
+
+        U ureal = udis(gen);
+        U uimag = udis(gen);
+
+        T real_ans = treal + static_cast<T>(ureal);
+        T imag_ans = timag + static_cast<T>(uimag);
+
+        thrust::complex<T> tComplex(treal, timag);
+        thrust::complex<U> uComplex(ureal, uimag);
+
+        tComplex += uComplex;
+
+        ASSERT_EQ(tComplex.real(), real_ans);
+        ASSERT_EQ(tComplex.imag(), imag_ans);
+
+        tComplex = thrust::complex<T>(treal, timag);
+        tComplex += ureal;
+
+        ASSERT_EQ(tComplex.real(), real_ans);
+    }    
+}
