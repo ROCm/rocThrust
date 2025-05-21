@@ -390,44 +390,68 @@ TYPED_TEST(ComplexPairsTests, TestAsignOperator)
     }
 }
 
-template <typename T, typename U, class Op, class ComplexOp, class ScalarOp>
-void run_compound_tests(const Op & o, const ComplexOp & co, const ScalarOp & so){
-    constexpr size_t test_it = 123456;
-
-    const double tmini = static_cast<double>(std::numeric_limits<T>::min());
-    const double tmaxi = static_cast<double>(std::numeric_limits<T>::max());
+template <typename T, typename U, class StdComplexOp, class StdScalarOp, class ThrustComplexOp, class ThrustScalarOp>
+void run_compound_tests(const StdComplexOp & sco, const StdScalarOp & sso, const ThrustComplexOp & tco, const ThrustScalarOp & tso){
     
-    const double umini = static_cast<double>(std::numeric_limits<U>::min());
-    const double umaxi = static_cast<double>(std::numeric_limits<U>::max());
+    auto CHECK_CORRECT = [&] (const std::complex<T> & std_complex, const thrust::complex<T> & thrust_complex){
+        // checking real component
+        if(std::isinf(std_complex.real()))
+            ASSERT_TRUE(std::isinf(thrust_complex.real()));
+        else if(std::isnan(std_complex.real()))
+            ASSERT_TRUE(std::isnan(thrust_complex.real()));
+        else
+            ASSERT_NEAR(std_complex.real(), thrust_complex.real(), abs(std_complex.real() * 1e-3));
 
+        // checking imaginary component
+        if(std::isinf(std_complex.imag()))
+            ASSERT_TRUE(std::isinf(thrust_complex.imag()));
+        else if(std::isnan(std_complex.imag()))
+            ASSERT_TRUE(std::isnan(thrust_complex.imag()));
+        else
+            ASSERT_NEAR(std_complex.imag(), thrust_complex.imag(), abs(std_complex.imag() * 1e-3));
+    };
+
+
+    constexpr size_t test_it = 123456;
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<double> tdis(tmini, tmaxi);
-    std::uniform_real_distribution<double> udis(umini, umaxi);
+    std::uniform_real_distribution<float> dis(-100000, 100000);
 
     for(size_t i = 0; i < test_it; i++){
 
-        T treal = tdis(gen);
-        T timag = tdis(gen);
+        T treal = dis(gen);
+        T timag = dis(gen);
 
-        U ureal = udis(gen);
-        U uimag = udis(gen);
+        U ureal = dis(gen);
+        U uimag = dis(gen);
 
-        T real_ans = o(treal, ureal);
-        T imag_ans = o(timag, uimag);
+        std::complex<T> stComplex(treal, timag);
+        std::complex<U> suComplex(ureal, uimag);
 
-        thrust::complex<T> tComplex(treal, timag);
-        thrust::complex<U> uComplex(ureal, uimag);
+        thrust::complex<T> ttComplex(treal, timag);
+        thrust::complex<U> tuComplex(ureal, uimag);
 
-        co(tComplex, uComplex);
+        sco(stComplex, suComplex);
+        tco(ttComplex, tuComplex);
 
-        ASSERT_EQ(tComplex.real(), real_ans);
-        ASSERT_EQ(tComplex.imag(), imag_ans);
+        CHECK_CORRECT(stComplex, ttComplex);
 
-        tComplex = thrust::complex<T>(treal, timag);
-        so(tComplex, ureal);
+        stComplex = std::complex<T>(treal, timag);
+        ttComplex = thrust::complex<T>(treal, timag);
 
-        ASSERT_EQ(tComplex.real(), real_ans);
+        sso(stComplex, ureal);
+        tso(ttComplex, ureal);
+        
+        CHECK_CORRECT(stComplex, ttComplex);
+
+        stComplex = std::complex<T>(treal, timag);
+        ttComplex = thrust::complex<T>(treal, timag);
+
+        sso(stComplex, uimag);
+        tso(ttComplex, uimag);
+
+        CHECK_CORRECT(stComplex, ttComplex);
+
     }    
 }
 
@@ -438,8 +462,11 @@ TYPED_TEST(ComplexPairsTests, TestCompoundPlusOperator){
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());   
 
     run_compound_tests<T, U>(
-        [=] (const T & lhs, const U & rhs){
-            return lhs + static_cast<U>(rhs);
+        [=] (std::complex<T> & lhs, const std::complex<U> & rhs){
+            lhs += rhs;
+        },
+        [=] (std::complex<T> & lhs, const U & rhs){
+            lhs += rhs;
         },
         [=] (thrust::complex<T> & lhs, const thrust::complex<U> & rhs){
             lhs += rhs;
@@ -457,14 +484,39 @@ TYPED_TEST(ComplexPairsTests, TestCompoundMinusOperator){
     SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());   
 
     run_compound_tests<T, U>(
-        [=] (const T & lhs, const U & rhs){
-            return lhs - static_cast<U>(rhs);
+        [=] (std::complex<T> & lhs, const std::complex<U> & rhs){
+            lhs -= rhs;
+        },
+        [=] (std::complex<T> & lhs, const U & rhs){
+            lhs -= rhs;
         },
         [=] (thrust::complex<T> & lhs, const thrust::complex<U> & rhs){
             lhs -= rhs;
         },
         [=] (thrust::complex<T> & lhs, const U & rhs){
             lhs -= rhs;
+        }
+    );
+}
+
+TYPED_TEST(ComplexPairsTests, TestCompoundMultiplyOperator){
+    using T = typename TestFixture::first_type;
+    using U = typename TestFixture::second_type;
+
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());   
+
+    run_compound_tests<T, U>(
+        [=] (std::complex<T> & lhs, const std::complex<U> & rhs){
+            lhs *= rhs;
+        },
+        [=] (std::complex<T> & lhs, const U & rhs){
+            lhs *= rhs;
+        },
+        [=] (thrust::complex<T> & lhs, const thrust::complex<U> & rhs){
+            lhs *= rhs;
+        },
+        [=] (thrust::complex<T> & lhs, const U & rhs){
+            lhs *= rhs;
         }
     );
 }
