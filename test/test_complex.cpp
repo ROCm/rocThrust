@@ -415,7 +415,7 @@ void run_compound_tests(const StdComplexOp & sco, const StdScalarOp & sso, const
     constexpr size_t test_it = 123456;
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> dis(-100000, 100000);
+    std::uniform_real_distribution<T> dis(std::numeric_limits<T>::min(), std::numeric_limits<T>::max());
 
     for(size_t i = 0; i < test_it; i++){
 
@@ -549,7 +549,7 @@ void run_equality_operator_tests(const EqualOp & f, const bool scalar = false){
 
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<float> dis(-100000, 100000);
+    std::uniform_real_distribution<T> dis(std::numeric_limits<T>::min(), std::numeric_limits<T>::max());
 
     for(size_t i = 0; i < test_size; i++){
         T treal = dis(gen);
@@ -571,7 +571,7 @@ void run_equality_operator_tests(const EqualOp & f, const bool scalar = false){
         thrust::complex<U> ucomplex;
         if(scalar){
             tcomplex = thrust::complex<T>(treal);
-            ucomplex = thrust::complex<U>(ureal);
+            ucomplex = thrust::complex<U>(ureal); 
         }
         else{
             tcomplex = thrust::complex<T>(treal, timag);
@@ -646,6 +646,114 @@ TYPED_TEST(ComplexPairsTests, TestEqualOperator_ThrustComplex_Scalar){
     run_equality_operator_tests<T, U>(
         [=] (const thrust::complex<T> & lhs, const thrust::complex<U> & rhs){
             return lhs == rhs.real();
+        },
+        true
+    );
+}
+
+template <typename T, typename U, class InequalOp>
+void run_inequality_operator_tests(const InequalOp & f, const bool scalar = false){
+    constexpr T test_size = 123456;
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<T> dis(std::numeric_limits<T>::min(), std::numeric_limits<T>::max());
+
+    for(size_t i = 0; i < test_size; i++){
+        T treal = dis(gen);
+        T timag = dis(gen);
+        
+        U ureal;
+        U uimag;
+
+        if (i % 2){
+            ureal = dis(gen);
+            uimag = dis(gen);
+        }
+        else{
+            ureal = treal;
+            uimag = timag;
+        }
+        
+        thrust::complex<T> tcomplex;
+        thrust::complex<U> ucomplex;
+        if(scalar){
+            tcomplex = thrust::complex<T>(treal);
+            ucomplex = thrust::complex<U>(ureal); 
+        }
+        else{
+            tcomplex = thrust::complex<T>(treal, timag);
+            ucomplex = thrust::complex<U>(ureal, uimag);
+        }
+
+        ASSERT_EQ(!(treal == ureal &&  (scalar ? true : timag == uimag)), f(tcomplex, ucomplex));
+    }
+}
+
+TYPED_TEST(ComplexPairsTests, TestInequalOperator_ThrustComplex_ThrustComplex){
+    using T = typename TestFixture::first_type;
+    using U = typename TestFixture::second_type;
+
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());   
+
+    run_inequality_operator_tests<T, U>(
+        [=] (const thrust::complex<T> & lhs, const thrust::complex<U> & rhs){
+            return lhs != rhs;
+        }
+    );
+}
+
+TYPED_TEST(ComplexPairsTests, TestInequalOperator_ThrustComplex_StdComplex){
+    using T = typename TestFixture::first_type;
+    using U = typename TestFixture::second_type;
+
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());   
+
+    run_inequality_operator_tests<T, U>(
+        [=] (const thrust::complex<T> & lhs, const thrust::complex<U> & rhs){
+            std::complex<U> rhs_(rhs.real(), rhs.imag());
+            return lhs != rhs_;
+        }
+    );
+}
+
+TYPED_TEST(ComplexPairsTests, TestInequalOperator_StdComplex_ThrustComplex){
+    using T = typename TestFixture::first_type;
+    using U = typename TestFixture::second_type;
+
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());   
+
+    run_inequality_operator_tests<T, U>(
+        [=] (const thrust::complex<T> & lhs, const thrust::complex<U> & rhs){
+            std::complex<T> lhs_(lhs.real(), lhs.imag());
+            return lhs_ != rhs;
+        }
+    );
+}
+
+TYPED_TEST(ComplexPairsTests, TestInequalOperator_Scalar_ThrustComplex){
+    using T = typename TestFixture::first_type;
+    using U = typename TestFixture::second_type;
+
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());   
+
+    run_inequality_operator_tests<T, U>(
+        [=] (const thrust::complex<T> & lhs, const thrust::complex<U> & rhs){
+            return lhs.real() != rhs;
+        },
+        true
+    );
+}
+
+TYPED_TEST(ComplexPairsTests, TestInequalOperator_ThrustComplex_Scalar){
+    using T = typename TestFixture::first_type;
+    using U = typename TestFixture::second_type;
+
+    SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());   
+
+    run_inequality_operator_tests<T, U>(
+        [=] (const thrust::complex<T> & lhs, const thrust::complex<U> & rhs){
+            return lhs != rhs.real();
         },
         true
     );
