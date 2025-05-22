@@ -19,6 +19,18 @@
 
 #include "test_header.hpp"
 
+    
+#define CHECK_CORRECT(stComplex, ttComplex)                                                  \
+do{                                                                                          \
+    if(std::isinf(stComplex.real())){ASSERT_TRUE(std::isinf(ttComplex.real()));}             \
+    else if(std::isnan(stComplex.real())){ASSERT_TRUE(std::isnan(ttComplex.real()));}        \
+    else{ASSERT_NEAR(stComplex.real(), ttComplex.real(), abs(stComplex.real() * 1e-3));}     \
+    if(std::isinf(stComplex.imag())){ASSERT_TRUE(std::isinf(ttComplex.imag()));}             \
+    else if(std::isnan(stComplex.imag())){ASSERT_TRUE(std::isnan(ttComplex.imag()));}        \
+    else{ASSERT_NEAR(stComplex.imag(), ttComplex.imag(), abs(stComplex.imag() * 1e-3));}     \
+}                                                                                            \
+while(0)                                                                                     \
+
 TESTS_DEFINE(ComplexTests, FloatTestsParams);
 
 TYPED_TEST(ComplexTests, TestComplexConstructors)
@@ -391,26 +403,11 @@ TYPED_TEST(ComplexPairsTests, TestAsignOperator)
 }
 
 template <typename T, typename U, class StdComplexOp, class StdScalarOp, class ThrustComplexOp, class ThrustScalarOp>
-void run_compound_tests(const StdComplexOp & sco, const StdScalarOp & sso, const ThrustComplexOp & tco, const ThrustScalarOp & tso){
-    
-    auto CHECK_CORRECT = [&] (const std::complex<T> & std_complex, const thrust::complex<T> & thrust_complex){
-        // checking real component
-        if(std::isinf(std_complex.real()))
-            ASSERT_TRUE(std::isinf(thrust_complex.real()));
-        else if(std::isnan(std_complex.real()))
-            ASSERT_TRUE(std::isnan(thrust_complex.real()));
-        else
-            ASSERT_NEAR(std_complex.real(), thrust_complex.real(), abs(std_complex.real() * 1e-3));
-
-        // checking imaginary component
-        if(std::isinf(std_complex.imag()))
-            ASSERT_TRUE(std::isinf(thrust_complex.imag()));
-        else if(std::isnan(std_complex.imag()))
-            ASSERT_TRUE(std::isnan(thrust_complex.imag()));
-        else
-            ASSERT_NEAR(std_complex.imag(), thrust_complex.imag(), abs(std_complex.imag() * 1e-3));
-    };
-
+void run_compound_tests(
+    const StdComplexOp & standard_complex_operator, 
+    const StdScalarOp & standard_scalar_operator, 
+    const ThrustComplexOp & thrust_complex_operator, 
+    const ThrustScalarOp & thrust_scalar_operator){
 
     constexpr size_t test_it = 123456;
     std::random_device rd;
@@ -431,24 +428,24 @@ void run_compound_tests(const StdComplexOp & sco, const StdScalarOp & sso, const
         thrust::complex<T> ttComplex(treal, timag);
         thrust::complex<U> tuComplex(ureal, uimag);
 
-        sco(stComplex, suComplex);
-        tco(ttComplex, tuComplex);
+        standard_complex_operator(stComplex, suComplex);
+        thrust_complex_operator(ttComplex, tuComplex);
 
         CHECK_CORRECT(stComplex, ttComplex);
 
         stComplex = std::complex<T>(treal, timag);
         ttComplex = thrust::complex<T>(treal, timag);
 
-        sso(stComplex, ureal);
-        tso(ttComplex, ureal);
+        standard_scalar_operator(stComplex, ureal);
+        thrust_scalar_operator(ttComplex, ureal);
         
         CHECK_CORRECT(stComplex, ttComplex);
 
         stComplex = std::complex<T>(treal, timag);
         ttComplex = thrust::complex<T>(treal, timag);
 
-        sso(stComplex, uimag);
-        tso(ttComplex, uimag);
+        standard_scalar_operator(stComplex, uimag);
+        thrust_scalar_operator(ttComplex, uimag);
 
         CHECK_CORRECT(stComplex, ttComplex);
 
