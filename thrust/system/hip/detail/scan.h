@@ -90,7 +90,12 @@ namespace __scan
                                                            bool              debug_sync)
         -> std::enable_if_t<decltype(nondeterministic(policy))::value, hipError_t>
     {
-        return rocprim::inclusive_scan(
+        return rocprim::inclusive_scan<
+            rocprim::default_config,
+            InputIt,
+            OutputIt,
+            ScanOp,
+            typename std::iterator_traits<InputIt>::value_type>(
             temporary_storage, storage_size, input, output, num_items, scan_op, stream, debug_sync);
     }
 
@@ -106,7 +111,12 @@ namespace __scan
                                                            bool              debug_sync)
         -> std::enable_if_t<!decltype(nondeterministic(policy))::value, hipError_t>
     {
-        return rocprim::deterministic_inclusive_scan(
+        return rocprim::deterministic_inclusive_scan<
+            rocprim::default_config,
+            InputIt,
+            OutputIt,
+            ScanOp,
+            typename std::iterator_traits<InputIt>::value_type>(
             temporary_storage, storage_size, input, output, num_items, scan_op, stream, debug_sync);
     }
 
@@ -180,15 +190,21 @@ namespace __scan
                                                            bool              debug_sync)
         -> std::enable_if_t<decltype(nondeterministic(policy))::value, hipError_t>
     {
-        return rocprim::exclusive_scan(temporary_storage,
-                                       storage_size,
-                                       input,
-                                       output,
-                                       init,
-                                       num_items,
-                                       scan_op,
-                                       stream,
-                                       debug_sync);
+        return rocprim::exclusive_scan<
+            rocprim::default_config,
+            InputIt,
+            OutputIt,
+            T,
+            ScanOp,
+            T>(temporary_storage,
+               storage_size,
+               input,
+               output,
+               init,
+               num_items,
+               scan_op,
+               stream,
+               debug_sync);
     }
 
     template <typename Derived,
@@ -209,15 +225,21 @@ namespace __scan
                                                            bool              debug_sync)
         -> std::enable_if_t<!decltype(nondeterministic(policy))::value, hipError_t>
     {
-        return rocprim::deterministic_exclusive_scan(temporary_storage,
-                                                     storage_size,
-                                                     input,
-                                                     output,
-                                                     init,
-                                                     num_items,
-                                                     scan_op,
-                                                     stream,
-                                                     debug_sync);
+        return rocprim::deterministic_exclusive_scan<
+            rocprim::default_config,
+            InputIt,
+            OutputIt,
+            T,
+            ScanOp,
+            T>(temporary_storage,
+               storage_size,
+               input,
+               output,
+               init,
+               num_items,
+               scan_op,
+               stream,
+               debug_sync);
     }
 
     template <typename Derived, typename InputIt, typename OutputIt, typename Size, typename T, typename ScanOp>
