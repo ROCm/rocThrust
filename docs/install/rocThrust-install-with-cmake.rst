@@ -10,12 +10,12 @@ Building and installing rocThrust on Windows and Linux with CMake
 
 You can build and install rocThrust with CMake on either Windows or Linux.
 
-Before you begin, set ``CXX`` to ``amdclang++`` or ``hipcc`` depending on the compiler you'll be using, and set ``CMAKE_CXX_COMPILER`` to the compiler's absolute path. For example:
+Set ``CXX`` to ``hipcc`` and set ``CMAKE_CXX_COMPILER`` to hipcc's absolute path. For example:
 
 .. code:: shell
 
-    CXX=amdclang++
-    CMAKE_CXX_COMPILER=/opt/rocm/bin/amdclang++
+    CXX=hipcc
+    CMAKE_CXX_COMPILER=/usr/bin/hipcc
 
 After :doc:`cloning the project <./rocThrust-install-overview>`, create the ``build`` directory under the ``rocthrust`` root directory, then change directory to the ``build`` directory:
 
