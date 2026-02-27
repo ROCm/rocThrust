@@ -1,0 +1,55 @@
+# Created by https://www.github.io/
+
+### C:/ ###
+# Prerequisites
+*.a
+
+# Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# all Headers
+*.gch
+*.pch
+
+# Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+sudo
+
+*.exe
+*.out
+*.app
+
+### CMake ###
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+thrust/system/cuda/detail/.gitignore
+*.bash
+run
+build*
+discrete_voronoi.pgm
+
+
+
+.vscode
+docs/_build/doctrees/environment.pickle
