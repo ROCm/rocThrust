@@ -566,6 +566,10 @@ void _TestScanWithLargeTypes()
 
 TEST(ScanTests, TestScanWithLargeTypes)
 {
+#ifdef ADDRESS_SANITIZER_BUILD
+  GTEST_SKIP() << "Skipping test due to memory constraints in address sanitizer build.";
+#endif
+  
   SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
   _TestScanWithLargeTypes<int, 1>();
@@ -800,6 +804,10 @@ void TestInclusiveScanWithBigIndexesHelper(int magnitude)
 
 TEST(ScanTests, TestInclusiveScanWithBigIndexes)
 {
+#ifdef ADDRESS_SANITIZER_BUILD
+  GTEST_SKIP() << "Skipping test due to memory constraints in address sanitizer build.";
+#endif
+  
   SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
   TestInclusiveScanWithBigIndexesHelper(30);
@@ -831,6 +839,10 @@ void TestExclusiveScanWithBigIndexesHelper(int magnitude)
 
 TEST(ScanTests, TestExclusiveScanWithBigIndexes)
 {
+#ifdef ADDRESS_SANITIZER_BUILD
+  GTEST_SKIP() << "Skipping test due to memory constraints in address sanitizer build.";
+#endif
+  
   SCOPED_TRACE(testing::Message() << "with device_id= " << test::set_device_from_ctest());
 
   TestExclusiveScanWithBigIndexesHelper(30);
